@@ -1,9 +1,7 @@
 package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.model.dto.Announcement.AnnouncementMapper;
-import com.bhtcnpm.website.model.dto.Doc.DocDetailsDTO;
-import com.bhtcnpm.website.model.dto.Doc.DocDetailsListDTO;
-import com.bhtcnpm.website.model.dto.Doc.DocDetailsMapper;
+import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.Doc;
 import com.bhtcnpm.website.repository.DocRepository;
 import com.bhtcnpm.website.service.DocService;
@@ -20,6 +18,7 @@ import javax.annotation.Nullable;
 import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -32,12 +31,14 @@ public class DocServiceImpl implements DocService {
 
     private final DocDetailsMapper docDetailsMapper;
 
+    private final DocRequestMapper docRequestMapper;
+
     private final DocRepository docRepository;
 
     public DocDetailsListDTO getAllDoc (Predicate predicate, @Min(0)Integer paginator) {
 
         //Create a pagable.
-        Pageable pageable = PageRequest.of(paginator, PAGE_SIZE, Sort.by("publishedDtm").descending());
+        Pageable pageable = PageRequest.of(paginator, PAGE_SIZE, Sort.by("publishDtm").descending());
 
         Page<Doc> queryResult = docRepository.findAll(predicate, pageable);
 
@@ -49,5 +50,23 @@ public class DocServiceImpl implements DocService {
         DocDetailsListDTO result = new DocDetailsListDTO(docDetailsDTOS, queryResult.getTotalPages());
 
         return result;
+    }
+
+    @Override
+    public DocDetailsDTO putDoc(Long docID, Long userID, DocRequestDTO docRequestDTO) {
+        Doc oldDoc = null;
+
+        if (docID != null) {
+            Optional<Doc> oldDocQuery = docRepository.findById(docID);
+            if (oldDocQuery.isPresent()) {
+                oldDoc = oldDocQuery.get();
+            }
+        }
+
+        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(userID, docRequestDTO, oldDoc);
+
+        doc = docRepository.save(doc);
+
+        return docDetailsMapper.docToDocDetailsDTO(doc);
     }
 }

@@ -7,18 +7,8 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
-public class DocDetailsDTO {
-    private Long id;
-
-    private Long authorID;
-
-    private String authorName;
-
-    private String category;
-
+public class DocRequestDTO {
     private Long categoryID;
-
-    private String docSubject;
 
     private Long docSubjectID;
 
@@ -33,10 +23,6 @@ public class DocDetailsDTO {
     private Set<TagDTO> tags;
 
     private LocalDateTime publishDtm;
-
-    private Long downloads;
-
-    private Long views;
 
     private Short version;
 }

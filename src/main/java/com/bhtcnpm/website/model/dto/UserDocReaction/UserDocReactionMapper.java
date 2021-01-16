@@ -14,11 +14,11 @@ public interface UserDocReactionMapper {
 
     List<UserDocReactionDTO> userDocReactionListToUserDocReactionDTOList (List<UserDocReaction> userDocReactions);
 
-    @Mapping(source = "userDocReactionId.user.id", target = "userId")
-    @Mapping(source = "userDocReactionId.doc.id", target = "docId")
+    @Mapping(source = "userDocReactionId.user.id", target = "userID")
+    @Mapping(source = "userDocReactionId.doc.id", target = "docID")
     UserDocReactionDTO userDocReactionToUserDocReactionDTO (UserDocReaction userDocReaction);
 
-    @Mapping(source = "userDocReactionId.doc.id", target = "docId")
+    @Mapping(source = "userDocReactionId.doc.id", target = "docID")
     UserDocReactionUserOwnDTO userDocReactionToUserDocReactionUserOwnDTO (UserDocReaction userDocReaction);
 
 }

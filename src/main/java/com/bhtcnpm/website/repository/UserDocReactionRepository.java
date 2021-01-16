@@ -1,15 +1,19 @@
 package com.bhtcnpm.website.repository;
 
+import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionDTO;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionStatsDTO;
 import com.bhtcnpm.website.model.entity.UserDocReaction;
+import com.bhtcnpm.website.model.entity.enumeration.DocReactionType.DocReactionType;
 import com.bhtcnpm.website.repository.custom.UserDocReactionRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Set;
 
+@Repository
 public interface UserDocReactionRepository extends JpaRepository<UserDocReaction, Long>, QuerydslPredicateExecutor<UserDocReaction>, UserDocReactionRepositoryCustom {
     List<UserDocReaction> getUserDocReactionsByUserDocReactionId_UserIdAndUserDocReactionId_DocId_IdIn (Long userId, List<Long> docIds);
 

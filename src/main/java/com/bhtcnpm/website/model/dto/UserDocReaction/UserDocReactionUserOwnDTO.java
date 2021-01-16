@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class UserDocReactionUserOwnDTO {
-    private Long docId;
+    private Long docID;
 
     private DocReactionType docReactionType;
 }

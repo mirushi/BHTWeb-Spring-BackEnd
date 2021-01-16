@@ -27,7 +27,10 @@ public class DocSubject {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "subjects")
+    @OneToMany(
+            mappedBy = "subject",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    )
     private Set<Doc> docs;
 
     @Version

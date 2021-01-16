@@ -4,10 +4,17 @@ import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionDTO;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionMapper;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionStatsDTO;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionUserOwnDTO;
+import com.bhtcnpm.website.model.entity.Doc;
 import com.bhtcnpm.website.model.entity.UserDocReaction;
+import com.bhtcnpm.website.model.entity.UserDocReactionId;
+import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.DocReactionType.DocReactionType;
+import com.bhtcnpm.website.repository.DocRepository;
 import com.bhtcnpm.website.repository.UserDocReactionRepository;
+import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.UserDocReactionService;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,6 +30,10 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
 
     private final UserDocReactionRepository reactionRepository;
 
+    private final UserWebsiteRepository userWebsiteRepository;
+
+    private final DocRepository docRepository;
+
     private final UserDocReactionMapper userDocReactionMapper;
 
     @Override
@@ -36,5 +47,24 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
                 .stream()
                 .map(userDocReactionMapper::userDocReactionToUserDocReactionUserOwnDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDocReactionDTO putUserReactionForDoc(Long userID, UserDocReactionUserOwnDTO userDocReactionUserOwnDTO) {
+        UserDocReactionId userDocReactionId = new UserDocReactionId();
+
+        UserWebsite user = userWebsiteRepository.getOne(userID);
+        Doc doc = docRepository.getOne(userDocReactionUserOwnDTO.getDocID());
+
+        userDocReactionId.setUser(user);
+        userDocReactionId.setDoc(doc);
+
+        UserDocReaction userDocReaction = new UserDocReaction();
+        userDocReaction.setUserDocReactionId(userDocReactionId);
+        userDocReaction.setDocReactionType(userDocReactionUserOwnDTO.getDocReactionType());
+
+        userDocReaction = reactionRepository.save(userDocReaction);
+
+        return userDocReactionMapper.userDocReactionToUserDocReactionDTO(userDocReaction);
     }
 }

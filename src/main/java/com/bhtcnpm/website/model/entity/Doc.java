@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,12 +25,15 @@ public class Doc {
     private Long id;
 
     @ManyToOne
+    @JoinColumn
     private UserWebsite author;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn
     private DocCategory category;
 
     @ManyToOne
+    @JoinColumn
     private DocSubject subject;
 
     @Column(nullable = false)
@@ -42,10 +46,13 @@ public class Doc {
     private String imageURL;
 
     @Column(nullable = false)
-    private LocalDateTime publishedDtm;
+    private LocalDateTime publishDtm;
 
     @Column(nullable = false)
     private LocalDateTime createdDtm;
+
+    @Column(nullable = false)
+    private LocalDateTime lastEditDtm;
 
     @Column(nullable = false)
     private String title;
@@ -75,17 +82,6 @@ public class Doc {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags;
-
-    @ManyToMany(cascade = {
-            CascadeType.MERGE,
-            CascadeType.PERSIST
-    })
-    @JoinTable(
-            name = "doc_doc_subject",
-            joinColumns = @JoinColumn(name = "doc_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id")
-    )
-    private Set<DocSubject> subjects;
 
     @OneToMany(
             mappedBy = "userDocReactionId.doc",

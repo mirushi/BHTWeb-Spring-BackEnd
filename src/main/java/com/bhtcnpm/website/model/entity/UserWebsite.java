@@ -38,6 +38,7 @@ public class UserWebsite {
     private Long reputationScore;
 
     @ManyToOne
+    @JoinColumn
     private UserWebsiteRole role;
 
     @Column(nullable = false)

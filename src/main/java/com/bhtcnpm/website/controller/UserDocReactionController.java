@@ -32,8 +32,19 @@ public class UserDocReactionController {
     @GetMapping("userOwn")
     @ResponseBody
     public ResponseEntity<List<UserDocReactionUserOwnDTO>> getUserOwnReaction (@RequestParam(value = "docIDs", required = true) List<Long> docIDs) {
-        //We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        List<UserDocReactionUserOwnDTO> userDocReactions = userDocReactionService.getUserReactionForDocs(1L, docIDs);
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+        List<UserDocReactionUserOwnDTO> userDocReactions = userDocReactionService.getUserReactionForDocs(userID, docIDs);
         return new ResponseEntity<>(userDocReactions, HttpStatus.OK);
     }
+
+    @PutMapping
+    @ResponseBody
+    public ResponseEntity<UserDocReactionDTO> putUserReactionForDoc (@RequestBody UserDocReactionUserOwnDTO userDocReactionUserOwnDTO) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+        UserDocReactionDTO responseDTO = userDocReactionService.putUserReactionForDoc(userID, userDocReactionUserOwnDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
 }

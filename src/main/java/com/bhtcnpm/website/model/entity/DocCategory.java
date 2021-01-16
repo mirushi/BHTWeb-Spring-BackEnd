@@ -3,6 +3,7 @@ package com.bhtcnpm.website.model.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "doc_category")
@@ -23,6 +24,12 @@ public class DocCategory {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany (
+            mappedBy = "category",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    )
+    private Set<Doc> docs;
 
     @Version
     private short version;
