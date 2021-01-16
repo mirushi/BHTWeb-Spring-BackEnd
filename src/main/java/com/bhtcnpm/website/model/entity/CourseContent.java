@@ -26,7 +26,8 @@ public class CourseContent {
     @Column(nullable = false)
     protected String name;
 
-    @Convert(converter = CourseContentTypeConverter.class)
+    @Enumerated
+    @Column(columnDefinition = "smallint")
     protected CourseContentType type;
 
     @Lob

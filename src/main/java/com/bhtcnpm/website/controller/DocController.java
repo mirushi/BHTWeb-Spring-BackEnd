@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.Min;
 import java.util.List;
 
-@RestController
-@RequestMapping("/documents")
-@Validated
-@RequiredArgsConstructor
+    @RestController
+    @RequestMapping("/documents")
+    @Validated
+    @RequiredArgsConstructor
 public class DocController {
 
     private final DocService docService;

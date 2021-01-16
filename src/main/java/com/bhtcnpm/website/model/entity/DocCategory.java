@@ -15,7 +15,7 @@ public class DocCategory {
             generator = "doc_category_sequence"
     )
     @SequenceGenerator(
-            name = "doc_category_sequence",
+                name = "doc_category_sequence",
             sequenceName = "doc_category_sequence",
             allocationSize = 3
     )

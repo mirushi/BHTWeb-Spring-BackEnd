@@ -41,7 +41,7 @@ public class Notification {
     @Column(nullable = false)
     private String title;
 
-    @Convert(converter = NotificationTypeConverter.class)
+    @Enumerated
     @Column(columnDefinition = "smallint")
     private NotificationType type;
 

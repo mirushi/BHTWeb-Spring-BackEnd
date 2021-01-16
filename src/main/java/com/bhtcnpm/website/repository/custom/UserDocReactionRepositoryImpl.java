@@ -24,13 +24,16 @@ public class UserDocReactionRepositoryImpl implements UserDocReactionRepositoryC
 
     private static final QUserDocReaction userDocReaction = QUserDocReaction.userDocReaction;
 
-    @Override
-    public Map<Long, Long> getUserDocReactionStatsDTO (List<Long> docIDs) {
-        Map<Long, Long> queryResult = CollQueryFactory
-                .from(userDocReaction)
-                .select(userDocReaction.userDocReactionId.doc.id, userDocReaction.userDocReactionId.user.id.count())
-                .where(userDocReaction.userDocReactionId.doc.id.in(docIDs))
-                .transform(groupBy(userDocReaction.userDocReactionId.doc.id).as(userDocReaction.userDocReactionId.user.id.count()));
-        return queryResult;
-    }
+//    @Override
+//    public Map<List<?>, Long> getUserDocReactionStatsDTO (List<Long> docIDs) {
+//        Map<List<?>, Long> queryResult = CollQueryFactory
+//                .from(userDocReaction)
+//                .where(userDocReaction.userDocReactionId.doc.id.in(docIDs))
+//                .transform(groupBy(userDocReaction.userDocReactionId.doc.id, userDocReaction.docReactionType).as(userDocReaction.userDocReactionId.user.id.count()));
+//        Map<Long, Long> queryResult = CollQueryFactory
+//                .from(userDocReaction)
+//                .where(userDocReaction.userDocReactionId.doc.id.in(docIDs))
+//                .transform(groupBy(userDocReaction.userDocReactionId.doc.id).as(userDocReaction.userDocReactionId.user.id.count()));
+//        return null;
+//    }
 }

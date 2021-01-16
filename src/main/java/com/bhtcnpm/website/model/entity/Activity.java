@@ -39,7 +39,7 @@ public class Activity {
     //ID of items that relates to actorActive and/or actorPassive.
     private Long idItem;
 
-    @Convert(converter = ActivityTypeConverter.class)
+    @Enumerated
     @Column(columnDefinition = "smallint")
     private ActivityType type;
 

@@ -9,6 +9,6 @@ import java.util.Map;
 
 public interface UserDocReactionRepositoryCustom {
 
-    Map<Long, Long> getUserDocReactionStatsDTO (List<Long> docIDs);
+//    Map<List<?>, Long> getUserDocReactionStatsDTO (List<Long> docIDs);
 
 }
