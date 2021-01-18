@@ -25,15 +25,19 @@ public class Doc {
     private Long id;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(nullable = false, insertable = false, updatable = false)
     private UserWebsite author;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(insertable = false, updatable = false)
+    private UserWebsite lastEditedUser;
+
+    @ManyToOne
+    @JoinColumn(nullable = false, insertable = false, updatable = false)
     private DocCategory category;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(nullable = false, insertable = false, updatable = false)
     private DocSubject subject;
 
     @Column(nullable = false)
@@ -48,7 +52,7 @@ public class Doc {
     @Column(nullable = false)
     private LocalDateTime publishDtm;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdDtm;
 
     @Column(nullable = false)
@@ -92,5 +96,4 @@ public class Doc {
 
     @Version
     private short version;
-
 }

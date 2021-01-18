@@ -11,5 +11,5 @@ public interface DocService {
 
     DocDetailsListDTO getAllDoc (Predicate predicate, @Min(0)Integer paginator);
 
-    DocDetailsDTO putDoc (Long docID, Long userID, DocRequestDTO docRequestDTO);
+    DocDetailsDTO putDoc (Long docID, Long lastEditedUserID, DocRequestDTO docRequestDTO);
 }

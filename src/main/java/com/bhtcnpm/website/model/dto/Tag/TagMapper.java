@@ -12,16 +12,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper
-public interface TagMapper {
+public abstract class TagMapper {
 
-    TagMapper INSTANCE = Mappers.getMapper(TagMapper.class);
+    public static final TagMapper INSTANCE = Mappers.getMapper(TagMapper.class);
 
-    List<TagDTO> tagListToTagDTOList (List<Tag> tags);
+    protected TagRepository tagRepository;
 
-    TagDTO tagToTagDTO (Tag tag);
+    public abstract List<TagDTO> tagListToTagDTOList (List<Tag> tags);
 
-    @InheritInverseConfiguration(name = "tagToTagDTO")
-    Tag tagDTOToTag (TagDTO tagDTO);
+    public abstract Set<Tag> tagDTOListToTagList (Set<TagDTO> tagDTOs);
+
+    public abstract TagDTO tagToTagDTO (Tag tag);
+
+    public Tag tagDTOToTag (TagDTO tagDTO) {
+        Tag resultTag;
+
+        if (tagDTO == null) {
+            return null;
+        }
+
+        if (tagDTO.getId() == null) {
+            resultTag = new Tag();
+            resultTag.setContent(tagDTO.getContent());
+            resultTag.setId(null);
+        } else {
+            resultTag = tagRepository.getOne(tagDTO.getId());
+        }
+
+        return resultTag;
+    }
+
+    @Autowired
+    public void setTagRepository (TagRepository tagRepository) {
+        this.tagRepository = tagRepository;
+    }
 }

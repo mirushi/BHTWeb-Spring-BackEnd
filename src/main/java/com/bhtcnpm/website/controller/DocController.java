@@ -39,9 +39,11 @@ public class DocController {
     public ResponseEntity<DocDetailsDTO> putDocument (@PathVariable Long id, @RequestBody DocRequestDTO docRequestDTO) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
         Long userID = 1L;
-        docService.putDoc(id, userID, docRequestDTO);
+        DocDetailsDTO docDetailsDTO = docService.putDoc(id, userID, docRequestDTO);
 
-        return null;
+        return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
+
+
 
 }

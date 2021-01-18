@@ -10,7 +10,7 @@ import java.util.Set;
 public class DocRequestDTO {
     private Long categoryID;
 
-    private Long docSubjectID;
+    private Long subjectID;
 
     private String title;
 
@@ -24,5 +24,5 @@ public class DocRequestDTO {
 
     private LocalDateTime publishDtm;
 
-    private Short version;
+    private short version;
 }

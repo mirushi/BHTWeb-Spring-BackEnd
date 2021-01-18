@@ -1,12 +1,10 @@
 package com.bhtcnpm.website.service.impl;
 
-import com.bhtcnpm.website.model.dto.Announcement.AnnouncementMapper;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.Doc;
 import com.bhtcnpm.website.repository.DocRepository;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.Visitor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
 import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -47,13 +44,11 @@ public class DocServiceImpl implements DocService {
                 .map(docDetailsMapper::docToDocDetailsDTO)
                 .collect(Collectors.toList());
 
-        DocDetailsListDTO result = new DocDetailsListDTO(docDetailsDTOS, queryResult.getTotalPages());
-
-        return result;
+        return new DocDetailsListDTO(docDetailsDTOS, queryResult.getTotalPages());
     }
 
     @Override
-    public DocDetailsDTO putDoc(Long docID, Long userID, DocRequestDTO docRequestDTO) {
+    public DocDetailsDTO putDoc(Long docID, Long lastEditedUserID, DocRequestDTO docRequestDTO) {
         Doc oldDoc = null;
 
         if (docID != null) {
@@ -63,7 +58,7 @@ public class DocServiceImpl implements DocService {
             }
         }
 
-        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(userID, docRequestDTO, oldDoc);
+        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(lastEditedUserID, docRequestDTO, oldDoc);
 
         doc = docRepository.save(doc);
 
