@@ -64,4 +64,24 @@ public class DocServiceImpl implements DocService {
 
         return docDetailsMapper.docToDocDetailsDTO(doc);
     }
+
+    @Override
+    @Transactional
+    public Boolean postApproval(Long docID, Long userID) {
+        int rowChanged = docRepository.postApprove(docID, userID);
+        if (rowChanged == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @Transactional
+    public Boolean deleteApproval (Long docID) {
+        int rowChanged = docRepository.deleteApprove(docID);
+        if (rowChanged == 1) {
+            return true;
+        }
+        return false;
+    }
 }

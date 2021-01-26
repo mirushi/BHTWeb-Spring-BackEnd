@@ -37,6 +37,9 @@ public class CourseContent {
     @Column(nullable = false)
     protected Long position;
 
+    @ManyToOne
+    protected CoursePart coursePart;
+
     @Version
     protected short version;
 }

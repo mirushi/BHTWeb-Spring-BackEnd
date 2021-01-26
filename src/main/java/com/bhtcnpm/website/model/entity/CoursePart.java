@@ -3,6 +3,7 @@ package com.bhtcnpm.website.model.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "course_part")
@@ -25,6 +26,13 @@ public class CoursePart {
 
     @ManyToOne
     private CourseHeading courseHeading;
+
+    @OneToMany (
+            mappedBy = "coursePart",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<CourseContent> courseContents;
 
     @Version
     private short version;

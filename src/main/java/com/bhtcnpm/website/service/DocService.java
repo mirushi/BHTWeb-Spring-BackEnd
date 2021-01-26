@@ -12,4 +12,8 @@ public interface DocService {
     DocDetailsListDTO getAllDoc (Predicate predicate, @Min(0)Integer paginator);
 
     DocDetailsDTO putDoc (Long docID, Long lastEditedUserID, DocRequestDTO docRequestDTO);
+
+    Boolean postApproval (Long docID, Long userID);
+
+    Boolean deleteApproval (Long docID);
 }

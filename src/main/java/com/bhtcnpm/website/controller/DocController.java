@@ -44,6 +44,29 @@ public class DocController {
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
 
+    @PostMapping("{id}/approval")
+    @ResponseBody
+    public ResponseEntity postDocApproval (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
 
+        Boolean result = docService.postApproval(id, userID);
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 
+    @DeleteMapping("{id}/approval")
+    @ResponseBody
+    public ResponseEntity deleteDocApproval (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = docService.deleteApproval(id);
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 }

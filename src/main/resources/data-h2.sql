@@ -37,7 +37,7 @@ INSERT INTO DOC_SUBJECT(ID, NAME, VERSION) VALUES
 
 WITH docs (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, IS_APPROVED, IS_PENDING_USER_ACTION, IS_SOFT_DELETED, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_NAME, CATEGORY_NAME, SUBJECT_NAME, VERSION) AS
          ( VALUES
-		(doc_sequence.NEXTVAL, '20200114', 'Doc 01 Description', 'http://google.com/docs01', 10, ' tinyurl.com/2fhx8t34', true, false, false,'20200115' ,'20200115', 'Doc 01 Title', 34, 'bran', 'Doc Category 01', 'Doc Subject 02', 0),
+		(doc_sequence.NEXTVAL, '20200114', 'Doc 01 Description', 'http://google.com/docs01', 10, ' tinyurl.com/2fhx8t34', false, false, false,'20200115' ,'20200115', 'Doc 01 Title', 34, 'bran', 'Doc Category 01', 'Doc Subject 02', 0),
 		(doc_sequence.NEXTVAL, '20210114', 'Doc 02 Description', 'http://google.com/docs02', 100, ' tinyurl.com/2fhx8t34', true, false, false,'20200115' ,'20210115', 'Doc 02 Title', 256, 'alex', 'Doc Category 02', 'Doc Subject 01', 0)
          )
 

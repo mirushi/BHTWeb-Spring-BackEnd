@@ -70,6 +70,9 @@ public class Doc {
     @Column(nullable = false)
     private Boolean isApproved;
 
+    @ManyToOne
+    private UserWebsite isApprovedBy;
+
     @Column(nullable = false)
     private Boolean isSoftDeleted;
 
