@@ -3,11 +3,10 @@ package com.bhtcnpm.website.controller;
 import com.bhtcnpm.website.model.dto.Doc.DocDetailsDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocDetailsListDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocRequestDTO;
-import com.bhtcnpm.website.model.entity.Doc;
+import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Formula;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @RestController
 @RequestMapping("/documents")

@@ -1,21 +1,13 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
 import com.bhtcnpm.website.model.dto.Tag.TagMapper;
-import com.bhtcnpm.website.model.entity.Doc;
-import com.bhtcnpm.website.model.entity.DocCategory;
-import com.bhtcnpm.website.model.entity.DocSubject;
+import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.repository.DocCategoryRepository;
-import com.bhtcnpm.website.repository.DocRepository;
 import com.bhtcnpm.website.repository.DocSubjectRepository;
-import lombok.RequiredArgsConstructor;
-import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDateTime;
 
 @Mapper
 public abstract class DocRequestMapper {

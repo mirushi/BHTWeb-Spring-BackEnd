@@ -1,8 +1,6 @@
-package com.bhtcnpm.website.model.entity;
+package com.bhtcnpm.website.model.entity.DocEntities;
 
-import com.bhtcnpm.website.model.entity.enumeration.CourseContentType.CourseContentTypeConverter;
 import com.bhtcnpm.website.model.entity.enumeration.DocReactionType.DocReactionType;
-import com.bhtcnpm.website.model.entity.enumeration.DocReactionType.DocReactionTypeConverter;
 import lombok.Data;
 
 import javax.persistence.*;

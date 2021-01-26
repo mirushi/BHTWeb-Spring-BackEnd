@@ -1,7 +1,7 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
 import com.bhtcnpm.website.model.dto.Tag.TagMapper;
-import com.bhtcnpm.website.model.entity.Doc;
+import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

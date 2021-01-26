@@ -1,6 +1,6 @@
 package com.bhtcnpm.website.model.dto.DocComment;
 
-import com.bhtcnpm.website.model.entity.DocComment;
+import com.bhtcnpm.website.model.entity.DocEntities.DocComment;
 import com.bhtcnpm.website.repository.DocCommentRepository;
 import com.bhtcnpm.website.repository.DocRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
@@ -10,7 +10,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Objects;
 

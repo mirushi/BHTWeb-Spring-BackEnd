@@ -3,7 +3,6 @@ package com.bhtcnpm.website.controller;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionDTO;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionStatsDTO;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionUserOwnDTO;
-import com.bhtcnpm.website.model.entity.UserDocReaction;
 import com.bhtcnpm.website.service.UserDocReactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/documents/reactions")

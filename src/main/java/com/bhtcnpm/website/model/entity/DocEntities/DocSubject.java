@@ -1,8 +1,6 @@
-package com.bhtcnpm.website.model.entity;
+package com.bhtcnpm.website.model.entity.DocEntities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;

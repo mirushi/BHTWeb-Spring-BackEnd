@@ -1,5 +1,6 @@
-package com.bhtcnpm.website.model.entity;
+package com.bhtcnpm.website.model.entity.PostEntities;
 
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;

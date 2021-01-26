@@ -1,7 +1,7 @@
 package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.model.dto.Doc.*;
-import com.bhtcnpm.website.model.entity.Doc;
+import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.repository.DocRepository;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;

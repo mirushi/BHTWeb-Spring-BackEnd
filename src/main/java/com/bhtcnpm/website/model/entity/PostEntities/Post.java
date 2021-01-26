@@ -1,5 +1,7 @@
-package com.bhtcnpm.website.model.entity;
+package com.bhtcnpm.website.model.entity.PostEntities;
 
+import com.bhtcnpm.website.model.entity.Tag;
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +23,12 @@ public class Post {
             sequenceName = "post_sequence"
     )
     private Long id;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private String summary;
 
     @Lob
     @Column(nullable = false)

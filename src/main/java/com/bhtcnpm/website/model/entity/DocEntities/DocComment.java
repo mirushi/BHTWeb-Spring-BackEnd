@@ -1,6 +1,6 @@
-package com.bhtcnpm.website.model.entity;
+package com.bhtcnpm.website.model.entity.DocEntities;
 
-import com.bhtcnpm.website.model.entity.enumeration.DocReactionType.DocReactionType;
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.Data;
 
 import javax.persistence.*;

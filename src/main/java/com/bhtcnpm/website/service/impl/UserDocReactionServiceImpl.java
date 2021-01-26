@@ -4,23 +4,19 @@ import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionDTO;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionMapper;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionStatsDTO;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionUserOwnDTO;
-import com.bhtcnpm.website.model.entity.Doc;
-import com.bhtcnpm.website.model.entity.UserDocReaction;
-import com.bhtcnpm.website.model.entity.UserDocReactionId;
+import com.bhtcnpm.website.model.entity.DocEntities.Doc;
+import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
+import com.bhtcnpm.website.model.entity.DocEntities.UserDocReactionId;
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.model.entity.enumeration.DocReactionType.DocReactionType;
 import com.bhtcnpm.website.repository.DocRepository;
 import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.UserDocReactionService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

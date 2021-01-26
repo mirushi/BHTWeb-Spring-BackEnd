@@ -68,3 +68,21 @@ FROM
                           ON userDocReactions.USER_NAME = actor.NAME
                      JOIN DOC AS doc
                           ON userDocReactions.DOC_TITLE = doc.TITLE;
+
+-- INSERT POST CATEGORY
+INSERT INTO POST_CATEGORY (ID, NAME, VERSION)
+VALUES ( post_category_sequence.NEXTVAL, 'Post Category 01', 0);
+
+-- INSERT POST.
+WITH posts (ID, CONTENT, SUMMARY, TITLE, AUTHOR_NAME, CATEGORY_NAME, VERSION) AS (
+    VALUES (post_sequence.NEXTVAL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', 'Summary of post 01',
+    'Post 01 title', 'alex', 'Post Category 01', 0)
+)
+INSERT INTO POST (ID, CONTENT, SUMMARY, TITLE, AUTHOR_ID, CATEGORY_ID, VERSION)
+SELECT
+    posts.ID, posts.CONTENT, posts.SUMMARY, posts.TITLE, author.ID, category.ID, posts.VERSION
+FROM
+    posts JOIN USER_WEBSITE AS author
+                ON posts.AUTHOR_NAME = author.NAME
+          JOIN POST_CATEGORY AS category
+                ON posts.CATEGORY_NAME = category.NAME;

@@ -1,6 +1,6 @@
 package com.bhtcnpm.website.model.dto.UserDocReaction;
 
-import com.bhtcnpm.website.model.entity.UserDocReaction;
+import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

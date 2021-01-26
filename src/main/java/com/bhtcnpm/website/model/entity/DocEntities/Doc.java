@@ -1,11 +1,10 @@
-package com.bhtcnpm.website.model.entity;
+package com.bhtcnpm.website.model.entity.DocEntities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.bhtcnpm.website.model.entity.*;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Entity(name = "Doc")

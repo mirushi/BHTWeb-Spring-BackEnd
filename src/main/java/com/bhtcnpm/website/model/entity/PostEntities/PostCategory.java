@@ -1,11 +1,10 @@
-package com.bhtcnpm.website.model.entity;
+package com.bhtcnpm.website.model.entity.PostEntities;
 
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "post_category")

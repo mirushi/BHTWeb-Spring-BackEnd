@@ -1,9 +1,8 @@
-package com.bhtcnpm.website.model.entity;
+package com.bhtcnpm.website.model.entity.DocEntities;
 
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.Data;
-import org.apache.catalina.User;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;

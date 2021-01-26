@@ -1,5 +1,8 @@
 package com.bhtcnpm.website.model.entity;
 
+import com.bhtcnpm.website.model.entity.DocEntities.Doc;
+import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
+import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import lombok.Data;
 
 import javax.persistence.*;
