@@ -1,9 +1,6 @@
 package com.bhtcnpm.website.service;
 
-import com.bhtcnpm.website.model.dto.Post.PostDetailsDTO;
-import com.bhtcnpm.website.model.dto.Post.PostStatisticDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
+import com.bhtcnpm.website.model.dto.Post.*;
 import com.querydsl.core.types.Predicate;
 
 import java.util.List;
@@ -23,4 +20,7 @@ public interface PostService {
     Boolean createUserPostLike(Long postID, Long userID);
 
     Boolean deleteUserPostLike(Long postID, Long userID);
+
+    PostDetailsDTO createPost (PostRequestDTO postRequestDTO, Long userID);
+
 }

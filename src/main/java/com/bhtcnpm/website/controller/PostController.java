@@ -1,9 +1,6 @@
 package com.bhtcnpm.website.controller;
 
-import com.bhtcnpm.website.model.dto.Post.PostDetailsDTO;
-import com.bhtcnpm.website.model.dto.Post.PostStatisticDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
+import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
@@ -47,9 +44,16 @@ public class PostController {
         return new ResponseEntity<>(postSummaryListDTO, HttpStatus.OK);
     }
 
-//    @PostMapping
-//    @ResponseBody
-//    public ResponseEntity<PostDetailsDTO> postPostDetails (@RequestBody )
+    @PostMapping
+    @ResponseBody
+    public ResponseEntity<PostDetailsDTO> postPostDetails (@RequestBody PostRequestDTO postRequestDTO) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        PostDetailsDTO detailsDTO = postService.createPost(postRequestDTO, userID);
+
+        return new ResponseEntity<>(detailsDTO, HttpStatus.OK);
+    }
 
     @GetMapping(value = "/{id}")
     @ResponseBody

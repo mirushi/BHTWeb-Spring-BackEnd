@@ -98,4 +98,11 @@ public class PostServiceImpl implements PostService {
 
         return true;
     }
+
+    @Override
+    public PostDetailsDTO createPost(PostRequestDTO postRequestDTO, Long userID) {
+        Post post = postMapper.postRequestDTOToPost(postRequestDTO, userID, null);
+
+        return postMapper.postToPostDetailsDTO(postRepository.save(post));
+    }
 }
