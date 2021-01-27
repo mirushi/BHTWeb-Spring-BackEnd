@@ -105,4 +105,23 @@ public class PostServiceImpl implements PostService {
 
         return postMapper.postToPostDetailsDTO(postRepository.save(post));
     }
+
+    @Override
+    public PostDetailsDTO editPost(PostRequestDTO postRequestDTO, Long postID, Long userID) {
+        Optional<Post> optionalPost = postRepository.findById(postID);
+        if (!optionalPost.isPresent()) {
+            return null;
+        }
+
+        Post post = optionalPost.get();
+
+        post = postMapper.postRequestDTOToPost(postRequestDTO, userID, post);
+
+        return postMapper.postToPostDetailsDTO(post);
+    }
+
+    @Override
+    public Boolean rejectPost(Long postID, Long userID) {
+        return null;
+    }
 }

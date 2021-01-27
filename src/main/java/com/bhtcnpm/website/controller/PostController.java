@@ -63,6 +63,17 @@ public class PostController {
         return new ResponseEntity<>(postDetailsDTO, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/{id}")
+    @ResponseBody
+    public ResponseEntity<PostDetailsDTO> putPostDetails (@RequestBody PostRequestDTO postRequestDTO, @PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        PostDetailsDTO postDetailsDTO = postService.editPost(postRequestDTO, id, userID);
+
+        return new ResponseEntity<>(postDetailsDTO, HttpStatus.OK);
+    }
+
     @PostMapping(value = "/{id}/approval")
     @ResponseBody
     public ResponseEntity postPostApproval (@PathVariable Long id) {
@@ -120,6 +131,15 @@ public class PostController {
         }
 
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping(value = "/{id}/rejection")
+    @ResponseBody
+    public ResponseEntity postRejection (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        return null;
     }
 
 }

@@ -23,4 +23,8 @@ public interface PostService {
 
     PostDetailsDTO createPost (PostRequestDTO postRequestDTO, Long userID);
 
+    PostDetailsDTO editPost (PostRequestDTO postRequestDTO, Long postID, Long userID);
+
+    Boolean rejectPost (Long postID, Long userID);
+
 }

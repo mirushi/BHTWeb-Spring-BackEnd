@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -52,15 +54,16 @@ public abstract class PostMapper {
             return entity;
         }
 
-        post.setAuthor(userWebsiteRepository.getOne(userID));
-        post.setCategory(postCategoryRepository.getOne(postRequestDTO.getCategoryID()));
-        post.setContent(postRequestDTO.getContent());
-        post.setImageURL(postRequestDTO.getImageURL());
-
+        //If current entity existed, we don't set new author. We just update last updated.
         if (entity != null) {
+            post.setAuthor(userWebsiteRepository.getOne(userID));
             post.setLastUpdatedBy(userWebsiteRepository.getOne(userID));
             post.setLastUpdatedDtm(LocalDateTime.now());
         }
+
+        post.setCategory(postCategoryRepository.getOne(postRequestDTO.getCategoryID()));
+        post.setContent(postRequestDTO.getContent());
+        post.setImageURL(postRequestDTO.getImageURL());
 
         post.setIsApproved(false);
 
