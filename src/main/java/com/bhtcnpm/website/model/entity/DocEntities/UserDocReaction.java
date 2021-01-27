@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "user_doc_reaction")
 @Data
 public class UserDocReaction {
     @EmbeddedId

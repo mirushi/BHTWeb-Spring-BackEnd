@@ -69,16 +69,12 @@ public class Post {
     )
     private List<PostComment> comments;
 
-    @ManyToMany(cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-    })
-    @JoinTable(
-            name = "post_user_liked",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+    @OneToMany (
+            mappedBy = "userPostLikeId.post",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    private Set<UserWebsite> usersLiked;
+    private Set<UserPostLike> userPostLikes;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,

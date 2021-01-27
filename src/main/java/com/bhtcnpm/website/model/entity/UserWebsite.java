@@ -3,6 +3,7 @@ package com.bhtcnpm.website.model.entity;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
+import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -78,8 +79,12 @@ public class UserWebsite {
     )
     private List<Notification> notificationsOfUserOwn;
 
-    @ManyToMany(mappedBy = "usersLiked")
-    private Set<Post> postsLiked;
+    @OneToMany(
+            mappedBy = "userPostLikeId.user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<UserPostLike> userPostLikes;
 
     @ManyToMany(mappedBy = "usersSaved")
     private Set<Post> postsSaved;

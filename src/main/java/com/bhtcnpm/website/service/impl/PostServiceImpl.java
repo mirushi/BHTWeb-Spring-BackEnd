@@ -2,7 +2,11 @@ package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
+import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
+import com.bhtcnpm.website.model.entity.PostEntities.UserPostLikeId;
 import com.bhtcnpm.website.repository.PostRepository;
+import com.bhtcnpm.website.repository.UserPostLikeRepository;
+import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +27,10 @@ import java.util.Optional;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+
+    private final UserPostLikeRepository userPostLikeRepository;
+
+    private final UserWebsiteRepository userWebsiteRepository;
 
     private final PostMapper postMapper;
 
@@ -65,5 +73,29 @@ public class PostServiceImpl implements PostService {
     public Boolean deletePostApproval(Long postID) {
         int rowAffected = postRepository.deletePostApproval(postID);
         return rowAffected == 1;
+    }
+
+    @Override
+    public Boolean createUserPostLike(Long postID, Long userID) {
+        UserPostLikeId id = new UserPostLikeId();
+        id.setPost(postRepository.getOne(postID));
+        id.setUser(userWebsiteRepository.getOne(userID));
+        UserPostLike userPostLike = new UserPostLike();
+        userPostLike.setUserPostLikeId(id);
+
+        userPostLikeRepository.save(userPostLike);
+
+        return true;
+    }
+
+    @Override
+    public Boolean deleteUserPostLike(Long postID, Long userID) {
+        UserPostLikeId id = new UserPostLikeId();
+        id.setPost(postRepository.getOne(postID));
+        id.setUser(userWebsiteRepository.getOne(userID));
+
+        userPostLikeRepository.deleteById(id);
+
+        return true;
     }
 }

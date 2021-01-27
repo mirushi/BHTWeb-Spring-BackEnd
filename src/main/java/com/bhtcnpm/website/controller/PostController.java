@@ -84,4 +84,34 @@ public class PostController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping(value = "/{id}/likeStatus")
+    @ResponseBody
+    public ResponseEntity postLikeStatus (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = postService.createUserPostLike(id, userID);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping(value = "/{id}/likeStatus")
+    @ResponseBody
+    public ResponseEntity deleteLikeStatus (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = postService.deleteUserPostLike(id, userID);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
 }

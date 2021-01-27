@@ -19,4 +19,8 @@ public interface PostService {
     Boolean approvePost (Long postID, Long userID);
 
     Boolean deletePostApproval (Long postID);
+
+    Boolean createUserPostLike(Long postID, Long userID);
+
+    Boolean deleteUserPostLike(Long postID, Long userID);
 }

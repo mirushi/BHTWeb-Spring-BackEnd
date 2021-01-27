@@ -11,12 +11,11 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredicateExecutor<Post> {
-    @Query("SELECT new com.bhtcnpm.website.model.dto.Post.PostStatisticDTO(p.id, COUNT(DISTINCT pc.id) ,COUNT(DISTINCT uLiked.id), " +
-            "CASE WHEN EXISTS (SELECT uLikedSub.id FROM p.usersLiked uLikedSub WHERE uLikedSub.id = :userID) THEN true ELSE false END, " +
-            "CASE WHEN EXISTS (SELECT uSavedSub.id FROM p.usersSaved uSavedSub WHERE uSavedSub.id = :userID) THEN true ELSE false END) " +
+    @Query("SELECT new com.bhtcnpm.website.model.dto.Post.PostStatisticDTO(p.id, COUNT(DISTINCT pc.id) ,COUNT(DISTINCT uLiked.userPostLikeId.user.id), " +
+            "CASE WHEN EXISTS (SELECT 1 FROM p.userPostLikes uLikedSub WHERE uLikedSub.userPostLikeId.user.id = :userID) THEN true ELSE false END, " +
+            "CASE WHEN EXISTS (SELECT 1 FROM p.usersSaved uSavedSub WHERE uSavedSub.id = :userID) THEN true ELSE false END) " +
             "FROM Post p " +
-            "LEFT JOIN p.usersLiked uLiked " +
-            "LEFT JOIN p.usersSaved uSaved " +
+            "LEFT JOIN p.userPostLikes uLiked " +
             "LEFT JOIN PostComment pc ON p.id = pc.post.id " +
             "WHERE p.id IN :postIDs " +
             "GROUP BY p.id")

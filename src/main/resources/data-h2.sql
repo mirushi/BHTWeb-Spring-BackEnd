@@ -97,7 +97,7 @@ WITH postUserLiked (POST_TITLE, USER_NAME) AS (
     VALUES ('Post 01 title', 'bran'),
     ('Post 01 title', 'alex')
 )
-INSERT INTO POST_USER_LIKED (POST_ID, USER_ID)
+INSERT INTO USER_POST_LIKE (POST_ID, USER_ID)
 SELECT
     posts.ID, users.ID
 FROM
