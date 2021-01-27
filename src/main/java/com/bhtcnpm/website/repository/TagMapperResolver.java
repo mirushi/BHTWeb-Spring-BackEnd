@@ -29,7 +29,7 @@ public class TagMapperResolver {
                 }
 
             } else if (dto.getContent() != null) {
-                result = tagRepository.findByContent(dto.getContent());
+                result = tagRepository.findByContentEquals(dto.getContent());
 
                 if (result == null) {
                     result = new Tag();

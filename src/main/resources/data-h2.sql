@@ -134,3 +134,16 @@ FROM
                       ON childComments.POST_TITLE = post.TITLE
                  JOIN POST_COMMENT as parentComment
                       ON childComments.PARENT_COMMENT_CONTENT = parentComment.CONTENT;
+
+-- INSERT TAG.
+INSERT INTO TAG(ID, CONTENT, VERSION) VALUES
+(tag_sequence.NEXTVAL, 'elit', 0),
+(tag_sequence.NEXTVAL, 'erat', 0),
+(tag_sequence.NEXTVAL, 'rutrum', 0),
+(tag_sequence.NEXTVAL, 'nunc', 0),
+(tag_sequence.NEXTVAL, 'felis', 0),
+(tag_sequence.NEXTVAL, 'tag111', 0),
+(tag_sequence.NEXTVAL, 'tag11', 0),
+(tag_sequence.NEXTVAL, 'tag111111', 0),
+(tag_sequence.NEXTVAL, 'tag1111', 0),
+(tag_sequence.NEXTVAL, 'tag11111', 0);
