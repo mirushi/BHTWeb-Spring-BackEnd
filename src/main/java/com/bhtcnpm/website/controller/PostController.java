@@ -55,4 +55,33 @@ public class PostController {
         return new ResponseEntity<>(postDetailsDTO, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/{id}/approval")
+    @ResponseBody
+    public ResponseEntity postPostApproval (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = postService.approvePost(id, userID);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping(value = "/{id}/approval")
+    @ResponseBody
+    public ResponseEntity postDeleteApproval (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = postService.deletePostApproval(id);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
 }

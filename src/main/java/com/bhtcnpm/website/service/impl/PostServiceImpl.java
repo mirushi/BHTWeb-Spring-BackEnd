@@ -54,4 +54,16 @@ public class PostServiceImpl implements PostService {
         }
         return null;
     }
+
+    @Override
+    public Boolean approvePost(Long postID, Long userID) {
+        int rowAffected = postRepository.approvePost(postID, userID);
+        return rowAffected == 1;
+    }
+
+    @Override
+    public Boolean deletePostApproval(Long postID) {
+        int rowAffected = postRepository.deletePostApproval(postID);
+        return rowAffected == 1;
+    }
 }

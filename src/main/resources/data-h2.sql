@@ -75,19 +75,23 @@ VALUES ( post_category_sequence.NEXTVAL, 'Post Category 01', 0),
        (post_category_sequence.NEXTVAL, 'Post Category 02', 0);
 
 -- INSERT POST.
-WITH posts (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_NAME, CATEGORY_NAME, VERSION) AS (
+WITH posts (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_NAME, CATEGORY_NAME, IS_APPROVED, IS_APPROVED_BY , VERSION) AS (
     VALUES (post_sequence.NEXTVAL,'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     'https://i.imgur.com/LnHFl0h.png', '20200126' , 'Summary of post 01',
-    'Post 01 title', 300,'alex', 'Post Category 01', 0)
+    'Post 01 title', 300,'alex', 'Post Category 01', false, 'bran', 0)
 )
-INSERT INTO POST (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_ID, CATEGORY_ID, VERSION)
+INSERT INTO POST (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_ID, CATEGORY_ID, IS_APPROVED, IS_APPROVED_BY_ID, VERSION)
 SELECT
-    posts.ID, posts.CONTENT, posts.IMAGEURL, posts.PUBLISH_DTM, posts.SUMMARY, posts.TITLE, posts.READING_TIME, author.ID, category.ID, posts.VERSION
+    posts.ID, posts.CONTENT, posts.IMAGEURL, posts.PUBLISH_DTM, posts.SUMMARY, posts.TITLE, posts.READING_TIME, author.ID, category.ID, posts.IS_APPROVED, approvedByUser.ID, posts.VERSION
 FROM
     posts JOIN USER_WEBSITE AS author
                 ON posts.AUTHOR_NAME = author.NAME
           JOIN POST_CATEGORY AS category
-                ON posts.CATEGORY_NAME = category.NAME;
+                ON posts.CATEGORY_NAME = category.NAME
+          JOIN USER_WEBSITE AS approvedByUser
+                ON posts.IS_APPROVED_BY = approvedByUser.NAME;
+
+-- INSERT POST USER LIKE.
 
 WITH postUserLiked (POST_TITLE, USER_NAME) AS (
     VALUES ('Post 01 title', 'bran'),
@@ -101,3 +105,32 @@ FROM
                         ON postUserLiked.POST_TITLE = posts.TITLE
                   JOIN USER_WEBSITE AS users
                         ON postUserLiked.USER_NAME = users.NAME;
+
+-- INSERT POST COMMENT.
+WITH postComments (ID, CONTENT, AUTHOR_NAME, POST_TITLE, PARENT_COMMENT_CONTENT, VERSION) AS (
+    VALUES (post_comment_sequence.NEXTVAL, 'Bài hay, thanks admin', 'alex', 'Post 01 title', null, 0),
+    (post_comment_sequence.NEXTVAL, 'Thanks nhé', 'bran', 'Post 01 title', null, 0)
+)
+INSERT INTO POST_COMMENT (ID, CONTENT, AUTHOR_ID, PARENT_COMMENT_ID, POST_ID, VERSION)
+SELECT
+    postComments.ID, postComments.CONTENT, author.ID, null, post.ID, postComments.VERSION
+FROM
+    postComments JOIN USER_WEBSITE as author
+                        ON postComments.AUTHOR_NAME = author.NAME
+                 JOIN POST as post
+                        ON postComments.POST_TITLE = post.TITLE;
+
+-- INSERT CHILD COMMENT.
+WITH childComments (ID, CONTENT, AUTHOR_NAME, POST_TITLE, PARENT_COMMENT_CONTENT, VERSION) AS (
+    VALUES(post_comment_sequence.NEXTVAL, 'Child comment nè', 'alex', 'Post 01 title', 'Thanks nhé', 0)
+)
+INSERT INTO POST_COMMENT (ID, CONTENT, AUTHOR_ID, PARENT_COMMENT_ID, POST_ID, VERSION)
+SELECT
+    childComments.ID, childComments.CONTENT, author.ID, parentComment.ID, post.ID, childComments.VERSION
+FROM
+    childComments JOIN USER_WEBSITE as author
+                      ON childComments.AUTHOR_NAME = author.NAME
+                 JOIN POST as post
+                      ON childComments.POST_TITLE = post.TITLE
+                 JOIN POST_COMMENT as parentComment
+                      ON childComments.PARENT_COMMENT_CONTENT = parentComment.CONTENT;

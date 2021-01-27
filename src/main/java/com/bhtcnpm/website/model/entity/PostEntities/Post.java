@@ -37,6 +37,18 @@ public class Post {
     @Column(nullable = false)
     private LocalDateTime publishDtm;
 
+    @ManyToOne
+    private UserWebsite lastUpdatedBy;
+
+    @Column
+    private LocalDateTime lastUpdatedDtm;
+
+    @Column(nullable = false)
+    private Boolean isApproved;
+
+    @ManyToOne
+    private UserWebsite isApprovedBy;
+
     @Column(nullable = false)
     private Integer readingTime;
 

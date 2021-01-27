@@ -4,6 +4,7 @@ import com.bhtcnpm.website.model.dto.Post.PostStatisticDTO;
 import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
@@ -20,4 +21,18 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
             "WHERE p.id IN :postIDs " +
             "GROUP BY p.id")
     List<PostStatisticDTO> getPostStatisticDTOs (List<Long> postIDs, Long userID);
+
+    @Modifying
+    @Query("UPDATE Post as p " +
+            "SET p.isApproved = TRUE, " +
+            "p.isApprovedBy.id = :userID "+
+            "WHERE p.id = :postID")
+    int approvePost (Long postID, Long userID);
+
+    @Modifying
+    @Query("UPDATE Post as p " +
+            "SET p.isApproved = FALSE, " +
+            "p.isApprovedBy.id = null "+
+            "WHERE p.id = :postID")
+    int deletePostApproval(Long postID);
 }

@@ -15,4 +15,8 @@ public interface PostService {
     PostSummaryListDTO getPostSummary (Predicate predicate, Integer paginator);
 
     PostDetailsDTO getPostDetails (Long id);
+
+    Boolean approvePost (Long postID, Long userID);
+
+    Boolean deletePostApproval (Long postID);
 }
