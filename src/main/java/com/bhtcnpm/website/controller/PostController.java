@@ -47,6 +47,10 @@ public class PostController {
         return new ResponseEntity<>(postSummaryListDTO, HttpStatus.OK);
     }
 
+    @PostMapping
+    @ResponseBody
+    public ResponseEntity<PostDetailsDTO> postPostDetails (@RequestBody )
+
     @GetMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity<PostDetailsDTO> getPostDetails (@PathVariable Long id) {
