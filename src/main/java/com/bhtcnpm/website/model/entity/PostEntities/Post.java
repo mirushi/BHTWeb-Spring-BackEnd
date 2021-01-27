@@ -5,6 +5,7 @@ import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -29,6 +30,15 @@ public class Post {
 
     @Column(nullable = false)
     private String summary;
+
+    @Column(nullable = false)
+    private String imageURL;
+
+    @Column(nullable = false)
+    private LocalDateTime publishDtm;
+
+    @Column(nullable = false)
+    private Integer readingTime;
 
     @Lob
     @Column(nullable = false)

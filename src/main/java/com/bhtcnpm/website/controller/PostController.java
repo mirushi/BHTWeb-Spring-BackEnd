@@ -1,13 +1,23 @@
 package com.bhtcnpm.website.controller;
 
+import com.bhtcnpm.website.model.dto.Post.PostDetailsDTO;
 import com.bhtcnpm.website.model.dto.Post.PostStatisticDTO;
+import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
+import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
+import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.service.PostService;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -29,6 +39,20 @@ public class PostController {
         return new ResponseEntity<>(postStatisticDTOS, HttpStatus.OK);
     }
 
+    @GetMapping
+    @ResponseBody
+    public ResponseEntity<PostSummaryListDTO> getPostSummary (@QuerydslPredicate(root = Post.class)Predicate predicate, @NotNull @Min(0) Integer paginator) {
+        PostSummaryListDTO postSummaryListDTO = postService.getPostSummary(predicate, paginator);
 
+        return new ResponseEntity<>(postSummaryListDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}")
+    @ResponseBody
+    public ResponseEntity<PostDetailsDTO> getPostDetails (@PathVariable Long id) {
+        PostDetailsDTO postDetailsDTO = postService.getPostDetails(id);
+
+        return new ResponseEntity<>(postDetailsDTO, HttpStatus.OK);
+    }
 
 }

@@ -71,18 +71,33 @@ FROM
 
 -- INSERT POST CATEGORY
 INSERT INTO POST_CATEGORY (ID, NAME, VERSION)
-VALUES ( post_category_sequence.NEXTVAL, 'Post Category 01', 0);
+VALUES ( post_category_sequence.NEXTVAL, 'Post Category 01', 0),
+       (post_category_sequence.NEXTVAL, 'Post Category 02', 0);
 
 -- INSERT POST.
-WITH posts (ID, CONTENT, SUMMARY, TITLE, AUTHOR_NAME, CATEGORY_NAME, VERSION) AS (
-    VALUES (post_sequence.NEXTVAL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', 'Summary of post 01',
-    'Post 01 title', 'alex', 'Post Category 01', 0)
+WITH posts (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_NAME, CATEGORY_NAME, VERSION) AS (
+    VALUES (post_sequence.NEXTVAL,'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
+    'https://i.imgur.com/LnHFl0h.png', '20200126' , 'Summary of post 01',
+    'Post 01 title', 300,'alex', 'Post Category 01', 0)
 )
-INSERT INTO POST (ID, CONTENT, SUMMARY, TITLE, AUTHOR_ID, CATEGORY_ID, VERSION)
+INSERT INTO POST (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_ID, CATEGORY_ID, VERSION)
 SELECT
-    posts.ID, posts.CONTENT, posts.SUMMARY, posts.TITLE, author.ID, category.ID, posts.VERSION
+    posts.ID, posts.CONTENT, posts.IMAGEURL, posts.PUBLISH_DTM, posts.SUMMARY, posts.TITLE, posts.READING_TIME, author.ID, category.ID, posts.VERSION
 FROM
     posts JOIN USER_WEBSITE AS author
                 ON posts.AUTHOR_NAME = author.NAME
           JOIN POST_CATEGORY AS category
                 ON posts.CATEGORY_NAME = category.NAME;
+
+WITH postUserLiked (POST_TITLE, USER_NAME) AS (
+    VALUES ('Post 01 title', 'bran'),
+    ('Post 01 title', 'alex')
+)
+INSERT INTO POST_USER_LIKED (POST_ID, USER_ID)
+SELECT
+    posts.ID, users.ID
+FROM
+    postUserLiked JOIN POST AS posts
+                        ON postUserLiked.POST_TITLE = posts.TITLE
+                  JOIN USER_WEBSITE AS users
+                        ON postUserLiked.USER_NAME = users.NAME;
