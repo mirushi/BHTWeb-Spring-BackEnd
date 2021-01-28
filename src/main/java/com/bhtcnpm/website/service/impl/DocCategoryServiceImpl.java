@@ -26,4 +26,24 @@ public class DocCategoryServiceImpl implements DocCategoryService {
 
         return docCategoryMapper.docCategoryListToDocCategoryDTOList(queryResult);
     }
+
+    @Override
+    public DocCategoryDTO createDocCategory(DocCategoryDTO docCategoryDTO) {
+        DocCategory docCategory = docCategoryMapper.docCategoryDTOToDocCategory(docCategoryDTO, new DocCategory());
+        docCategory = docCategoryRepository.save(docCategory);
+
+        return docCategoryMapper.docCategoryToDocCategoryDTO(docCategory);
+    }
+
+    @Override
+    public DocCategoryDTO updateDocCategory(Long docCategoryId, DocCategoryDTO docCategoryDTO) {
+
+        DocCategory docCategory = docCategoryRepository.getOne(docCategoryId);
+
+        docCategory = docCategoryMapper.docCategoryDTOToDocCategory(docCategoryDTO, docCategory);
+
+        docCategory = docCategoryRepository.save(docCategory);
+
+        return docCategoryMapper.docCategoryToDocCategoryDTO(docCategory);
+    }
 }

@@ -8,4 +8,8 @@ public interface DocCategoryService {
 
     List<DocCategoryDTO> getDocCategories ();
 
+    DocCategoryDTO createDocCategory(DocCategoryDTO docCategoryDTO);
+
+    DocCategoryDTO updateDocCategory (Long docCategoryId, DocCategoryDTO docCategoryDTO);
+
 }

@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +24,20 @@ public class DocCategoryController {
         List<DocCategoryDTO> docCategoryDTOs = docCategoryService.getDocCategories();
 
         return new ResponseEntity<>(docCategoryDTOs, HttpStatus.OK);
+    }
+
+    @PostMapping
+    @ResponseBody
+    public ResponseEntity<DocCategoryDTO> postDocCategory (@RequestBody DocCategoryDTO docCategoryDTO) {
+        DocCategoryDTO docCategoryDTOnew = docCategoryService.createDocCategory(docCategoryDTO);
+        return new ResponseEntity<>(docCategoryDTOnew, HttpStatus.OK);
+    }
+
+    @PutMapping("{id}")
+    @ResponseBody
+    public ResponseEntity<DocCategoryDTO> putDocCategory (@PathVariable Long id, @RequestBody DocCategoryDTO docCategoryDTO) {
+        DocCategoryDTO docCategoryDTOnew = docCategoryService.updateDocCategory(id, docCategoryDTO);
+        return new ResponseEntity<>(docCategoryDTOnew, HttpStatus.OK);
     }
 
 }
