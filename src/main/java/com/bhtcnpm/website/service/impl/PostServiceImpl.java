@@ -4,6 +4,7 @@ import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostLikeId;
+import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.PostRepository;
 import com.bhtcnpm.website.repository.UserPostLikeRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
@@ -65,13 +66,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Boolean approvePost(Long postID, Long userID) {
-        int rowAffected = postRepository.approvePost(postID, userID);
+        int rowAffected = postRepository.setPostState(postID, PostStateType.APPROVED);
         return rowAffected == 1;
     }
 
     @Override
     public Boolean deletePostApproval(Long postID) {
-        int rowAffected = postRepository.deletePostApproval(postID);
+        int rowAffected = postRepository.setPostState(postID, PostStateType.PENDING_APPROVAL);
         return rowAffected == 1;
     }
 

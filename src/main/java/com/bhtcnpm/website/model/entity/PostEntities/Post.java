@@ -2,6 +2,7 @@ package com.bhtcnpm.website.model.entity.PostEntities;
 
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -44,12 +45,6 @@ public class Post {
     private LocalDateTime lastUpdatedDtm;
 
     @Column(nullable = false)
-    private Boolean isApproved;
-
-    @ManyToOne
-    private UserWebsite isApprovedBy;
-
-    @Column(nullable = false)
     private Integer readingTime;
 
     @Lob
@@ -61,6 +56,10 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private PostCategory category;
+
+    @Enumerated
+    @Column(columnDefinition = "smallint")
+    private PostStateType postState;
 
     @OneToMany(
             mappedBy = "post",

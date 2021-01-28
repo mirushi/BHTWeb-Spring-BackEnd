@@ -4,6 +4,7 @@ import com.bhtcnpm.website.model.dto.Tag.TagMapper;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.PostCategory;
 import com.bhtcnpm.website.model.entity.Tag;
+import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.PostCategoryRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import org.jsoup.Jsoup;
@@ -59,13 +60,12 @@ public abstract class PostMapper {
             post.setAuthor(userWebsiteRepository.getOne(userID));
             post.setLastUpdatedBy(userWebsiteRepository.getOne(userID));
             post.setLastUpdatedDtm(LocalDateTime.now());
+            post.setPostState(PostStateType.PENDING_APPROVAL);
         }
 
         post.setCategory(postCategoryRepository.getOne(postRequestDTO.getCategoryID()));
         post.setContent(postRequestDTO.getContent());
         post.setImageURL(postRequestDTO.getImageURL());
-
-        post.setIsApproved(false);
 
         //Calculate reading time.
         post.setReadingTime(calculateReadTime(postRequestDTO.getContent()));

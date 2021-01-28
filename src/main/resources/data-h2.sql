@@ -75,21 +75,19 @@ VALUES ( post_category_sequence.NEXTVAL, 'Post Category 01', 0),
        (post_category_sequence.NEXTVAL, 'Post Category 02', 0);
 
 -- INSERT POST.
-WITH posts (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_NAME, CATEGORY_NAME, IS_APPROVED, IS_APPROVED_BY , VERSION) AS (
+WITH posts (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_NAME, CATEGORY_NAME, POST_STATE, VERSION) AS (
     VALUES (post_sequence.NEXTVAL,'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     'https://i.imgur.com/LnHFl0h.png', '20200126' , 'Summary of post 01',
-    'Post 01 title', 300,'alex', 'Post Category 01', false, 'bran', 0)
+    'Post 01 title', 300,'alex', 'Post Category 01', 1, 0)
 )
-INSERT INTO POST (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_ID, CATEGORY_ID, IS_APPROVED, IS_APPROVED_BY_ID, VERSION)
+INSERT INTO POST (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_ID, CATEGORY_ID, POST_STATE, VERSION)
 SELECT
-    posts.ID, posts.CONTENT, posts.IMAGEURL, posts.PUBLISH_DTM, posts.SUMMARY, posts.TITLE, posts.READING_TIME, author.ID, category.ID, posts.IS_APPROVED, approvedByUser.ID, posts.VERSION
+    posts.ID, posts.CONTENT, posts.IMAGEURL, posts.PUBLISH_DTM, posts.SUMMARY, posts.TITLE, posts.READING_TIME, author.ID, category.ID, posts.POST_STATE, posts.VERSION
 FROM
     posts JOIN USER_WEBSITE AS author
                 ON posts.AUTHOR_NAME = author.NAME
           JOIN POST_CATEGORY AS category
-                ON posts.CATEGORY_NAME = category.NAME
-          JOIN USER_WEBSITE AS approvedByUser
-                ON posts.IS_APPROVED_BY = approvedByUser.NAME;
+                ON posts.CATEGORY_NAME = category.NAME;
 
 -- INSERT POST USER LIKE.
 

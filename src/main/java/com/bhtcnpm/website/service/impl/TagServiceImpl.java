@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,7 +27,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<TagDTO> getTagQuickSearch(String content) {
         Pageable pageable = PageRequest.of(0, QUICK_SEARCH_RESULT_LIMIT);
-        List<Tag> finalQueryResult = tagRepository.findByContentEqualsOrContentContainingIgnoreCase(pageable, content, content);
+        List<Tag> finalQueryResult = tagRepository.getSimilarTags(pageable, content ,content);
 
         List<TagDTO> result = tagMapper.tagListToTagDTOList(finalQueryResult);
 
