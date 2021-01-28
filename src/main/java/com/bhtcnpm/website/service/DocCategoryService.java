@@ -12,4 +12,5 @@ public interface DocCategoryService {
 
     DocCategoryDTO updateDocCategory (Long docCategoryId, DocCategoryDTO docCategoryDTO);
 
+    Boolean deleteDocCategory (Long docCategoryId);
 }

@@ -40,4 +40,16 @@ public class DocCategoryController {
         return new ResponseEntity<>(docCategoryDTOnew, HttpStatus.OK);
     }
 
+    @DeleteMapping("{id}")
+    @ResponseBody
+    public ResponseEntity deleteDocCategory (@PathVariable Long id) {
+        Boolean result = docCategoryService.deleteDocCategory(id);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
 }

@@ -46,4 +46,12 @@ public class DocCategoryServiceImpl implements DocCategoryService {
 
         return docCategoryMapper.docCategoryToDocCategoryDTO(docCategory);
     }
+
+    @Override
+    public Boolean deleteDocCategory(Long docCategoryId) {
+        DocCategory category = docCategoryRepository.getOne(docCategoryId);
+        docCategoryRepository.delete(category);
+
+        return true;
+    }
 }
