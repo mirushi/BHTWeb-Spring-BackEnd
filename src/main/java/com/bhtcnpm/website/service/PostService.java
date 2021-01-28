@@ -27,4 +27,11 @@ public interface PostService {
 
     Boolean rejectPost (Long postID, Long userID);
 
+    Boolean createSavedStatus (Long postID, Long userID);
+
+    Boolean deleteSavedStatus (Long postID, Long userID);
+
+    List<PostSummaryDTO> getPostWithActivityCategory();
+
+    List<PostSummaryDTO> getPostNewest();
 }

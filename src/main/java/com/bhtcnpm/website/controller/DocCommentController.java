@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.controller;
 
+import com.bhtcnpm.website.model.dto.DocComment.DocCommentDTO;
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentListDTO;
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentRequestDTO;
 import com.bhtcnpm.website.service.DocCommentService;
@@ -10,20 +11,20 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/documents/{id}/comments")
+@RequestMapping("/documents")
 @Validated
 @RequiredArgsConstructor
 public class DocCommentController {
 
     private final DocCommentService docCommentService;
 
-    @GetMapping
+    @GetMapping("{id}/comments")
     @ResponseBody
     public ResponseEntity<DocCommentListDTO> getDocComment (@RequestParam Integer paginator, @PathVariable Long id) {
         return new ResponseEntity<>(docCommentService.getDocComment(paginator, id), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("{id}/comments")
     @ResponseBody
     public ResponseEntity postDocComment (@RequestBody DocCommentRequestDTO requestDTO, @PathVariable Long id) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
@@ -40,4 +41,27 @@ public class DocCommentController {
         return new ResponseEntity(status);
     }
 
+    @PutMapping("/comments/{id}")
+    @ResponseBody
+    public ResponseEntity<DocCommentDTO> putDocComment (@RequestBody DocCommentRequestDTO docCommentRequestDTO, @PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        DocCommentDTO docCommentDTO = docCommentService.putDocComment(docCommentRequestDTO, id, userID);
+
+        return new ResponseEntity<>(docCommentDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/comments/{id}")
+    @ResponseBody
+    public ResponseEntity deleteDocComment (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        if (docCommentService.deleteDocComment(id, userID)) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 }

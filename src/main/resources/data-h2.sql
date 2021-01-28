@@ -69,16 +69,49 @@ FROM
                      JOIN DOC AS doc
                           ON userDocReactions.DOC_TITLE = doc.TITLE;
 
+-- INSERT DOC COMMENT.
+WITH docComments (ID, CONTENT, AUTHOR_NAME, DOC_TITLE) AS (
+    VALUES (doc_comment_sequence.NEXTVAL, 'Tài liệu hay và chính xác quá. Cảm ơn admin.', 'alex', 'Doc 01 Title'),
+    (doc_comment_sequence.NEXTVAL,'Tài liệu hữu ích. Nhưng có nhiều chỗ sai. Admin xem lại nha.', 'bran', 'Doc 02 Title')
+)
+INSERT INTO DOC_COMMENT (ID, CONTENT, AUTHOR_ID, DOC_ID, PARENT_COMMENT_ID)
+SELECT docComments.ID, docComments.CONTENT, author.ID ,doc.ID, null
+FROM
+    docComments JOIN USER_WEBSITE AS author ON docComments.AUTHOR_NAME = author.NAME
+                JOIN DOC AS doc ON docComments.DOC_TITLE = doc.TITLE;
+
+-- INSERT DOC COMMENT CHILD.
+WITH docComments (ID, CONTENT, AUTHOR_NAME, DOC_TITLE, PARENT_COMMENT_CONTENT) AS (
+    VALUES (doc_comment_sequence.NEXTVAL, 'Ok thanks bạn nhé', 'bran', 'Doc 01 Title', 'Tài liệu hay và chính xác quá. Cảm ơn admin.'),
+    (doc_comment_sequence.NEXTVAL,'Cảm ơn bạn đã nhắc nhở', 'bran', 'Doc 02 Title', 'Tài liệu hữu ích. Nhưng có nhiều chỗ sai. Admin xem lại nha.')
+)
+INSERT INTO DOC_COMMENT (ID, CONTENT, AUTHOR_ID, DOC_ID, PARENT_COMMENT_ID)
+SELECT docComments.ID, docComments.CONTENT, author.ID ,doc.ID, childComment.ID
+FROM
+    docComments JOIN USER_WEBSITE AS author ON docComments.AUTHOR_NAME = author.NAME
+                JOIN DOC AS doc ON docComments.DOC_TITLE = doc.TITLE
+                JOIN DOC_COMMENT AS childComment ON docComments.PARENT_COMMENT_CONTENT = childComment.CONTENT;
+
 -- INSERT POST CATEGORY
 INSERT INTO POST_CATEGORY (ID, NAME, VERSION)
 VALUES ( post_category_sequence.NEXTVAL, 'Post Category 01', 0),
-       (post_category_sequence.NEXTVAL, 'Post Category 02', 0);
+       (post_category_sequence.NEXTVAL, 'Post Category 02', 0),
+       (post_category_sequence.NEXTVAL, 'Hoạt động', 0);
 
 -- INSERT POST.
 WITH posts (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_NAME, CATEGORY_NAME, POST_STATE, VERSION) AS (
     VALUES (post_sequence.NEXTVAL,'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     'https://i.imgur.com/LnHFl0h.png', '20200126' , 'Summary of post 01',
-    'Post 01 title', 300,'alex', 'Post Category 01', 1, 0)
+    'Post 01 title', 300,'alex', 'Post Category 01', 1, 0),
+    (post_sequence.NEXTVAL,'augue, eu tempor erat neque non quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam fringilla cursus purus. Nullam scelerisque neque sed sem egestas blandit. Nam nulla magna, malesuada vel, convallis in, cursus et, eros. Proin ultrices. Duis volutpat nunc sit amet metus. Aliquam erat volutpat. Nulla facilisis. Suspendisse commodo tincidunt nibh. Phasellus nulla. Integer vulputate, risus a ultricies adipiscing, enim mi tempor lorem, eget mollis lectus pede et risus. Quisque libero lacus, varius et, euismod et, commodo at, libero. Morbi accumsan laoreet ipsum. Curabitur consequat, lectus sit amet luctus vulputate, nisi sem semper erat, in consectetuer ipsum nunc id enim. Curabitur massa. Vestibulum accumsan neque et nunc. Quisque ornare tortor at risus. Nunc ac sem ut dolor dapibus gravida. Aliquam tincidunt, nunc ac mattis ornare, lectus ante dictum mi, ac mattis velit justo nec ante. Maecenas mi felis, adipiscing fringilla, porttitor vulputate, posuere vulputate, lacus.',
+                'https://i.imgur.com/LnHFl0h.png', '20200126' , 'etNullam ut nisi a odio semper cursus.',
+    'magna. Nam ligula elit, pretium et, rutrum non, hendrerit id, ante.', 300,'alex', 'Hoạt động', 1, 0),
+    (post_sequence.NEXTVAL,'Aenean eget metus. In nec orci. Donec nibh. Quisque nonummy ipsum non arcu. Vivamus sit amet risus. Donec egestas. Aliquam nec enim. Nunc ut erat. Sed nunc est, mollis non, cursus non, egestas a, dui. Cras pellentesque. Sed dictum. Proin eget odio. Aliquam vulputate ullamcorper magna. Sed eu eros. Nam consequat dolor vitae dolor. Donec fringilla. Donec feugiat metus sit amet ante. Vivamus non lorem vitae odio sagittis semper. Nam tempor diam dictum sapien. Aenean massa. Integer vitae nibh. Donec est mauris, rhoncus id, mollis nec, cursus a, enim. Suspendisse aliquet, sem ut cursus luctus, ipsum leo elementum sem, vitae aliquam eros turpis non enim. Mauris quis turpis vitae',
+    'https://i.imgur.com/LnHFl0h.png', '20200126' , 'Nullam scelerisque neque sed sem egestas blandit. Vestibulum',
+    'mvel, faucibus id, libero. Donec consectetuer mauris id sapien. Cras', 300,'alex', 'Hoạt động', 1, 0),
+    (post_sequence.NEXTVAL,'Đây là một bài post mới',
+    'https://i.imgur.com/LnHFl0h.png', '20200126' , 'Đây là tóm tắt của bài post',
+    'Đây là tiêu đề của bài post', 300,'alex', 'Post Category 02', 1, 0)
 )
 INSERT INTO POST (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_ID, CATEGORY_ID, POST_STATE, VERSION)
 SELECT

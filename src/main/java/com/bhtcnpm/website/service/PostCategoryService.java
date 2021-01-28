@@ -8,4 +8,7 @@ public interface PostCategoryService {
 
     List<PostCategoryDTO> getAllPostCategories ();
 
+    PostCategoryDTO postPostCategory (PostCategoryDTO postCategoryDTO);
+
+    PostCategoryDTO putPostCategory (PostCategoryDTO postCategoryDTO, Long postCategoryID);
 }

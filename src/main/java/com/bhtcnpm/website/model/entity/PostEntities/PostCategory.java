@@ -23,7 +23,7 @@ public class PostCategory {
     )
     private Long id;
 
-    @NaturalId
+    @NaturalId(mutable = true)
     @Column(nullable = false)
     private String name;
 

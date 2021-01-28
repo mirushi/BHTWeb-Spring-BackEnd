@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,5 +28,31 @@ public class PostCategoryServiceImpl implements PostCategoryService {
         List<PostCategoryDTO> result = postCategoryMapper.postCategoryListToPostCategoryDTOList(queryResult);
 
         return result;
+    }
+
+    @Override
+    public PostCategoryDTO postPostCategory(PostCategoryDTO postCategoryDTO) {
+
+        PostCategory postCategory = postCategoryMapper.postCategoryDTOToPostCategory(postCategoryDTO, null);
+
+        postCategory = postCategoryRepository.save(postCategory);
+
+        return postCategoryMapper.postCategoryToPostCategoryDTO(postCategory);
+    }
+
+    @Override
+    public PostCategoryDTO putPostCategory(PostCategoryDTO postCategoryDTO, Long postCategoryID) {
+
+        Optional<PostCategory> optionalPostCategory = postCategoryRepository.findById(postCategoryID);
+
+        if (!optionalPostCategory.isPresent()) {
+            return null;
+        }
+
+        PostCategory postCategory = postCategoryMapper.postCategoryDTOToPostCategory(postCategoryDTO, optionalPostCategory.get());
+
+        postCategory = postCategoryRepository.save(postCategory);
+
+        return postCategoryMapper.postCategoryToPostCategoryDTO(postCategory);
     }
 }

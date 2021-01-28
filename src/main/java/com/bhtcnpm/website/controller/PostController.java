@@ -139,7 +139,54 @@ public class PostController {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
         Long userID = 1L;
 
-        return null;
+        Boolean result = postService.rejectPost(id, userID);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping(value = "/{id}/savedStatus")
+    @ResponseBody
+    public ResponseEntity postSavedStatus (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = postService.createSavedStatus(id, userID);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping(value = "/{id}/savedStatus")
+    @ResponseBody
+    public ResponseEntity deleteSavedStatus (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = postService.deleteSavedStatus(id, userID);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("newactivities")
+    @ResponseBody
+    public ResponseEntity<List<PostSummaryDTO>> getNewActivities () {
+        return new ResponseEntity<>(postService.getPostWithActivityCategory(), HttpStatus.OK);
+    }
+
+    @GetMapping("newest")
+    @ResponseBody
+    public ResponseEntity<List<PostSummaryDTO>> getNewestPost () {
+        return new ResponseEntity<>(postService.getPostNewest(), HttpStatus.OK);
+    }
 }

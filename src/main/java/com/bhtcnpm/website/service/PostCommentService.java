@@ -12,4 +12,6 @@ public interface PostCommentService {
     List<PostCommentDTO> getChildComments (Long parentCommentID);
 
     PostCommentDTO postPostComment (PostCommentRequestDTO postCommentRequestDTO, Long postID, Long authorID);
+
+    PostCommentDTO putPostComment (PostCommentRequestDTO postCommentRequestDTO, Long commentID, Long authorID);
 }

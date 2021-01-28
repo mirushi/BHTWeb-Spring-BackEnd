@@ -2,13 +2,10 @@ package com.bhtcnpm.website.model.dto.Post;
 
 import com.bhtcnpm.website.model.dto.Tag.TagMapper;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
-import com.bhtcnpm.website.model.entity.PostEntities.PostCategory;
-import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.PostCategoryRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import org.jsoup.Jsoup;
-import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -16,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,6 +42,8 @@ public abstract class PostMapper {
     public PostSummaryListDTO postPageToPostSummaryListDTO (Page<Post> postPage) {
         return new PostSummaryListDTO(postToPostSummaryDTOs(postPage.getContent()), postPage.getTotalPages());
     }
+
+    public abstract List<PostSummaryDTO> postPageToPostSummaryDTOList (Page<Post> postPage);
 
     public Post postRequestDTOToPost (PostRequestDTO postRequestDTO, Long userID, Post entity) {
         Post post = Objects.requireNonNullElseGet(entity, Post::new);

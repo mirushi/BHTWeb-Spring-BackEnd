@@ -75,16 +75,12 @@ public class Post {
     )
     private Set<UserPostLike> userPostLikes;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(
-            name = "post_user_saved",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+    @OneToMany (
+            mappedBy = "userPostSaveId.post",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    private Set<UserWebsite> usersSaved;
+    private Set<UserPostSave> userPostSaves;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,

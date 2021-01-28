@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.service.impl;
 
+import com.bhtcnpm.website.model.dto.DocComment.DocCommentDTO;
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentListDTO;
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentMapper;
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentRequestDTO;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -29,7 +31,7 @@ public class DocCommentServiceImpl implements DocCommentService {
     public DocCommentListDTO getDocComment (Integer pageNum, Long docID) {
         Pageable pageable = PageRequest.of(pageNum,PAGE_SIZE);
 
-        Page<DocComment> queryResults = docCommentRepository.findAllByDocId(pageable, docID);
+        Page<DocComment> queryResults = docCommentRepository.findAllByDocIdAndParentCommentIsNull(pageable, docID);
 
         DocCommentListDTO result = docCommentMapper.docCommentPageToDocCommentListDTO(queryResults);
 
@@ -41,6 +43,34 @@ public class DocCommentServiceImpl implements DocCommentService {
         DocComment docComment = docCommentMapper.docCommentDTOToDocComment(requestDTO, authorID, docID, null);
 
         docCommentRepository.save(docComment);
+        return true;
+    }
+
+    @Override
+    public DocCommentDTO putDocComment(DocCommentRequestDTO requestDTO, Long commentID, Long userID) {
+        //TODO: Please check if user has sufficient right to change comment.
+        Optional<DocComment> optionalDocComment = docCommentRepository.findById(commentID);
+
+        if (!optionalDocComment.isPresent()) {
+            return null;
+        }
+
+        DocComment docComment = optionalDocComment.get();
+
+        docComment = docCommentMapper.docCommentDTOToDocComment(
+                requestDTO, docComment.getAuthor().getId(), docComment.getDoc().getId(), docComment);
+
+        docComment = docCommentRepository.save(docComment);
+
+        return docCommentMapper.docCommentToDocCommentDTO(docComment);
+    }
+
+    @Override
+    public Boolean deleteDocComment(Long commentID, Long userID) {
+        //TODO: Please check if user has enough permission to perform delete comment.
+        DocComment comment = docCommentRepository.getOne(commentID);
+        docCommentRepository.delete(comment);
+        
         return true;
     }
 }

@@ -1,12 +1,11 @@
 package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.model.dto.Post.*;
-import com.bhtcnpm.website.model.entity.PostEntities.Post;
-import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
-import com.bhtcnpm.website.model.entity.PostEntities.UserPostLikeId;
+import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.PostRepository;
 import com.bhtcnpm.website.repository.UserPostLikeRepository;
+import com.bhtcnpm.website.repository.UserPostSaveRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
@@ -31,11 +30,17 @@ public class PostServiceImpl implements PostService {
 
     private final UserPostLikeRepository userPostLikeRepository;
 
+    private final UserPostSaveRepository userPostSaveRepository;
+
     private final UserWebsiteRepository userWebsiteRepository;
 
     private final PostMapper postMapper;
 
     private static final int PAGE_SIZE = 10;
+
+    private static final int PAGE_SIZE_NEW_ACTIVITIES = 16;
+
+    private static final int PAGE_SIZE_NEWEST = 16;
 
     @Override
     public List<PostStatisticDTO> getPostStatistic(List<Long> postIDs, Long userID) {
@@ -123,6 +128,54 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Boolean rejectPost(Long postID, Long userID) {
-        return null;
+        int rowChanged = postRepository.setPostState(postID, PostStateType.REJECTED);
+
+        if (rowChanged == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean createSavedStatus(Long postID, Long userID) {
+        UserPostSaveId id = new UserPostSaveId();
+        id.setPost(postRepository.getOne(postID));
+        id.setUser(userWebsiteRepository.getOne(userID));
+        UserPostSave userPostSave = new UserPostSave();
+        userPostSave.setUserPostSaveId(id);
+
+        userPostSaveRepository.save(userPostSave);
+
+        return true;
+    }
+
+    @Override
+    public Boolean deleteSavedStatus(Long postID, Long userID) {
+        UserPostSaveId id = new UserPostSaveId();
+        id.setPost(postRepository.getOne(postID));
+        id.setUser(userWebsiteRepository.getOne(userID));
+
+        userPostSaveRepository.deleteById(id);
+
+        return true;
+    }
+
+    @Override
+    public List<PostSummaryDTO> getPostWithActivityCategory() {
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE_NEW_ACTIVITIES);
+
+        List<Post> queryResult = postRepository.findByCategoryNameOrderByPublishDtmDesc(pageable,"Hoạt động");
+
+        return postMapper.postToPostSummaryDTOs(queryResult);
+    }
+
+    @Override
+    public List<PostSummaryDTO> getPostNewest() {
+        Sort sort = Sort.by("publishDtm").descending();
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE_NEWEST, sort);
+
+        Page<Post> queryResult = postRepository.findAll(pageable);
+
+        return postMapper.postPageToPostSummaryDTOList(queryResult);
     }
 }

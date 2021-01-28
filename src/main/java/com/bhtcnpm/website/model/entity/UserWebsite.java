@@ -4,6 +4,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
+import com.bhtcnpm.website.model.entity.PostEntities.UserPostSave;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -86,8 +87,12 @@ public class UserWebsite {
     )
     private Set<UserPostLike> userPostLikes;
 
-    @ManyToMany(mappedBy = "usersSaved")
-    private Set<Post> postsSaved;
+    @OneToMany (
+            mappedBy = "userPostSaveId.user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<UserPostSave> userPostSaves;
 
     @ManyToMany(mappedBy = "usersSaved")
     private Set<Course> savedCourses;

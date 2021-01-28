@@ -9,4 +9,8 @@ public interface DocCommentService {
     DocCommentListDTO getDocComment (Integer pageNum, Long docID);
 
     Boolean postDocComment (DocCommentRequestDTO requestDTO, Long authorID, Long docID);
+
+    DocCommentDTO putDocComment(DocCommentRequestDTO requestDTO, Long commentID, Long userID);
+
+    Boolean deleteDocComment (Long commentID, Long userID);
 }
