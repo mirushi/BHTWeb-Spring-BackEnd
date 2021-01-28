@@ -32,7 +32,6 @@ public class Post {
     @Column(nullable = false)
     private String summary;
 
-    @Column(nullable = false)
     private String imageURL;
 
     @Column(nullable = false)

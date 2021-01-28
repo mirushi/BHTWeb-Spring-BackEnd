@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(uses = {TagMapper.class})
 public interface DocDetailsMapper {
 
@@ -21,5 +23,7 @@ public interface DocDetailsMapper {
     @Mapping(source = "publishDtm", target = "publishDtm")
     @Mapping(source = "viewCount", target = "views")
     DocDetailsDTO docToDocDetailsDTO (Doc doc);
+
+    List<DocDetailsDTO> docListToDocDetailsDTOList (List<Doc> docs);
 
 }

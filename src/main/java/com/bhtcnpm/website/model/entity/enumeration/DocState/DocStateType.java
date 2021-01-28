@@ -4,5 +4,6 @@ public enum DocStateType {
     APPROVED,
     PENDING_APPROVAL,
     PENDING_FIX,
-    REJECTED
+    REJECTED,
+    SOFT_DELETED
 }

@@ -2,6 +2,7 @@ package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
+import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.DocRepository;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
@@ -25,6 +26,8 @@ import java.util.stream.StreamSupport;
 public class DocServiceImpl implements DocService {
 
     private static final int PAGE_SIZE = 10;
+
+    private static final int PAGE_SIZE_RELATED_DOC = 3;
 
     private final DocDetailsMapper docDetailsMapper;
 
@@ -68,7 +71,7 @@ public class DocServiceImpl implements DocService {
     @Override
     @Transactional
     public Boolean postApproval(Long docID, Long userID) {
-        int rowChanged = docRepository.postApprove(docID, userID);
+        int rowChanged = docRepository.setDocState(docID, DocStateType.APPROVED);
         if (rowChanged == 1) {
             return true;
         }
@@ -78,7 +81,7 @@ public class DocServiceImpl implements DocService {
     @Override
     @Transactional
     public Boolean deleteApproval (Long docID) {
-        int rowChanged = docRepository.deleteApprove(docID);
+        int rowChanged = docRepository.setDocState(docID, DocStateType.PENDING_APPROVAL);
         if (rowChanged == 1) {
             return true;
         }
@@ -93,5 +96,39 @@ public class DocServiceImpl implements DocService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Boolean postReject(Long docID, Long userID) {
+        //TODO: Please check condition before allowing doc approval;
+
+        int rowChanged = docRepository.setDocState(docID, DocStateType.REJECTED);
+        if (rowChanged == 1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Boolean undoReject(Long docID, Long userID) {
+        //TODO: Please check condition before allowing doc approval;
+        int rowChanged = docRepository.setDocState(docID, DocStateType.PENDING_APPROVAL);
+
+        if (rowChanged == 1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public List<DocDetailsDTO> getRelatedDocs(Long docID) {
+        //TODO: Please implement a real getRelatedDocs function.
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE_RELATED_DOC);
+
+        List<Doc> docs = docRepository.getDocByIdNot(pageable, docID);
+
+        return docDetailsMapper.docListToDocDetailsDTOList(docs);
     }
 }

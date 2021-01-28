@@ -7,6 +7,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @RequestMapping("/documents")
@@ -82,4 +84,43 @@ public class DocController {
 
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping("{id}/rejection")
+    @ResponseBody
+    public ResponseEntity rejectDoc (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = docService.postReject(id, userID);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("{id}/rejection")
+    @ResponseBody
+    public ResponseEntity undoRejectDoc (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = docService.undoReject(id, userID);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("{id}/related")
+    @ResponseBody
+    public ResponseEntity<List<DocDetailsDTO>> getRelatedDocs (@PathVariable Long id) {
+        List<DocDetailsDTO> docDetailsDTOs = docService.getRelatedDocs(id);
+
+        return new ResponseEntity<>(docDetailsDTOs, HttpStatus.OK);
+    }
+
 }

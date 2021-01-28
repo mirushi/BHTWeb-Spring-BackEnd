@@ -35,15 +35,15 @@ INSERT INTO DOC_SUBJECT(ID, NAME, VERSION) VALUES
 (doc_subject_sequence.NEXTVAL, 'Doc Subject 01', 0),
 (doc_subject_sequence.NEXTVAL, 'Doc Subject 02', 0);
 
-WITH docs (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, IS_APPROVED, IS_PENDING_USER_ACTION, IS_SOFT_DELETED, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_NAME, CATEGORY_NAME, SUBJECT_NAME, VERSION) AS
+WITH docs (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, DOC_STATE, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_NAME, CATEGORY_NAME, SUBJECT_NAME, VERSION) AS
          ( VALUES
-		(doc_sequence.NEXTVAL, '20200114', 'Doc 01 Description', 'http://google.com/docs01', 10, ' tinyurl.com/2fhx8t34', false, false, false,'20200115' ,'20200115', 'Doc 01 Title', 34, 'bran', 'Doc Category 01', 'Doc Subject 02', 0),
-		(doc_sequence.NEXTVAL, '20210114', 'Doc 02 Description', 'http://google.com/docs02', 100, ' tinyurl.com/2fhx8t34', true, false, false,'20200115' ,'20210115', 'Doc 02 Title', 256, 'alex', 'Doc Category 02', 'Doc Subject 01', 0)
+		(doc_sequence.NEXTVAL, '20200114', 'Doc 01 Description', 'http://google.com/docs01', 10, ' tinyurl.com/2fhx8t34', 0,'20200115' ,'20200115', 'Doc 01 Title', 34, 'bran', 'Doc Category 01', 'Doc Subject 02', 0),
+		(doc_sequence.NEXTVAL, '20210114', 'Doc 02 Description', 'http://google.com/docs02', 100, ' tinyurl.com/2fhx8t34', 0,'20200115' ,'20210115', 'Doc 02 Title', 256, 'alex', 'Doc Category 02', 'Doc Subject 01', 0)
          )
 
-INSERT INTO DOC (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, IS_APPROVED, IS_PENDING_USER_ACTION, IS_SOFT_DELETED, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_ID, CATEGORY_ID, SUBJECT_ID, VERSION)
+INSERT INTO DOC (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, DOC_STATE, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_ID, CATEGORY_ID, SUBJECT_ID, VERSION)
 SELECT
-    docs.ID, docs.CREATED_DTM, docs.DESCRIPTION, docs.DOCURL, docs.DOWNLOAD_COUNT, docs.IMAGEURL, docs.IS_APPROVED, docs.IS_PENDING_USER_ACTION, docs.IS_SOFT_DELETED, docs.LAST_EDIT_DTM ,docs.PUBLISH_DTM, docs.TITLE, docs.VIEW_COUNT, author.ID, category.ID, subject.ID, docs.VERSION
+    docs.ID, docs.CREATED_DTM, docs.DESCRIPTION, docs.DOCURL, docs.DOWNLOAD_COUNT, docs.IMAGEURL, docs.DOC_STATE, docs.LAST_EDIT_DTM ,docs.PUBLISH_DTM, docs.TITLE, docs.VIEW_COUNT, author.ID, category.ID, subject.ID, docs.VERSION
 FROM
     docs JOIN USER_WEBSITE AS author
               ON docs.AUTHOR_NAME = author.NAME

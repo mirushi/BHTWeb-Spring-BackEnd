@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.dto.Doc.DocRequestDTO;
 import com.querydsl.core.types.Predicate;
 
 import javax.validation.constraints.Min;
+import java.util.List;
 
 public interface DocService {
 
@@ -18,4 +19,10 @@ public interface DocService {
     Boolean deleteApproval (Long docID);
 
     Boolean increaseDownloadCount (Long docID, Long userID);
+
+    Boolean postReject(Long docID, Long userID);
+
+    Boolean undoReject(Long docID, Long userID);
+
+    List<DocDetailsDTO> getRelatedDocs (Long docID);
 }

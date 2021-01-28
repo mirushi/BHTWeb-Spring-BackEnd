@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
 import com.bhtcnpm.website.model.entity.*;
+import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -66,17 +67,9 @@ public class Doc {
     @Column(nullable = false)
     private String docURL;
 
-    @Column(nullable = false)
-    private Boolean isApproved;
-
-    @ManyToOne
-    private UserWebsite isApprovedBy;
-
-    @Column(nullable = false)
-    private Boolean isSoftDeleted;
-
-    @Column(nullable = false)
-    private Boolean isPendingUserAction;
+    @Enumerated
+    @Column(columnDefinition = "smallint")
+    private DocStateType docState;
 
     @ManyToMany(cascade = {
             CascadeType.MERGE,
