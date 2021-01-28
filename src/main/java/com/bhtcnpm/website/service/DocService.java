@@ -16,4 +16,6 @@ public interface DocService {
     Boolean postApproval (Long docID, Long userID);
 
     Boolean deleteApproval (Long docID);
+
+    Boolean increaseDownloadCount (Long docID, Long userID);
 }

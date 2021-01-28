@@ -70,7 +70,7 @@ public class DocCommentServiceImpl implements DocCommentService {
         //TODO: Please check if user has enough permission to perform delete comment.
         DocComment comment = docCommentRepository.getOne(commentID);
         docCommentRepository.delete(comment);
-        
+
         return true;
     }
 }

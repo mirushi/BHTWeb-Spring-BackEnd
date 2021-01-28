@@ -54,9 +54,10 @@ public abstract class PostMapper {
 
         //If current entity existed, we don't set new author. We just update last updated.
         if (entity != null) {
-            post.setAuthor(userWebsiteRepository.getOne(userID));
             post.setLastUpdatedBy(userWebsiteRepository.getOne(userID));
             post.setLastUpdatedDtm(LocalDateTime.now());
+        } else {
+            post.setAuthor(userWebsiteRepository.getOne(userID));
             post.setPostState(PostStateType.PENDING_APPROVAL);
         }
 

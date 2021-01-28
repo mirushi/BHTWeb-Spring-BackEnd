@@ -84,4 +84,14 @@ public class DocServiceImpl implements DocService {
         }
         return false;
     }
+
+    @Override
+    public Boolean increaseDownloadCount(Long docID, Long userID) {
+        //TODO: Please check condition before increase download count;
+        int rowChanged = docRepository.incrementDownloadCount(docID);
+        if (rowChanged == 1) {
+            return true;
+        }
+        return false;
+    }
 }

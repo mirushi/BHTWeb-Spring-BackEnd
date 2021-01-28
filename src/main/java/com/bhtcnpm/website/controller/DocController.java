@@ -67,4 +67,19 @@ public class DocController {
         }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping("{id}/downloadCount")
+    @ResponseBody
+    public ResponseEntity increaseDownloadCount (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = docService.increaseDownloadCount(id, userID);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 }
