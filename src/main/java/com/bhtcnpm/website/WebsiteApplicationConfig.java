@@ -15,7 +15,7 @@ public class WebsiteApplicationConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:3000")
                         .allowedMethods("GET", "PUT", "POST", "DELETE")
-                        .allowedHeaders("userLoginToken");
+                        .allowedHeaders("userLoginToken", "Content-Type");
             }
         };
     }
