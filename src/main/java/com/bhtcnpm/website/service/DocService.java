@@ -24,5 +24,7 @@ public interface DocService {
 
     Boolean undoReject(Long docID, Long userID);
 
+    DocDetailsDTO createDocument (DocRequestDTO docRequestDTO);
+
     List<DocDetailsDTO> getRelatedDocs (Long docID);
 }

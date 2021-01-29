@@ -6,6 +6,7 @@ import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -188,5 +189,11 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<List<PostSummaryDTO>> getNewestPost () {
         return new ResponseEntity<>(postService.getPostNewest(), HttpStatus.OK);
+    }
+
+    @GetMapping("searchFilter")
+    @ResponseBody
+    public ResponseEntity<PostSummaryListDTO> searchFilter (@QuerydslPredicate(root = Post.class) Predicate predicate, @RequestParam String searchTerm, @RequestParam Integer paginator) {
+        return new ResponseEntity<>(postService.getPostBySearchTerm(predicate, paginator, searchTerm), HttpStatus.OK);
     }
 }

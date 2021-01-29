@@ -33,4 +33,5 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
     int incrementDownloadCount(Long docID);
 
     List<Doc> getDocByIdNot (Pageable pageable, Long docID);
+
 }

@@ -34,4 +34,6 @@ public interface PostService {
     List<PostSummaryDTO> getPostWithActivityCategory();
 
     List<PostSummaryDTO> getPostNewest();
+
+    PostSummaryListDTO getPostBySearchTerm (Predicate predicate, Integer paginator, String searchTerm);
 }

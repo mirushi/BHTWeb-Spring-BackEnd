@@ -10,7 +10,6 @@ import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -166,7 +165,7 @@ public class PostServiceImpl implements PostService {
 
         List<Post> queryResult = postRepository.findByCategoryNameOrderByPublishDtmDesc(pageable,"Hoạt động");
 
-        return postMapper.postToPostSummaryDTOs(queryResult);
+        return postMapper.postListToPostSummaryDTOs(queryResult);
     }
 
     @Override
@@ -177,5 +176,14 @@ public class PostServiceImpl implements PostService {
         Page<Post> queryResult = postRepository.findAll(pageable);
 
         return postMapper.postPageToPostSummaryDTOList(queryResult);
+    }
+
+    @Override
+    public PostSummaryListDTO getPostBySearchTerm(Predicate predicate, Integer paginator, String searchTerm) {
+        Pageable pageable = PageRequest.of(paginator, PAGE_SIZE);
+        
+        Page<PostSummaryDTO> queryResult = postRepository.searchBySearchTerm(pageable, searchTerm, searchTerm);
+
+        return postMapper.postSummaryPageToPostSummaryListDTO(queryResult);
     }
 }

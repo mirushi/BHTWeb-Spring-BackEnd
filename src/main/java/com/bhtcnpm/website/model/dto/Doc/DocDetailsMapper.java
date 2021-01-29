@@ -26,4 +26,6 @@ public interface DocDetailsMapper {
 
     List<DocDetailsDTO> docListToDocDetailsDTOList (List<Doc> docs);
 
+
+
 }

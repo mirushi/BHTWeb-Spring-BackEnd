@@ -131,4 +131,10 @@ public class DocServiceImpl implements DocService {
 
         return docDetailsMapper.docListToDocDetailsDTOList(docs);
     }
+
+    @Override
+    public DocDetailsDTO createDocument(DocRequestDTO docRequestDTO) {
+//        docRequestMapper.updateDocFromDocRequestDTO()
+        return null;
+    }
 }

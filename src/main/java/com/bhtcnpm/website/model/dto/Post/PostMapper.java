@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Mapper
 public abstract class PostMapper {
@@ -31,7 +32,7 @@ public abstract class PostMapper {
     @Mapping(target = "categoryName", source = "category.name")
     public abstract PostSummaryDTO postToPostSummaryDTO (Post post);
 
-    public abstract List<PostSummaryDTO> postToPostSummaryDTOs (List<Post> posts);
+    public abstract List<PostSummaryDTO> postListToPostSummaryDTOs(List<Post> posts);
 
     @Mapping(target = "authorID", source = "post.author.id")
     @Mapping(target = "authorName", source = "post.author.name")
@@ -40,7 +41,11 @@ public abstract class PostMapper {
     public abstract PostDetailsDTO postToPostDetailsDTO (Post post);
 
     public PostSummaryListDTO postPageToPostSummaryListDTO (Page<Post> postPage) {
-        return new PostSummaryListDTO(postToPostSummaryDTOs(postPage.getContent()), postPage.getTotalPages());
+        return new PostSummaryListDTO(postListToPostSummaryDTOs(postPage.getContent()), postPage.getTotalPages());
+    }
+
+    public PostSummaryListDTO postSummaryPageToPostSummaryListDTO (Page<PostSummaryDTO> postSummaryDTOs) {
+        return new PostSummaryListDTO(postSummaryDTOs.get().collect(Collectors.toList()), postSummaryDTOs.getTotalPages());
     }
 
     public abstract List<PostSummaryDTO> postPageToPostSummaryDTOList (Page<Post> postPage);

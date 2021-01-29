@@ -39,10 +39,19 @@ public class DocController {
     public ResponseEntity<DocDetailsDTO> putDocument (@PathVariable Long id, @RequestBody DocRequestDTO docRequestDTO) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
         Long userID = 1L;
-        DocDetailsDTO docDetailsDTO = docService.putDoc(id, userID, docRequestDTO);
 
+        DocDetailsDTO docDetailsDTO = docService.putDoc(id, userID, docRequestDTO);
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
+//
+//    @PostMapping
+//    @ResponseBody
+//    public ResponseEntity<DocDetailsDTO> postDocument (@RequestBody DocRequestDTO docRequestDTO) {
+//        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+//        Long userID = 1L;
+//
+//        DocDetailsDTO docDetailsDTO = docService.
+//    }
 
     @PostMapping("{id}/approval")
     @ResponseBody

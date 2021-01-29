@@ -1,10 +1,12 @@
 package com.bhtcnpm.website.model.dto.Post;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
 public class PostSummaryDTO {
     private Long id;
     private Long authorID;
@@ -13,7 +15,7 @@ public class PostSummaryDTO {
     private String categoryName;
     private String imageURL;
     private LocalDateTime publishDtm;
-    private Long readingTime;
+    private Integer readingTime;
     private String summary;
     private String title;
 }
