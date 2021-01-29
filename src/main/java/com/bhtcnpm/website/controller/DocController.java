@@ -1,9 +1,6 @@
 package com.bhtcnpm.website.controller;
 
-import com.bhtcnpm.website.model.dto.Doc.DocDetailsDTO;
-import com.bhtcnpm.website.model.dto.Doc.DocDetailsListDTO;
-import com.bhtcnpm.website.model.dto.Doc.DocRequestDTO;
-import com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO;
+import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
@@ -137,6 +134,17 @@ public class DocController {
         List<DocDetailsDTO> docDetailsDTOs = docService.getRelatedDocs(id);
 
         return new ResponseEntity<>(docDetailsDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping("searchFilter")
+    @ResponseBody
+    public ResponseEntity<List<DocStatisticDTO>> getDocStatistic (@RequestParam List<Long> docIDs) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        List<DocStatisticDTO> docStatisticDTOs = docService.getDocStatistics(docIDs, userID);
+
+        return new ResponseEntity<>(docStatisticDTOs, HttpStatus.OK);
     }
 
 }

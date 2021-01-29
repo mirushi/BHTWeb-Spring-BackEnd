@@ -146,4 +146,10 @@ public class DocServiceImpl implements DocService {
 
         return docRepository.getTrendingDoc(pageable);
     }
+
+    @Override
+    public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, Long userID) {
+
+        return null;
+    }
 }

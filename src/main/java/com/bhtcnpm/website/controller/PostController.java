@@ -7,6 +7,7 @@ import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -194,9 +195,9 @@ public class PostController {
     public ResponseEntity<PostSummaryListDTO> searchFilter (
             @QuerydslPredicate(root = Post.class) Predicate predicate,
             @RequestParam String searchTerm,
-            @RequestParam("page") int page,
-            @RequestParam("sort") String sort,
-            Pageable pageable) {
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "sort", required = false) String sort,
+            @PageableDefault Pageable pageable) {
         return new ResponseEntity<>(postService.getPostBySearchTerm(predicate, pageable, searchTerm), HttpStatus.OK);
     }
 }
