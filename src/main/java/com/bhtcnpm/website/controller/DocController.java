@@ -3,6 +3,7 @@ package com.bhtcnpm.website.controller;
 import com.bhtcnpm.website.model.dto.Doc.DocDetailsDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocDetailsListDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocRequestDTO;
+import com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
@@ -43,7 +44,7 @@ public class DocController {
         DocDetailsDTO docDetailsDTO = docService.putDoc(id, userID, docRequestDTO);
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
-//
+
 //    @PostMapping
 //    @ResponseBody
 //    public ResponseEntity<DocDetailsDTO> postDocument (@RequestBody DocRequestDTO docRequestDTO) {
@@ -52,6 +53,12 @@ public class DocController {
 //
 //        DocDetailsDTO docDetailsDTO = docService.
 //    }
+
+    @GetMapping("trending")
+    @ResponseBody
+    public ResponseEntity<List<DocSummaryDTO>> getTrendingDocs () {
+        return new ResponseEntity<>(docService.getTrending(), HttpStatus.OK);
+    }
 
     @PostMapping("{id}/approval")
     @ResponseBody

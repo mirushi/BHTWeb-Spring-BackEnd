@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.repository;
 
 import com.bhtcnpm.website.model.dto.Doc.DocQuickSearchResult;
+import com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.custom.DocRepositoryCustom;
@@ -34,4 +35,10 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
 
     List<Doc> getDocByIdNot (Pageable pageable, Long docID);
 
+//    @Query("SELECT new com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO() " +
+//            "FROM Doc d " +
+//            "JOIN UserDocReaction usr ON d.id = usr.userDocReactionId.doc.id " +
+//            "ORDER BY d.downloadCount, count(usr.docReactionType = 0)/ " +
+//            "GROUP BY d ")
+//    List<DocSummaryDTO> getTrendingDoc (Pageable pageable);
 }

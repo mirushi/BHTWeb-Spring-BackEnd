@@ -29,6 +29,8 @@ public class DocServiceImpl implements DocService {
 
     private static final int PAGE_SIZE_RELATED_DOC = 3;
 
+    private static final int PAGE_SIZE_TRENDING_DOC = 16;
+
     private final DocDetailsMapper docDetailsMapper;
 
     private final DocRequestMapper docRequestMapper;
@@ -136,5 +138,12 @@ public class DocServiceImpl implements DocService {
     public DocDetailsDTO createDocument(DocRequestDTO docRequestDTO) {
 //        docRequestMapper.updateDocFromDocRequestDTO()
         return null;
+    }
+
+    @Override
+    public List<DocSummaryDTO> getTrending() {
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE_TRENDING_DOC);
+
+        return docRepository.getTrendingDoc(pageable);
     }
 }

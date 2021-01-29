@@ -3,6 +3,7 @@ package com.bhtcnpm.website.service;
 import com.bhtcnpm.website.model.dto.Doc.DocDetailsDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocDetailsListDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocRequestDTO;
+import com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO;
 import com.querydsl.core.types.Predicate;
 
 import javax.validation.constraints.Min;
@@ -27,4 +28,6 @@ public interface DocService {
     DocDetailsDTO createDocument (DocRequestDTO docRequestDTO);
 
     List<DocDetailsDTO> getRelatedDocs (Long docID);
+
+    List<DocSummaryDTO> getTrending ();
 }

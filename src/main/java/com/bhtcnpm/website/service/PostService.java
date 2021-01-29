@@ -1,7 +1,6 @@
 package com.bhtcnpm.website.service;
 
 import com.bhtcnpm.website.model.dto.Post.*;
-import com.bhtcnpm.website.model.entity.enumeration.SortOrder;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Pageable;
 
