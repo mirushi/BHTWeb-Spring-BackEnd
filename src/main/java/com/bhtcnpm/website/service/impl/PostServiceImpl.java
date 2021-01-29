@@ -3,11 +3,13 @@ package com.bhtcnpm.website.service.impl;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.model.entity.enumeration.SortOrder;
 import com.bhtcnpm.website.repository.PostRepository;
 import com.bhtcnpm.website.repository.UserPostLikeRepository;
 import com.bhtcnpm.website.repository.UserPostSaveRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.PostService;
+import com.querydsl.core.types.Order;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -179,11 +181,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSummaryListDTO getPostBySearchTerm(Predicate predicate, Integer paginator, String searchTerm) {
-        Pageable pageable = PageRequest.of(paginator, PAGE_SIZE);
-        
-        Page<PostSummaryDTO> queryResult = postRepository.searchBySearchTerm(pageable, searchTerm, searchTerm);
+    public PostSummaryListDTO getPostBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
+        //Reset PAGE_SIZE to predefined value.
+        pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
 
-        return postMapper.postSummaryPageToPostSummaryListDTO(queryResult);
+        PostSummaryListDTO queryResult = postRepository.searchBySearchTerm(predicate, pageable, searchTerm);
+
+        return queryResult;
     }
 }

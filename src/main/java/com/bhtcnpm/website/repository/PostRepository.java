@@ -6,9 +6,9 @@ import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.custom.PostRepositoryCustom;
-import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -43,9 +43,9 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
             "ORDER BY "+ "(CASE WHEN EXISTS (SELECT 1 FROM p WHERE p.title = :searchTermExact) THEN TRUE ELSE FALSE END)" +" DESC, length(p.title)")
     List<PostQuickSearchResult> quickSearch (Pageable pageable, String searchTerm, String searchTermExact);
 
-    @Query (value = "SELECT new com.bhtcnpm.website.model.dto.Post.PostSummaryDTO(p.id, p.author.id, p.author.name, p.category.id, p.category.name, p.imageURL, p.publishDtm, p.readingTime, p.summary, p.title) " +
-            "FROM Post p " +
-            "WHERE p.title LIKE %:searchTerm% " +
-            "ORDER BY "+ "(CASE WHEN EXISTS (SELECT 1 FROM p WHERE p.title = :searchTermExact) THEN TRUE ELSE FALSE END)" +" DESC, length(p.title)")
-    Page<PostSummaryDTO> searchBySearchTerm (Pageable pageable, String searchTerm, String searchTermExact);
+//    @Query (value = "SELECT new com.bhtcnpm.website.model.dto.Post.PostSummaryDTO(p.id, p.author.id, p.author.name, p.category.id, p.category.name, p.imageURL, p.publishDtm, p.readingTime, p.summary, p.title) " +
+//            "FROM Post p " +
+//            "WHERE p.title LIKE %:searchTerm% " +
+//            "ORDER BY "+ "(CASE WHEN EXISTS (SELECT 1 FROM p WHERE p.title = :searchTermExact) THEN TRUE ELSE FALSE END) ")
+//    Page<PostSummaryDTO> searchBySearchTerm (Specification specification, Pageable pageable, String searchTerm, String searchTermExact);
 }
