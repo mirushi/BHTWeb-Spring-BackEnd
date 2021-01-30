@@ -2,6 +2,7 @@ package com.bhtcnpm.website.service;
 
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.querydsl.core.types.Predicate;
+import org.springframework.data.domain.Pageable;
 
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -31,4 +32,6 @@ public interface DocService {
     List<DocReactionStatisticDTO> getDocStatistics(List<Long> docIDs, Long userID);
 
     DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, Long userID);
+
+    DocSummaryListDTO getPostBySearchTerm (Predicate predicate, Pageable pageable, String searchTerm);
 }

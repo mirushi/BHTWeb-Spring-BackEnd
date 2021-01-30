@@ -164,4 +164,14 @@ public class DocServiceImpl implements DocService {
 
         return docDetailsMapper.docToDocDetailsDTO(doc);
     }
+
+    @Override
+    public DocSummaryListDTO getPostBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
+        //Reset PAGE_SIZE to predefined value.
+        pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
+
+        DocSummaryListDTO queryResult = docRepository.searchBySearchTerm(predicate, pageable, searchTerm);
+
+        return queryResult;
+    }
 }

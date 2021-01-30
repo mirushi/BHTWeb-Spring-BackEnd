@@ -2,10 +2,16 @@ package com.bhtcnpm.website.repository.custom;
 
 import com.bhtcnpm.website.model.dto.Doc.DocReactionStatisticDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO;
+import com.bhtcnpm.website.model.dto.Doc.DocSummaryListDTO;
+import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
+import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.QDoc;
 import com.bhtcnpm.website.model.entity.DocEntities.QUserDocReaction;
+import com.bhtcnpm.website.model.entity.PostEntities.Post;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
@@ -61,4 +67,28 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
 
         return null;
     }
+
+    @Override
+    public DocSummaryListDTO searchBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
+
+        JPAQuery query = new JPAQuery<Post>(em)
+                .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.name, qDoc.category.id, qDoc.category.name,qDoc.subject.id,qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.downloadCount, qDoc.viewCount, qDoc.version))
+                .from(qDoc)
+                .where(qDoc.title.contains(searchTerm), predicate);
+
+        JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
+
+        QueryResults queryResults = finalQuery.fetchResults();
+
+        List<DocSummaryDTO> listSummaryDTOs = queryResults.getResults();
+
+        Long resultCount = finalQuery.fetchResults().getTotal();
+
+        Integer totalPages = (int)Math.ceil((double)resultCount / pageable.getPageSize());
+
+        DocSummaryListDTO result = new DocSummaryListDTO(listSummaryDTOs, totalPages);
+
+        return result;
+    }
+
 }

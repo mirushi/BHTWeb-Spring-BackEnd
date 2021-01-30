@@ -5,7 +5,9 @@ import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -155,6 +157,17 @@ public class DocController {
         DocDetailsDTO docDetailsDTO = docService.createDoc(docRequestDTO, userID);
 
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("searchFilter")
+    @ResponseBody
+    public ResponseEntity<DocSummaryListDTO> searchFilter (
+            @QuerydslPredicate(root = Doc.class) Predicate predicate,
+            @RequestParam String searchTerm,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "sort", required = false) String sort,
+            @PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(docService.getPostBySearchTerm(predicate, pageable, searchTerm), HttpStatus.OK);
     }
 
 }
