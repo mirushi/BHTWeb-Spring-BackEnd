@@ -18,6 +18,7 @@ public interface DocCommentRepository extends JpaRepository<DocComment, Long> {
     @Query("SELECT new com.bhtcnpm.website.model.dto.Doc.DocCommentStatisticDTO(dc.doc.id, COUNT(dc.id)) " +
             "FROM DocComment dc " +
             "WHERE dc.doc.id IN :docIDs " +
-            "GROUP BY dc.doc.id ")
+            "GROUP BY dc.doc.id " +
+            "ORDER BY dc.doc.id ASC ")
     List<DocCommentStatisticDTO> getDocCommentStatistic (List<Long> docIDs);
 }

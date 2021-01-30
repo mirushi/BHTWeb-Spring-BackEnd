@@ -25,11 +25,13 @@ public interface UserDocReactionRepository extends JpaRepository<UserDocReaction
             "SUM(CASE WHEN usr.docReactionType = com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType.DISLIKE THEN 1 ELSE 0 END))" +
             "FROM UserDocReaction usr " +
             "WHERE usr.userDocReactionId.doc.id IN :docIDs " +
-            "GROUP BY usr.userDocReactionId.doc.id")
+            "GROUP BY usr.userDocReactionId.doc.id " +
+            "ORDER BY usr.userDocReactionId.doc.id ASC ")
     List<DocReactionStatisticDTO> getDocReactionStatisticsDTO(List<Long> docIDs);
 
     @Query("SELECT new com.bhtcnpm.website.model.dto.Doc.DocUserOwnReactionStatisticDTO(usr.userDocReactionId.doc.id, usr.docReactionType) " +
             "FROM UserDocReaction usr " +
-            "WHERE usr.userDocReactionId.doc.id IN :docIDs AND usr.userDocReactionId.user.id = :userID ")
+            "WHERE usr.userDocReactionId.doc.id IN :docIDs AND usr.userDocReactionId.user.id = :userID " +
+            "ORDER BY usr.userDocReactionId.doc.id ASC ")
     List<DocUserOwnReactionStatisticDTO> getDocUserOwnReactionStatisticDTO (List<Long> docIDs, Long userID);
 }

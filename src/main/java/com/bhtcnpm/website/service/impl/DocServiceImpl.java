@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -155,7 +156,7 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocStatisticDTO getDocStatistics(List<Long> docIDs, Long userID) {
+    public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, Long userID) {
 
         List<DocReactionStatisticDTO> docReactionStatisticDTOs = userDocReactionRepository.getDocReactionStatisticsDTO(docIDs);
 
@@ -163,7 +164,23 @@ public class DocServiceImpl implements DocService {
 
         List<DocCommentStatisticDTO> docCommentStatisticDTOs = docCommentRepository.getDocCommentStatistic(docIDs);
 
-        return new DocStatisticDTO(docReactionStatisticDTOs, docUserOwnReactionStatisticDTOs, docCommentStatisticDTOs);
+        int totalIDs = docReactionStatisticDTOs.size();
+
+        List<DocStatisticDTO> resultList = new ArrayList<>(totalIDs);
+
+        for (int i = 0;i < totalIDs; ++i) {
+            Long docID = docReactionStatisticDTOs.get(i).getDocID();
+
+            DocReactionStatisticDTO docReactionStatisticDTO = docReactionStatisticDTOs.get(i);
+            DocUserOwnReactionStatisticDTO docUserOwnReactionStatisticDTO = docUserOwnReactionStatisticDTOs.get(i);
+            DocCommentStatisticDTO docCommentStatisticDTO = docCommentStatisticDTOs.get(i);
+
+            resultList.add(new DocStatisticDTO(docID,
+                    docReactionStatisticDTO.getLikeCount(), docReactionStatisticDTO.getDislikeCount(),
+                    docUserOwnReactionStatisticDTO.getDocReactionType(), docCommentStatisticDTO.getCommentCount()));
+        }
+
+        return resultList;
     }
 
     @Override
