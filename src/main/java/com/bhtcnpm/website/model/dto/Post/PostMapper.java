@@ -38,6 +38,7 @@ public abstract class PostMapper {
     @Mapping(target = "authorName", source = "post.author.name")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     public abstract PostDetailsDTO postToPostDetailsDTO (Post post);
 
     public PostSummaryListDTO postPageToPostSummaryListDTO (Page<Post> postPage) {

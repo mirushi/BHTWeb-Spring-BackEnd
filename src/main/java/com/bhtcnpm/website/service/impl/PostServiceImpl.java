@@ -187,4 +187,14 @@ public class PostServiceImpl implements PostService {
 
         return queryResult;
     }
+
+    @Override
+    public PostSummaryWithStateListDTO getPostWithStateBySearchTerm (Predicate predicate, Pageable pageable) {
+        //Reset PAGE_SIZE to predefined value.
+        pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
+
+        PostSummaryWithStateListDTO queryResult = postRepository.searchBySearchTermWithState(predicate, pageable);
+
+        return queryResult;
+    }
 }

@@ -19,6 +19,7 @@ public class PostDetailsDTO {
     private Set<TagDTO> tags;
     private Long authorID;
     private String authorName;
+    private String authorAvatarURL;
     private Long categoryID;
     private String categoryName;
 }

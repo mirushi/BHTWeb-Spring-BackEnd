@@ -37,4 +37,6 @@ public interface PostService {
     List<PostSummaryDTO> getPostNewest();
 
     PostSummaryListDTO getPostBySearchTerm (Predicate predicate, Pageable pageable, String searchTerm);
+
+    PostSummaryWithStateListDTO getPostWithStateBySearchTerm (Predicate predicate, Pageable pageable);
 }

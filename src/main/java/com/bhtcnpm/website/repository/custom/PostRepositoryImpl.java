@@ -2,6 +2,8 @@ package com.bhtcnpm.website.repository.custom;
 
 import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
 import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
+import com.bhtcnpm.website.model.dto.Post.PostSummaryWithStateDTO;
+import com.bhtcnpm.website.model.dto.Post.PostSummaryWithStateListDTO;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.QPost;
 import com.bhtcnpm.website.repository.PostRepository;
@@ -65,4 +67,28 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         return result;
     }
+
+    @Override
+    public PostSummaryWithStateListDTO searchBySearchTermWithState(Predicate predicate, Pageable pageable) {
+
+        JPAQuery query = new JPAQuery<Post>(em)
+                .select(Projections.constructor(PostSummaryWithStateDTO.class, qPost.id, qPost.author.id, qPost.author.name, qPost.category.id, qPost.category.name, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.summary, qPost.title, qPost.postState))
+                .from(qPost)
+                .where(predicate);
+
+        JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
+
+        QueryResults queryResults = finalQuery.fetchResults();
+
+        List<PostSummaryWithStateDTO> listSummaryDTOs = queryResults.getResults();
+
+        Long resultCount = finalQuery.fetchResults().getTotal();
+
+        Integer totalPages = (int)Math.ceil((double)resultCount / pageable.getPageSize());
+
+        PostSummaryWithStateListDTO result = new PostSummaryWithStateListDTO(listSummaryDTOs, totalPages);
+
+        return result;
+    }
+
 }

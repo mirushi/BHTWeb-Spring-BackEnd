@@ -200,4 +200,14 @@ public class PostController {
             @PageableDefault Pageable pageable) {
         return new ResponseEntity<>(postService.getPostBySearchTerm(predicate, pageable, searchTerm), HttpStatus.OK);
     }
+
+    @GetMapping("myPosts")
+    @ResponseBody
+    public ResponseEntity<PostSummaryWithStateListDTO> getMyPosts (
+            @QuerydslPredicate(root = Post.class) Predicate predicate,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "sort", required = false) String sort,
+            @PageableDefault Pageable pageable) {
+        return new ResponseEntity<>(postService.getPostWithStateBySearchTerm(predicate, pageable), HttpStatus.OK);
+    }
 }
