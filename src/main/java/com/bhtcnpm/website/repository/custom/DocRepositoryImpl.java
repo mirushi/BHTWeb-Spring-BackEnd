@@ -1,18 +1,15 @@
 package com.bhtcnpm.website.repository.custom;
 
+import com.bhtcnpm.website.model.dto.Doc.DocReactionStatisticDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.QDoc;
 import com.bhtcnpm.website.model.entity.DocEntities.QUserDocReaction;
-import com.bhtcnpm.website.model.entity.PostEntities.Post;
-import com.bhtcnpm.website.model.entity.PostEntities.QPost;
 import com.querydsl.core.types.EntityPath;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
@@ -43,7 +40,6 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
 
     @Override
     public List<DocSummaryDTO> getTrendingDoc(Pageable pageable) {
-
          JPAQuery query = new JPAQuery<Doc>(em)
                  .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.name, qDoc.category.id, qDoc.category.name, qDoc.subject.id, qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.downloadCount, qDoc.viewCount, qDoc.version))
                  .from(qDoc)
@@ -54,6 +50,15 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
          JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
 
          return finalQuery.fetch();
+    }
 
+    @Override
+    public List<DocReactionStatisticDTO> getDocStatisticsWithUserID (List<Long> docIds, Long userID) {
+//        JPAQuery query = new JPAQuery<Doc>(em)
+//                .select(Projections.constructor(DocStatisticDTO.class, qDoc.id))
+//                .from(qDoc)
+//
+
+        return null;
     }
 }

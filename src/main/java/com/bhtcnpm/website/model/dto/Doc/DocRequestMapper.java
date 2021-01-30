@@ -2,12 +2,19 @@ package com.bhtcnpm.website.model.dto.Doc;
 
 import com.bhtcnpm.website.model.dto.Tag.TagMapper;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
+import com.bhtcnpm.website.model.entity.DocEntities.DocCategory;
+import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.DocCategoryRepository;
 import com.bhtcnpm.website.repository.DocSubjectRepository;
+import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Mapper
 public abstract class DocRequestMapper {
@@ -18,6 +25,8 @@ public abstract class DocRequestMapper {
 
     protected DocSubjectRepository docSubjectRepository;
 
+    protected UserWebsiteRepository userWebsiteRepository;
+
     protected TagMapper tagMapper;
 
     @Mapping(target = "categoryID", source = "category.id")
@@ -25,23 +34,22 @@ public abstract class DocRequestMapper {
     public abstract DocRequestDTO docToDocRequestDTO (Doc doc);
 
     public Doc updateDocFromDocRequestDTO (Long lastEditedUserID, DocRequestDTO docRequestDTO, Doc entity) {
-        Doc newDoc;
-
-        if (entity == null) {
-            newDoc = new Doc();
-        } else {
-            newDoc = entity;
-        }
+        Doc newDoc = Objects.requireNonNullElseGet(entity, Doc::new);
 
         if (docRequestDTO == null) {
             return entity;
         }
 
-        if (docRequestDTO.getCategoryID() != null) {
-            newDoc.setCategory(docCategoryRepository.getOne(docRequestDTO.getCategoryID()));
-        } else {
-            newDoc.setCategory(null);
+        if (entity == null) {
+            newDoc.setDownloadCount(0L);
+            newDoc.setCreatedDtm(LocalDateTime.now());
+            newDoc.setViewCount(0L);
+            newDoc.setDocState(DocStateType.PENDING_APPROVAL);
+            newDoc.setAuthor(userWebsiteRepository.getOne(lastEditedUserID));
         }
+
+        newDoc.setLastEditDtm(LocalDateTime.now());
+        newDoc.setLastEditedUser(userWebsiteRepository.getOne(lastEditedUserID));
         newDoc.setCategory(docCategoryRepository.getOne(docRequestDTO.getCategoryID()));
         newDoc.setSubject(docSubjectRepository.getOne(docRequestDTO.getSubjectID()));
         newDoc.setTitle(docRequestDTO.getTitle());
@@ -68,6 +76,11 @@ public abstract class DocRequestMapper {
     @Autowired
     public void setTagMapper (TagMapper tagMapper) {
         this.tagMapper = tagMapper;
+    }
+
+    @Autowired
+    public void setUserWebsiteRepository (UserWebsiteRepository userWebsiteRepository) {
+        this.userWebsiteRepository = userWebsiteRepository;
     }
 
 //    @Mapping(target = "lastEditDtm", expression = "java(java.time.LocalDateTime.now())")

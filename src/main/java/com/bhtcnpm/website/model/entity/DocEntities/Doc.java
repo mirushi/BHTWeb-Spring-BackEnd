@@ -25,19 +25,19 @@ public class Doc {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(nullable = false, insertable = false, updatable = false)
+    @JoinColumn(nullable = false)
     private UserWebsite author;
 
     @ManyToOne
-    @JoinColumn(insertable = false, updatable = false)
+    @JoinColumn
     private UserWebsite lastEditedUser;
 
     @ManyToOne
-    @JoinColumn(nullable = false, insertable = false, updatable = false)
+    @JoinColumn(nullable = false)
     private DocCategory category;
 
     @ManyToOne
-    @JoinColumn(nullable = false, insertable = false, updatable = false)
+    @JoinColumn(nullable = false)
     private DocSubject subject;
 
     @Column(nullable = false)

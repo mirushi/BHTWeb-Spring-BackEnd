@@ -148,8 +148,20 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, Long userID) {
+    public List<DocReactionStatisticDTO> getDocStatistics(List<Long> docIDs, Long userID) {
 
-        return null;
+        List<DocReactionStatisticDTO> docStatisticDTOs = docRepository.getDocReactionStatisticsDTO(docIDs, userID);
+
+        return docStatisticDTOs;
+    }
+
+    @Override
+    public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, Long userID) {
+
+        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(userID, docRequestDTO, null);
+
+        doc = docRepository.save(doc);
+
+        return docDetailsMapper.docToDocDetailsDTO(doc);
     }
 }

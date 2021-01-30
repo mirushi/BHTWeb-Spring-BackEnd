@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
-import com.bhtcnpm.website.model.entity.enumeration.DocReactionType.DocReactionType;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionTypeConverter;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ public class UserDocReaction {
     @EmbeddedId
     private UserDocReactionId userDocReactionId;
 
-    @Enumerated
     @Column(columnDefinition = "smallint")
+    @Convert(converter = DocReactionTypeConverter.class)
     private DocReactionType docReactionType;
 }

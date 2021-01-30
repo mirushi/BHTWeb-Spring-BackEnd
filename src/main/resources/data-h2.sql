@@ -10,7 +10,8 @@ VALUES (user_website_role_sequence.NEXTVAL, 'ADMIN', 0),
 
 INSERT INTO USER_WEBSITE (ID, NAME, DISPLAY_NAME, HASHED_PASSWORD, EMAIL, REPUTATION_SCORE, ROLE_ID, AVATARURL, BAN_STATUS, VERSION)
 VALUES (user_website_sequence.NEXTVAL, 'alex', 'Alexa', 'sha512hashedpassword', '123@gmail.com', 100, (SELECT ID FROM USER_WEBSITE_ROLE WHERE NAME = 'ADMIN'), 'https://tophinhanhdep.com/wp-content/uploads/2017/07/avatar-dep-de-thuong.jpg', false, 0),
-       (user_website_sequence.NEXTVAL, 'bran', 'Branxol Muns', 'sha512hashedpassword' , '456@gmail.com', 300, (SELECT ID FROM USER_WEBSITE_ROLE WHERE NAME = 'USER'), 'https://tophinhanhdep.com/wp-content/uploads/2017/07/avatar-facebook-dep.jpg', false, 0);
+       (user_website_sequence.NEXTVAL, 'bran', 'Branxol Muns', 'sha512hashedpassword' , '456@gmail.com', 300, (SELECT ID FROM USER_WEBSITE_ROLE WHERE NAME = 'USER'), 'https://tophinhanhdep.com/wp-content/uploads/2017/07/avatar-facebook-dep.jpg', false, 0),
+       (user_website_sequence.NEXTVAL, 'david', 'Branxol Muns', 'sha512hashedpassword' , '456@gmail.com', 300, (SELECT ID FROM USER_WEBSITE_ROLE WHERE NAME = 'USER'), 'https://tophinhanhdep.com/wp-content/uploads/2017/07/avatar-facebook-dep.jpg', false, 0);
 
 -- INSERT ACTIVITIES
 WITH activities (ID, NAME, TYPE, ACTOR_ACTIVE_NAME, ACTOR_PASSIVE_NAME, ACTIVITY_DTM, ID_ITEM, VERSION) AS
@@ -58,7 +59,8 @@ WITH userDocReactions (USER_NAME, DOC_TITLE, DOC_REACTION_TYPE) AS
 		('bran', 'Doc 01 Title', 0),
 		('alex', 'Doc 01 Title', 1),
 		('bran', 'Doc 02 Title', 1),
-		('alex', 'Doc 02 Title', 0)
+		('alex', 'Doc 02 Title', 0),
+             ('david', 'Doc 01 Title', 0)
          )
 INSERT INTO USER_DOC_REACTION (USER_ID, DOC_ID, DOC_REACTION_TYPE)
 SELECT
@@ -72,7 +74,10 @@ FROM
 -- INSERT DOC COMMENT.
 WITH docComments (ID, CONTENT, AUTHOR_NAME, DOC_TITLE) AS (
     VALUES (doc_comment_sequence.NEXTVAL, 'Tài liệu hay và chính xác quá. Cảm ơn admin.', 'alex', 'Doc 01 Title'),
-    (doc_comment_sequence.NEXTVAL,'Tài liệu hữu ích. Nhưng có nhiều chỗ sai. Admin xem lại nha.', 'bran', 'Doc 02 Title')
+    (doc_comment_sequence.NEXTVAL,'Tài liệu hữu ích. Nhưng có nhiều chỗ sai. Admin xem lại nha.', 'bran', 'Doc 02 Title'),
+    (doc_comment_sequence.NEXTVAL,'Thanks nhé.', 'bran', 'Doc 01 Title'),
+    (doc_comment_sequence.NEXTVAL,'Cảm ơn ạ.', 'bran', 'Doc 01 Title')
+
 )
 INSERT INTO DOC_COMMENT (ID, CONTENT, AUTHOR_ID, DOC_ID, PARENT_COMMENT_ID)
 SELECT docComments.ID, docComments.CONTENT, author.ID ,doc.ID, null

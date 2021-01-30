@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserWebsiteRepository extends JpaRepository<UserWebsite, Long> {
-
-
 }

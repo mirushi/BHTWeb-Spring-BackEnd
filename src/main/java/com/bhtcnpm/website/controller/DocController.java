@@ -5,7 +5,6 @@ import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -136,15 +135,26 @@ public class DocController {
         return new ResponseEntity<>(docDetailsDTOs, HttpStatus.OK);
     }
 
-    @GetMapping("searchFilter")
+    @GetMapping("statistics")
     @ResponseBody
-    public ResponseEntity<List<DocStatisticDTO>> getDocStatistic (@RequestParam List<Long> docIDs) {
+    public ResponseEntity<List<DocReactionStatisticDTO>> getDocStatistic (@RequestParam List<Long> docIDs) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        Long userID = 101L;
 
-        List<DocStatisticDTO> docStatisticDTOs = docService.getDocStatistics(docIDs, userID);
+        List<DocReactionStatisticDTO> docStatisticDTOs = docService.getDocStatistics(docIDs, userID);
 
         return new ResponseEntity<>(docStatisticDTOs, HttpStatus.OK);
+    }
+
+    @PostMapping
+    @ResponseBody
+    public ResponseEntity<DocDetailsDTO> postDoc (@RequestBody DocRequestDTO docRequestDTO) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 51L;
+
+        DocDetailsDTO docDetailsDTO = docService.createDoc(docRequestDTO, userID);
+
+        return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
 
 }

@@ -1,8 +1,9 @@
 package com.bhtcnpm.website.repository;
 
 import com.bhtcnpm.website.model.dto.Doc.DocQuickSearchResult;
-import com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO;
+import com.bhtcnpm.website.model.dto.Doc.DocReactionStatisticDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.custom.DocRepositoryCustom;
 import org.springframework.data.domain.Pageable;
@@ -35,10 +36,14 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
 
     List<Doc> getDocByIdNot (Pageable pageable, Long docID);
 
-//    @Query("SELECT new com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO() " +
-//            "FROM Doc d " +
-//            "JOIN UserDocReaction usr ON d.id = usr.userDocReactionId.doc.id " +
-//            "ORDER BY d.downloadCount, count(usr.docReactionType = 0)/ " +
-//            "GROUP BY d ")
-//    List<DocSummaryDTO> getTrendingDoc (Pageable pageable);
+    @Query("SELECT new com.bhtcnpm.website.model.dto.Doc.DocReactionStatisticDTO(usr.userDocReactionId.doc.id, " +
+            "SUM(CASE WHEN usr.docReactionType = com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType.LIKE THEN 1 ELSE 0 END), " +
+            "SUM(CASE WHEN usr.docReactionType = com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType.DISLIKE THEN 1 ELSE 0 END)," +
+            "CASE WHEN EXISTS (SELECT 1 FROM UserDocReaction subUsr " +
+            "WHERE subUsr.userDocReactionId.doc.id = usr.userDocReactionId.doc.id AND subUsr.userDocReactionId.user.id = :userID) THEN 1 ELSE 0 END)" +
+            "FROM UserDocReaction usr " +
+            "WHERE usr.userDocReactionId.doc.id IN :docIDs " +
+            "GROUP BY usr.userDocReactionId.doc.id")
+    List<DocReactionStatisticDTO> getDocReactionStatisticsDTO(List<Long> docIDs, Long userID);
+
 }
