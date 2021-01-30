@@ -139,11 +139,11 @@ public class DocController {
 
     @GetMapping("statistics")
     @ResponseBody
-    public ResponseEntity<List<DocReactionStatisticDTO>> getDocStatistic (@RequestParam List<Long> docIDs) {
+    public ResponseEntity<DocStatisticDTO> getDocStatistic (@RequestParam List<Long> docIDs) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 101L;
+        Long userID = 1L;
 
-        List<DocReactionStatisticDTO> docStatisticDTOs = docService.getDocStatistics(docIDs, userID);
+        DocStatisticDTO docStatisticDTOs = docService.getDocStatistics(docIDs, userID);
 
         return new ResponseEntity<>(docStatisticDTOs, HttpStatus.OK);
     }

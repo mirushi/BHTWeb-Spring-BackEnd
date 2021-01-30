@@ -29,7 +29,7 @@ public interface DocService {
 
     List<DocSummaryDTO> getTrending ();
 
-    List<DocReactionStatisticDTO> getDocStatistics(List<Long> docIDs, Long userID);
+    DocStatisticDTO getDocStatistics(List<Long> docIDs, Long userID);
 
     DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, Long userID);
 

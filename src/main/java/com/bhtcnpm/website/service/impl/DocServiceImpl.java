@@ -2,8 +2,11 @@ package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
+import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
+import com.bhtcnpm.website.repository.DocCommentRepository;
 import com.bhtcnpm.website.repository.DocRepository;
+import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +39,10 @@ public class DocServiceImpl implements DocService {
     private final DocRequestMapper docRequestMapper;
 
     private final DocRepository docRepository;
+
+    private final DocCommentRepository docCommentRepository;
+
+    private final UserDocReactionRepository userDocReactionRepository;
 
     public DocDetailsListDTO getAllDoc (Predicate predicate, @Min(0)Integer paginator) {
 
@@ -148,11 +155,15 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public List<DocReactionStatisticDTO> getDocStatistics(List<Long> docIDs, Long userID) {
+    public DocStatisticDTO getDocStatistics(List<Long> docIDs, Long userID) {
 
-        List<DocReactionStatisticDTO> docStatisticDTOs = docRepository.getDocReactionStatisticsDTO(docIDs, userID);
+        List<DocReactionStatisticDTO> docReactionStatisticDTOs = userDocReactionRepository.getDocReactionStatisticsDTO(docIDs);
 
-        return docStatisticDTOs;
+        List<DocUserOwnReactionStatisticDTO> docUserOwnReactionStatisticDTOs = userDocReactionRepository.getDocUserOwnReactionStatisticDTO(docIDs, userID);
+
+        List<DocCommentStatisticDTO> docCommentStatisticDTOs = docCommentRepository.getDocCommentStatistic(docIDs);
+
+        return new DocStatisticDTO(docReactionStatisticDTOs, docUserOwnReactionStatisticDTOs, docCommentStatisticDTOs);
     }
 
     @Override

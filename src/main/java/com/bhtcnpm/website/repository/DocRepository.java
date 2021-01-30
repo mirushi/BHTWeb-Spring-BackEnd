@@ -35,15 +35,4 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
     int incrementDownloadCount(Long docID);
 
     List<Doc> getDocByIdNot (Pageable pageable, Long docID);
-
-    @Query("SELECT new com.bhtcnpm.website.model.dto.Doc.DocReactionStatisticDTO(usr.userDocReactionId.doc.id, " +
-            "SUM(CASE WHEN usr.docReactionType = com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType.LIKE THEN 1 ELSE 0 END), " +
-            "SUM(CASE WHEN usr.docReactionType = com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType.DISLIKE THEN 1 ELSE 0 END)," +
-            "CASE WHEN EXISTS (SELECT 1 FROM UserDocReaction subUsr " +
-            "WHERE subUsr.userDocReactionId.doc.id = usr.userDocReactionId.doc.id AND subUsr.userDocReactionId.user.id = :userID) THEN 1 ELSE 0 END)" +
-            "FROM UserDocReaction usr " +
-            "WHERE usr.userDocReactionId.doc.id IN :docIDs " +
-            "GROUP BY usr.userDocReactionId.doc.id")
-    List<DocReactionStatisticDTO> getDocReactionStatisticsDTO(List<Long> docIDs, Long userID);
-
 }
