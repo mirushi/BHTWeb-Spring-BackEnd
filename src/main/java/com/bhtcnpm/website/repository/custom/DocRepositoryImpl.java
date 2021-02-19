@@ -3,8 +3,6 @@ package com.bhtcnpm.website.repository.custom;
 import com.bhtcnpm.website.model.dto.Doc.DocReactionStatisticDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocSummaryListDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.QDoc;
 import com.bhtcnpm.website.model.entity.DocEntities.QUserDocReaction;

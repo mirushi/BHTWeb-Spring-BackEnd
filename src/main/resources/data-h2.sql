@@ -7,14 +7,20 @@ VALUES (announcement_sequence.NEXTVAL, 'Thong bao thu nhat - Server vua khai tru
 -- INSERT USER ROLE.
 
 INSERT INTO USER_WEBSITE_ROLE (ID, NAME, VERSION)
-VALUES (user_website_role_sequence.NEXTVAL, 'ADMIN', 0),
-       (user_website_role_sequence.NEXTVAL, 'USER', 0);
+VALUES (1, 'ADMIN', 0),
+       (2, 'USER', 0);
 
 -- INSERT USER.
-INSERT INTO USER_WEBSITE (ID, NAME, DISPLAY_NAME, HASHED_PASSWORD, EMAIL, REPUTATION_SCORE, ROLE_ID, AVATARURL, BAN_STATUS, VERSION)
-VALUES (user_website_sequence.NEXTVAL, 'dong', 'Nguyen Van Dong', 'sha512hashedpassword', '123@gmail.com', 100, (SELECT ID FROM USER_WEBSITE_ROLE WHERE NAME = 'ADMIN'), 'https://tophinhanhdep.com/wp-content/uploads/2017/07/avatar-dep-de-thuong.jpg', false, 0),
-       (user_website_sequence.NEXTVAL, 'nghi', 'Luu Bieu Nghi', 'sha512hashedpassword' , '456@gmail.com', 300, (SELECT ID FROM USER_WEBSITE_ROLE WHERE NAME = 'USER'), 'https://www.vippng.com/png/detail/136-1363405_avatar-png-image-with-transparent-background-funny-avatar.png', false, 0),
-       (user_website_sequence.NEXTVAL, 'hai', 'Vu Tuan Hai', 'sha512hashedpassword' , '456@gmail.com', 300, (SELECT ID FROM USER_WEBSITE_ROLE WHERE NAME = 'USER'), 'https://media.images.yourquote.in/post/large/0/0/5/223/WGvR1449.jpg', false, 0);
+INSERT INTO USER_WEBSITE (ID, NAME, DISPLAY_NAME, HASHED_PASSWORD, EMAIL, REPUTATION_SCORE, AVATARURL, BAN_STATUS, VERSION)
+VALUES (user_website_sequence.NEXTVAL, 'dong', 'Nguyen Van Dong', 'sha512hashedpassword', '123@gmail.com', 100, 'https://tophinhanhdep.com/wp-content/uploads/2017/07/avatar-dep-de-thuong.jpg', false, 0),
+       (user_website_sequence.NEXTVAL, 'nghi', 'Luu Bieu Nghi', 'sha512hashedpassword' , '456@gmail.com', 300, 'https://www.vippng.com/png/detail/136-1363405_avatar-png-image-with-transparent-background-funny-avatar.png', false, 0),
+       (user_website_sequence.NEXTVAL, 'hai', 'Vu Tuan Hai', 'sha512hashedpassword' , '456@gmail.com', 300, 'https://media.images.yourquote.in/post/large/0/0/5/223/WGvR1449.jpg', false, 0);
+
+-- INSERT ROLES OF USERS.
+INSERT INTO USER_ROLE (USER_ID, ROLE_ID) VALUES
+    ((SELECT ID FROM USER_WEBSITE WHERE NAME='dong'), (SELECT ID FROM USER_WEBSITE_ROLE WHERE NAME='ADMIN')),
+    ((SELECT ID FROM USER_WEBSITE WHERE NAME='nghi'), (SELECT ID FROM USER_WEBSITE_ROLE WHERE NAME='USER')),
+    ((SELECT ID FROM USER_WEBSITE WHERE NAME='hai'), (SELECT ID FROM USER_WEBSITE_ROLE WHERE NAME='USER'));
 
 -- INSERT ACTIVITIES
 WITH activities (ID, NAME, TYPE, ACTOR_ACTIVE_NAME, ACTOR_PASSIVE_NAME, ACTIVITY_DTM, ID_ITEM, VERSION) AS

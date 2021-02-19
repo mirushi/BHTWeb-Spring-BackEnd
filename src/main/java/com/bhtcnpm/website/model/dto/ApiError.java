@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.model.entity;
+package com.bhtcnpm.website.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

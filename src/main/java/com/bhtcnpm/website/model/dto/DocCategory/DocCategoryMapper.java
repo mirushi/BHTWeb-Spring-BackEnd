@@ -14,6 +14,8 @@ public interface DocCategoryMapper {
     DocCategoryMapper INSTANCE = Mappers.getMapper(DocCategoryMapper.class);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "docs", ignore = true)
+    @Mapping(target = "version", ignore = true)
     DocCategory docCategoryDTOToDocCategory(DocCategoryDTO docCategoryDTO, @MappingTarget DocCategory docCategory);
 
     DocCategoryDTO docCategoryToDocCategoryDTO (DocCategory docCategory);

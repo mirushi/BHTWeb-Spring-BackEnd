@@ -25,11 +25,19 @@ public class UserWebsiteRole {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany (
-            mappedBy = "role",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
-    )
+    @ManyToMany(mappedBy = "roles")
     private Set<UserWebsite> users;
+
+    @ManyToMany (cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(
+            name = "role_authority",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id")
+    )
+    private Set<UserWebsiteAuthority> authorities;
 
     @Version
     private short version;
