@@ -51,7 +51,7 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
                 .userWebsiteCreateNewRequestToUserWebsite(requestDTO, new HashSet<>(Collections.singletonList(normalUserRole)));
 
         userWebsite = uwRepository.save(userWebsite);
-        HttpHeaders headers = getJwtHeader(userWebsite);
+        HttpHeaders headers = SecurityUtils.getJwtHeader(userWebsite, jwtTokenProvider);
 
         return userAuthenticatedMapper.userWebsiteToUserAuthenticatedDTO(userWebsite, headers);
     }
@@ -72,22 +72,10 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
             throw new ConstraintViolationException("Login credentials is invalid.", null);
         }
 
-        authenticateUser(username, password);
+        SecurityUtils.authenticateUser(username, password, authManager);
 
-        HttpHeaders headers = getJwtHeader(userWebsite.get());
+        HttpHeaders headers = SecurityUtils.getJwtHeader(userWebsite.get(), jwtTokenProvider);
 
         return userAuthenticatedMapper.userWebsiteToUserAuthenticatedDTO(userWebsite.get(), headers);
-    }
-
-    private void authenticateUser (String username, String normalPassword) {
-        String prefixedPassword = SecurityUtils.getDefaultEncodingPrefixedPassword(normalPassword);
-        authManager.authenticate(new UsernamePasswordAuthenticationToken(username, prefixedPassword));
-    }
-
-    private HttpHeaders getJwtHeader (UserWebsite userWebsite) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(SecurityConstant.JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(userWebsite));
-
-        return headers;
     }
 }
