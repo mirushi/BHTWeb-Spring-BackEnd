@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -24,14 +25,14 @@ public class UserWebsiteRole {
 
     @Column(nullable = false)
     private String name;
-
-    @ManyToMany(mappedBy = "roles")
-    private Set<UserWebsite> users;
-
-    @ManyToMany (cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
+    
+    @ManyToMany (
+            cascade = {
+                CascadeType.PERSIST,
+                CascadeType.MERGE
+            },
+            fetch = FetchType.EAGER
+    )
     @JoinTable(
             name = "role_authority",
             joinColumns = @JoinColumn(name = "role_id"),

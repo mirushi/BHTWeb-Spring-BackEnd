@@ -6,12 +6,14 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
 @ValidUWCreateNewRequest
 public class UserWebsiteCreateNewRequestDTO {
     @NotBlank
+    @Pattern(regexp = "^[A-Za-z0-9]*$")
     @Size(min = UWBusinessConstraint.MIN_USER_NAME_LENGTH, max = UWBusinessConstraint.MAX_USER_NAME_LENGTH)
     private String name;
 

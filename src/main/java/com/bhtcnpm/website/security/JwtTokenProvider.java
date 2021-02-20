@@ -39,6 +39,7 @@ public class JwtTokenProvider {
     }
 
     public List<GrantedAuthority> getAuthorities (String token) {
+        //Will throw exception if token is invalid.
         String[] claims = getClaimsFromToken(token);
 
         if (claims == null) {

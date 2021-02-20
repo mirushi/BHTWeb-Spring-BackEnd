@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -24,8 +25,4 @@ public class UserWebsiteAuthority {
 
     @Column(nullable = false)
     private String permission;
-
-    @ManyToMany(mappedBy = "authorities")
-    private Set<UserWebsiteRole> roles;
-
 }

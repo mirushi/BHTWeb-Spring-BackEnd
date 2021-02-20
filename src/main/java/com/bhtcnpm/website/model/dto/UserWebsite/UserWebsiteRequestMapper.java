@@ -5,18 +5,16 @@ import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.UserWebsiteRole;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 
 @Mapper
-public abstract class UserWebsiteCreateNewRequestMapper {
+public abstract class UserWebsiteRequestMapper {
 
-    public static final UserWebsiteCreateNewRequestMapper INSTANCE = Mappers.getMapper(UserWebsiteCreateNewRequestMapper.class);
+    public static final UserWebsiteRequestMapper INSTANCE = Mappers.getMapper(UserWebsiteRequestMapper.class);
 
     private PasswordEncoder passwordEncoder;
 

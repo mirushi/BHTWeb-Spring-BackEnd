@@ -6,10 +6,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostSave;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -83,6 +80,7 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @EqualsAndHashCode.Exclude
     private List<Post> postedPosts;
 
     @OneToMany (
@@ -90,6 +88,7 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @EqualsAndHashCode.Exclude
     private List<Doc> postedDocs;
 
     @OneToMany(
@@ -97,6 +96,7 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @EqualsAndHashCode.Exclude
     private List<UserDocReaction> docReactions;
 
     @OneToMany(
@@ -104,6 +104,7 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @EqualsAndHashCode.Exclude
     private List<Notification> notificationsOfUserOwn;
 
     @OneToMany(
@@ -111,6 +112,7 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @EqualsAndHashCode.Exclude
     private Set<UserPostLike> userPostLikes;
 
     @OneToMany (
@@ -118,9 +120,11 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @EqualsAndHashCode.Exclude
     private Set<UserPostSave> userPostSaves;
 
     @ManyToMany(mappedBy = "usersSaved")
+    @EqualsAndHashCode.Exclude
     private Set<Course> savedCourses;
 
     @Transient
