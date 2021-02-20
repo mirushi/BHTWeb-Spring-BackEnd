@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //Variable for specifying whenever Authentication is applied or not (not implemented yet).
     private Boolean isSecurityEnabled = true;
 
-    public static final String CURRENT_ENCODING_ALGO = "{bcrypt}";
+    public static final String DEFAULT_ENCODING_ALGO = "{bcrypt}";
 
     @Qualifier("jpaUserDetailsService")
     private final UserDetailsService jpaUserDetailsService;

@@ -9,6 +9,7 @@ import com.bhtcnpm.website.model.entity.UserWebsiteRole;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRoleRepository;
 import com.bhtcnpm.website.security.JwtTokenProvider;
+import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -79,7 +80,7 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     }
 
     private void authenticateUser (String username, String normalPassword) {
-        String prefixedPassword = StringUtils.prependIfMissingIgnoreCase(normalPassword, SecurityConfig.CURRENT_ENCODING_ALGO);
+        String prefixedPassword = SecurityUtils.getDefaultEncodingPrefixedPassword(normalPassword);
         authManager.authenticate(new UsernamePasswordAuthenticationToken(username, prefixedPassword));
     }
 

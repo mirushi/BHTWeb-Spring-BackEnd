@@ -1,8 +1,10 @@
 package com.bhtcnpm.website.model.dto.UserWebsite;
 
+import com.bhtcnpm.website.config.SecurityConfig;
 import com.bhtcnpm.website.constant.business.UserWebsite.UWBusinessConstant;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.UserWebsiteRole;
+import com.bhtcnpm.website.security.util.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -18,7 +20,6 @@ public abstract class UserWebsiteRequestMapper {
 
     private PasswordEncoder passwordEncoder;
 
-    //TODO: Change default value to custom BHTCNPM default avatar image.
     public UserWebsite userWebsiteCreateNewRequestToUserWebsite(UserWebsiteCreateNewRequestDTO createRequestDTO, Set<UserWebsiteRole> userWebsiteRoles) {
         if (createRequestDTO == null) {
             return null;
@@ -35,9 +36,9 @@ public abstract class UserWebsiteRequestMapper {
                 .name(createRequestDTO.getName())
                 .displayName(createRequestDTO.getDisplayName())
                 .email(createRequestDTO.getEmail())
-                .hashedPassword(passwordEncoder.encode(createRequestDTO.getPassword()))
+                .hashedPassword(SecurityUtils.getEncodedPassword(createRequestDTO.getPassword(), passwordEncoder))
                 .avatarURL(avatarURL)
-                .reputationScore(1L)
+                .reputationScore(UWBusinessConstant.DEFAULT_REPUTATION_SCORE)
                 .roles(userWebsiteRoles)
                 .accountNonExpired(true)
                 .credentialsNonExpired(true)
