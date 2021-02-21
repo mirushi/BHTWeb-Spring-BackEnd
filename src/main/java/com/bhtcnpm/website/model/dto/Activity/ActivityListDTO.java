@@ -9,9 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class ActivityListDTO {
-
     private List<ActivityDTO> activities;
-
     private Integer totalPages;
-
+    private Long totalElements;
 }

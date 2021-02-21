@@ -10,4 +10,5 @@ import java.util.List;
 public class PostSummaryWithStateListDTO {
     private List<PostSummaryWithStateDTO> postSummaryWithStateDTOs;
     private Integer totalPages;
+    private Long totalElements;
 }

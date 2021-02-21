@@ -9,6 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 public class DocCommentListDTO {
     private List<DocCommentDTO> docCommentDTOs;
-
     private Integer totalPages;
+    private Long totalElements;
 }

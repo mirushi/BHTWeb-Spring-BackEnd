@@ -63,7 +63,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         Integer totalPages = (int)Math.ceil((double)resultCount / pageable.getPageSize());
 
-        PostSummaryListDTO result = new PostSummaryListDTO(listSummaryDTOs, totalPages);
+        PostSummaryListDTO result = new PostSummaryListDTO(listSummaryDTOs, totalPages, resultCount);
 
         return result;
     }
@@ -86,7 +86,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         Integer totalPages = (int)Math.ceil((double)resultCount / pageable.getPageSize());
 
-        PostSummaryWithStateListDTO result = new PostSummaryWithStateListDTO(listSummaryDTOs, totalPages);
+        PostSummaryWithStateListDTO result = new PostSummaryWithStateListDTO(listSummaryDTOs, totalPages, resultCount);
 
         return result;
     }

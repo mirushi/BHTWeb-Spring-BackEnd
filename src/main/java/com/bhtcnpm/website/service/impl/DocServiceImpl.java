@@ -57,7 +57,7 @@ public class DocServiceImpl implements DocService {
                 .map(docDetailsMapper::docToDocDetailsDTO)
                 .collect(Collectors.toList());
 
-        return new DocDetailsListDTO(docDetailsDTOS, queryResult.getTotalPages());
+        return new DocDetailsListDTO(docDetailsDTOS, queryResult.getTotalPages(), queryResult.getTotalElements());
     }
 
     @Override

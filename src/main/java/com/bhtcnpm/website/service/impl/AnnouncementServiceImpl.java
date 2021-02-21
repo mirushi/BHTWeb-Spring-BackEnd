@@ -43,7 +43,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 .map(announcementMapper::announcementToAnnouncementDTO)
                 .collect(Collectors.toList());
 
-        AnnouncementListDTO finalResult = new AnnouncementListDTO(announcementList, queryResult.getTotalPages());
+        AnnouncementListDTO finalResult = new AnnouncementListDTO(announcementList, queryResult.getTotalPages(), queryResult.getTotalElements());
 
         return finalResult;
     }
@@ -58,7 +58,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 .map(announcementMapper::announcementToAnnouncementDTO)
                 .collect(Collectors.toList());
 
-        AnnouncementListDTO finalResult = new AnnouncementListDTO(announcementList, queryResult.getTotalPages());
+        AnnouncementListDTO finalResult = new AnnouncementListDTO(announcementList, queryResult.getTotalPages(), queryResult.getTotalElements());
 
         return finalResult;
     }

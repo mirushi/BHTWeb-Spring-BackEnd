@@ -42,11 +42,11 @@ public abstract class PostMapper {
     public abstract PostDetailsDTO postToPostDetailsDTO (Post post);
 
     public PostSummaryListDTO postPageToPostSummaryListDTO (Page<Post> postPage) {
-        return new PostSummaryListDTO(postListToPostSummaryDTOs(postPage.getContent()), postPage.getTotalPages());
+        return new PostSummaryListDTO(postListToPostSummaryDTOs(postPage.getContent()), postPage.getTotalPages(), postPage.getTotalElements());
     }
 
     public PostSummaryListDTO postSummaryPageToPostSummaryListDTO (Page<PostSummaryDTO> postSummaryDTOs) {
-        return new PostSummaryListDTO(postSummaryDTOs.get().collect(Collectors.toList()), postSummaryDTOs.getTotalPages());
+        return new PostSummaryListDTO(postSummaryDTOs.get().collect(Collectors.toList()), postSummaryDTOs.getTotalPages(), postSummaryDTOs.getTotalElements());
     }
 
     public abstract List<PostSummaryDTO> postPageToPostSummaryDTOList (Page<Post> postPage);

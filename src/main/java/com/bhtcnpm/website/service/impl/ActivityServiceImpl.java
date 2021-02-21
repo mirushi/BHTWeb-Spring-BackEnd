@@ -40,7 +40,7 @@ public class ActivityServiceImpl implements ActivityService {
                 .map(activityMapper::activityToActivityDTO)
                 .collect(Collectors.toList());
 
-        ActivityListDTO finalResult = new ActivityListDTO(activityList, queryResult.getTotalPages());
+        ActivityListDTO finalResult = new ActivityListDTO(activityList, queryResult.getTotalPages(), queryResult.getTotalElements());
 
         return finalResult;
     }
