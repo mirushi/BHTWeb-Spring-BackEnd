@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -24,12 +25,20 @@ public class UserWebsiteRole {
 
     @Column(nullable = false)
     private String name;
-
-    @OneToMany (
-            mappedBy = "role",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    
+    @ManyToMany (
+            cascade = {
+                CascadeType.PERSIST,
+                CascadeType.MERGE
+            },
+            fetch = FetchType.EAGER
     )
-    private Set<UserWebsite> users;
+    @JoinTable(
+            name = "role_authority",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id")
+    )
+    private Set<UserWebsiteAuthority> authorities;
 
     @Version
     private short version;
