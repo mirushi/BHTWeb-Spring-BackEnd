@@ -30,7 +30,7 @@ public abstract class DocCommentMapper {
     public abstract List<DocCommentDTO> docCommentListToDocCommentDTOList (List<DocComment> docComments);
 
     public DocCommentListDTO docCommentPageToDocCommentListDTO (Page<DocComment> docCommentPage) {
-        DocCommentListDTO docCommentListDTO = new DocCommentListDTO(this.docCommentListToDocCommentDTOList(docCommentPage.getContent()), docCommentPage.getTotalPages());
+        DocCommentListDTO docCommentListDTO = new DocCommentListDTO(this.docCommentListToDocCommentDTOList(docCommentPage.getContent()), docCommentPage.getTotalPages(), docCommentPage.getTotalElements());
 
         return docCommentListDTO;
     }

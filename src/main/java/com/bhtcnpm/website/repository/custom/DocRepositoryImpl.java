@@ -84,7 +84,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
 
         Integer totalPages = (int)Math.ceil((double)resultCount / pageable.getPageSize());
 
-        DocSummaryListDTO result = new DocSummaryListDTO(listSummaryDTOs, totalPages);
+        DocSummaryListDTO result = new DocSummaryListDTO(listSummaryDTOs, totalPages, resultCount);
 
         return result;
     }

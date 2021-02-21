@@ -10,4 +10,5 @@ import java.util.List;
 public class DocSummaryListDTO {
     private List<DocSummaryDTO> docSummaries;
     private Integer totalPages;
+    private Long totalElements;
 }

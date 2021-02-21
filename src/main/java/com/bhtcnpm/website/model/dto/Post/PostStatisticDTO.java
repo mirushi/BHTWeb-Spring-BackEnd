@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PostStatisticDTO {
-    private Long postID;
+    private Long id;
     private Long commentCount;
     private Long likeCount;
     private Boolean likeStatus;

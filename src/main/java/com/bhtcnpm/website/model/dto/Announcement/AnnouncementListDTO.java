@@ -8,9 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class AnnouncementListDTO {
-
     private List<AnnouncementDTO> announcements;
-
     private Integer totalPages;
-
+    private Long totalElements;
 }
