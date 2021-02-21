@@ -30,8 +30,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    //Variable for specifying whenever Authentication is applied or not (not implemented yet).
-    private Boolean isSecurityEnabled = true;
+    //Variable for specifying whenever Authentication and Authorization should be applied or not.
+    private Boolean isSecurityEnabled = false;
 
     public static final String DEFAULT_ENCODING_ALGO = "{bcrypt}";
 
@@ -68,16 +68,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll()
             .and()
             //TODO: Remove this before applying to production environment. Below is for development profile only.
-            .authorizeRequests().antMatchers(SecurityConstant.DEV_PUBLIC_URLS).permitAll()
+            .authorizeRequests().antMatchers(SecurityConstant.DEV_PUBLIC_URLS).permitAll();
+
+        if (isSecurityEnabled == true) {
             //All other requests must be authenticated.
-            .anyRequest().authenticated()
-            .and()
-            .exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler)
+            http.authorizeRequests().anyRequest().authenticated();
+        } else {
+            http.authorizeRequests().anyRequest().permitAll();
+        }
+
+        http.exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler)
             .authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and()
             .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         //Allow frame for H2 console.
+        //TODO: Remove this before applying to production environment. Below is for development profile only.
         http.headers().frameOptions().sameOrigin();
     }
 
