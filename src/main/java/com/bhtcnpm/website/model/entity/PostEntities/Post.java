@@ -4,15 +4,26 @@ import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Loader;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "post")
 @Data
+@SQLDelete(sql = "UPDATE post SET DELETED_DATE = "+ "20210302" +" WHERE id = ? AND VERSION = ?")
+@Loader(namedQuery = "findPostById")
+@NamedQuery(name = "findPostById", query = "SELECT p FROM Post p WHERE p.id = ?1 AND p.deletedDate IS NULL")
+@Where(clause = "DELETED_DATE is NULL")
 public class Post {
 
     @Id
@@ -65,6 +76,7 @@ public class Post {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @EqualsAndHashCode.Exclude
     private List<PostComment> comments;
 
     @OneToMany (
@@ -72,6 +84,7 @@ public class Post {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @EqualsAndHashCode.Exclude
     private Set<UserPostLike> userPostLikes;
 
     @OneToMany (
@@ -79,6 +92,7 @@ public class Post {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @EqualsAndHashCode.Exclude
     private Set<UserPostSave> userPostSaves;
 
     @ManyToMany(cascade = {
@@ -90,7 +104,10 @@ public class Post {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+    @EqualsAndHashCode.Exclude
     private Set<Tag> tags;
+
+    private LocalDateTime deletedDate;
 
     @Version
     private short version;

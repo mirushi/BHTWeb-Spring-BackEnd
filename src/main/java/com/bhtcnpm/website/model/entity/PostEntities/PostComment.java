@@ -4,6 +4,7 @@ import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -46,6 +47,7 @@ public class PostComment {
             orphanRemoval = true
     )
     @JsonBackReference
+    @EqualsAndHashCode.Exclude
     private List<PostComment> childComments;
 
     @ManyToMany (cascade = {
@@ -57,6 +59,7 @@ public class PostComment {
             joinColumns = @JoinColumn(name = "post_comment_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @EqualsAndHashCode.Exclude
     private Set<UserWebsite> likedByUsers;
 
     @Version
