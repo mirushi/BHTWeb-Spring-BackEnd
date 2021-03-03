@@ -45,5 +45,4 @@ public class Activity {
 
     @Version
     private short version;
-
 }

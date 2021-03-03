@@ -74,6 +74,21 @@ public class PostController {
         return new ResponseEntity<>(postDetailsDTO, HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/{id}")
+    @ResponseBody
+    public ResponseEntity deletePost (@PathVariable Long id) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = postService.deletePost(userID, id);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping(value = "/{id}/approval")
     @ResponseBody
     public ResponseEntity postPostApproval (@PathVariable Long id) {

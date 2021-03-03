@@ -126,6 +126,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Boolean deletePost(Long userID, Long postID) {
+        //TODO: Consider checking userID permission and saving who deleted the post.
+        postRepository.deleteById(postID);
+        return true;
+    }
+
+    @Override
     public Boolean rejectPost(Long postID, Long userID) {
         int rowChanged = postRepository.setPostState(postID, PostStateType.REJECTED);
 

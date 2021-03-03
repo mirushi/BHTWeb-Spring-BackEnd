@@ -26,6 +26,8 @@ public interface PostService {
 
     PostDetailsDTO editPost (PostRequestDTO postRequestDTO, Long postID, Long userID);
 
+    Boolean deletePost (Long userID, Long postID);
+
     Boolean rejectPost (Long postID, Long userID);
 
     Boolean createSavedStatus (Long postID, Long userID);
