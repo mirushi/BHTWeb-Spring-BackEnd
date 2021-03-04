@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.dto.UserPostReport;
 
+import com.bhtcnpm.website.model.dto.UserWebsite.UserSummaryDTO;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
 import lombok.Data;
@@ -10,11 +11,10 @@ import java.time.LocalDateTime;
 public class UserPostReportDTO {
     private Long id;
     private Long postId;
-    private Long reporterId;
+    private UserSummaryDTO reporter;
     private String reason;
     private LocalDateTime reportTime;
     private LocalDateTime resolvedTime;
-    private UserWebsite resolvedBy;
-    private LocalDateTime resolvedNote;
+    private String resolvedNote;
     private PostReportActionType actionTaken;
 }

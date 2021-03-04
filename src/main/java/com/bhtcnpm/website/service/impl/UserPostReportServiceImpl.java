@@ -76,11 +76,19 @@ public class UserPostReportServiceImpl implements UserPostReportService {
     }
 
     @Override
-    public UserPostReportListDTO getUserReports(Pageable pageable) {
+    public UserPostReportListDTO getUserReports(Pageable pageable, Boolean isResolved) {
         //Reset PAGE_SIZE to predefined value.
         pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
+        Page<UserPostReport> userPostReports;
 
-        Page<UserPostReport> userPostReports = userPostReportRepository.findAll(pageable);
+        if (isResolved == null) {
+            userPostReports = userPostReportRepository.findAll(pageable);
+        }
+        else if (isResolved == true) {
+            userPostReports = userPostReportRepository.findAllByResolvedTimeNotNull(pageable);
+        } else {
+            userPostReports = userPostReportRepository.findAllByResolvedTimeIsNull(pageable);
+        }
 
         return userPostReportMapper.userPostReportPageToUserPostReportListDTO(userPostReports);
     }

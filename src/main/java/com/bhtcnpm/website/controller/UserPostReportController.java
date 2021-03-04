@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.controller;
 
-import com.bhtcnpm.website.model.dto.UserPostReport.UserPostReportDTO;
 import com.bhtcnpm.website.model.dto.UserPostReport.UserPostReportListDTO;
 import com.bhtcnpm.website.model.dto.UserPostReport.UserPostReportRequestDTO;
 import com.bhtcnpm.website.model.dto.UserPostReport.UserPostReportResolveRequestDTO;
@@ -15,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @Validated
@@ -35,7 +34,7 @@ public class UserPostReportController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping("/post/report/{id}")
+    @PostMapping("/post/resolveReport/{id}")
     @ResponseBody
     public ResponseEntity resolveReport (@RequestParam Long reportID, @RequestBody UserPostReportResolveRequestDTO dto) throws IDNotFoundException {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
@@ -50,10 +49,10 @@ public class UserPostReportController {
     @ResponseBody
     public ResponseEntity<UserPostReportListDTO> getUserReports (@RequestParam(value = "page", required = false) Integer page,
                                                                  @RequestParam(value = "sort", required = false) String sort,
-                                                                 @PageableDefault @Nullable Pageable pageable) {
-        UserPostReportListDTO list = userPostReportService.getUserReports(pageable);
+                                                                 @PageableDefault @Nullable Pageable pageable,
+                                                                 Boolean isResolvedReport) {
+        UserPostReportListDTO list = userPostReportService.getUserReports(pageable, isResolvedReport);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-
 }
