@@ -15,5 +15,5 @@ import java.util.List;
 public interface UserPostReportService {
     Boolean createNewReport(Long userId, Long postId, @Valid UserPostReportRequestDTO dto) throws IDNotFoundException;
     Boolean resolveReport (Long userId, Long reportId, @Valid UserPostReportResolveRequestDTO dto) throws IDNotFoundException;
-    UserPostReportListDTO getUserReports (Pageable pageable);
+    UserPostReportListDTO getUserReports (Pageable pageable, Boolean isResolved);
 }
