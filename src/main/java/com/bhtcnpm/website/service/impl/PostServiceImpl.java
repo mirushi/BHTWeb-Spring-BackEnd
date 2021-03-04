@@ -143,6 +143,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Boolean rejectPostWithFeedback(Long postID, String feedback) {
+        int rowChanged = postRepository.setPostStateAndFeedback(postID, PostStateType.PENDING_FIX, feedback);
+
+        if (rowChanged == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Boolean createSavedStatus(Long postID, Long userID) {
         UserPostSaveId id = new UserPostSaveId();
         id.setPost(postRepository.getOne(postID));
@@ -204,4 +214,25 @@ public class PostServiceImpl implements PostService {
 
         return queryResult;
     }
+
+    @Override
+    public PostDetailsWithStateListDTO getPostDetailsWithState(Predicate predicate, Pageable pageable, PostStateType postStateType) {
+        //Reset PAGE_SIZE to predefined value.
+        pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
+
+        PostDetailsWithStateListDTO queryResult = postRepository.getPostDetailsListWithStateFilter(predicate, pageable, postStateType);
+
+        return queryResult;
+    }
+
+    @Override
+    public PostSummaryWithStateAndFeedbackListDTO getPostWithStateAndFeedback(Predicate predicate, Pageable pageable) {
+        //Reset PAGE_SIZE to predefined value.
+        pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
+
+        PostSummaryWithStateAndFeedbackListDTO queryResult = postRepository.getPostSummaryStateFeedback(predicate, pageable);
+
+        return queryResult;
+    }
+
 }

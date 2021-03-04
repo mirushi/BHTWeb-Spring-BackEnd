@@ -1,11 +1,9 @@
 package com.bhtcnpm.website.repository.custom;
 
-import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryWithStateDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryWithStateListDTO;
+import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.QPost;
+import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.PostRepository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.EntityPath;
@@ -72,7 +70,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public PostSummaryWithStateListDTO searchBySearchTermWithState(Predicate predicate, Pageable pageable) {
 
         JPAQuery query = new JPAQuery<Post>(em)
-                .select(Projections.constructor(PostSummaryWithStateDTO.class, qPost.id, qPost.author.id, qPost.author.name, qPost.category.id, qPost.category.name, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.summary, qPost.title, qPost.postState))
+                .select(Projections.constructor(PostSummaryWithStateDTO.class, qPost.id, qPost.author.id, qPost.author.name, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.summary, qPost.title, qPost.postState))
                 .from(qPost)
                 .where(predicate);
 
@@ -87,6 +85,51 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         Integer totalPages = (int)Math.ceil((double)resultCount / pageable.getPageSize());
 
         PostSummaryWithStateListDTO result = new PostSummaryWithStateListDTO(listSummaryDTOs, totalPages, resultCount);
+
+        return result;
+    }
+
+    @Override
+    public PostSummaryWithStateAndFeedbackListDTO getPostSummaryStateFeedback(Predicate predicate, Pageable pageable) {
+        JPAQuery query = new JPAQuery<Post>(em)
+                .select(Projections.constructor(PostSummaryWithStateAndFeedbackDTO.class, qPost.id, qPost.author.id, qPost.author.name, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.summary, qPost.title, qPost.postState, qPost.adminFeedback))
+                .from(qPost)
+                .where(predicate);
+
+        JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
+
+        QueryResults queryResults = finalQuery.fetchResults();
+
+        List<PostSummaryWithStateAndFeedbackDTO> listSummaryDTOs = queryResults.getResults();
+
+        Long resultCount = finalQuery.fetchResults().getTotal();
+
+        Integer totalPages = (int)Math.ceil((double)resultCount / pageable.getPageSize());
+
+        PostSummaryWithStateAndFeedbackListDTO result = new PostSummaryWithStateAndFeedbackListDTO(listSummaryDTOs, totalPages, resultCount);
+
+        return result;
+    }
+
+    @Override
+    public PostDetailsWithStateListDTO getPostDetailsListWithStateFilter(Predicate predicate, Pageable pageable, PostStateType postStateType) {
+        JPAQuery query = new JPAQuery<Post>(em)
+                .select(Projections.constructor(PostDetailsWithStateDTO.class, qPost.id, qPost.author.id, qPost.author.name, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.content, qPost.title, qPost.postState))
+                .from(qPost)
+                .where(predicate)
+                .where(qPost.postState.eq(postStateType));
+
+        JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
+
+        QueryResults queryResults = finalQuery.fetchResults();
+
+        List<PostDetailsWithStateDTO> listDetailDTOs = queryResults.getResults();
+
+        Long resultCount = finalQuery.fetchResults().getTotal();
+
+        Integer totalPages = (int)Math.ceil((double)resultCount / pageable.getPageSize());
+
+        PostDetailsWithStateListDTO result = new PostDetailsWithStateListDTO(listDetailDTOs, totalPages, resultCount);
 
         return result;
     }

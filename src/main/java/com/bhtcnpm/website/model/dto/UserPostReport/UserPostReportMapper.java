@@ -5,7 +5,6 @@ import com.bhtcnpm.website.model.entity.PostEntities.UserPostReport;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -14,6 +13,9 @@ import java.util.List;
 public abstract class UserPostReportMapper {
     @Mapping(target = "postId", source = "post.id")
     @Mapping(target = "reporter", source = "userPostReport.reporter")
+    @Mapping(target = "title", source = "userPostReport.post.title")
+    @Mapping(target = "content", source = "userPostReport.post.content")
+    @Mapping(target = "postImageURL", source = "userPostReport.post.imageURL")
     public abstract UserPostReportDTO userPostReportToUserPostReportDTO (UserPostReport userPostReport);
 
     public abstract List<UserPostReportDTO> userPostReportListToUserPostReportDTOList (List<UserPostReport> userPostReports);

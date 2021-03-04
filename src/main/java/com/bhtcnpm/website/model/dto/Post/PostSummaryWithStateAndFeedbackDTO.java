@@ -1,14 +1,14 @@
 package com.bhtcnpm.website.model.dto.Post;
 
+import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class PostSummaryWithStateDTO {
+public class PostSummaryWithStateAndFeedbackDTO {
     private Long id;
     private Long authorID;
     private String authorName;
@@ -21,4 +21,5 @@ public class PostSummaryWithStateDTO {
     private String summary;
     private String title;
     private PostStateType postState;
+    private String feedback;
 }
