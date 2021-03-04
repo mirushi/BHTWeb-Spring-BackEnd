@@ -34,6 +34,12 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
             "WHERE p.id = :postID")
     int setPostState (Long postID, PostStateType postStateType);
 
+    @Modifying
+    @Query("UPDATE Post as p " +
+            "SET p.postState = :postStateType, p.adminFeedback = :feedBack " +
+            "WHERE p.id = :postID")
+    int setPostStateAndFeedback (Long postID, PostStateType postStateType, String feedBack);
+
     List<Post> findByCategoryNameOrderByPublishDtmDesc (Pageable pageable, String categoryName);
 
     //Search Term is the same as Search Term Exact. Please don't pass different value.

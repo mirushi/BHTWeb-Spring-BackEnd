@@ -1,7 +1,9 @@
 package com.bhtcnpm.website.controller;
 
+import com.bhtcnpm.website.model.binding.IgnorePostStateTypeBinding;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
+import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -163,6 +166,21 @@ public class PostController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping(value = "/{id}/rejectionWithFeedback")
+    @ResponseBody
+    public ResponseEntity postRejectionWithFeedback (@PathVariable Long id, @RequestBody String feedback) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        Boolean result = postService.rejectPostWithFeedback(id, feedback);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
     @PostMapping(value = "/{id}/savedStatus")
     @ResponseBody
     public ResponseEntity postSavedStatus (@PathVariable Long id) {
@@ -212,17 +230,28 @@ public class PostController {
             @RequestParam String searchTerm,
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "sort", required = false) String sort,
-            @PageableDefault Pageable pageable) {
+            @PageableDefault @Nullable Pageable pageable) {
         return new ResponseEntity<>(postService.getPostBySearchTerm(predicate, pageable, searchTerm), HttpStatus.OK);
     }
 
     @GetMapping("myPosts")
     @ResponseBody
-    public ResponseEntity<PostSummaryWithStateListDTO> getMyPosts (
+    public ResponseEntity<PostSummaryWithStateAndFeedbackListDTO> getMyPosts (
             @QuerydslPredicate(root = Post.class) Predicate predicate,
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "sort", required = false) String sort,
-            @PageableDefault Pageable pageable) {
-        return new ResponseEntity<>(postService.getPostWithStateBySearchTerm(predicate, pageable), HttpStatus.OK);
+            @PageableDefault @Nullable Pageable pageable) {
+        return new ResponseEntity<>(postService.getPostWithStateAndFeedback(predicate, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("pendingApproval")
+    @ResponseBody
+    public ResponseEntity<PostDetailsWithStateListDTO> getPendingApprovalPosts (
+            @QuerydslPredicate(root = Post.class, bindings = IgnorePostStateTypeBinding.class) Predicate predicate,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "sort", required = false) String sort,
+            @PageableDefault @Nullable Pageable pageable
+    ) {
+        return new ResponseEntity<>(postService.getPostDetailsWithState(predicate, pageable, PostStateType.PENDING_APPROVAL), HttpStatus.OK);
     }
 }

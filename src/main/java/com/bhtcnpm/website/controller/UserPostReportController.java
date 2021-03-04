@@ -50,7 +50,7 @@ public class UserPostReportController {
     public ResponseEntity<UserPostReportListDTO> getUserReports (@RequestParam(value = "page", required = false) Integer page,
                                                                  @RequestParam(value = "sort", required = false) String sort,
                                                                  @PageableDefault @Nullable Pageable pageable,
-                                                                 Boolean isResolvedReport) {
+                                                                 @Nullable Boolean isResolvedReport) {
         UserPostReportListDTO list = userPostReportService.getUserReports(pageable, isResolvedReport);
 
         return new ResponseEntity<>(list, HttpStatus.OK);

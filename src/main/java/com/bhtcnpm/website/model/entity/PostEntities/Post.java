@@ -61,6 +61,10 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
+    @Lob
+    @Column
+    private String adminFeedback;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private UserWebsite author;
 
