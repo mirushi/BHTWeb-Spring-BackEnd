@@ -11,6 +11,7 @@ public class PostSummaryDTO {
     private Long id;
     private Long authorID;
     private String authorName;
+    private String authorAvatarURL;
     private Long categoryID;
     private String categoryName;
     private String imageURL;

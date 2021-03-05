@@ -47,7 +47,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public PostSummaryListDTO searchBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
 
         JPAQuery query = new JPAQuery<Post>(em)
-                .select(Projections.constructor(PostSummaryDTO.class, qPost.id, qPost.author.id, qPost.author.name, qPost.category.id, qPost.category.name, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.summary, qPost.title))
+                .select(Projections.constructor(PostSummaryDTO.class, qPost.id, qPost.author.id, qPost.author.name, qPost.author.avatarURL, qPost.category.id, qPost.category.name, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.summary, qPost.title))
                 .from(qPost)
                 .where(qPost.title.contains(searchTerm), predicate);
 
