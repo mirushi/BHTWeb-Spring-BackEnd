@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -168,6 +169,12 @@ public class DocController {
             @RequestParam(value = "sort", required = false) String sort,
             @PageableDefault Pageable pageable) {
         return new ResponseEntity<>(docService.getPostBySearchTerm(predicate, pageable, searchTerm), HttpStatus.OK);
+    }
+
+    @PostMapping("upload")
+    @ResponseBody
+    public ResponseEntity<DocUploadDTO> uploadDoc (@RequestParam("file")MultipartFile file) {
+
     }
 
 }
