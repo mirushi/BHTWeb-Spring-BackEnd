@@ -1,23 +1,32 @@
 package com.bhtcnpm.website.service.impl;
 
+import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
-import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
+import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
+import com.bhtcnpm.website.model.entity.DocFileUploadRepository;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
+import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.repository.DocCommentRepository;
 import com.bhtcnpm.website.repository.DocRepository;
 import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.service.DocService;
+import com.bhtcnpm.website.service.GoogleDriveService;
+import com.google.api.services.drive.model.File;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,11 +44,17 @@ public class DocServiceImpl implements DocService {
 
     private static final int PAGE_SIZE_TRENDING_DOC = 16;
 
+    private static final int FILE_NAME_RANDOM_LENGTH = 10;
+
+    private static final String DRIVE_UPLOAD_DEFAULT_FOLDER_ID = "1mg_iZfewkU93WhcFfKYf38irvW1Gr-wn";
+
     private final DocDetailsMapper docDetailsMapper;
 
     private final DocRequestMapper docRequestMapper;
 
     private final DocRepository docRepository;
+
+    private final DocFileUploadRepository docFileUploadRepository;
 
     private final DocCommentRepository docCommentRepository;
 
@@ -201,5 +216,36 @@ public class DocServiceImpl implements DocService {
         DocSummaryListDTO queryResult = docRepository.searchBySearchTerm(predicate, pageable, searchTerm);
 
         return queryResult;
+    }
+
+    @Override
+    public DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Long userID) throws IOException, FileExtensionNotAllowedException {
+        byte[] fileContent = multipartFile.getBytes();
+        String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+
+        //Get mime type.
+        String mimeType = AllowedUploadExtension.getMimeType(extension);
+
+        //Generate random file name (for security reason, don't trust user submitted file name.
+        //https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html#file-upload-threats
+        String fileName = RandomStringUtils.randomAlphanumeric(FILE_NAME_RANDOM_LENGTH) + "." + extension;
+
+        //Get subfolder of userID to upload file.
+        com.google.api.services.drive.model.File uploadedFile = GoogleDriveService
+            .createGoogleFileWithUserID(DRIVE_UPLOAD_DEFAULT_FOLDER_ID, userID, mimeType, fileName, fileContent);
+
+        //Save DB location for the file.
+        DocFileUpload fileUpload = new DocFileUpload();
+        fileUpload.setFileName(multipartFile.getOriginalFilename());
+        fileUpload.setFileSize(multipartFile.getSize());
+        fileUpload.setDownloadURL(uploadedFile.getWebViewLink());
+
+        fileUpload = docFileUploadRepository.save(fileUpload);
+
+        return DocUploadDTO.builder()
+                .fileName(fileUpload.getFileName())
+                .code(fileUpload.getCode())
+                .fileSize(multipartFile.getSize())
+                .build();
     }
 }

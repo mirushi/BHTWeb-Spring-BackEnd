@@ -12,6 +12,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.FileList;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -46,6 +47,23 @@ public class GoogleDriveService {
         }
     }
 
+    private static com.google.api.services.drive.model.File _createBlankFile (String googleFolderIdParent, String contentType, String customFileName) throws IOException {
+        com.google.api.services.drive.model.File fileMetadata = new com.google.api.services.drive.model.File();
+        fileMetadata.setName(customFileName);
+
+        List<String> parents = Arrays.asList(googleFolderIdParent);
+
+        fileMetadata.setParents(parents);
+
+        fileMetadata.setMimeType(contentType);
+
+        Drive driveService = getDriveService();
+
+        com.google.api.services.drive.model.File file = driveService.files().create(fileMetadata).setFields("id, webContentLink, webViewLink, parents").execute();
+
+        return file;
+    }
+
     private static com.google.api.services.drive.model.File _createGoogleFile (String googleFolderIdParent, String contentType, String customFileName, AbstractInputStreamContent uploadStreamContent) throws IOException {
         com.google.api.services.drive.model.File fileMetadata = new com.google.api.services.drive.model.File();
         fileMetadata.setName(customFileName);
@@ -64,6 +82,48 @@ public class GoogleDriveService {
     public static com.google.api.services.drive.model.File createGoogleFile(String googleFolderIdParent, String contentType, String customFileName, byte[] uploadData) throws IOException {
         AbstractInputStreamContent uploadStreamContent = new ByteArrayContent(contentType, uploadData);
         return _createGoogleFile(googleFolderIdParent, contentType, customFileName, uploadStreamContent);
+    }
+
+    public static final String createOrGetSubFolderIdWithName(String googleFolderIdParent, String subFolderName) throws IOException {
+        Drive driveService = getDriveService();
+
+        String pageToken = null;
+
+        String query;
+
+        com.google.api.services.drive.model.File subFolder = null;
+
+        if (googleFolderIdParent == null) {
+            query = " mimeType = 'application/vnd.google-apps.folder' " //
+                    + " and 'root' in parents and name ='" + subFolderName + "'";
+        } else {
+            query = " mimeType = 'application/vnd.google-apps.folder' " //
+                    + " and '" + googleFolderIdParent + "' in parents and name ='" + subFolderName + "'";
+        }
+
+        do {
+            FileList result = driveService.files().list().setQ(query).setSpaces("drive")
+                    .setFields("nextPageToken, files(id, name, createdTime)")
+                    .setPageToken(pageToken).execute();
+            for (com.google.api.services.drive.model.File file : result.getFiles()) {
+                subFolder = file;
+            }
+            pageToken = result.getNextPageToken();
+        } while (pageToken != null);
+
+        //If the subfolder doesn't exist, create one.
+        if (subFolder == null) {
+            subFolder = _createBlankFile(googleFolderIdParent, "application/vnd.google-apps.folder", subFolderName);
+        }
+
+        return subFolder.getId();
+    }
+
+    public static com.google.api.services.drive.model.File createGoogleFileWithUserID (String googleFolderIdParent, Long userID, String contentType, String customFileName, byte[] uploadData) throws IOException {
+        //Get subfolder of userID to upload file.
+        String userFolderID = GoogleDriveService.createOrGetSubFolderIdWithName(googleFolderIdParent, userID.toString());
+
+        return GoogleDriveService.createGoogleFile(userFolderID, contentType, customFileName, uploadData);
     }
 
     public static com.google.api.services.drive.model.File createGoogleFile(String googleFolderIdParent, String contentType, //

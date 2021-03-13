@@ -2,6 +2,7 @@ package com.bhtcnpm.website.controller;
 
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
+import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -173,8 +175,12 @@ public class DocController {
 
     @PostMapping("upload")
     @ResponseBody
-    public ResponseEntity<DocUploadDTO> uploadDoc (@RequestParam("file")MultipartFile file) {
+    public ResponseEntity<DocUploadDTO> uploadDoc (@RequestParam("file")MultipartFile file) throws IOException, FileExtensionNotAllowedException {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 51L;
 
+        DocUploadDTO dto = docService.uploadFileToGDrive(file, userID);
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
-
 }
