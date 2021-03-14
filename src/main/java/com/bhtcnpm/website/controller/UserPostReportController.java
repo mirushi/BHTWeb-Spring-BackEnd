@@ -36,7 +36,7 @@ public class UserPostReportController {
 
     @PostMapping("/post/resolveReport/{id}")
     @ResponseBody
-    public ResponseEntity resolveReport (@PathVariable Long reportID, @RequestBody UserPostReportResolveRequestDTO dto) throws IDNotFoundException {
+    public ResponseEntity resolveReport (@PathVariable("id") Long reportID, @RequestBody UserPostReportResolveRequestDTO dto) throws IDNotFoundException {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
         Long userID = 1L;
 

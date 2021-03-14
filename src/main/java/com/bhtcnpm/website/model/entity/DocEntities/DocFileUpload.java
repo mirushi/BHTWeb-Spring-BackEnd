@@ -1,7 +1,10 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
+import com.bhtcnpm.website.model.entity.UserWebsite;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
@@ -11,6 +14,9 @@ import java.util.UUID;
 @Entity(name = "DocFileUpload")
 @Table(name = "doc_file_upload")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DocFileUpload {
     @Id
     @GeneratedValue(
@@ -35,7 +41,12 @@ public class DocFileUpload {
     @Column(nullable = false)
     private Long fileSize;
 
+    @Column(nullable = false)
     private String downloadURL;
+
+    @ManyToOne
+    @Column(nullable = false)
+    private UserWebsite uploader;
 
     @PrePersist
     public void initializeUUID () {

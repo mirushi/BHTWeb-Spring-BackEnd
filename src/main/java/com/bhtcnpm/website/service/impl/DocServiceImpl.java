@@ -5,11 +5,13 @@ import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.DocFileUploadRepository;
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.repository.DocCommentRepository;
 import com.bhtcnpm.website.repository.DocRepository;
 import com.bhtcnpm.website.repository.UserDocReactionRepository;
+import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.DocService;
 import com.bhtcnpm.website.service.GoogleDriveService;
 import com.google.api.services.drive.model.File;
@@ -59,6 +61,8 @@ public class DocServiceImpl implements DocService {
     private final DocCommentRepository docCommentRepository;
 
     private final UserDocReactionRepository userDocReactionRepository;
+
+    private final UserWebsiteRepository userWebsiteRepository;
 
     public DocDetailsListDTO getAllDoc (Predicate predicate, @Min(0)Integer paginator) {
 
@@ -234,11 +238,16 @@ public class DocServiceImpl implements DocService {
         com.google.api.services.drive.model.File uploadedFile = GoogleDriveService
             .createGoogleFileWithUserID(DRIVE_UPLOAD_DEFAULT_FOLDER_ID, userID, mimeType, fileName, fileContent);
 
+        //Get proxy for author.
+        UserWebsite author = userWebsiteRepository.getOne(userID);
+
         //Save DB location for the file.
-        DocFileUpload fileUpload = new DocFileUpload();
-        fileUpload.setFileName(multipartFile.getOriginalFilename());
-        fileUpload.setFileSize(multipartFile.getSize());
-        fileUpload.setDownloadURL(uploadedFile.getWebViewLink());
+        DocFileUpload fileUpload = DocFileUpload.builder()
+            .fileName(multipartFile.getOriginalFilename())
+            .fileSize(multipartFile.getSize())
+            .downloadURL(uploadedFile.getWebViewLink())
+            .uploader(author)
+            .build();
 
         fileUpload = docFileUploadRepository.save(fileUpload);
 
