@@ -45,7 +45,7 @@ public class DocFileUpload {
     private String downloadURL;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private UserWebsite uploader;
 
     @PrePersist

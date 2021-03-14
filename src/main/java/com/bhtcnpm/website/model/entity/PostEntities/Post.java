@@ -8,8 +8,6 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Loader;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -19,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Indexed
 @Table(name = "post")
 @Data
 @SQLDelete(sql = "UPDATE post SET DELETED_DATE = "+ "20210302" +" WHERE id = ? AND VERSION = ?")
@@ -40,11 +37,9 @@ public class Post {
     private Long id;
 
     @Column(nullable = false)
-    @FullTextField
     private String title;
 
     @Column(nullable = false)
-    @FullTextField
     private String summary;
 
     private String imageURL;
