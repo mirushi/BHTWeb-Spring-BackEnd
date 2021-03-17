@@ -56,8 +56,8 @@ INSERT INTO DOC_SUBJECT(ID, NAME, VERSION) VALUES
 (doc_subject_sequence.NEXTVAL, 'Mẹo vặt', 0);
 
 -- INSERT DOCFILE.
-INSERT INTO DOC_FILE_UPLOAD (id, code, fileName, fileSize, downloadURL, uploader)
-VALUES (doc_file_upload_sequence.NEXTVAL, '123acb', 'file1.docx', 10000, 'google.com', 1)
+INSERT INTO DOC_FILE_UPLOAD (ID, CODE, FILE_NAME, FILE_SIZE, DOWNLOADURL, UPLOADER_ID)
+VALUES (doc_file_upload_sequence.NEXTVAL, '123acb', 'file1.docx', 10000, 'google.com', 1);
 
 -- INSERT DOC.
 
@@ -72,16 +72,18 @@ WITH docs (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, DOC_S
          (doc_sequence.NEXTVAL, '20210114', 'Tài liệu Nhập môn lập trình - Trường ĐHCNTT.', 'http://google.com/docs02', 100, 'https://www.ed2go.com/binaries/content/gallery/ed2go/products/17160.jpg', 0 ,'20200115' ,'20210115', 'Tài liệu Nhập môn lập trình', 123, 'dong', 'Giáo trình', 'Đại cương', 0)
          )
 
-INSERT INTO DOC (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, DOC_STATE, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_ID, CATEGORY_ID, SUBJECT_ID, VERSION)
+INSERT INTO DOC (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, DOC_STATE, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_ID, CATEGORY_ID, SUBJECT_ID, DOC_FILE_ID, VERSION)
 SELECT
-    docs.ID, docs.CREATED_DTM, docs.DESCRIPTION, docs.DOCURL, docs.DOWNLOAD_COUNT, docs.IMAGEURL, docs.DOC_STATE, docs.LAST_EDIT_DTM ,docs.PUBLISH_DTM, docs.TITLE, docs.VIEW_COUNT, author.ID, category.ID, subject.ID, docs.VERSION
+    docs.ID, docs.CREATED_DTM, docs.DESCRIPTION, docs.DOCURL, docs.DOWNLOAD_COUNT, docs.IMAGEURL, docs.DOC_STATE, docs.LAST_EDIT_DTM ,docs.PUBLISH_DTM, docs.TITLE, docs.VIEW_COUNT, author.ID, category.ID, subject.ID, docfileupload.ID, docs.VERSION
 FROM
     docs JOIN USER_WEBSITE AS author
               ON docs.AUTHOR_NAME = author.NAME
          JOIN DOC_CATEGORY AS category
               ON docs.CATEGORY_NAME = category.NAME
          JOIN DOC_SUBJECT AS subject
-              ON docs.SUBJECT_NAME = subject.NAME;
+              ON docs.SUBJECT_NAME = subject.NAME
+        JOIN DOC_FILE_UPLOAD AS docfileupload
+              ON docfileupload.CODE = '123abc';
 
 -- INSERT USER DOC REACTION.
 
