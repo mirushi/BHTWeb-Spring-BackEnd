@@ -64,7 +64,6 @@ public class Doc {
     @Column(nullable = false)
     private Long viewCount;
 
-    @Column(nullable = false)
     @Deprecated
     private String docURL;
 

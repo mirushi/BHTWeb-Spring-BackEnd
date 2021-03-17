@@ -56,34 +56,34 @@ INSERT INTO DOC_SUBJECT(ID, NAME, VERSION) VALUES
 (doc_subject_sequence.NEXTVAL, 'Mẹo vặt', 0);
 
 -- INSERT DOCFILE.
-INSERT INTO DOC_FILE_UPLOAD (ID, CODE, FILE_NAME, FILE_SIZE, DOWNLOADURL, UPLOADER_ID)
-VALUES (doc_file_upload_sequence.NEXTVAL, '123acb', 'file1.docx', 10000, 'google.com', 1);
+-- INSERT INTO DOC_FILE_UPLOAD (ID, CODE, FILE_NAME, FILE_SIZE, DOWNLOADURL, UPLOADER_ID)
+-- VALUES (doc_file_upload_sequence.NEXTVAL, '250ea8b0-3971-40aa-81b4-667f583a0e88', 'file1.docx', 10000, 'google.com', 1);
 
 -- INSERT DOC.
-
-WITH docs (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, DOC_STATE, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_NAME, CATEGORY_NAME, SUBJECT_NAME, VERSION) AS
-         ( VALUES
-        (doc_sequence.NEXTVAL, '20200114', 'Tổng hợp đầy đủ các dạng bài tập từ dễ đến khó của môn Giải tích 1.', 'http://google.com/docs01', 10, 'https://images.theconversation.com/files/207820/original/file-20180226-140213-yox11e.jpg', 0,'20200115' ,'20200115', 'Tổng hợp bài tập Giải tích 1', 34, 'nghi', 'Bài tập', 'Đại cương', 0),
-        (doc_sequence.NEXTVAL, '20210114', 'Tổng hợp những bài tập Anh Văn 1 cực sát đề thi.', 'http://google.com/docs02', 100, 'https://www.cityofparramatta.nsw.gov.au/sites/council/files/2019-05/english_conversation_class.jpg', 0,'20200115' ,'20210115', 'Bài tập Anh Văn 1', 256, 'dong', 'Bài tập', 'Toán học phổ thông', 0),
-         (doc_sequence.NEXTVAL, '20210114', 'Đề thi Anh Văn 2 năm học 2020-2021.', 'http://google.com/docs02', 100, 'https://flightplanenglish.com/wp-content/uploads/pexels-photo-301920.jpeg', 0,'20200115' ,'20210115', 'Đề thi Anh Văn 2', 123, 'hai', 'Đề thi', 'Ngoại ngữ', 0),
-         (doc_sequence.NEXTVAL, '20210114', 'Đề thi Đại số Tuyến tính năm học 2020-2021.', 'http://google.com/docs02', 100, 'https://prod-discovery.edx-cdn.org/media/course/image/7b2ecb24-2874-402b-ad86-473e246cae0c-aa0d4ca8dc73.small.png', 0,'20200115' ,'20210115', 'Đề thi Đại số Tuyến tính HK1 2020-2021', 123, 'dong', 'Đề thi', 'Toán học phổ thông', 0),
-         (doc_sequence.NEXTVAL, '20210114', 'Tư duy thuật toán là bộ tài liệu giúp bạn học và hiểu thuật toán nhanh nhất.', 'http://google.com/docs02', 100, 'https://sm.mashable.com/t/mashable_in/feature/w/what-is-an/what-is-an-algorithm-anyway_sa5m.960.jpg', 0,'20200115' ,'20210115', 'Tư duy về thuật toán', 123, 'nghi', 'Khác', 'Mẹo vặt', 0),
-         (doc_sequence.NEXTVAL, '20210114', 'Tư duy lập trình là bộ tài liệu giúp bạn hiểu những khái niệm cơ bản trong lập trình.', 'http://google.com/docs02', 100, 'https://sm.mashable.com/t/mashable_in/feature/w/what-is-an/what-is-an-algorithm-anyway_sa5m.960.jpg', 0,'20200115' ,'20210115', 'Tư duy lập trình', 123, 'dong', 'Khác', 'Mẹo vặt', 0),
-         (doc_sequence.NEXTVAL, '20210114', 'Tài liệu Nhập môn lập trình - Trường ĐHCNTT.', 'http://google.com/docs02', 100, 'https://www.ed2go.com/binaries/content/gallery/ed2go/products/17160.jpg', 0 ,'20200115' ,'20210115', 'Tài liệu Nhập môn lập trình', 123, 'dong', 'Giáo trình', 'Đại cương', 0)
-         )
-
-INSERT INTO DOC (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, DOC_STATE, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_ID, CATEGORY_ID, SUBJECT_ID, DOC_FILE_ID, VERSION)
-SELECT
-    docs.ID, docs.CREATED_DTM, docs.DESCRIPTION, docs.DOCURL, docs.DOWNLOAD_COUNT, docs.IMAGEURL, docs.DOC_STATE, docs.LAST_EDIT_DTM ,docs.PUBLISH_DTM, docs.TITLE, docs.VIEW_COUNT, author.ID, category.ID, subject.ID, docfileupload.ID, docs.VERSION
-FROM
-    docs JOIN USER_WEBSITE AS author
-              ON docs.AUTHOR_NAME = author.NAME
-         JOIN DOC_CATEGORY AS category
-              ON docs.CATEGORY_NAME = category.NAME
-         JOIN DOC_SUBJECT AS subject
-              ON docs.SUBJECT_NAME = subject.NAME
-        JOIN DOC_FILE_UPLOAD AS docfileupload
-              ON docfileupload.CODE = '123abc';
+--
+-- WITH docs (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, DOC_STATE, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_NAME, CATEGORY_NAME, SUBJECT_NAME, VERSION) AS
+--          ( VALUES
+--         (doc_sequence.NEXTVAL, '20200114', 'Tổng hợp đầy đủ các dạng bài tập từ dễ đến khó của môn Giải tích 1.', 'http://google.com/docs01', 10, 'https://images.theconversation.com/files/207820/original/file-20180226-140213-yox11e.jpg', 0,'20200115' ,'20200115', 'Tổng hợp bài tập Giải tích 1', 34, 'nghi', 'Bài tập', 'Đại cương', 0),
+--         (doc_sequence.NEXTVAL, '20210114', 'Tổng hợp những bài tập Anh Văn 1 cực sát đề thi.', 'http://google.com/docs02', 100, 'https://www.cityofparramatta.nsw.gov.au/sites/council/files/2019-05/english_conversation_class.jpg', 0,'20200115' ,'20210115', 'Bài tập Anh Văn 1', 256, 'dong', 'Bài tập', 'Toán học phổ thông', 0),
+--          (doc_sequence.NEXTVAL, '20210114', 'Đề thi Anh Văn 2 năm học 2020-2021.', 'http://google.com/docs02', 100, 'https://flightplanenglish.com/wp-content/uploads/pexels-photo-301920.jpeg', 0,'20200115' ,'20210115', 'Đề thi Anh Văn 2', 123, 'hai', 'Đề thi', 'Ngoại ngữ', 0),
+--          (doc_sequence.NEXTVAL, '20210114', 'Đề thi Đại số Tuyến tính năm học 2020-2021.', 'http://google.com/docs02', 100, 'https://prod-discovery.edx-cdn.org/media/course/image/7b2ecb24-2874-402b-ad86-473e246cae0c-aa0d4ca8dc73.small.png', 0,'20200115' ,'20210115', 'Đề thi Đại số Tuyến tính HK1 2020-2021', 123, 'dong', 'Đề thi', 'Toán học phổ thông', 0),
+--          (doc_sequence.NEXTVAL, '20210114', 'Tư duy thuật toán là bộ tài liệu giúp bạn học và hiểu thuật toán nhanh nhất.', 'http://google.com/docs02', 100, 'https://sm.mashable.com/t/mashable_in/feature/w/what-is-an/what-is-an-algorithm-anyway_sa5m.960.jpg', 0,'20200115' ,'20210115', 'Tư duy về thuật toán', 123, 'nghi', 'Khác', 'Mẹo vặt', 0),
+--          (doc_sequence.NEXTVAL, '20210114', 'Tư duy lập trình là bộ tài liệu giúp bạn hiểu những khái niệm cơ bản trong lập trình.', 'http://google.com/docs02', 100, 'https://sm.mashable.com/t/mashable_in/feature/w/what-is-an/what-is-an-algorithm-anyway_sa5m.960.jpg', 0,'20200115' ,'20210115', 'Tư duy lập trình', 123, 'dong', 'Khác', 'Mẹo vặt', 0),
+--          (doc_sequence.NEXTVAL, '20210114', 'Tài liệu Nhập môn lập trình - Trường ĐHCNTT.', 'http://google.com/docs02', 100, 'https://www.ed2go.com/binaries/content/gallery/ed2go/products/17160.jpg', 0 ,'20200115' ,'20210115', 'Tài liệu Nhập môn lập trình', 123, 'dong', 'Giáo trình', 'Đại cương', 0)
+--          )
+--
+-- INSERT INTO DOC (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, DOC_STATE, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_ID, CATEGORY_ID, SUBJECT_ID, DOC_FILE_ID, VERSION)
+-- SELECT
+--     docs.ID, docs.CREATED_DTM, docs.DESCRIPTION, docs.DOCURL, docs.DOWNLOAD_COUNT, docs.IMAGEURL, docs.DOC_STATE, docs.LAST_EDIT_DTM ,docs.PUBLISH_DTM, docs.TITLE, docs.VIEW_COUNT, author.ID, category.ID, subject.ID, docfileupload.ID, docs.VERSION
+-- FROM
+--     docs JOIN USER_WEBSITE AS author
+--               ON docs.AUTHOR_NAME = author.NAME
+--          JOIN DOC_CATEGORY AS category
+--               ON docs.CATEGORY_NAME = category.NAME
+--          JOIN DOC_SUBJECT AS subject
+--               ON docs.SUBJECT_NAME = subject.NAME
+--         JOIN DOC_FILE_UPLOAD AS docfileupload
+--               ON docfileupload.CODE = '250ea8b0-3971-40aa-81b4-667f583a0e88';
 
 -- INSERT USER DOC REACTION.
 
