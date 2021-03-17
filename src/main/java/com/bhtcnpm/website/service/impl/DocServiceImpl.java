@@ -204,7 +204,6 @@ public class DocServiceImpl implements DocService {
 
     @Override
     public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, Long userID) {
-
         Doc doc = docRequestMapper.updateDocFromDocRequestDTO(userID, docRequestDTO, null);
 
         doc = docRepository.save(doc);

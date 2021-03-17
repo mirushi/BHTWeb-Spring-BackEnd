@@ -55,6 +55,10 @@ INSERT INTO DOC_SUBJECT(ID, NAME, VERSION) VALUES
 (doc_subject_sequence.NEXTVAL, 'Ngoại ngữ', 0),
 (doc_subject_sequence.NEXTVAL, 'Mẹo vặt', 0);
 
+-- INSERT DOCFILE.
+INSERT INTO DOC_FILE_UPLOAD (id, code, fileName, fileSize, downloadURL, uploader)
+VALUES (doc_file_upload_sequence.NEXTVAL, '123acb', 'file1.docx', 10000, 'google.com', 1)
+
 -- INSERT DOC.
 
 WITH docs (ID, CREATED_DTM, DESCRIPTION, DOCURL, DOWNLOAD_COUNT, IMAGEURL, DOC_STATE, LAST_EDIT_DTM, PUBLISH_DTM, TITLE, VIEW_COUNT, AUTHOR_NAME, CATEGORY_NAME, SUBJECT_NAME, VERSION) AS
