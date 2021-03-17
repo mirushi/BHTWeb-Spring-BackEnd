@@ -1,6 +1,8 @@
 package com.bhtcnpm.website;
 
 import lombok.SneakyThrows;
+import org.hibernate.search.engine.cfg.BackendSettings;
+import org.hibernate.search.engine.cfg.IndexSettings;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ public class HibernateSearchEventListener implements ApplicationListener<Applica
     @Override
     @Transactional
     public void onApplicationEvent(ApplicationReadyEvent event) {
+        configureLucene();
         SearchSession searchSession = Search.session(em);
         searchSession.massIndexer().startAndWait();
     }
@@ -29,6 +32,10 @@ public class HibernateSearchEventListener implements ApplicationListener<Applica
     @Autowired
     public void setEm (EntityManager em) {
         this.em = em;
+    }
+
+    private void configureLucene() {
+
     }
 
 }
