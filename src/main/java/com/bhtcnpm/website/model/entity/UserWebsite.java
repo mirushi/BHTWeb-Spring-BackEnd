@@ -7,6 +7,10 @@ import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostSave;
 import lombok.*;
+import org.hibernate.search.engine.backend.types.Norms;
+import org.hibernate.search.engine.backend.types.Searchable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -40,10 +44,12 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
 
     @Column(nullable = false, length = UWDomainConstant.NAME_LENGTH)
     @Size(max = UWDomainConstant.NAME_LENGTH)
+    @KeywordField(norms = Norms.YES, searchable = Searchable.YES)
     private String name;
 
     @Column(nullable = false, length = UWDomainConstant.DISPLAY_NAME_LENGTH)
     @Size(max = UWDomainConstant.DISPLAY_NAME_LENGTH)
+    @FullTextField(norms = Norms.YES, searchable = Searchable.YES)
     private String displayName;
 
     @Column(nullable = false, length = UWDomainConstant.PASSWORD_LENGTH)

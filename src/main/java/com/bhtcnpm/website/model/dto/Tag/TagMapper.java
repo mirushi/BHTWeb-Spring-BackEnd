@@ -1,7 +1,6 @@
 package com.bhtcnpm.website.model.dto.Tag;
 
 import com.bhtcnpm.website.model.entity.Tag;
-import com.bhtcnpm.website.repository.TagMapperResolver;
 import com.bhtcnpm.website.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.InheritInverseConfiguration;
@@ -35,9 +34,10 @@ public abstract class TagMapper {
         }
 
         if (tagDTO.getId() == null) {
-            resultTag = new Tag();
-            resultTag.setContent(tagDTO.getContent());
-            resultTag.setId(null);
+            resultTag = Tag.builder()
+                    .id(null)
+                    .content(tagDTO.getContent())
+                    .build();
         } else {
             resultTag = tagRepository.getOne(tagDTO.getId());
         }

@@ -3,11 +3,20 @@ package com.bhtcnpm.website.model.entity.PostEntities;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.search.bridge.TagValueBridge;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Loader;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.hibernate.search.engine.backend.types.*;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.extractor.builtin.BuiltinContainerExtractors;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -17,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Indexed
 @Table(name = "post")
 @Data
 @SQLDelete(sql = "UPDATE post SET DELETED_DATE = "+ "20210302" +" WHERE id = ? AND VERSION = ?")
@@ -37,9 +47,21 @@ public class Post {
     private Long id;
 
     @Column(nullable = false)
+    @FullTextField(analyzer = "default",
+            norms = Norms.YES,
+            termVector = TermVector.YES,
+            projectable = Projectable.YES,
+            searchable = Searchable.YES)
+    @KeywordField(name = "title_sort",norms = Norms.YES,
+            sortable = Sortable.YES)
     private String title;
 
     @Column(nullable = false)
+    @FullTextField(analyzer = "default",
+            norms = Norms.YES,
+            termVector = TermVector.YES,
+            projectable = Projectable.YES,
+            searchable = Searchable.YES)
     private String summary;
 
     private String imageURL;
@@ -61,10 +83,20 @@ public class Post {
     private String content;
 
     @Lob
+    @Column(nullable = false)
+    @FullTextField(analyzer = "default",
+            norms = Norms.YES,
+            termVector = TermVector.YES,
+            projectable = Projectable.YES,
+            searchable = Searchable.YES)
+    private String contentPlainText;
+
+    @Lob
     @Column
     private String adminFeedback;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @IndexedEmbedded
     private UserWebsite author;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -108,6 +140,8 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     @EqualsAndHashCode.Exclude
+    @KeywordField(searchable = Searchable.YES,
+            valueBridge = @ValueBridgeRef(type = TagValueBridge.class))
     private Set<Tag> tags;
 
     private LocalDateTime deletedDate;
