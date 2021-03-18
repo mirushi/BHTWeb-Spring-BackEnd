@@ -173,7 +173,7 @@ Chắc hẳn mình và bạn – những người trẻ mang tư duy rộng mở
 )
 INSERT INTO POST (ID, CONTENT, CONTENT_PLAIN_TEXT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_ID, CATEGORY_ID, POST_STATE, VERSION)
 SELECT
-    posts.ID, posts.CONTENT, posts.CONTENT , posts.IMAGEURL, posts.PUBLISH_DTM, posts.SUMMARY, posts.TITLE, posts.READING_TIME, author.ID, category.ID, posts.POST_STATE, posts.VERSION
+    posts.ID, posts.CONTENT, posts.CONTENT, posts.IMAGEURL, posts.PUBLISH_DTM, posts.SUMMARY, posts.TITLE, posts.READING_TIME, author.ID, category.ID, posts.POST_STATE, posts.VERSION
 FROM
     posts JOIN USER_WEBSITE AS author
                 ON posts.AUTHOR_NAME = author.NAME

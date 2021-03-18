@@ -196,13 +196,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSummaryListDTO getPostBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
-        //Reset PAGE_SIZE to predefined value.
-        pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
-
-        PostSummaryListDTO queryResult = postRepository.searchBySearchTerm(predicate, pageable, searchTerm);
-
-        return queryResult;
+    public PostSummaryListDTO getPostBySearchTerm(String sortByPublishDtm, Integer page, String searchTerm, Long postCategoryID) {
+        PostSummaryListDTO postSummaryListDTO = postRepository.searchBySearchTerm(sortByPublishDtm, postCategoryID, page, PAGE_SIZE , searchTerm);
+        return postSummaryListDTO;
     }
 
     @Override

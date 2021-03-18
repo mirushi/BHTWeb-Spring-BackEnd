@@ -3,6 +3,7 @@ package com.bhtcnpm.website.model.entity.PostEntities;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.search.bridge.PostCategoryValueBridge;
 import com.bhtcnpm.website.search.bridge.TagValueBridge;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,10 +14,7 @@ import org.hibernate.search.engine.backend.types.*;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.extractor.builtin.BuiltinContainerExtractors;
 import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -66,6 +64,7 @@ public class Post {
     private String imageURL;
 
     @Column(nullable = false)
+    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     private LocalDateTime publishDtm;
 
     @ManyToOne
@@ -98,7 +97,12 @@ public class Post {
     @IndexedEmbedded
     private UserWebsite author;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @GenericField(
+            valueBridge = @ValueBridgeRef(type = PostCategoryValueBridge.class),
+            searchable = Searchable.YES,
+            name = "categoryID"
+    )
     private PostCategory category;
 
     @Enumerated

@@ -226,12 +226,11 @@ public class PostController {
     @GetMapping("searchFilter")
     @ResponseBody
     public ResponseEntity<PostSummaryListDTO> searchFilter (
-            @QuerydslPredicate(root = Post.class) Predicate predicate,
             @RequestParam String searchTerm,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "sort", required = false) String sort,
-            @PageableDefault @Nullable Pageable pageable) {
-        return new ResponseEntity<>(postService.getPostBySearchTerm(predicate, pageable, searchTerm), HttpStatus.OK);
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "sortByPublishDtm", required = false) String sortByPublishDtm,
+            @RequestParam(value = "postCategoryID", required = false) Long postCategoryID) {
+        return new ResponseEntity<>(postService.getPostBySearchTerm(sortByPublishDtm, page, searchTerm, postCategoryID), HttpStatus.OK);
     }
 
     @GetMapping("myPosts")
