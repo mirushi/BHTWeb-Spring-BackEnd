@@ -52,6 +52,8 @@ public class DocServiceImpl implements DocService {
 
     private final DocDetailsMapper docDetailsMapper;
 
+    private final DocSummaryMapper docSummaryMapper;
+
     private final DocRequestMapper docRequestMapper;
 
     private final DocRepository docRepository;
@@ -77,6 +79,22 @@ public class DocServiceImpl implements DocService {
                 .collect(Collectors.toList());
 
         return new DocDetailsListDTO(docDetailsDTOS, queryResult.getTotalPages(), queryResult.getTotalElements());
+    }
+
+    @Override
+    public DocSummaryListDTO getAllPendingApprovalDoc(@Min(0) Integer paginator) {
+        //Create a pagable.
+        Pageable pageable = PageRequest.of(paginator, PAGE_SIZE, Sort.by("publishDtm").descending());
+
+        Page<Doc> pendingApprovalDocs = docRepository.findByDocState(pageable ,DocStateType.PENDING_APPROVAL);
+
+
+        List<DocSummaryDTO> docSummaryDTOS = StreamSupport
+                .stream(pendingApprovalDocs.spliterator(), false)
+                .map(docSummaryMapper::docToDocSummaryDTO)
+                .collect(Collectors.toList());
+
+        return new DocSummaryListDTO(docSummaryDTOS, pendingApprovalDocs.getTotalPages(), pendingApprovalDocs.getTotalElements());
     }
 
     @Override

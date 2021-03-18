@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
-import com.bhtcnpm.website.model.dto.Tag.TagMapper;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,10 +7,10 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(uses = {TagMapper.class})
-public interface DocDetailsMapper {
+@Mapper
+public interface DocSummaryMapper {
 
-    DocDetailsMapper INSTANCE = Mappers.getMapper(DocDetailsMapper.class);
+    DocSummaryMapper INSTANCE = Mappers.getMapper(DocSummaryMapper.class);
 
     @Mapping(source = "author.id", target = "authorID")
     @Mapping(source = "author.name", target = "authorName")
@@ -22,7 +21,6 @@ public interface DocDetailsMapper {
     @Mapping(source = "downloadCount", target = "downloads")
     @Mapping(source = "publishDtm", target = "publishDtm")
     @Mapping(source = "viewCount", target = "views")
-    DocDetailsDTO docToDocDetailsDTO (Doc doc);
+    DocSummaryDTO docToDocSummaryDTO (Doc doc);
 
-    List<DocDetailsDTO> docListToDocDetailsDTOList (List<Doc> docs);
 }

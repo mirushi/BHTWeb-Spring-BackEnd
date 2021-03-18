@@ -36,6 +36,14 @@ public class DocController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("pendingDocuments")
+    @ResponseBody
+    public ResponseEntity<DocSummaryListDTO> getPendingApprovalDocuments (@NotNull @Min(0) Integer paginator) {
+        DocSummaryListDTO result = docService.getAllPendingApprovalDoc(paginator);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @PutMapping("{id}")
     @ResponseBody
     public ResponseEntity<DocDetailsDTO> putDocument (@PathVariable Long id, @RequestBody DocRequestDTO docRequestDTO) {
