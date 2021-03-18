@@ -24,7 +24,6 @@ public class HibernateSearchEventListener implements ApplicationListener<Applica
     @Override
     @Transactional
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        configureLucene();
         SearchSession searchSession = Search.session(em);
         searchSession.massIndexer().startAndWait();
     }
@@ -33,9 +32,4 @@ public class HibernateSearchEventListener implements ApplicationListener<Applica
     public void setEm (EntityManager em) {
         this.em = em;
     }
-
-    private void configureLucene() {
-
-    }
-
 }

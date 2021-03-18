@@ -34,7 +34,6 @@ import java.util.Set;
 @NamedQuery(name = "findPostById", query = "SELECT p FROM Post p WHERE p.id = ?1 AND p.deletedDate IS NULL")
 @Where(clause = "DELETED_DATE is NULL")
 public class Post {
-
     @Id
     @GeneratedValue (
             strategy = GenerationType.SEQUENCE,

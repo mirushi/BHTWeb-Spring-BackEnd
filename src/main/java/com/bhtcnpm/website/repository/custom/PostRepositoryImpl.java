@@ -13,12 +13,15 @@ import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
 
+import javax.naming.directory.SearchResult;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
@@ -32,6 +35,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     private final EntityPath<Post> path;
     private final PathBuilder<Post> builder;
 
+    private final SearchSession searchSession;
+
     private final QPost qPost = QPost.post;
 
     private final Querydsl querydsl;
@@ -41,10 +46,17 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         this.path = SimpleEntityPathResolver.INSTANCE.createPath(Post.class);
         this.builder = new PathBuilder<Post>(path.getType(), path.getMetadata());
         this.querydsl = new Querydsl(em, builder);
+        this.searchSession = Search.session(em);
     }
 
     @Override
     public PostSummaryListDTO searchBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
+
+        SearchResult<Post> result = searchSession.search(Post.class)
+                .where(f -> f.phrase()
+                        .fields("title", "summary", "contentPlainText")
+                        .matching(searchTerm))
+                .fetch(pageable);
 
         JPAQuery query = new JPAQuery<Post>(em)
                 .select(Projections.constructor(PostSummaryDTO.class, qPost.id, qPost.author.id, qPost.author.name, qPost.author.avatarURL, qPost.category.id, qPost.category.name, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.summary, qPost.title))
