@@ -38,4 +38,6 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
     List<Doc> getDocByIdNot (Pageable pageable, Long docID);
 
     Page<Doc> findByDocState (Pageable pageable, DocStateType docStateType);
+
+    Page<Doc> findByAuthorId (Pageable pageable, Long authorID);
 }

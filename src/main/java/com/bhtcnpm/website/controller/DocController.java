@@ -44,6 +44,17 @@ public class DocController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("myDocuments")
+    @ResponseBody
+    public ResponseEntity<DocSummaryListDTO> getMyDocuments (@NotNull @Min(0) Integer paginator) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        DocSummaryListDTO result = docService.getMyDocuments(userID, paginator);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @PutMapping("{id}")
     @ResponseBody
     public ResponseEntity<DocDetailsDTO> putDocument (@PathVariable Long id, @RequestBody DocRequestDTO docRequestDTO) {

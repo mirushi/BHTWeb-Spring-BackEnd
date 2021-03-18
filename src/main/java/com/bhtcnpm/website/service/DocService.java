@@ -17,6 +17,8 @@ public interface DocService {
 
     DocSummaryListDTO getAllPendingApprovalDoc (@Min(0)Integer paginator);
 
+    DocSummaryListDTO getMyDocuments (Long userID ,@Min(0)Integer paginator);
+
     DocDetailsDTO putDoc (Long docID, Long lastEditedUserID, DocRequestDTO docRequestDTO);
 
     Boolean postApproval (Long docID, Long userID);

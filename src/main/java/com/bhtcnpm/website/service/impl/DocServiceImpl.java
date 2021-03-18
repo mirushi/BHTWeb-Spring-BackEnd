@@ -98,6 +98,22 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
+    public DocSummaryListDTO getMyDocuments(Long userID, @Min(0) Integer paginator) {
+        //Create a pagable.
+        Pageable pageable = PageRequest.of(paginator, PAGE_SIZE, Sort.by("publishDtm").descending());
+
+        Page<Doc> pendingApprovalDocs = docRepository.findByAuthorId(pageable, userID);
+
+
+        List<DocSummaryDTO> docSummaryDTOS = StreamSupport
+                .stream(pendingApprovalDocs.spliterator(), false)
+                .map(docSummaryMapper::docToDocSummaryDTO)
+                .collect(Collectors.toList());
+
+        return new DocSummaryListDTO(docSummaryDTOS, pendingApprovalDocs.getTotalPages(), pendingApprovalDocs.getTotalElements());
+    }
+
+    @Override
     public DocDetailsDTO putDoc(Long docID, Long lastEditedUserID, DocRequestDTO docRequestDTO) {
         Doc oldDoc = null;
 
