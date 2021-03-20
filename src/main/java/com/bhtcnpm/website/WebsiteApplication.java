@@ -7,8 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.config.BootstrapMode;
 
-import javax.swing.*;
-
 @SpringBootApplication
 @EnableJpaRepositories(bootstrapMode = BootstrapMode.DEFERRED)
 public class WebsiteApplication {

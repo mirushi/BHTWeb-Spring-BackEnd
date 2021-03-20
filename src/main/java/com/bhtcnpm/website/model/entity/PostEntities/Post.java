@@ -3,6 +3,7 @@ package com.bhtcnpm.website.model.entity.PostEntities;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.search.bridge.AuthorValueBridge;
 import com.bhtcnpm.website.search.bridge.PostCategoryValueBridge;
 import com.bhtcnpm.website.search.bridge.TagValueBridge;
 import lombok.Data;
@@ -94,7 +95,12 @@ public class Post {
     private String adminFeedback;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @IndexedEmbedded
+    @IndexedEmbedded(name = "author")
+    //TODO: Maybe try to convert GenericField into IndexedEmbedded too.
+    @GenericField(
+            valueBridge = @ValueBridgeRef(type = AuthorValueBridge.class),
+            searchable = Searchable.YES,
+            name = "authorID")
     private UserWebsite author;
 
     @ManyToOne
