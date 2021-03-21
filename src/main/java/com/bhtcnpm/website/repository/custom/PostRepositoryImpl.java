@@ -151,6 +151,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .extension(LuceneExtension.get())
                 .where(f -> f.bool(b -> {
                         b.must(f.fromLuceneQuery(query));
+                        b.mustNot(f.match()
+                                .field("id")
+                                .matching(entity.getId()));
                         if (authorID != null) {
                             b.must(f.match()
                                     .field("authorID")

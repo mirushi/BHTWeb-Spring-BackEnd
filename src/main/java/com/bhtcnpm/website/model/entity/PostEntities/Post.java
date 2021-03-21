@@ -42,6 +42,7 @@ public class Post {
             name = "post_sequence",
             sequenceName = "post_sequence"
     )
+    @GenericField(name = "id", searchable = Searchable.YES, projectable = Projectable.YES)
     private Long id;
 
     @Column(nullable = false)
