@@ -2,15 +2,117 @@
   {
     "_class": "com.bhtcnpm.website.model.entity.PostEntities.Post",
     "id": 1000,
-    "title": "Post mới title.",
+    "title": "Hướng dẫn sử dụng Docker (phần 1)",
     "summary": "Post mới summary.",
-    "imageURL": "Post mới imageURL",
+    "imageURL": "https://rancher.com/docs/img/os/rancheroshowitworks_hu0036294caa53da66a430f0f423e09912_453505_600x0_resize_box_2.png",
     "publishDtm": "2021-03-21T07:11:06",
     "lastUpdatedBy": null,
     "lastUpdatedDtm": "2021-03-21T07:11:06",
     "readingTime": 100,
-    "content": "Content của bài mới.",
+    "content": "<p>Vào một đêm đẹp trời trăng thanh gió mát,\n\nBạn được phân bổ vào dự án mới, và tất nhiên là hào khí ngút trời, thế như chẻ tre\n\nHứng khởi vào đọc README.md một hồi, thấy dự án này sao mà cài cắm nhiều thứ thế\n\nNào là php, rồi npm, redis, mysql, elasticsearch, ...\n\nMỗi thứ lại phải kèm theo version bao nhiêu, một tá thư viện, vân vân và mây mây với với hàng tá thứ khác.\n\nĐịnh kể thêm tý nữa cho ra vẻ nguy hiểm nhưng mà thôi các bạn cứ hiểu là nhiều nhé \uD83D\uDE05\n\nLẩm bẩm một hồi, giờ ngồi search google, cài cắm một tá thứ này thì hết bao lâu ta ?\n\nSếp ơi, em cần 1 buổi sáng để setup ạ.\n\nCài chưa xong đã thấy rối tùm lum, cái nọ xung đột cái kia chẳng hạn, lại còn ảnh hưởng tới những chương trình cũ đã cài đặt trong máy nữa chứ, thôi cài lại luôn cả hệ điều hành cho máy.\nSếp ơi, em cần thêm 1 buổi nữa để setup ạ -_-\n\nThôi xong, mất thời gian, mệt mỏi với nhưng thao tác phụ mà chưa tập trung được vào việc chính, hic.</p>",
     "contentPlainText": "ContentPlainText của bài mới.",
+    "adminFeedback": "Feedback của admin về bài post.",
+    "author": {
+      "id": 1
+    },
+    "category": {
+      "id": 1
+    },
+    "postState": "APPROVED",
+    "userPostLikes": [
+      {
+        "userPostLikeId": {
+          "user": {
+            "id": 1
+          },
+          "post": {
+            "id": 1
+          }
+        }
+      }
+    ],
+    "userPostSaves": [
+      {
+        "userPostSaveId": {
+          "user": {
+            "id": 51
+          },
+          "post": {
+            "id": 51
+          }
+        }
+      }
+    ],
+    "tags": [
+      {
+        "id": 1
+      }
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.Post",
+    "id": 13,
+    "title": "HĐH - Ôn tập giữa kỳ (part 1)",
+    "summary": "Đến nay thì chúng ta đã học xong chương 1,2,3,4 và chuẩn bị bước vào đợt thi giữa kỳ rồi. Vậy thì, chúng mình cùng ôn tập lại một số kiến thức, để nhớ bài hơn và thi tốt hơn nhé",
+    "imageURL": "https://miro.medium.com/max/1838/1*wkWRTkLYMqKmdySQQR_A_Q.jpeg",
+    "publishDtm": "2021-03-21T07:11:06",
+    "lastUpdatedBy": null,
+    "lastUpdatedDtm": "2021-03-21T07:11:06",
+    "readingTime": 100,
+    "content": "<p>Câu 1 : Định nghĩa hệ điều hành? \n- Hệ điều hành là chương trình trung gian giữa phần cứng máy tính và người sử dụng, có chức năng điều khiển và phối hợp việc sử dụng phần cứng và cung cấp các dịch vụ cơ bản cho các ứng dụng.\nCâu 2 :  Cấu trúc hệ thống máy tính gồm những phần nào? \n- Phần cứng (hardware): Bao gồm các tài nguyên phần cứng của máy tính như CPU, bộ nhớ, các thiết bị I/O. Ví dụ: Chuột, bàn phím, màn hình, …\n- Hệ điều hành (operating system): Phân phối tài nguyên, điều khiển và phối hợp các hoạt động của các chương trình trong hệ thống. Ví dụ một số loại HĐH: MS – DOS, Linux, Window\n- Chương trình ứng dụng (application programs): Sử dụng hệ thống tài nguyên để giải quyết một bài toán tính toán nào đó của người sử dụng. Ví dụ: game\n- Users (people, machines, other computers)\nCâu 3 :  Hệ điều hành có những chức năng gì? \n- Phân chia thời gian xử lý và định thời CPU.\n- Phối hợp và đồng bộ hoạt động giữa các processes (coordination & synchronization).\n- Quản lý tài nguyên hệ thống (thiết bị I/O, bộ nhớ, file chứa dữ liệu,…).\n- Thực hiện và kiểm soát access control, protection.\n- Duy trì sự nhất quán (integrity) của hệ thống, kiểm soát lỗi và phục hồi hệ thống khi có lỗi (error recovery).\n- Cung cấp giao diện làm việc cho users.</p>",
+    "contentPlainText": "chương trình trung gian giữa phần cứng máy tính và người sử dụng,",
+    "adminFeedback": "Feedback của admin về bài post.",
+    "author": {
+      "id": 1
+    },
+    "category": {
+      "id": 1
+    },
+    "postState": "APPROVED",
+    "userPostLikes": [
+      {
+        "userPostLikeId": {
+          "user": {
+            "id": 1
+          },
+          "post": {
+            "id": 1
+          }
+        }
+      }
+    ],
+    "userPostSaves": [
+      {
+        "userPostSaveId": {
+          "user": {
+            "id": 51
+          },
+          "post": {
+            "id": 51
+          }
+        }
+      }
+    ],
+    "tags": [
+      {
+        "id": 1
+      }
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.Post",
+    "id": 12,
+    "title": "Học được gì từ HĐH cho việc quản lý thời gian của mình ?",
+    "summary": "#StudyWithMe #HĐH\nNgoài những kiến thức khô khan mà ta học được trên lớp, phải chăng HĐH chỉ có vậy thôi ? Học thuộc bài, qua môn, xong !!! ",
+    "imageURL": "https://miro.medium.com/max/1838/1*wkWRTkLYMqKmdySQQR_A_Q.jpeg",
+    "publishDtm": "2021-03-21T07:11:06",
+    "lastUpdatedBy": null,
+    "lastUpdatedDtm": "2021-03-21T07:11:06",
+    "readingTime": 100,
+    "content": "<p>#StudyWithMe #HĐH\nNgoài những kiến thức khô khan mà ta học được trên lớp, phải chăng HĐH chỉ có vậy thôi ? Học thuộc bài, qua môn, xong !!! \nTuy nhiên, khi ngẫm lại, thực sự chúng ta có thể thấy, ta có thể học được nhiều thứ từ HĐH chứ không chỉ là những kiến thức khô khan thôi đâu ! Hãy cùng mình khám phá qua bài viết sau nhé !\nTrong một mùa hè năm 1997, Robot Pathfinder của NASA đã đổ bộ xuống sao Hoả. Và nó bắt đầu truyền các tín hiệu hình ảnh về Trái Đất để phục vụ mục đích nghiên cứu. Nhưng vài ngày sau đó, có một chuyện không may xảy ra : Việc truyền tin hoàn toàn bị dừng lại. Pathfinder đang bị vướng vào 1 hiệu ứng, gọi là hiệu ứng “trì hoãn” (procrastinating) : Giữ cho chính mình làm việc liên tục nhưng lại hoàn toàn không làm được những việc quan trọng nhất. Chuyện gì đang xảy ra vậy ?\nAh, thì ra là có một bug trong trình Định thời của nó. Mỗi hệ điều hành hiện nay, đều có một thứ gọi là “Bộ định thời”, nhằm mục đích điều khiển CPU nên làm một công việc bao lâu trước khi chuyển qua một công việc khác, và chuyển đến công việc nào. Khi mọi thứ diễn ra suôn sẻ, máy tính của mình sẽ vô cùng mượt mà mặc cho rất nhiều chương trình hiện đang chạy, cho một ảo giác như là máy tính ta làm nhiều công việc một lúc vậy. Và chúng ta đều biết chuyện gì sẽ xảy ra nếu như “Bộ định thì” hoạt động không hiệu quả.</p>",
+    "contentPlainText": "chương trình trung gian giữa phần cứng máy tính và người sử dụng,",
     "adminFeedback": "Feedback của admin về bài post.",
     "author": {
       "id": 1
