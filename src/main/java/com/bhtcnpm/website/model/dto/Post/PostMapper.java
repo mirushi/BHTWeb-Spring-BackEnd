@@ -6,6 +6,9 @@ import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.PostCategoryRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.safety.Cleaner;
+import org.jsoup.safety.Whitelist;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -54,8 +57,10 @@ public abstract class PostMapper {
 
     public Post postRequestDTOToPost (PostRequestDTO postRequestDTO, Long userID, Post entity) {
         Post post = Objects.requireNonNullElseGet(entity, Post::new);
+        String contentCleansed = stripDangerousHTMLTag(postRequestDTO.getContent());
+        String contentPlainText = stripAllHTMLTag(postRequestDTO.getContent());
 
-        if (postRequestDTO == null || userID == null) {
+        if (userID == null) {
             return entity;
         }
 
@@ -69,7 +74,8 @@ public abstract class PostMapper {
         }
 
         post.setCategory(postCategoryRepository.getOne(postRequestDTO.getCategoryID()));
-        post.setContent(postRequestDTO.getContent());
+        post.setContent(contentCleansed);
+        post.setContentPlainText(contentPlainText);
         post.setImageURL(postRequestDTO.getImageURL());
 
         //Calculate reading time.
@@ -83,13 +89,22 @@ public abstract class PostMapper {
         return post;
     }
 
-    protected String stripHTMLTag (String htmlContent) {
-        return Jsoup.parse(htmlContent).text();
+    protected String stripAllHTMLTag (String htmlContent) {
+        return Jsoup.parse(htmlContent, "UTF-8").text();
+    }
+
+    protected String stripDangerousHTMLTag(String htmlContent) {
+        Whitelist basicWhiteList = Whitelist.basic();
+        Cleaner cleaner = new Cleaner(basicWhiteList);
+
+        Document sanitizedDocument = cleaner.clean(Jsoup.parse(htmlContent, "UTF-8"));
+
+        return sanitizedDocument.body().html();
     }
 
     protected Integer calculateReadTime (String htmlContent) {
 
-        String realText = stripHTMLTag(htmlContent);
+        String realText = stripAllHTMLTag(htmlContent);
 
         Integer readSpeedPerSec = 4;
         String trim = realText.trim();
