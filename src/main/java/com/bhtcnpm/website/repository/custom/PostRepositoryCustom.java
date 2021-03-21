@@ -7,10 +7,12 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface PostRepositoryCustom {
-    PostSummaryListDTO searchBySearchTerm (Predicate predicate, Pageable pageable, String searchTerm);
+    PostSummaryListDTO searchBySearchTerm (String sortByPublishDtm, Long postCategoryID ,Integer page, Integer pageSize ,String searchTerm);
+    List<PostSuggestionDTO> searchRelatedPost(Long authorID, Long categoryID, Post entity, int page , int pageSize) throws IOException;
     PostSummaryWithStateListDTO searchBySearchTermWithState (Predicate predicate, Pageable pageable);
     PostSummaryWithStateAndFeedbackListDTO getPostSummaryStateFeedback (Predicate predicate, Pageable pageable);
     PostDetailsWithStateListDTO getPostDetailsListWithStateFilter(Predicate predicate, Pageable pageable, PostStateType postStateType);

@@ -171,9 +171,9 @@ Chắc hẳn mình và bạn – những người trẻ mang tư duy rộng mở
     'https://i.imgur.com/LnHFl0h.png', '20200128' , 'Môn Toán luôn là một trong những môn mà biết bao học sinh sợ hãi khi nhắc đến. Vậy làm cách nào để học tốt môn Toán? ',
     'Phương pháp học tốt môn Toán', 300,'hai', 'Kinh nghiệm học tập', 1, 0)
 )
-INSERT INTO POST (ID, CONTENT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_ID, CATEGORY_ID, POST_STATE, VERSION)
+INSERT INTO POST (ID, CONTENT, CONTENT_PLAIN_TEXT, IMAGEURL, PUBLISH_DTM, SUMMARY, TITLE, READING_TIME, AUTHOR_ID, CATEGORY_ID, POST_STATE, VERSION)
 SELECT
-    posts.ID, posts.CONTENT, posts.IMAGEURL, posts.PUBLISH_DTM, posts.SUMMARY, posts.TITLE, posts.READING_TIME, author.ID, category.ID, posts.POST_STATE, posts.VERSION
+    posts.ID, posts.CONTENT, posts.CONTENT, posts.IMAGEURL, posts.PUBLISH_DTM, posts.SUMMARY, posts.TITLE, posts.READING_TIME, author.ID, category.ID, posts.POST_STATE, posts.VERSION
 FROM
     posts JOIN USER_WEBSITE AS author
                 ON posts.AUTHOR_NAME = author.NAME
