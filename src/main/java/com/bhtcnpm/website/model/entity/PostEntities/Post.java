@@ -3,11 +3,19 @@ package com.bhtcnpm.website.model.entity.PostEntities;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.search.bridge.AuthorValueBridge;
+import com.bhtcnpm.website.search.bridge.PostCategoryValueBridge;
+import com.bhtcnpm.website.search.bridge.TagValueBridge;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Loader;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.hibernate.search.engine.backend.types.*;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.extractor.builtin.BuiltinContainerExtractors;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -17,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Indexed
 @Table(name = "post")
 @Data
 @SQLDelete(sql = "UPDATE post SET DELETED_DATE = "+ "20210302" +" WHERE id = ? AND VERSION = ?")
@@ -24,7 +33,6 @@ import java.util.Set;
 @NamedQuery(name = "findPostById", query = "SELECT p FROM Post p WHERE p.id = ?1 AND p.deletedDate IS NULL")
 @Where(clause = "DELETED_DATE is NULL")
 public class Post {
-
     @Id
     @GeneratedValue (
             strategy = GenerationType.SEQUENCE,
@@ -37,14 +45,27 @@ public class Post {
     private Long id;
 
     @Column(nullable = false)
+    @FullTextField(analyzer = "default",
+            norms = Norms.YES,
+            termVector = TermVector.YES,
+            projectable = Projectable.YES,
+            searchable = Searchable.YES)
+    @KeywordField(name = "title_sort",norms = Norms.YES,
+            sortable = Sortable.YES)
     private String title;
 
     @Column(nullable = false)
+    @FullTextField(analyzer = "default",
+            norms = Norms.YES,
+            termVector = TermVector.YES,
+            projectable = Projectable.YES,
+            searchable = Searchable.YES)
     private String summary;
 
     private String imageURL;
 
     @Column(nullable = false)
+    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     private LocalDateTime publishDtm;
 
     @ManyToOne
@@ -61,13 +82,33 @@ public class Post {
     private String content;
 
     @Lob
+    @Column(nullable = false)
+    @FullTextField(analyzer = "default",
+            norms = Norms.YES,
+            termVector = TermVector.YES,
+            projectable = Projectable.YES,
+            searchable = Searchable.YES)
+    private String contentPlainText;
+
+    @Lob
     @Column
     private String adminFeedback;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @IndexedEmbedded(name = "author")
+    //TODO: Maybe try to convert GenericField into IndexedEmbedded too.
+    @GenericField(
+            valueBridge = @ValueBridgeRef(type = AuthorValueBridge.class),
+            searchable = Searchable.YES,
+            name = "authorID")
     private UserWebsite author;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @GenericField(
+            valueBridge = @ValueBridgeRef(type = PostCategoryValueBridge.class),
+            searchable = Searchable.YES,
+            name = "categoryID"
+    )
     private PostCategory category;
 
     @Enumerated
@@ -108,6 +149,8 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     @EqualsAndHashCode.Exclude
+    @KeywordField(searchable = Searchable.YES,
+            valueBridge = @ValueBridgeRef(type = TagValueBridge.class))
     private Set<Tag> tags;
 
     private LocalDateTime deletedDate;

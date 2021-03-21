@@ -2,8 +2,7 @@ package com.bhtcnpm.website.model.entity;
 
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 
@@ -14,6 +13,11 @@ import java.util.Set;
 @NaturalIdCache
 @Table(name = "tag")
 @Data
+//Making class becomes immutable for indexing inside other entities.
+@Setter(value = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Tag {
 
     @Id

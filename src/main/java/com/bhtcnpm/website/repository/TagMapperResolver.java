@@ -32,8 +32,9 @@ public class TagMapperResolver {
                 result = tagRepository.findByContentEquals(dto.getContent());
 
                 if (result == null) {
-                    result = new Tag();
-                    result.setContent(dto.getContent());
+                    result = Tag.builder()
+                            .content(dto.getContent())
+                            .build();
                 }
 
             } else {

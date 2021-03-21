@@ -4,6 +4,7 @@ import com.bhtcnpm.website.model.binding.IgnorePostStateTypeBinding;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -226,12 +228,29 @@ public class PostController {
     @GetMapping("searchFilter")
     @ResponseBody
     public ResponseEntity<PostSummaryListDTO> searchFilter (
-            @QuerydslPredicate(root = Post.class) Predicate predicate,
             @RequestParam String searchTerm,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "sort", required = false) String sort,
-            @PageableDefault @Nullable Pageable pageable) {
-        return new ResponseEntity<>(postService.getPostBySearchTerm(predicate, pageable, searchTerm), HttpStatus.OK);
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "sortByPublishDtm", required = false) String sortByPublishDtm,
+            @RequestParam(value = "postCategoryID", required = false) Long postCategoryID) {
+        return new ResponseEntity<>(postService.getPostBySearchTerm(sortByPublishDtm, page, searchTerm, postCategoryID), HttpStatus.OK);
+    }
+
+    @GetMapping("relatedSameAuthor")
+    @ResponseBody
+    public ResponseEntity<List<PostSuggestionDTO>> relatedSameAuthor (
+            @RequestParam("authorID") Long authorID,
+            @RequestParam("postID") Long postID,
+            @RequestParam(value = "page", required = false) Integer page) throws IDNotFoundException, IOException {
+        return new ResponseEntity<>(postService.getRelatedPostSameAuthor(authorID, postID, page), HttpStatus.OK);
+    }
+
+    @GetMapping("relatedSameCategory")
+    @ResponseBody
+    public ResponseEntity<List<PostSuggestionDTO>> relatedSameCategory (
+            @RequestParam("categoryID") Long categoryID,
+            @RequestParam("postID") Long postID,
+            @RequestParam(value = "page", required = false) Integer page) throws IDNotFoundException, IOException {
+        return new ResponseEntity<>(postService.getRelatedPostSameCategory(categoryID, postID, page), HttpStatus.OK);
     }
 
     @GetMapping("myPosts")

@@ -1,8 +1,10 @@
 package com.bhtcnpm.website.service.impl;
 
+import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.PostRepository;
 import com.bhtcnpm.website.repository.UserPostLikeRepository;
 import com.bhtcnpm.website.repository.UserPostSaveRepository;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -196,13 +199,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSummaryListDTO getPostBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
-        //Reset PAGE_SIZE to predefined value.
-        pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
-
-        PostSummaryListDTO queryResult = postRepository.searchBySearchTerm(predicate, pageable, searchTerm);
-
-        return queryResult;
+    public PostSummaryListDTO getPostBySearchTerm(String sortByPublishDtm, Integer page, String searchTerm, Long postCategoryID) {
+        PostSummaryListDTO postSummaryListDTO = postRepository.searchBySearchTerm(sortByPublishDtm, postCategoryID, page, PAGE_SIZE , searchTerm);
+        return postSummaryListDTO;
     }
 
     @Override
@@ -233,6 +232,35 @@ public class PostServiceImpl implements PostService {
         PostSummaryWithStateAndFeedbackListDTO queryResult = postRepository.getPostSummaryStateFeedback(predicate, pageable);
 
         return queryResult;
+    }
+
+    @Override
+    public List<PostSuggestionDTO> getRelatedPostSameAuthor(Long authorID, Long postID, Integer page) throws IDNotFoundException, IOException {
+
+        if (page == null) {
+            page = 0;
+        }
+
+        Optional<Post> optEntity = postRepository.findById(postID);
+        if (optEntity.isEmpty()) {
+            throw new IDNotFoundException();
+        }
+
+        return postRepository.searchRelatedPost(authorID, null ,optEntity.get(), page ,PostBusinessConstant.RELATED_POST_MAX);
+    }
+
+    @Override
+    public List<PostSuggestionDTO> getRelatedPostSameCategory(Long categoryID, Long postID, Integer page) throws IDNotFoundException, IOException {
+        if (page == null) {
+            page = 0;
+        }
+
+        Optional<Post> optEntity = postRepository.findById(postID);
+        if (optEntity.isEmpty()) {
+            throw new IDNotFoundException();
+        }
+
+        return postRepository.searchRelatedPost(null, categoryID ,optEntity.get(), page ,PostBusinessConstant.RELATED_POST_MAX);
     }
 
 }
