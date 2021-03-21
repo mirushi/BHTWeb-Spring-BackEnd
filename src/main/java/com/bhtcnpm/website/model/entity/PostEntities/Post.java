@@ -6,6 +6,10 @@ import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.search.bridge.AuthorValueBridge;
 import com.bhtcnpm.website.search.bridge.PostCategoryValueBridge;
 import com.bhtcnpm.website.search.bridge.TagValueBridge;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Loader;
@@ -66,12 +70,16 @@ public class Post {
 
     @Column(nullable = false)
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime publishDtm;
 
     @ManyToOne
     private UserWebsite lastUpdatedBy;
 
     @Column
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime lastUpdatedDtm;
 
     @Column(nullable = false)
@@ -115,14 +123,6 @@ public class Post {
     @Column(columnDefinition = "smallint")
     private PostStateType postState;
 
-    @OneToMany(
-            mappedBy = "post",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @EqualsAndHashCode.Exclude
-    private List<PostComment> comments;
-
     @OneToMany (
             mappedBy = "userPostLikeId.post",
             cascade = CascadeType.ALL,
@@ -153,6 +153,8 @@ public class Post {
             valueBridge = @ValueBridgeRef(type = TagValueBridge.class))
     private Set<Tag> tags;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime deletedDate;
 
     @Version

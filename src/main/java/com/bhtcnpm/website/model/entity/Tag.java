@@ -2,6 +2,8 @@ package com.bhtcnpm.website.model.entity;
 
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
+import com.bhtcnpm.website.model.entity.PostEntities.PostCategory;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
@@ -18,8 +20,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(value = {"docs","posts"})
 public class Tag {
-
     @Id
     @GeneratedValue (
             strategy = GenerationType.SEQUENCE,
@@ -35,14 +37,20 @@ public class Tag {
     @NaturalId
     private String content;
 
-    @ManyToMany(mappedBy = "tags")
-    @EqualsAndHashCode.Exclude
-    private Set<Doc> docs;
-
-    @ManyToMany (mappedBy = "tags")
-    @EqualsAndHashCode.Exclude
-    private Set<Post> posts;
+//    @ManyToMany(mappedBy = "tags")
+//    @EqualsAndHashCode.Exclude
+//    private Set<Doc> docs;
+//
+//    @ManyToMany (mappedBy = "tags")
+//    @EqualsAndHashCode.Exclude
+//    private Set<Post> posts;
 
     @Version
     private short version;
+
+    //For repository populator.
+    @JsonCreator
+    public static Tag getOne (@JacksonInject EntityManager entityManager, @JsonProperty("id") long id) {
+        return entityManager.find(Tag.class, id);
+    }
 }

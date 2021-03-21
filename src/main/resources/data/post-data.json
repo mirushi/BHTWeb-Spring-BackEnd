@@ -1,0 +1,53 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.Post",
+    "id": 1000,
+    "title": "Post mới title.",
+    "summary": "Post mới summary.",
+    "imageURL": "Post mới imageURL",
+    "publishDtm": "2021-03-21T07:11:06",
+    "lastUpdatedBy": null,
+    "lastUpdatedDtm": "2021-03-21T07:11:06",
+    "readingTime": 100,
+    "content": "Content của bài mới.",
+    "contentPlainText": "ContentPlainText của bài mới.",
+    "adminFeedback": "Feedback của admin về bài post.",
+    "author": {
+      "id": 1
+    },
+    "category": {
+      "id": 1
+    },
+    "postState": "APPROVED",
+    "userPostLikes": [
+      {
+        "userPostLikeId": {
+          "user": {
+            "id": 1
+          },
+          "post": {
+            "id": 1
+          }
+        }
+      }
+    ],
+    "userPostSaves": [
+      {
+        "userPostSaveId": {
+          "user": {
+            "id": 51
+          },
+          "post": {
+            "id": 51
+          }
+        }
+      }
+    ],
+    "tags": [
+      {
+        "id": 1
+      }
+    ],
+    "version": 0
+  }
+]
