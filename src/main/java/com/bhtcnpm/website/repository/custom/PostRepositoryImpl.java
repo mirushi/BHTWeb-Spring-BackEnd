@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.repository.custom;
 
 import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
+import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.PostCategory;
@@ -106,9 +107,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                     b.filter(f.matchAll());
                     if (StringUtils.isNotEmpty(searchTerm)) {
                         b.must(f.match()
-                                .field("title").boost(2.0f)
-                                .field("summary").boost(1.5f)
-                                .field("contentPlainText")
+                                .field("title").boost(PostBusinessConstant.SEARCH_TITLE_BOOST)
+                                .field("summary").boost(PostBusinessConstant.SEARCH_SUMMARY_BOOST)
+                                .field("contentPlainText").boost(PostBusinessConstant.SEARCH_CONTENT_BOOST)
                                 .matching(searchTerm));
                     }
                     if (postCategoryID != null) {

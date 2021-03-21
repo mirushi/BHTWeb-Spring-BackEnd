@@ -55,4 +55,6 @@ public interface PostService {
     List<PostSuggestionDTO> getRelatedPostSameAuthor (Long authorID, Long postID, Integer page) throws IDNotFoundException, IOException;
 
     List<PostSuggestionDTO> getRelatedPostSameCategory (Long categoryID, Long postID, Integer page) throws IDNotFoundException, IOException;
+
+    PostSummaryListDTO getPostSavedByUserID (Long userID, Pageable pageable);
 }
