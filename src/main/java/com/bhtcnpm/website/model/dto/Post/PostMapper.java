@@ -11,6 +11,7 @@ import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,7 +31,7 @@ public abstract class PostMapper {
     protected TagMapper tagMapper;
 
     @Mapping(target = "authorID", source = "post.author.id")
-    @Mapping(target = "authorName", source = "post.author.name")
+    @Mapping(target = "authorName", source = "post.author.name", qualifiedBy = {})
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
@@ -89,10 +90,12 @@ public abstract class PostMapper {
         return post;
     }
 
+    @Named("stripAllHTMLTag")
     protected String stripAllHTMLTag (String htmlContent) {
         return Jsoup.parse(htmlContent, "UTF-8").text();
     }
 
+    @Named("stripDangerousHTMLTag")
     protected String stripDangerousHTMLTag(String htmlContent) {
         Whitelist basicWhiteList = Whitelist.basic();
         Cleaner cleaner = new Cleaner(basicWhiteList);
