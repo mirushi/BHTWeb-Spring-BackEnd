@@ -64,7 +64,7 @@ public class Doc {
     @Column(nullable = false)
     private Long viewCount;
 
-    @Column(nullable = false)
+    @Deprecated
     private String docURL;
 
     @Enumerated
@@ -88,6 +88,10 @@ public class Doc {
             orphanRemoval = true
     )
     private Set<UserDocReaction> userDocReactions;
+
+    @OneToOne
+    @JoinColumn(nullable = false)
+    private DocFileUpload docFile;
 
     @Version
     private short version;

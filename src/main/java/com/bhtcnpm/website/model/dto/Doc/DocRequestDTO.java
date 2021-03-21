@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 public class DocRequestDTO {
@@ -19,12 +20,12 @@ public class DocRequestDTO {
 
     private String imageURL;
 
-    private String docURL;
-
     private Set<TagDTO> tags;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime publishDtm;
+
+    private UUID fileCode;
 
     private short version;
 }

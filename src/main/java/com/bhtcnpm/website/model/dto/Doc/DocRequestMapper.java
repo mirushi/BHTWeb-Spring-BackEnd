@@ -3,6 +3,7 @@ package com.bhtcnpm.website.model.dto.Doc;
 import com.bhtcnpm.website.model.dto.Tag.TagMapper;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocCategory;
+import com.bhtcnpm.website.model.entity.DocFileUploadRepository;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.DocCategoryRepository;
@@ -27,10 +28,13 @@ public abstract class DocRequestMapper {
 
     protected UserWebsiteRepository userWebsiteRepository;
 
+    protected DocFileUploadRepository docFileUploadRepository;
+
     protected TagMapper tagMapper;
 
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "subjectID", source = "subject.id")
+    @Mapping(target = "fileCode", source = "docFile.code")
     public abstract DocRequestDTO docToDocRequestDTO (Doc doc);
 
     public Doc updateDocFromDocRequestDTO (Long lastEditedUserID, DocRequestDTO docRequestDTO, Doc entity) {
@@ -55,7 +59,7 @@ public abstract class DocRequestMapper {
         newDoc.setTitle(docRequestDTO.getTitle());
         newDoc.setDescription(docRequestDTO.getDescription());
         newDoc.setImageURL(docRequestDTO.getImageURL());
-        newDoc.setDocURL(docRequestDTO.getDocURL());
+        newDoc.setDocFile(docFileUploadRepository.findByCode(docRequestDTO.getFileCode()));
         newDoc.setTags(tagMapper.tagDTOListToTagList(docRequestDTO.getTags()));
         newDoc.setPublishDtm(docRequestDTO.getPublishDtm());
         newDoc.setVersion(docRequestDTO.getVersion());
@@ -81,6 +85,11 @@ public abstract class DocRequestMapper {
     @Autowired
     public void setUserWebsiteRepository (UserWebsiteRepository userWebsiteRepository) {
         this.userWebsiteRepository = userWebsiteRepository;
+    }
+
+    @Autowired
+    public void setDocFileUploadRepository (DocFileUploadRepository docFileUploadRepository) {
+        this.docFileUploadRepository = docFileUploadRepository;
     }
 
 //    @Mapping(target = "lastEditDtm", expression = "java(java.time.LocalDateTime.now())")

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 public class DocDetailsDTO {
@@ -28,7 +29,7 @@ public class DocDetailsDTO {
 
     private String imageURL;
 
-    private String docURL;
+    private UUID fileCode;
 
     private Set<TagDTO> tags;
 

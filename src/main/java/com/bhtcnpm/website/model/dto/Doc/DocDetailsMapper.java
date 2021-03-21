@@ -22,6 +22,7 @@ public interface DocDetailsMapper {
     @Mapping(source = "downloadCount", target = "downloads")
     @Mapping(source = "publishDtm", target = "publishDtm")
     @Mapping(source = "viewCount", target = "views")
+    @Mapping(source = "docFile.code", target = "fileCode")
     DocDetailsDTO docToDocDetailsDTO (Doc doc);
 
     List<DocDetailsDTO> docListToDocDetailsDTOList (List<Doc> docs);
