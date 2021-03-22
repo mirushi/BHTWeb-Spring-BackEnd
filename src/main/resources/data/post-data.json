@@ -53,7 +53,7 @@
   {
     "_class": "com.bhtcnpm.website.model.entity.PostEntities.Post",
     "id": 13,
-    "title": "HĐH - Ôn tập giữa kỳ (part 1)",
+    "title": "Ôn tập giữa kỳ - Kiến trúc và dữ liệu máy tính. Kiến trúc và dữ liệu máy tính. Kiến trúc và dữ liệu máy tính.  (part 1)",
     "summary": "Đến nay thì chúng ta đã học xong chương 1,2,3,4 và chuẩn bị bước vào đợt thi giữa kỳ rồi. Vậy thì, chúng mình cùng ôn tập lại một số kiến thức, để nhớ bài hơn và thi tốt hơn nhé",
     "imageURL": "https://miro.medium.com/max/1838/1*wkWRTkLYMqKmdySQQR_A_Q.jpeg",
     "publishDtm": "2021-03-21T07:11:06",
@@ -61,7 +61,7 @@
     "lastUpdatedDtm": "2021-03-21T07:11:06",
     "readingTime": 100,
     "content": "<p>Câu 1 : Định nghĩa hệ điều hành? \n- Hệ điều hành là chương trình trung gian giữa phần cứng máy tính và người sử dụng, có chức năng điều khiển và phối hợp việc sử dụng phần cứng và cung cấp các dịch vụ cơ bản cho các ứng dụng.\nCâu 2 :  Cấu trúc hệ thống máy tính gồm những phần nào? \n- Phần cứng (hardware): Bao gồm các tài nguyên phần cứng của máy tính như CPU, bộ nhớ, các thiết bị I/O. Ví dụ: Chuột, bàn phím, màn hình, …\n- Hệ điều hành (operating system): Phân phối tài nguyên, điều khiển và phối hợp các hoạt động của các chương trình trong hệ thống. Ví dụ một số loại HĐH: MS – DOS, Linux, Window\n- Chương trình ứng dụng (application programs): Sử dụng hệ thống tài nguyên để giải quyết một bài toán tính toán nào đó của người sử dụng. Ví dụ: game\n- Users (people, machines, other computers)\nCâu 3 :  Hệ điều hành có những chức năng gì? \n- Phân chia thời gian xử lý và định thời CPU.\n- Phối hợp và đồng bộ hoạt động giữa các processes (coordination & synchronization).\n- Quản lý tài nguyên hệ thống (thiết bị I/O, bộ nhớ, file chứa dữ liệu,…).\n- Thực hiện và kiểm soát access control, protection.\n- Duy trì sự nhất quán (integrity) của hệ thống, kiểm soát lỗi và phục hồi hệ thống khi có lỗi (error recovery).\n- Cung cấp giao diện làm việc cho users.</p>",
-    "contentPlainText": "chương trình trung gian giữa phần cứng máy tính và người sử dụng,",
+    "contentPlainText": "chương trình trung gian giữa phần cứng máy tính và người sử dụng, coordination synchronization",
     "adminFeedback": "Feedback của admin về bài post.",
     "author": {
       "id": 1
