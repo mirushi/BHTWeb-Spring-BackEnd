@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,5 +33,16 @@ public class TagServiceImpl implements TagService {
         List<TagDTO> result = tagMapper.tagListToTagDTOList(finalQueryResult);
 
         return result;
+    }
+
+    @Override
+    public TagDTO getTagByID(Long id) {
+        Optional<Tag> tag = tagRepository.findById(id);
+
+        if (tag.isEmpty()) {
+            return null;
+        }
+
+        return tagMapper.tagToTagDTO(tag.get());
     }
 }

@@ -26,4 +26,11 @@ public class TagController {
         return new ResponseEntity<>(tagDTOs, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<TagDTO> getTagById (@RequestParam Long id) {
+        TagDTO tag = tagService.getTagByID(id);
+        return new ResponseEntity<>(tag, HttpStatus.OK);
+    }
+
 }
