@@ -38,7 +38,7 @@ public class QuickSearchServiceImpl implements QuickSearchService {
         Pageable pageableDoc = PageRequest.of(0, DOC_RESULT_LIMIT);
         Pageable pageableTag = PageRequest.of(0, TAG_RESULT_LIMIT);
 
-        List<PostQuickSearchResult> postQuickSearchResults = postRepository.quickSearch(pageablePost, searchTerm, searchTerm);
+        List<PostQuickSearchResult> postQuickSearchResults = postRepository.quickSearch(0, POST_RESULT_LIMIT ,searchTerm);
         List<DocQuickSearchResult> docQuickSearchResults = docRepository.quickSearch(pageableDoc, searchTerm, searchTerm);
         List<TagQuickSearchResult> tagQuickSearchResults = tagRepository.quickSearch(pageableTag, searchTerm, searchTerm);
 

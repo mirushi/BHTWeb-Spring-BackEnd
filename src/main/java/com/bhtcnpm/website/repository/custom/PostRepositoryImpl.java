@@ -60,14 +60,15 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
     private Environment environment;
 
-    private final PostSuggestionMapper postSuggestionMapper;
+    private final PostSuggestionMapper postSuggestionMapper = PostSuggestionMapper.INSTANCE;
+
+    private final PostQuickSearchResultMapper postQuickSearchResultMapper = PostQuickSearchResultMapper.INSTANCE;
 
     private final IndexReader luceneIndexReader;
 
-    public PostRepositoryImpl (EntityManager em, Environment environment, PostSuggestionMapper postSuggestionMapper) throws IOException {
+    public PostRepositoryImpl (EntityManager em, Environment environment) throws IOException {
         this.em = em;
         this.environment = environment;
-        this.postSuggestionMapper = postSuggestionMapper;
 
         this.luceneIndexReader = LuceneIndexUtils.getReader("Post");
         this.path = SimpleEntityPathResolver.INSTANCE.createPath(Post.class);
@@ -240,6 +241,30 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         return result;
     }
+
+    public List<PostQuickSearchResult> quickSearch (int page, int pageSize, String searchTerm) {
+        SearchResult<Post> searchResult = searchSession.search(Post.class)
+                .where(f -> f.bool(b -> {
+                    b.filter(f.matchAll());
+                    if (StringUtils.isNotEmpty(searchTerm)) {
+                        b.must(f.match()
+                                .field("title").boost(PostBusinessConstant.SEARCH_TITLE_BOOST)
+                                .field("summary").boost(PostBusinessConstant.SEARCH_SUMMARY_BOOST)
+                                .field("contentPlainText").boost(PostBusinessConstant.SEARCH_CONTENT_BOOST)
+                                .matching(searchTerm));
+                    }
+                }))
+                .fetch(page * pageSize, pageSize);
+
+        //TODO: Consider optimize projection so that the result is projected instead of converting from mapper.
+
+        List<Post> queryResult = searchResult.hits();
+
+        List<PostQuickSearchResult> postQuickSearchResults = postQuickSearchResultMapper.postListToPostQuickSearchResultList(searchResult.hits());
+
+        return postQuickSearchResults;
+    }
+
 
     @PreDestroy
     public void cleanUp() throws IOException {

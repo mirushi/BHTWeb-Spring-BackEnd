@@ -16,4 +16,5 @@ public interface PostRepositoryCustom {
     PostSummaryWithStateListDTO searchBySearchTermWithState (Predicate predicate, Pageable pageable);
     PostSummaryWithStateAndFeedbackListDTO getPostSummaryStateFeedback (Predicate predicate, Pageable pageable);
     PostDetailsWithStateListDTO getPostDetailsListWithStateFilter(Predicate predicate, Pageable pageable, PostStateType postStateType);
+    List<PostQuickSearchResult> quickSearch (int page, int pageSize, String searchTerm);
 }
