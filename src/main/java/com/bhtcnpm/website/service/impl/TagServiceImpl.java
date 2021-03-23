@@ -45,4 +45,10 @@ public class TagServiceImpl implements TagService {
 
         return tagMapper.tagToTagDTO(tag.get());
     }
+
+    @Override
+    public List<TagDTO> getRelatedTags(Long tagID) {
+
+        return null;
+    }
 }

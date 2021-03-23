@@ -5,6 +5,10 @@ import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.search.engine.backend.types.Norms;
+import org.hibernate.search.engine.backend.types.Searchable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -18,6 +22,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Indexed
 public class Tag {
 
     @Id
@@ -33,6 +38,7 @@ public class Tag {
 
     @Column(nullable = false, unique = true, updatable = false)
     @NaturalId
+    @KeywordField(norms = Norms.YES, searchable = Searchable.YES)
     private String content;
 
     @ManyToMany(mappedBy = "tags")
