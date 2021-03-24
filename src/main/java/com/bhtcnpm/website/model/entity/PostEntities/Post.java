@@ -150,8 +150,9 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     @EqualsAndHashCode.Exclude
-    @KeywordField(searchable = Searchable.YES,
+    @KeywordField(name = "tags_kw", searchable = Searchable.YES,
             valueBridge = @ValueBridgeRef(type = TagValueBridge.class))
+    @IndexedEmbedded(name = "tags_eb")
     private Set<Tag> tags;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

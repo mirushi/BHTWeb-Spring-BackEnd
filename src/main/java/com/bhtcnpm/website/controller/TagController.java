@@ -28,14 +28,14 @@ public class TagController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<TagDTO> getTagById (@RequestParam Long id) {
+    public ResponseEntity<TagDTO> getTagById (@PathVariable Long id) {
         TagDTO tag = tagService.getTagByID(id);
         return new ResponseEntity<>(tag, HttpStatus.OK);
     }
 
     @GetMapping("/relatedTags")
     @ResponseBody
-    public ResponseEntity<List<TagDTO>> getRelatedTags (Long tagID) {
+    public ResponseEntity<List<TagDTO>> getRelatedTags (@RequestParam Long tagID) {
         return new ResponseEntity<>(tagService.getRelatedTags(tagID), HttpStatus.OK);
     }
 

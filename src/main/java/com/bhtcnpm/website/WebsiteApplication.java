@@ -44,8 +44,8 @@ public class WebsiteApplication {
         InjectableValues injects = new InjectableValues.Std().addValue(EntityManager.class, entityManager);
         objectMapper.setInjectableValues(injects);
         factoryBean.setResources(new Resource[]{
-                new ClassPathResource("data/post-data.json"),
-                new ClassPathResource("data/tag-data.json")
+                new ClassPathResource("data/post-data.json")
+//                new ClassPathResource("data/tag-data.json")
         });
         factoryBean.setMapper(objectMapper);
 

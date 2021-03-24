@@ -2,46 +2,55 @@
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 52,
-    "content": "study"
+    "content": "study",
+    "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 53,
-    "content": "mathematics"
+    "content": "mathematics",
+    "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 54,
-    "content": "quantum"
+    "content": "quantum",
+    "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 55,
-    "content": "physics"
+    "content": "physics",
+    "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 56,
-    "content": "physical-education"
+    "content": "physical-education",
+    "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 57,
-    "content": "computer-programming"
+    "content": "computer-programming",
+    "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 58,
-    "content": "algorithm"
+    "content": "algorithm",
+    "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 59,
-    "content": "data-structure"
+    "content": "data-structure",
+    "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 60,
-    "content": "programming-paradigm"
+    "content": "programming-paradigm",
+    "version": 0
   }
 ]
