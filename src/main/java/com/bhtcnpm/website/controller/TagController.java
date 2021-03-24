@@ -36,7 +36,7 @@ public class TagController {
     @GetMapping("/relatedTags")
     @ResponseBody
     public ResponseEntity<List<TagDTO>> getRelatedTags (Long tagID) {
-
+        return new ResponseEntity<>(tagService.getRelatedTags(tagID), HttpStatus.OK);
     }
 
 }

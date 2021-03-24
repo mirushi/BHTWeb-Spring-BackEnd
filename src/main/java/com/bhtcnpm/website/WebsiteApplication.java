@@ -19,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @SpringBootApplication
+//Deferred mode is for Hibernate Search 6 startup issue's workaround.
 @EnableJpaRepositories(bootstrapMode = BootstrapMode.DEFERRED)
 public class WebsiteApplication {
 
@@ -42,7 +43,10 @@ public class WebsiteApplication {
         Jackson2RepositoryPopulatorFactoryBean factoryBean = new Jackson2RepositoryPopulatorFactoryBean();
         InjectableValues injects = new InjectableValues.Std().addValue(EntityManager.class, entityManager);
         objectMapper.setInjectableValues(injects);
-        factoryBean.setResources(new Resource[]{new ClassPathResource("data/post-data.json")});
+        factoryBean.setResources(new Resource[]{
+                new ClassPathResource("data/post-data.json"),
+                new ClassPathResource("data/tag-data.json")
+        });
         factoryBean.setMapper(objectMapper);
 
         return factoryBean;

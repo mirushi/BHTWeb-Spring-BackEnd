@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.service.impl;
 
+import com.bhtcnpm.website.constant.business.Tag.TagBusinessConstant;
 import com.bhtcnpm.website.model.dto.Tag.TagDTO;
 import com.bhtcnpm.website.model.dto.Tag.TagMapper;
 import com.bhtcnpm.website.model.entity.Tag;
@@ -48,7 +49,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagDTO> getRelatedTags(Long tagID) {
-
-        return null;
+        Optional<Tag> optEntity = tagRepository.findById(tagID);
+        if (optEntity.isEmpty()) {
+            return null;
+        }
+        return tagRepository.getRelatedTags(optEntity.get(), TagBusinessConstant.RELATED_TAG_LIMIT);
     }
 }

@@ -5,6 +5,7 @@ import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.PostCategory;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.search.engine.backend.types.Norms;
@@ -18,13 +19,14 @@ import java.util.Set;
 @Entity
 @NaturalIdCache
 @Table(name = "tag")
-@Data
 //Making class becomes immutable for indexing inside other entities.
-@Setter(value = AccessLevel.PRIVATE)
-@NoArgsConstructor
+@RequiredArgsConstructor
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @Builder
 @Indexed
+@Getter
 public class Tag {
     @Id
     @GeneratedValue (
@@ -41,6 +43,20 @@ public class Tag {
     @NaturalId
     @KeywordField(norms = Norms.YES, searchable = Searchable.YES)
     private String content;
+
+    @ManyToMany(mappedBy = "tags")
+    @EqualsAndHashCode.Exclude
+    //We don't need this to be serialized.
+    @ToString.Exclude
+    @JsonIgnore
+    private Set<Doc> docs;
+
+    @ManyToMany (mappedBy = "tags")
+    @EqualsAndHashCode.Exclude
+    //We don't need this to be serialized.
+    @ToString.Exclude
+    @JsonIgnore
+    private Set<Post> posts;
 
     @Version
     private short version;
