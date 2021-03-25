@@ -97,8 +97,8 @@ public abstract class PostMapper {
 
     @Named("stripDangerousHTMLTag")
     protected String stripDangerousHTMLTag(String htmlContent) {
-        Whitelist basicWhiteList = Whitelist.basic();
-        Cleaner cleaner = new Cleaner(basicWhiteList);
+        Whitelist relaxedWhiteList = Whitelist.relaxed();
+        Cleaner cleaner = new Cleaner(relaxedWhiteList);
 
         Document sanitizedDocument = cleaner.clean(Jsoup.parse(htmlContent, "UTF-8"));
 

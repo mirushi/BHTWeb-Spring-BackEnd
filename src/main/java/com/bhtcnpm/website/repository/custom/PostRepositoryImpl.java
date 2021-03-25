@@ -56,26 +56,20 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
     private PostMapper postMapper = PostMapper.INSTANCE;
 
-    private final String PATH_TO_POST_INDEX;
-
-    private Environment environment;
-
     private final PostSuggestionMapper postSuggestionMapper = PostSuggestionMapper.INSTANCE;
 
     private final PostQuickSearchResultMapper postQuickSearchResultMapper = PostQuickSearchResultMapper.INSTANCE;
 
     private final IndexReader luceneIndexReader;
 
-    public PostRepositoryImpl (EntityManager em, Environment environment) throws IOException {
+    public PostRepositoryImpl (EntityManager em) throws IOException {
         this.em = em;
-        this.environment = environment;
 
         this.luceneIndexReader = LuceneIndexUtils.getReader("Post");
         this.path = SimpleEntityPathResolver.INSTANCE.createPath(Post.class);
         this.builder = new PathBuilder<Post>(path.getType(), path.getMetadata());
         this.querydsl = new Querydsl(em, builder);
         this.searchSession = Search.session(em);
-        this.PATH_TO_POST_INDEX = environment.getProperty("spring.jpa.properties.hibernate.search.backend.directory.root") + "/Post";
     }
 
     @Override
