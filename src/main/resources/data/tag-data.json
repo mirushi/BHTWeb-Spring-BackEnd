@@ -3,6 +3,8 @@
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 52,
     "content": "study",
+    "docs": [],
+    "posts": [],
     "version": 0
   },
   {
