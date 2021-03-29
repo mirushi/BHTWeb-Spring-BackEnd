@@ -35,11 +35,4 @@ public class PostCategory {
 
     @Version
     private short version;
-
-    //For repository populator.
-    @JsonCreator
-    public static PostCategory getOne (@JacksonInject EntityManager entityManager, @JsonProperty("id") long id) {
-        return entityManager.find(PostCategory.class, id);
-    }
-
 }

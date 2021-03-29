@@ -14,6 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.config.BootstrapMode;
 import org.springframework.data.repository.init.Jackson2RepositoryPopulatorFactoryBean;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -39,12 +40,14 @@ public class WebsiteApplication {
 
     //Populate data for repository.
     @Bean
+    @Transactional
     public Jackson2RepositoryPopulatorFactoryBean getRepositoryPopulator() {
         Jackson2RepositoryPopulatorFactoryBean factoryBean = new Jackson2RepositoryPopulatorFactoryBean();
         InjectableValues injects = new InjectableValues.Std().addValue(EntityManager.class, entityManager);
         objectMapper.setInjectableValues(injects);
         factoryBean.setResources(new Resource[]{
-                new ClassPathResource("data/post-data.json")
+                new ClassPathResource("data/post-data.json"),
+                new ClassPathResource("data/highlight-post-data.json")
 //                new ClassPathResource("data/tag-data.json")
         });
         factoryBean.setMapper(objectMapper);
