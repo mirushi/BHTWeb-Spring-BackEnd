@@ -1,9 +1,10 @@
 [
   {
     "_class": "com.bhtcnpm.website.model.entity.PostEntities.HighlightPost",
-    "id": 1,
-    "post": {
-      "id": 1
+    "highlightPostId": {
+      "post": {
+        "id": 1
+      }
     },
     "highlightedBy": {
       "id": 1
@@ -13,9 +14,10 @@
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.PostEntities.HighlightPost",
-    "id": 151,
-    "post": {
-      "id": 151
+    "highlightPostId": {
+      "post": {
+        "id": 151
+      }
     },
     "highlightedBy": {
       "id": 1
@@ -25,9 +27,10 @@
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.PostEntities.HighlightPost",
-    "id": 51,
-    "post": {
-      "id": 51
+    "highlightPostId": {
+      "post": {
+        "id": 51
+      }
     },
     "highlightedBy": {
       "id": 1

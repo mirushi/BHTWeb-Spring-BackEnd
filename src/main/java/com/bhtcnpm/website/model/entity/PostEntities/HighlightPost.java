@@ -24,19 +24,10 @@ import java.time.LocalDateTime;
 @Slf4j
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class HighlightPost {
-    @Id
-    //Id cannot be set externally.
-    @Setter(value = AccessLevel.NONE)
-    private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "post")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @PrimaryKeyJoinColumn
-    private Post post;
+    @EmbeddedId
+    private HighlightPostId highlightPostId;
 
     @ManyToOne
     @JoinColumn(name = "highlighted_by_user")
@@ -51,14 +42,4 @@ public class HighlightPost {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime highlightDtm;
-
-    //Workaround for Foreign Primary key problem when perform populating repository.
-    //TODO: Figure out how this work.
-    @JsonSetter("postID")
-    public void setPost (Long id) { }
-
-    public void setPost (Post post) {
-        this.id = post.getId();
-        this.post = post;
-    }
 }

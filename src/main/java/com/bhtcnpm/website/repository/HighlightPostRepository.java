@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface HighlightPostRepository extends JpaRepository<HighlightPost, Long>, HighlightPostRepositoryCustom {
-    @Query("SELECT hlp.post.id FROM HighlightPost hlp")
+    @Query("SELECT hlp.highlightPostId.post.id FROM HighlightPost hlp")
     List<Long> getAllHighlightedPostIDs ();
 
     List<HighlightPost> findAllByOrderByRankAsc ();

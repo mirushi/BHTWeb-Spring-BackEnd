@@ -1,10 +1,6 @@
 package com.bhtcnpm.website.repository.custom;
 
-import com.bhtcnpm.website.model.dto.Post.HighlightPostRequestDTO;
-import com.bhtcnpm.website.model.entity.PostEntities.HighlightPost;
-import com.bhtcnpm.website.model.entity.PostEntities.Post;
-import com.bhtcnpm.website.model.entity.PostEntities.QHighlightPost;
-import com.bhtcnpm.website.model.entity.PostEntities.QPost;
+import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -12,8 +8,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.time.LocalDateTime;
 
 @Component
@@ -42,7 +36,7 @@ public class HighlightPostRepositoryImpl implements HighlightPostRepositoryCusto
 
         //2. Add a highlight post to DB.
         HighlightPost highlightPost = HighlightPost.builder()
-                .post(post)
+                .highlightPostId(new HighlightPostId(post))
                 .rank(1)
                 .highlightDtm(LocalDateTime.now())
                 .highlightedBy(user)
@@ -55,7 +49,7 @@ public class HighlightPostRepositoryImpl implements HighlightPostRepositoryCusto
     public void deleteHighlightPost(Long id) {
         JPQLQuery query = JPAExpressions.select(qHighlightPost.rank)
                 .from(qHighlightPost)
-                .where(qHighlightPost.id.eq(id));
+                .where(qHighlightPost.highlightPostId.post.id.eq(id));
 
         //1. Minus 1 to all rank higher than it.
         queryFactory.update(qHighlightPost)
@@ -64,14 +58,14 @@ public class HighlightPostRepositoryImpl implements HighlightPostRepositoryCusto
 
         //2. Delete the highlight.
         queryFactory.delete(qHighlightPost)
-                .where(qHighlightPost.id.eq(id)).execute();
+                .where(qHighlightPost.highlightPostId.post.id.eq(id)).execute();
     }
 
     @Override
     public void stickToTop(Long id) {
         JPQLQuery query = JPAExpressions.select(qHighlightPost.rank)
                 .from(qHighlightPost)
-                .where(qHighlightPost.id.eq(id));
+                .where(qHighlightPost.highlightPostId.post.id.eq(id));
 
         //1. Add 1 to all rank that is less than current rank.
         queryFactory.update(qHighlightPost)
@@ -81,6 +75,6 @@ public class HighlightPostRepositoryImpl implements HighlightPostRepositoryCusto
         //2. Set current rank to 1.
         queryFactory.update(qHighlightPost)
                 .set(qHighlightPost.rank, 1)
-                .where(qHighlightPost.id.eq(id)).execute();
+                .where(qHighlightPost.highlightPostId.post.id.eq(id)).execute();
     }
 }

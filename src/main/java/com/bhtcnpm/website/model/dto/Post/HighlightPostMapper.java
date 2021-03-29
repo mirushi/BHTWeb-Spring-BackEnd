@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.dto.Post;
 
 import com.bhtcnpm.website.model.entity.PostEntities.HighlightPost;
+import com.bhtcnpm.website.model.entity.PostEntities.HighlightPostId;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.repository.PostRepository;
@@ -19,7 +20,7 @@ public abstract class HighlightPostMapper {
     protected PostRepository postRepository;
     protected UserWebsiteRepository userWebsiteRepository;
 
-    @Mapping(target = "postSummaryDTO", source = "highlightPost.post")
+    @Mapping(target = "postSummaryDTO", source = "highlightPost.highlightPostId.post")
     public abstract HighlightPostDTO highlightPostToHighlightPostDTO (HighlightPost highlightPost);
 
     public abstract List<HighlightPostDTO> highlightPostListToHighlightPostDTOList (List<HighlightPost> highlightPostList);
@@ -29,7 +30,7 @@ public abstract class HighlightPostMapper {
         UserWebsite user = userWebsiteRepository.getOne(userID);
 
         return HighlightPost.builder()
-                .post(postProxy)
+                .highlightPostId(new HighlightPostId(postProxy))
                 .highlightedBy(user)
                 .rank(dto.getRank())
                 .build();
