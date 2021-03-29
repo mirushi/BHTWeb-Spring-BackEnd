@@ -47,12 +47,16 @@
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 59,
     "content": "data-structure",
+    "docs": [],
+    "posts": [],
     "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 60,
     "content": "programming-paradigm",
+    "docs": [],
+    "posts": [],
     "version": 0
   }
 ]

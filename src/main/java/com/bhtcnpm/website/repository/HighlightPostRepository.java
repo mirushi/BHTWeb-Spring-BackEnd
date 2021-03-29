@@ -1,0 +1,17 @@
+package com.bhtcnpm.website.repository;
+
+import com.bhtcnpm.website.model.entity.PostEntities.HighlightPost;
+import com.bhtcnpm.website.repository.custom.HighlightPostRepositoryCustom;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface HighlightPostRepository extends JpaRepository<HighlightPost, Long>, HighlightPostRepositoryCustom {
+    @Query("SELECT hlp.post.id FROM HighlightPost hlp")
+    List<Long> getAllHighlightedPostIDs ();
+
+    List<HighlightPost> findAllByOrderByRankAsc ();
+}

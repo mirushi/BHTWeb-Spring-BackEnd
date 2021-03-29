@@ -70,10 +70,4 @@ public class Tag {
 
     @Version
     private short version;
-
-    //For repository populator.
-    @JsonCreator
-    public static Tag getOne (@JacksonInject EntityManager entityManager, @JsonProperty("id") long id) {
-        return entityManager.find(Tag.class, id);
-    }
 }

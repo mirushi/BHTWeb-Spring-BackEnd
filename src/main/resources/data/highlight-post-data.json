@@ -1,0 +1,38 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.HighlightPost",
+    "id": 1,
+    "post": {
+      "id": 1
+    },
+    "highlightedBy": {
+      "id": 1
+    },
+    "rank": 1,
+    "highlightDtm": "2021-03-27T07:11:06"
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.HighlightPost",
+    "id": 151,
+    "post": {
+      "id": 151
+    },
+    "highlightedBy": {
+      "id": 1
+    },
+    "rank": 2,
+    "highlightDtm": "2021-03-27T07:11:06"
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.HighlightPost",
+    "id": 51,
+    "post": {
+      "id": 51
+    },
+    "highlightedBy": {
+      "id": 1
+    },
+    "rank": 3,
+    "highlightDtm": "2021-03-27T07:11:06"
+  }
+]
