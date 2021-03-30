@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
+import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -36,6 +37,15 @@ public abstract class PostMapper {
     @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     public abstract PostSummaryDTO postToPostSummaryDTO (Post post);
+
+    @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
+    @Mapping(target = "authorID", source = "post.author.id")
+    @Mapping(target = "authorName", source = "post.author.name", qualifiedBy = {})
+    @Mapping(target = "categoryID", source = "category.id")
+    @Mapping(target = "categoryName", source = "category.name")
+    public abstract PostSummaryWithStateDTO postToPostSummaryWithStateDTO (Post post);
+
+    public abstract List<PostSummaryWithStateDTO> postListToPostSummaryWithStateDTOList (List<Post> postList);
 
     public abstract List<PostSummaryDTO> postListToPostSummaryDTOs(List<Post> posts);
 

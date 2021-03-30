@@ -72,8 +72,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         this.searchSession = Search.session(em);
     }
 
-    @Override
-    public PostSummaryListDTO searchBySearchTerm(String sortByPublishDtm, Long postCategoryID ,Integer page, Integer pageSize ,String searchTerm) {
+    private SearchResult<Post> getPostSearchResult (String sortByPublishDtm,
+                                                    Long postCategoryID,
+                                                    Integer page,
+                                                    Integer pageSize,
+                                                    String searchTerm) {
         SearchScope<Post> scope = searchSession.scope(Post.class);
 
         //Build dynamic sorting condition based on user input.
@@ -116,6 +119,22 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .sort(sortFinalStep.toSort())
                 .fetch(page * pageSize, pageSize);
 
+        return searchResult;
+    }
+
+    @Override
+    public PostSummaryListDTO searchBySearchTerm(String sortByPublishDtm,
+                                                 Long postCategoryID,
+                                                 Integer page,
+                                                 Integer pageSize,
+                                                 String searchTerm) {
+
+        SearchResult<Post> searchResult = getPostSearchResult(sortByPublishDtm,
+                postCategoryID,
+                page,
+                pageSize,
+                searchTerm);
+
         Long resultCount = searchResult.total().hitCountLowerBound();
 
         Integer totalPages = (int)Math.ceil((double)resultCount / pageSize);
@@ -123,6 +142,25 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         List<PostSummaryDTO> postSummaryListDTOS = postMapper.postListToPostSummaryDTOs(searchResult.hits());
 
         PostSummaryListDTO finalResult = new PostSummaryListDTO(postSummaryListDTOS, totalPages, resultCount);
+
+        return finalResult;
+    }
+
+    @Override
+    public PostSummaryWithStateListDTO getManagementPost(String sortByPublishDtm, Long postCategoryID, Integer page, Integer pageSize, String searchTerm) {
+        SearchResult<Post> searchResult = getPostSearchResult(sortByPublishDtm,
+                postCategoryID,
+                page,
+                pageSize,
+                searchTerm);
+
+        Long resultCount = searchResult.total().hitCountLowerBound();
+
+        Integer totalPages = (int)Math.ceil((double)resultCount / pageSize);
+
+        List<PostSummaryWithStateDTO> postSummaryListDTOS = postMapper.postListToPostSummaryWithStateDTOList(searchResult.hits());
+
+        PostSummaryWithStateListDTO finalResult = new PostSummaryWithStateListDTO(postSummaryListDTOS, totalPages, resultCount);
 
         return finalResult;
     }

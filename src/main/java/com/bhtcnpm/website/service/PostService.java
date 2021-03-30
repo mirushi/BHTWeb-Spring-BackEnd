@@ -57,4 +57,6 @@ public interface PostService {
     List<PostSuggestionDTO> getRelatedPostSameCategory (Long categoryID, Long postID, Integer page) throws IDNotFoundException, IOException;
 
     PostSummaryListDTO getPostSavedByUserID (Long userID, Pageable pageable);
+
+    PostSummaryWithStateListDTO getManagementPost (String searchTerm, Integer page, String sortByPublishDtm, Long postCategoryID);
 }

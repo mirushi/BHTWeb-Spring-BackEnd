@@ -287,4 +287,19 @@ public class PostController {
     ) {
         return new ResponseEntity<>(postService.getPostDetailsWithState(predicate, pageable, PostStateType.PENDING_APPROVAL), HttpStatus.OK);
     }
+
+    @GetMapping("getManagementPost")
+    @ResponseBody
+    public ResponseEntity<PostSummaryWithStateListDTO> getManagementPost (
+            @RequestParam String searchTerm,
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "sortByPublishDtm", required = false) String sortByPublishDtm,
+            @RequestParam(value = "postCategoryID", required = false) Long postCategoryID
+    ) {
+        return new ResponseEntity<>(postService.getManagementPost(searchTerm,
+                page,
+                sortByPublishDtm,
+                postCategoryID), HttpStatus.OK);
+    }
+
 }
