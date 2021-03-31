@@ -76,7 +76,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                                     Long postCategoryID,
                                                     Integer page,
                                                     Integer pageSize,
-                                                    String searchTerm) {
+                                                    String searchTerm,
+                                                    PostStateType postStateType) {
         SearchScope<Post> scope = searchSession.scope(Post.class);
 
         //Build dynamic sorting condition based on user input.
@@ -115,6 +116,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                 .field("categoryID")
                                 .matching(em.getReference(PostCategory.class, postCategoryID)));
                     }
+                    if (postStateType != null) {
+                        b.filter(f.match()
+                                .field("postState")
+                                .matching(postStateType));
+                    }
                 }))
                 .sort(sortFinalStep.toSort())
                 .fetch(page * pageSize, pageSize);
@@ -133,7 +139,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 postCategoryID,
                 page,
                 pageSize,
-                searchTerm);
+                searchTerm,
+                null);
 
         Long resultCount = searchResult.total().hitCountLowerBound();
 
@@ -147,12 +154,18 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public PostSummaryWithStateListDTO getManagementPost(String sortByPublishDtm, Long postCategoryID, Integer page, Integer pageSize, String searchTerm) {
+    public PostSummaryWithStateListDTO getManagementPost(String sortByPublishDtm,
+                                                         Long postCategoryID,
+                                                         Integer page,
+                                                         Integer pageSize,
+                                                         String searchTerm,
+                                                         PostStateType postStateType) {
         SearchResult<Post> searchResult = getPostSearchResult(sortByPublishDtm,
                 postCategoryID,
                 page,
                 pageSize,
-                searchTerm);
+                searchTerm,
+                postStateType);
 
         Long resultCount = searchResult.total().hitCountLowerBound();
 

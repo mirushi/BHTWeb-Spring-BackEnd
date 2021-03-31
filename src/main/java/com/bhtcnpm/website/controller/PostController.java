@@ -291,12 +291,14 @@ public class PostController {
     @GetMapping("getManagementPost")
     @ResponseBody
     public ResponseEntity<PostSummaryWithStateListDTO> getManagementPost (
-            @RequestParam String searchTerm,
+            @RequestParam(value = "searchTerm") String searchTerm,
+            @RequestParam(value = "postState") PostStateType postStateType,
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) String sortByPublishDtm,
             @RequestParam(value = "postCategoryID", required = false) Long postCategoryID
     ) {
         return new ResponseEntity<>(postService.getManagementPost(searchTerm,
+                postStateType,
                 page,
                 sortByPublishDtm,
                 postCategoryID), HttpStatus.OK);

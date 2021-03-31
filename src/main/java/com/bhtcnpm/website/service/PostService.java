@@ -58,5 +58,5 @@ public interface PostService {
 
     PostSummaryListDTO getPostSavedByUserID (Long userID, Pageable pageable);
 
-    PostSummaryWithStateListDTO getManagementPost (String searchTerm, Integer page, String sortByPublishDtm, Long postCategoryID);
+    PostSummaryWithStateListDTO getManagementPost (String searchTerm, PostStateType postStateType, Integer page, String sortByPublishDtm, Long postCategoryID);
 }
