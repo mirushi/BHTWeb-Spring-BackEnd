@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -53,6 +54,8 @@ public class DocServiceImpl implements DocService {
     private final DocDetailsMapper docDetailsMapper;
 
     private final DocRequestMapper docRequestMapper;
+
+    private final DocDownloadInfoMapper docDownloadInfoMapper;
 
     private final DocRepository docRepository;
 
@@ -256,5 +259,12 @@ public class DocServiceImpl implements DocService {
                 .code(fileUpload.getCode())
                 .fileSize(multipartFile.getSize())
                 .build();
+    }
+
+    @Override
+    public DocDownloadInfoDTO getDocDownloadInfo(String fileCode) {
+        DocFileUpload file = docFileUploadRepository.findByCode(UUID.fromString(fileCode));
+
+        return docDownloadInfoMapper.docFileUploadToDocDownloadInfoDTO(file);
     }
 }
