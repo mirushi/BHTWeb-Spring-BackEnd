@@ -183,4 +183,11 @@ public class DocController {
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
+    @GetMapping("downloadURL")
+    @ResponseBody
+    public ResponseEntity<DocDownloadInfoDTO> getDownloadURL (@RequestParam("code") String fileCode) {
+        DocDownloadInfoDTO dto = docService.getDocDownloadInfo(fileCode);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
 }

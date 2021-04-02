@@ -40,4 +40,6 @@ public interface DocService {
     DocSummaryListDTO getPostBySearchTerm (Predicate predicate, Pageable pageable, String searchTerm);
 
     DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Long userID) throws IOException, FileExtensionNotAllowedException;
+
+    DocDownloadInfoDTO getDocDownloadInfo (String fileCode);
 }
