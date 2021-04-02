@@ -1,0 +1,62 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction",
+    "userDocReactionId": {
+      "user": {
+        "id": 1
+      },
+      "doc": {
+        "id": 1
+      }
+    },
+    "docReactionType": "LIKE"
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction",
+    "userDocReactionId": {
+      "user": {
+        "id": 1
+      },
+      "doc": {
+        "id": 2
+      }
+    },
+    "docReactionType": "DISLIKE"
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction",
+    "userDocReactionId": {
+      "user": {
+        "id": 101
+      },
+      "doc": {
+        "id": 3
+      }
+    },
+    "docReactionType": "LIKE"
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction",
+    "userDocReactionId": {
+      "user": {
+        "id": 101
+      },
+      "doc": {
+        "id": 4
+      }
+    },
+    "docReactionType": "LIKE"
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction",
+    "userDocReactionId": {
+      "user": {
+        "id": 101
+      },
+      "doc": {
+        "id": 5
+      }
+    },
+    "docReactionType": "DISLIKE"
+  }
+]
