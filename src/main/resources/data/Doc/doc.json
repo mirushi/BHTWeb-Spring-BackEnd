@@ -1,0 +1,49 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 1,
+    "author": {
+      "id": 1
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 1
+    },
+    "subject": {
+      "id": 1
+    },
+    "description": "Tổng hợp đầy đủ các dạng bài tập từ dễ đến khó của môn Giải tích 1.",
+    "docFileUpload": {
+      "id": 1
+    },
+    "imageURL": "https://media.store123doc.com/images/document/12/gu/sp/small_spy1344916794.png",
+    "publishDtm": "2020-01-14T23:37:29Z",
+    "createdDtm": "2020-01-14T23:37:29Z",
+    "lastEditDtm": "2020-01-14T23:37:29Z",
+    "title": "Tổng hợp bài tập Giải tích 1",
+    "viewCount": "1000",
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 1
+      },
+      {
+        "id": 51
+      }
+    ],
+    "userDocReactions": [
+      {
+        "userDocReactionId": {
+          "user": {
+            "id": 1
+          },
+          "doc": {
+            "id": 1
+          },
+          "docReactionType": "LIKE"
+        }
+      }
+    ],
+    "version": 0
+  }
+]

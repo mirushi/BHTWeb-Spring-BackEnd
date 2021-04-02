@@ -2,7 +2,12 @@ package com.bhtcnpm.website.model.entity.DocEntities;
 
 import com.bhtcnpm.website.model.entity.*;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -43,19 +48,25 @@ public class Doc {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private Long downloadCount;
+    @OneToOne
+    private DocFileUpload docFileUpload;
 
     @Column(nullable = false)
     private String imageURL;
 
     @Column(nullable = false)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime publishDtm;
 
     @Column(nullable = false, updatable = false)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createdDtm;
 
     @Column(nullable = false)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime lastEditDtm;
 
     @Column(nullable = false)
@@ -64,17 +75,11 @@ public class Doc {
     @Column(nullable = false)
     private Long viewCount;
 
-    @Column(nullable = false)
-    private String docURL;
-
     @Enumerated
     @Column(columnDefinition = "smallint")
     private DocStateType docState;
 
-    @ManyToMany(cascade = {
-            CascadeType.MERGE,
-            CascadeType.PERSIST
-    })
+    @ManyToMany
     @JoinTable(
             name = "doc_doc_tag",
             joinColumns = @JoinColumn(name = "doc_id"),

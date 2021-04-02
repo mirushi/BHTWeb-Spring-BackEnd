@@ -1,0 +1,14 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
+    "id": 1,
+    "code": "1b8940a4-f606-4233-991e-2d90b2ded8d7",
+    "fileName": "TongHopToan.docx",
+    "fileSize": "100",
+    "downloadURL": "https://drive.google.com/file/d/18_TTBQAbVy3K9FE8Ksbc6KpoUiZ6eajj/view?usp=sharing",
+    "downloadCount": 100,
+    "uploader": {
+      "id": 1
+    }
+  }
+]

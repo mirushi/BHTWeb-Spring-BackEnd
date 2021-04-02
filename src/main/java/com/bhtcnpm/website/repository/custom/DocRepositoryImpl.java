@@ -45,10 +45,10 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     @Override
     public List<DocSummaryDTO> getTrendingDoc(Pageable pageable) {
          JPAQuery query = new JPAQuery<Doc>(em)
-                 .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.name, qDoc.category.id, qDoc.category.name, qDoc.subject.id, qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.downloadCount, qDoc.viewCount, qDoc.version))
+                 .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.name, qDoc.category.id, qDoc.category.name, qDoc.subject.id, qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.docFileUpload.downloadCount, qDoc.viewCount, qDoc.version))
                  .from(qDoc)
                  .join(qUserDocReaction).on(qUserDocReaction.userDocReactionId.doc.id.eq(qDoc.id))
-                 .orderBy(qDoc.downloadCount.desc())
+                 .orderBy(qDoc.docFileUpload.downloadCount.desc())
                  .groupBy(qDoc);
 
          JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
@@ -70,7 +70,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     public DocSummaryListDTO searchBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
 
         JPAQuery query = new JPAQuery<Post>(em)
-                .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.name, qDoc.category.id, qDoc.category.name,qDoc.subject.id,qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.downloadCount, qDoc.viewCount, qDoc.version))
+                .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.name, qDoc.category.id, qDoc.category.name,qDoc.subject.id,qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.docFileUpload.downloadCount, qDoc.viewCount, qDoc.version))
                 .from(qDoc)
                 .where(qDoc.title.contains(searchTerm), predicate);
 
