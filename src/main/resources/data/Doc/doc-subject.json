@@ -26,5 +26,19 @@
     "name": "Mẹo vặt",
     "docs": [],
     "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocSubject",
+    "id": 5,
+    "name": "Xác suất thống kê",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocSubject",
+    "id": 6,
+    "name": "Giải tích",
+    "docs": [],
+    "version": 0
   }
 ]

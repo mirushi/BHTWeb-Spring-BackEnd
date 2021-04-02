@@ -40,5 +40,12 @@
     "name": "Khác",
     "docs": [],
     "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocCategory",
+    "id": 7,
+    "name": "Ôn thi",
+    "docs": [],
+    "version": 0
   }
 ]

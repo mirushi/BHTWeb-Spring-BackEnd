@@ -31,19 +31,147 @@
         "id": 51
       }
     ],
-    "userDocReactions": [
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 2,
+    "author": {
+      "id": 51
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 4
+    },
+    "subject": {
+      "id": 5
+    },
+    "description": "Slide bài giảng XSTK của thầy Hà Mạnh Linh - UIT",
+    "docFileUpload": {
+      "id": 2
+    },
+    "imageURL": "https://i.imgur.com/nFdlytE.png",
+    "publishDtm": "2020-12-27T23:37:29Z",
+    "createdDtm": "2020-12-27T23:37:29Z",
+    "lastEditDtm": "2020-12-27T23:37:29Z",
+    "title": "Slide bài giảng XSTK thầy Hà Mạnh Linh",
+    "viewCount": "1000",
+    "docState": "APPROVED",
+    "tags": [
       {
-        "userDocReactionId": {
-          "user": {
-            "id": 1
-          },
-          "doc": {
-            "id": 1
-          },
-          "docReactionType": "LIKE"
-        }
+        "id": 1
+      },
+      {
+        "id": 51
       }
     ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 3,
+    "author": {
+      "id": 101
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 4
+    },
+    "subject": {
+      "id": 5
+    },
+    "description": "Bảng phân phối XSTK - Phân phối chuẩn, Laplace, Student",
+    "docFileUpload": {
+      "id": 3
+    },
+    "imageURL": "https://i.imgur.com/nFdlytE.png",
+    "publishDtm": "2020-12-27T23:37:29Z",
+    "createdDtm": "2020-12-27T23:37:29Z",
+    "lastEditDtm": "2020-12-27T23:37:29Z",
+    "title": "Bảng phân phối XSTK",
+    "viewCount": "998",
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 1
+      },
+      {
+        "id": 51
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 4,
+    "author": {
+      "id": 51
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 7
+    },
+    "subject": {
+      "id": 6
+    },
+    "description": "9 đề ôn tập Giải tích cuối kì - Thầy Hà Mạnh Linh",
+    "docFileUpload": {
+      "id": 4
+    },
+    "imageURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=11I7hqRxRaN8w1NJP-k2aWn_lcamd7vSW",
+    "publishDtm": "2019-01-23T23:37:29Z",
+    "createdDtm": "2019-01-23T23:37:29Z",
+    "lastEditDtm": "2019-01-23T23:37:29Z",
+    "title": "9 đề ôn thi Giải tích cuối HK",
+    "viewCount": "998",
+    "docState": "PENDING_APPROVAL",
+    "tags": [
+      {
+        "id": 1
+      },
+      {
+        "id": 51
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 5,
+    "author": {
+      "id": 51
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 2
+    },
+    "subject": {
+      "id": 6
+    },
+    "description": "Bài tập Tích phân suy rộng",
+    "docFileUpload": {
+      "id": 5
+    },
+    "imageURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1S_CWlLpRvT9R9OCLfsvShD6koY0clwH_",
+    "publishDtm": "2019-01-23T23:37:29Z",
+    "createdDtm": "2019-01-23T23:37:29Z",
+    "lastEditDtm": "2019-01-23T23:37:29Z",
+    "title": "Bài tập Tích phân suy rộng, bao gồm lời giải chi tiết cho từng bài.",
+    "viewCount": "998",
+    "docState": "PENDING_FIX",
+    "tags": [
+      {
+        "id": 1
+      },
+      {
+        "id": 51
+      }
+    ],
+    "userDocReactions": [],
     "version": 0
   }
 ]

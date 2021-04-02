@@ -8,6 +8,9 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Loader;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +19,12 @@ import java.util.Set;
 @Entity(name = "Doc")
 @Table(name = "doc")
 @Data
+@SQLDelete(sql = "UPDATE doc SET DELETED_DATE = "+ "20210302" +" WHERE id = ? AND VERSION = ?")
+@Loader(namedQuery = "findDocById")
+@NamedQuery(name = "findDocById",
+        query = "SELECT d FROM Doc d WHERE d.id = ?1 " +
+                "AND d.deletedDate IS NULL")
+@Where(clause = "DELETED_DATE is NULL")
 public class Doc {
 
     @Id
@@ -93,6 +102,10 @@ public class Doc {
             orphanRemoval = true
     )
     private Set<UserDocReaction> userDocReactions;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime deletedDate;
 
     @Version
     private short version;

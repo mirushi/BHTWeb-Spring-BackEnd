@@ -49,6 +49,9 @@ public class DocFileUpload {
     @Column(nullable = false)
     private Long downloadCount;
 
+    @Column(nullable = false)
+    private String thumbnailURL;
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private UserWebsite uploader;

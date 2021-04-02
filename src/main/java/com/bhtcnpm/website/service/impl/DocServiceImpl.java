@@ -1,9 +1,11 @@
 package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
+import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.repository.DocFileUploadRepository;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
@@ -28,10 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -185,16 +184,50 @@ public class DocServiceImpl implements DocService {
 
         List<DocCommentStatisticDTO> docCommentStatisticDTOs = docCommentRepository.getDocCommentStatistic(docIDs);
 
-        int totalIDs = docReactionStatisticDTOs.size();
+        //Tạo ra một HashMap để search nhanh ra các Statistic ứng với từng docID.
+        Map<Long, DocReactionStatisticDTO> docReactionStatisticDTOMap = new HashMap<>();
+        Map<Long, DocUserOwnReactionStatisticDTO> docUserOwnReactionStatisticDTOMap = new HashMap<>();
+        Map<Long, DocCommentStatisticDTO> docCommentStatisticDTOMap = new HashMap<>();
+
+        for (DocReactionStatisticDTO dto : docReactionStatisticDTOs) {
+            docReactionStatisticDTOMap.put(dto.getDocID(), dto);
+        }
+        for (DocUserOwnReactionStatisticDTO dto : docUserOwnReactionStatisticDTOs) {
+            docUserOwnReactionStatisticDTOMap.put(dto.getDocID(), dto);
+        }
+        for (DocCommentStatisticDTO dto : docCommentStatisticDTOs) {
+            docCommentStatisticDTOMap.put(dto.getDocID(), dto);
+        }
+
+        int totalIDs = docIDs.size();
 
         List<DocStatisticDTO> resultList = new ArrayList<>(totalIDs);
 
         for (int i = 0;i < totalIDs; ++i) {
-            Long docID = docReactionStatisticDTOs.get(i).getDocID();
+            Long docID = docIDs.get(i);
 
-            DocReactionStatisticDTO docReactionStatisticDTO = docReactionStatisticDTOs.get(i);
-            DocUserOwnReactionStatisticDTO docUserOwnReactionStatisticDTO = docUserOwnReactionStatisticDTOs.get(i);
-            DocCommentStatisticDTO docCommentStatisticDTO = docCommentStatisticDTOs.get(i);
+            DocReactionStatisticDTO docReactionStatisticDTO = docReactionStatisticDTOMap.get(docID);
+            if (docReactionStatisticDTO == null) {
+                docReactionStatisticDTO = DocReactionStatisticDTO.builder()
+                        .docID(docID)
+                        .dislikeCount(0L)
+                        .likeCount(0L)
+                        .build();
+            }
+            DocUserOwnReactionStatisticDTO docUserOwnReactionStatisticDTO = docUserOwnReactionStatisticDTOMap.get(docID);
+            if (docUserOwnReactionStatisticDTO == null) {
+                docUserOwnReactionStatisticDTO = DocUserOwnReactionStatisticDTO.builder()
+                        .docID(docID)
+                        .docReactionType(DocReactionType.NONE)
+                        .build();
+            }
+            DocCommentStatisticDTO docCommentStatisticDTO = docCommentStatisticDTOMap.get(docID);
+            if (docCommentStatisticDTO == null) {
+                docCommentStatisticDTO = DocCommentStatisticDTO.builder()
+                        .docID(docID)
+                        .commentCount(0L)
+                        .build();
+            }
 
             resultList.add(new DocStatisticDTO(docID,
                     docReactionStatisticDTO.getLikeCount(), docReactionStatisticDTO.getDislikeCount(),
@@ -248,6 +281,7 @@ public class DocServiceImpl implements DocService {
             .fileName(multipartFile.getOriginalFilename())
             .fileSize(multipartFile.getSize())
             .downloadURL(uploadedFile.getWebViewLink())
+            .thumbnailURL(String.format(DocFileUploadConstant.DRIVE_THUMBNAIL_URL, uploadedFile.getId()))
             .uploader(author)
             .build();
 
