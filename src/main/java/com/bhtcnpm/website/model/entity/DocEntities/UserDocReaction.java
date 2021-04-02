@@ -14,6 +14,6 @@ public class UserDocReaction {
     private UserDocReactionId userDocReactionId;
 
     @Column(columnDefinition = "smallint")
-    @Convert(converter = DocReactionTypeConverter.class)
+    @Enumerated
     private DocReactionType docReactionType;
 }

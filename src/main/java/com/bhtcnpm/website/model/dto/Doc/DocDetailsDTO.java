@@ -28,8 +28,6 @@ public class DocDetailsDTO {
 
     private String imageURL;
 
-    private String docURL;
-
     private Set<TagDTO> tags;
 
     private LocalDateTime publishDtm;

@@ -19,7 +19,7 @@ public class DocRequestDTO {
 
     private String imageURL;
 
-    private String docURL;
+    private String fileCode;
 
     private Set<TagDTO> tags;
 

@@ -2,7 +2,6 @@ package com.bhtcnpm.website;
 
 import com.bhtcnpm.website.miscellenous.PrettySqlFormat;
 import com.fasterxml.jackson.databind.InjectableValues;
-import com.fasterxml.jackson.databind.InjectableValues.Std;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.p6spy.engine.spy.P6SpyOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +45,12 @@ public class WebsiteApplication {
         InjectableValues injects = new InjectableValues.Std().addValue(EntityManager.class, entityManager);
         objectMapper.setInjectableValues(injects);
         factoryBean.setResources(new Resource[]{
-                new ClassPathResource("data/post-data.json"),
-                new ClassPathResource("data/highlight-post-data.json")
+                new ClassPathResource("data/post.json"),
+                new ClassPathResource("data/highlight-post.json"),
+                new ClassPathResource("data/Doc/doc-subject.json"),
+                new ClassPathResource("data/Doc/doc-category.json"),
+                new ClassPathResource("data/Doc/doc-file-upload.json"),
+                new ClassPathResource("data/Doc/doc.json")
 //                new ClassPathResource("data/tag-data.json")
         });
         factoryBean.setMapper(objectMapper);

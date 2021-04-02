@@ -1,6 +1,8 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.UUIDSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -43,6 +45,9 @@ public class DocFileUpload {
 
     @Column(nullable = false)
     private String downloadURL;
+
+    @Column(nullable = false)
+    private Long downloadCount;
 
     @ManyToOne
     @JoinColumn(nullable = false)

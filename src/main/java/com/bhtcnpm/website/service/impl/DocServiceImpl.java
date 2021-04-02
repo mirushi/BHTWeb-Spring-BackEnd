@@ -4,7 +4,7 @@ import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
-import com.bhtcnpm.website.model.entity.DocFileUploadRepository;
+import com.bhtcnpm.website.repository.DocFileUploadRepository;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
@@ -14,7 +14,6 @@ import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.DocService;
 import com.bhtcnpm.website.service.GoogleDriveService;
-import com.google.api.services.drive.model.File;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -263,6 +262,8 @@ public class DocServiceImpl implements DocService {
 
     @Override
     public DocDownloadInfoDTO getDocDownloadInfo(String fileCode) {
+        UUID uuid = UUID.fromString(fileCode);
+
         DocFileUpload file = docFileUploadRepository.findByCode(UUID.fromString(fileCode));
 
         return docDownloadInfoMapper.docFileUploadToDocDownloadInfoDTO(file);
