@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
+import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
@@ -248,6 +249,7 @@ public class DocServiceImpl implements DocService {
             .fileName(multipartFile.getOriginalFilename())
             .fileSize(multipartFile.getSize())
             .downloadURL(uploadedFile.getWebViewLink())
+            .thumbnailURL(String.format(DocFileUploadConstant.DRIVE_THUMBNAIL_URL, uploadedFile.getId()))
             .uploader(author)
             .build();
 
