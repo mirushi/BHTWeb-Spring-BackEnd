@@ -274,4 +274,15 @@ public class PostServiceImpl implements PostService {
         return result;
     }
 
+    @Override
+    public PostSummaryWithStateListDTO getManagementPost(String searchTerm, PostStateType postStateType, Integer page, String sortByPublishDtm, Long postCategoryID) {
+        PostSummaryWithStateListDTO dto = postRepository.getManagementPost(sortByPublishDtm,
+                postCategoryID,
+                page,
+                PAGE_SIZE,
+                searchTerm,
+                postStateType);
+        return dto;
+    }
+
 }

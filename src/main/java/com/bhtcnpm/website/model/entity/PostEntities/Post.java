@@ -127,6 +127,7 @@ public class Post {
 
     @Enumerated
     @Column(columnDefinition = "smallint")
+    @GenericField(projectable = Projectable.YES, searchable = Searchable.YES)
     private PostStateType postState;
 
     @OneToMany (
