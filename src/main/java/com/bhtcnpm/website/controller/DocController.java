@@ -1,16 +1,14 @@
 package com.bhtcnpm.website.controller;
 
+import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
-import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -171,12 +169,21 @@ public class DocController {
     @GetMapping("searchFilter")
     @ResponseBody
     public ResponseEntity<DocSummaryListDTO> searchFilter (
-            @QuerydslPredicate(root = Doc.class) Predicate predicate,
-            @RequestParam String searchTerm,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "sort", required = false) String sort,
-            @PageableDefault Pageable pageable) {
-        return new ResponseEntity<>(docService.getPostBySearchTerm(predicate, pageable, searchTerm), HttpStatus.OK);
+            @RequestParam(value = "searchTerm") String searchTerm,
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
+            @RequestParam(value = "categoryID", required = false) Long categoryID,
+            @RequestParam(value = "subjectID", required = false) Long subjectID) {
+
+        DocSummaryListDTO dtoList = docService.getDocBySearchTerm(
+                searchTerm,
+                page,
+                sortByPublishDtm,
+                categoryID,
+                subjectID
+        );
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @PostMapping("upload")
