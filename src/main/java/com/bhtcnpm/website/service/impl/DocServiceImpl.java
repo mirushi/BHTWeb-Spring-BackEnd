@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
+import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.DocFileUploadRepository;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
@@ -302,4 +303,25 @@ public class DocServiceImpl implements DocService {
 
         return docDownloadInfoMapper.docFileUploadToDocDownloadInfoDTO(file);
     }
+
+    @Override
+    public DocSummaryWithStateListDTO getManagementDoc(
+            String searchTerm,
+            DocStateType docStateType,
+            Long subjectID,
+            Long categoryID,
+            Integer page
+    ) {
+        DocSummaryWithStateListDTO dtoList = docRepository.getManagementDocs(
+                null,
+                categoryID,
+                subjectID,
+                page,
+                PAGE_SIZE,
+                searchTerm,
+                docStateType
+        );
+        return dtoList;
+    }
+
 }

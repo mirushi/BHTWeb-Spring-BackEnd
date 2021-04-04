@@ -2,6 +2,8 @@ package com.bhtcnpm.website.controller;
 
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
+import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
+import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
@@ -30,7 +32,9 @@ public class DocController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<DocDetailsListDTO> getAllDocuments (@QuerydslPredicate(root = Doc.class) Predicate predicate, @NotNull @Min(0) Integer paginator) {
+    public ResponseEntity<DocDetailsListDTO> getAllDocuments (
+            @QuerydslPredicate(root = Doc.class) Predicate predicate,
+            @NotNull @Min(0) Integer paginator) {
         DocDetailsListDTO result = docService.getAllDoc(predicate,paginator);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -38,7 +42,9 @@ public class DocController {
 
     @PutMapping("{id}")
     @ResponseBody
-    public ResponseEntity<DocDetailsDTO> putDocument (@PathVariable Long id, @RequestBody DocRequestDTO docRequestDTO) {
+    public ResponseEntity<DocDetailsDTO> putDocument (
+            @PathVariable Long id,
+            @RequestBody DocRequestDTO docRequestDTO) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
         Long userID = 1L;
 
@@ -190,4 +196,25 @@ public class DocController {
         DocDownloadInfoDTO dto = docService.getDocDownloadInfo(fileCode);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
+    @GetMapping("getManagementDoc")
+    @ResponseBody
+    public ResponseEntity<DocSummaryWithStateListDTO> getManagementDoc (
+            @RequestParam(value = "searchTerm") String searchTerm,
+            @RequestParam(value = "docState") DocStateType docState,
+            @RequestParam(value = "subjectID", required = false) Long subjectID,
+            @RequestParam(value = "categoryID", required = false) Long categoryID,
+            @RequestParam(value = "page") Integer page
+    ) {
+        DocSummaryWithStateListDTO dtoList = docService.getManagementDoc(
+                searchTerm,
+                docState,
+                subjectID,
+                categoryID,
+                page
+        );
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
 }
