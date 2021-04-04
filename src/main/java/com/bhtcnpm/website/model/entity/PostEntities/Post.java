@@ -1,11 +1,10 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
-import com.bhtcnpm.website.model.dto.Post.PostMapper;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
-import com.bhtcnpm.website.search.bridge.AuthorValueBridge;
-import com.bhtcnpm.website.search.bridge.PostCategoryValueBridge;
+import com.bhtcnpm.website.search.bridge.UserWebsiteIDValueBridge;
+import com.bhtcnpm.website.search.bridge.PostCategoryIDValueBridge;
 import com.bhtcnpm.website.search.bridge.TagValueBridge;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -20,17 +19,10 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.hibernate.search.engine.backend.types.*;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
-import org.hibernate.search.mapper.pojo.extractor.builtin.BuiltinContainerExtractors;
-import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -110,16 +102,15 @@ public class Post {
 
     @ManyToOne
     @IndexedEmbedded(name = "author")
-    //TODO: Maybe try to convert GenericField into IndexedEmbedded too.
     @GenericField(
-            valueBridge = @ValueBridgeRef(type = AuthorValueBridge.class),
+            valueBridge = @ValueBridgeRef(type = UserWebsiteIDValueBridge.class),
             searchable = Searchable.YES,
             name = "authorID")
     private UserWebsite author;
 
     @ManyToOne
     @GenericField(
-            valueBridge = @ValueBridgeRef(type = PostCategoryValueBridge.class),
+            valueBridge = @ValueBridgeRef(type = PostCategoryIDValueBridge.class),
             searchable = Searchable.YES,
             name = "categoryID"
     )

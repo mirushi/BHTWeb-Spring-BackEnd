@@ -54,7 +54,7 @@ public abstract class DocRequestMapper {
 
         DocFileUpload file = docFileUploadRepository.findByCode(UUID.fromString(docRequestDTO.getFileCode()));
         newDoc.setDocFileUpload(file);
-        newDoc.setLastEditDtm(LocalDateTime.now());
+        newDoc.setLastUpdatedDtm(LocalDateTime.now());
         newDoc.setLastEditedUser(userWebsiteRepository.getOne(lastEditedUserID));
         newDoc.setCategory(docCategoryRepository.getOne(docRequestDTO.getCategoryID()));
         newDoc.setSubject(docSubjectRepository.getOne(docRequestDTO.getSubjectID()));
@@ -93,7 +93,7 @@ public abstract class DocRequestMapper {
         this.docFileUploadRepository = docFileUploadRepository;
     }
 
-//    @Mapping(target = "lastEditDtm", expression = "java(java.time.LocalDateTime.now())")
+//    @Mapping(target = "lastUpdatedDtm", expression = "java(java.time.LocalDateTime.now())")
 //    @Mapping(target = "lastEditedUser.id", source = "lastEditedUserID")
 //    @Mapping(target = "category", source = "docRequestDTO.categoryID")
 //    @Mapping(target = "subject", source = "docRequestDTO.docSubjectID")
