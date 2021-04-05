@@ -18,9 +18,9 @@ public class DocDetailsDTO {
 
     private Long categoryID;
 
-    private String docSubject;
+    private String subject;
 
-    private Long docSubjectID;
+    private Long subjectID;
 
     private String title;
 

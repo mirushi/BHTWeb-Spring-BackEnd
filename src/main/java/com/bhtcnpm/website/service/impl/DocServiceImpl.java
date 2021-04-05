@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.service.impl;
 
+import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
 import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
 import com.bhtcnpm.website.model.dto.Doc.*;
@@ -17,6 +18,7 @@ import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.DocService;
 import com.bhtcnpm.website.service.GoogleDriveService;
+import com.bhtcnpm.website.util.EnumConverter;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -249,11 +251,20 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocSummaryListDTO getPostBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
-        //Reset PAGE_SIZE to predefined value.
-        pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
-
-        DocSummaryListDTO queryResult = docRepository.searchBySearchTerm(predicate, pageable, searchTerm);
+    public DocSummaryListDTO getDocBySearchTerm(
+            String searchTerm,
+            Integer page,
+            ApiSortOrder sortByPublishDtm,
+            Long categoryID,
+            Long subjectID
+    ) {
+        DocSummaryListDTO queryResult = docRepository.searchBySearchTerm(
+                searchTerm,
+                page,
+                PAGE_SIZE,
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByPublishDtm),
+                categoryID,
+                subjectID);
 
         return queryResult;
     }

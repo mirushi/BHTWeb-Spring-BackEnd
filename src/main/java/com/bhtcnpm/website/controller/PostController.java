@@ -291,8 +291,8 @@ public class PostController {
     @GetMapping("getManagementPost")
     @ResponseBody
     public ResponseEntity<PostSummaryWithStateListDTO> getManagementPost (
-            @RequestParam(value = "searchTerm") String searchTerm,
-            @RequestParam(value = "postState") PostStateType postStateType,
+            @RequestParam(value = "searchTerm", required = false) String searchTerm,
+            @RequestParam(value = "postState", required = false) PostStateType postStateType,
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) String sortByPublishDtm,
             @RequestParam(value = "postCategoryID", required = false) Long postCategoryID

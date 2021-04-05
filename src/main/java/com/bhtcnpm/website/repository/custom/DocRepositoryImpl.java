@@ -17,6 +17,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.index.IndexReader;
 import org.hibernate.search.engine.search.query.SearchResult;
+import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.data.domain.Pageable;
@@ -85,40 +86,47 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     }
 
     @Override
-    public DocSummaryListDTO searchBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
+    public DocSummaryListDTO searchBySearchTerm(String searchTerm,
+                                                Integer page,
+                                                Integer pageSize,
+                                                SortOrder sortByPublishDtm,
+                                                Long categoryID,
+                                                Long subjectID) {
 
-        JPAQuery query = new JPAQuery<Post>(em)
-                .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.name, qDoc.category.id, qDoc.category.name,qDoc.subject.id,qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.docFileUpload.downloadCount, qDoc.viewCount, qDoc.version))
-                .from(qDoc)
-                .where(qDoc.title.contains(searchTerm), predicate);
+        //TODO: DocState may need to depend on ACL.
+        SearchResult<Doc> searchResult = getDocSearchResult(
+                sortByPublishDtm,
+                categoryID,
+                subjectID,
+                page,
+                pageSize,
+                searchTerm,
+                null
+        );
 
-        JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
+        Long resultCount = searchResult.total().hitCountLowerBound();
 
-        QueryResults queryResults = finalQuery.fetchResults();
+        Integer totalPages = (int)Math.ceil((double)resultCount / pageSize);
 
-        List<DocSummaryDTO> listSummaryDTOs = queryResults.getResults();
+        List<DocSummaryDTO> listSummaryDTOs = docSummaryMapper.docListToDocSummaryDTOList(searchResult.hits());
 
-        Long resultCount = finalQuery.fetchResults().getTotal();
+        DocSummaryListDTO finalResult = new DocSummaryListDTO(listSummaryDTOs, totalPages, resultCount);
 
-        Integer totalPages = (int)Math.ceil((double)resultCount / pageable.getPageSize());
-
-        DocSummaryListDTO result = new DocSummaryListDTO(listSummaryDTOs, totalPages, resultCount);
-
-        return result;
+        return finalResult;
     }
 
     @Override
-    public DocSummaryWithStateListDTO getManagementDocs(String sortByPublishDtm,
-                                                        Long docCategoryID,
-                                                        Long docSubjectID,
+    public DocSummaryWithStateListDTO getManagementDocs(SortOrder sortByPublishDtm,
+                                                        Long categoryID,
+                                                        Long subjectID,
                                                         Integer page,
                                                         Integer pageSize,
                                                         String searchTerm,
                                                         DocStateType docStateType) {
         SearchResult<Doc> searchResult = getDocSearchResult(
                 sortByPublishDtm,
-                docCategoryID,
-                docSubjectID,
+                categoryID,
+                subjectID,
                 page,
                 pageSize,
                 searchTerm,
@@ -140,13 +148,13 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
         return finalResult;
     }
 
-    private SearchResult<Doc> getDocSearchResult (String sortByPublishDtm,
-                                                  Long docCategoryID,
-                                                  Long docSubjectID,
+    private SearchResult<Doc> getDocSearchResult (SortOrder sortByPublishDtm,
+                                                  Long categoryID,
+                                                  Long subjectID,
                                                   Integer page,
                                                   Integer pageSize,
                                                   String searchTerm,
-                                                  DocStateType docStateType) {
+                                                  DocStateType docState) {
         SearchResult<Doc> searchResult = searchSession.search(Doc.class)
                 .where(f -> f.bool(b -> {
                     b.filter(f.matchAll());
@@ -157,32 +165,28 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                                 .matching(searchTerm)
                         );
                     }
-                    if (docCategoryID != null) {
+                    if (categoryID != null) {
                         b.filter(f.match()
                                 .field("categoryID")
-                                .matching(em.getReference(DocCategory.class, docCategoryID))
+                                .matching(em.getReference(DocCategory.class, categoryID))
                         );
                     }
-                    if (docSubjectID != null) {
+                    if (subjectID != null) {
                         b.filter(f.match()
                                 .field("subjectID")
-                                .matching(em.getReference(DocSubject.class, docSubjectID))
+                                .matching(em.getReference(DocSubject.class, subjectID))
                         );
                     }
-                    if (docStateType != null) {
+                    if (docState != null) {
                         b.filter(f.match()
                                 .field("docState")
-                                .matching(docStateType)
+                                .matching(docState)
                         );
                     }
                 }))
                 .sort(f -> f.composite( b -> {
                     if (sortByPublishDtm != null) {
-                        if (GenericBusinessConstant.SORT_ASC.equalsIgnoreCase(sortByPublishDtm)) {
-                            b.add(f.field("publishDtm").asc());
-                        } else if (GenericBusinessConstant.SORT_DESC.equalsIgnoreCase(sortByPublishDtm)) {
-                            b.add(f.field("publishDtm").desc());
-                        }
+                        b.add(f.field("publishDtm").order(sortByPublishDtm));
                     }
                 }))
                 .fetch(page * pageSize, pageSize);

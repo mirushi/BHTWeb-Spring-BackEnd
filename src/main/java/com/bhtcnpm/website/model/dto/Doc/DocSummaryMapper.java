@@ -16,8 +16,8 @@ public interface DocSummaryMapper {
     @Mapping(target = "authorName", source = "author.name")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "category", source = "category.name")
-    @Mapping(target = "docSubject", source = "subject.name")
-    @Mapping(target = "docSubjectID", source = "subject.id")
+    @Mapping(target = "subject", source = "subject.name")
+    @Mapping(target = "subjectID", source = "subject.id")
     @Mapping(target = "downloads", source = "docFileUpload.downloadCount")
     @Mapping(target = "views", source = "viewCount")
     DocSummaryDTO docToDocSummaryDTO (Doc doc);
