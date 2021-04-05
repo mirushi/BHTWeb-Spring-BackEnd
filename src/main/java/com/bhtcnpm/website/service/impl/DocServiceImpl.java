@@ -110,7 +110,7 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocSummaryListDTO getMyDocuments(String searchTerm,
+    public DocSummaryWithStateListDTO getMyDocuments(String searchTerm,
                                             Long categoryID,
                                             Long subjectID,
                                             DocStateType docState,
@@ -118,7 +118,7 @@ public class DocServiceImpl implements DocService {
                                             ApiSortOrder sortByPublishDtm,
                                             ApiSortOrder sortByCreatedDtm,
                                             Long userID) {
-        DocSummaryListDTO dtoList = docRepository.getDocSummaryList(
+        DocSummaryWithStateListDTO dtoList = docRepository.getDocSummaryWithStateList(
                 searchTerm,
                 categoryID,
                 subjectID,

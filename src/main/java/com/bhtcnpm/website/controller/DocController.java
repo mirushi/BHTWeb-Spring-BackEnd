@@ -63,7 +63,7 @@ public class DocController {
 
     @GetMapping("myDocuments")
     @ResponseBody
-    public ResponseEntity<DocSummaryListDTO> getMyDocuments (
+    public ResponseEntity<DocSummaryWithStateListDTO> getMyDocuments (
             @RequestParam(value = "searchTerm", required = false) String searchTerm,
             @RequestParam(value = "subjectID", required = false) Long subjectID,
             @RequestParam(value = "categoryID", required = false) Long categoryID,
@@ -75,7 +75,7 @@ public class DocController {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
         Long userID = 1L;
 
-        DocSummaryListDTO result = docService.getMyDocuments(
+        DocSummaryWithStateListDTO result = docService.getMyDocuments(
                 searchTerm,
                 categoryID,
                 subjectID,

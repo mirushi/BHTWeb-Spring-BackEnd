@@ -27,7 +27,7 @@ public interface DocService {
             ApiSortOrder sortByCreatedDtm
     );
 
-    DocSummaryListDTO getMyDocuments (String searchTerm,
+    DocSummaryWithStateListDTO getMyDocuments (String searchTerm,
                                       Long categoryID,
                                       Long subjectID,
                                       DocStateType docState,
