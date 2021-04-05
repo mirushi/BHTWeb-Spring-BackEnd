@@ -3,9 +3,11 @@ package com.bhtcnpm.website.model.dto.Doc;
 import com.bhtcnpm.website.model.dto.Tag.TagMapper;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocCategory;
+import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.DocCategoryRepository;
+import com.bhtcnpm.website.repository.DocFileUploadRepository;
 import com.bhtcnpm.website.repository.DocSubjectRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import org.mapstruct.Mapper;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Mapper
 public abstract class DocRequestMapper {
@@ -26,6 +29,8 @@ public abstract class DocRequestMapper {
     protected DocSubjectRepository docSubjectRepository;
 
     protected UserWebsiteRepository userWebsiteRepository;
+
+    protected DocFileUploadRepository docFileUploadRepository;
 
     protected TagMapper tagMapper;
 
@@ -41,21 +46,21 @@ public abstract class DocRequestMapper {
         }
 
         if (entity == null) {
-            newDoc.setDownloadCount(0L);
             newDoc.setCreatedDtm(LocalDateTime.now());
             newDoc.setViewCount(0L);
             newDoc.setDocState(DocStateType.PENDING_APPROVAL);
             newDoc.setAuthor(userWebsiteRepository.getOne(lastEditedUserID));
         }
 
-        newDoc.setLastEditDtm(LocalDateTime.now());
+        DocFileUpload file = docFileUploadRepository.findByCode(UUID.fromString(docRequestDTO.getFileCode()));
+        newDoc.setDocFileUpload(file);
+        newDoc.setLastUpdatedDtm(LocalDateTime.now());
         newDoc.setLastEditedUser(userWebsiteRepository.getOne(lastEditedUserID));
         newDoc.setCategory(docCategoryRepository.getOne(docRequestDTO.getCategoryID()));
         newDoc.setSubject(docSubjectRepository.getOne(docRequestDTO.getSubjectID()));
         newDoc.setTitle(docRequestDTO.getTitle());
         newDoc.setDescription(docRequestDTO.getDescription());
         newDoc.setImageURL(docRequestDTO.getImageURL());
-        newDoc.setDocURL(docRequestDTO.getDocURL());
         newDoc.setTags(tagMapper.tagDTOListToTagList(docRequestDTO.getTags()));
         newDoc.setPublishDtm(docRequestDTO.getPublishDtm());
         newDoc.setVersion(docRequestDTO.getVersion());
@@ -83,7 +88,12 @@ public abstract class DocRequestMapper {
         this.userWebsiteRepository = userWebsiteRepository;
     }
 
-//    @Mapping(target = "lastEditDtm", expression = "java(java.time.LocalDateTime.now())")
+    @Autowired
+    public void setDocFileUploadRepository (DocFileUploadRepository docFileUploadRepository) {
+        this.docFileUploadRepository = docFileUploadRepository;
+    }
+
+//    @Mapping(target = "lastUpdatedDtm", expression = "java(java.time.LocalDateTime.now())")
 //    @Mapping(target = "lastEditedUser.id", source = "lastEditedUserID")
 //    @Mapping(target = "category", source = "docRequestDTO.categoryID")
 //    @Mapping(target = "subject", source = "docRequestDTO.docSubjectID")

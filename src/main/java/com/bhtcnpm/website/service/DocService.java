@@ -1,6 +1,9 @@
 package com.bhtcnpm.website.service;
 
+import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
+import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
+import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.google.api.services.drive.model.File;
 import com.querydsl.core.types.Predicate;
@@ -41,7 +44,22 @@ public interface DocService {
 
     DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, Long userID);
 
-    DocSummaryListDTO getPostBySearchTerm (Predicate predicate, Pageable pageable, String searchTerm);
-
+    DocSummaryListDTO getDocBySearchTerm(
+            String searchTerm,
+            Integer page,
+            ApiSortOrder sortByPublishDtm,
+            Long categoryID,
+            Long subjectID
+    );
     DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Long userID) throws IOException, FileExtensionNotAllowedException;
+
+    DocDownloadInfoDTO getDocDownloadInfo (String fileCode);
+
+    DocSummaryWithStateListDTO getManagementDoc(
+            String searchTerm,
+            DocStateType docStateType,
+            Long subjectID,
+            Long categoryID,
+            Integer page
+    );
 }

@@ -179,6 +179,8 @@ public class PostServiceImpl implements PostService {
         return true;
     }
 
+
+
     @Override
     public List<PostSummaryDTO> getPostWithActivityCategory() {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE_NEW_ACTIVITIES);
@@ -261,6 +263,26 @@ public class PostServiceImpl implements PostService {
         }
 
         return postRepository.searchRelatedPost(null, categoryID ,optEntity.get(), page ,PostBusinessConstant.RELATED_POST_MAX);
+    }
+
+    @Override
+    public PostSummaryListDTO getPostSavedByUserID(Long userID, Pageable pageable) {
+        //Reset PAGE_SIZE to predefined value.
+        pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
+
+        PostSummaryListDTO result = userPostSaveRepository.findByUserPostSaveIdUserId(userID, pageable);
+        return result;
+    }
+
+    @Override
+    public PostSummaryWithStateListDTO getManagementPost(String searchTerm, PostStateType postStateType, Integer page, String sortByPublishDtm, Long postCategoryID) {
+        PostSummaryWithStateListDTO dto = postRepository.getManagementPost(sortByPublishDtm,
+                postCategoryID,
+                page,
+                PAGE_SIZE,
+                searchTerm,
+                postStateType);
+        return dto;
     }
 
 }

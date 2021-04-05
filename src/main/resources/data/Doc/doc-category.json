@@ -1,0 +1,51 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocCategory",
+    "id": 1,
+    "name": "Tài liệu Training",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocCategory",
+    "id": 2,
+    "name": "Bài tập",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocCategory",
+    "id": 3,
+    "name": "Đề thi",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocCategory",
+    "id": 4,
+    "name": "Slide bài giảng",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocCategory",
+    "id": 5,
+    "name": "Giáo trình",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocCategory",
+    "id": 6,
+    "name": "Khác",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocCategory",
+    "id": 7,
+    "name": "Ôn thi",
+    "docs": [],
+    "version": 0
+  }
+]

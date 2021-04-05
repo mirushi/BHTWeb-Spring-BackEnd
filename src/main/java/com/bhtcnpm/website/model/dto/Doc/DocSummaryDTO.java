@@ -20,9 +20,9 @@ public class DocSummaryDTO {
 
     private String category;
 
-    private Long docSubjectID;
+    private Long subjectID;
 
-    private String docSubject;
+    private String subject;
 
     private String title;
 

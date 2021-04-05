@@ -41,11 +41,4 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
     int setPostStateAndFeedback (Long postID, PostStateType postStateType, String feedBack);
 
     List<Post> findByCategoryNameOrderByPublishDtmDesc (Pageable pageable, String categoryName);
-
-    //Search Term is the same as Search Term Exact. Please don't pass different value.
-    @Query ("SELECT new com.bhtcnpm.website.model.dto.Post.PostQuickSearchResult(p.id, p.imageURL, p.title) " +
-            "FROM Post p " +
-            "WHERE p.title LIKE %:searchTerm% " +
-            "ORDER BY "+ "(CASE WHEN EXISTS (SELECT 1 FROM p WHERE p.title = :searchTermExact) THEN TRUE ELSE FALSE END)" +" DESC, length(p.title)")
-    List<PostQuickSearchResult> quickSearch (Pageable pageable, String searchTerm, String searchTermExact);
 }

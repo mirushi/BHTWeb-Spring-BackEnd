@@ -1,14 +1,14 @@
 package com.bhtcnpm.website.controller;
 
+import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
+import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +30,9 @@ public class DocController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<DocDetailsListDTO> getAllDocuments (@QuerydslPredicate(root = Doc.class) Predicate predicate, @NotNull @Min(0) Integer paginator) {
+    public ResponseEntity<DocDetailsListDTO> getAllDocuments (
+            @QuerydslPredicate(root = Doc.class) Predicate predicate,
+            @NotNull @Min(0) Integer paginator) {
         DocDetailsListDTO result = docService.getAllDoc(predicate,paginator);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -57,7 +59,9 @@ public class DocController {
 
     @PutMapping("{id}")
     @ResponseBody
-    public ResponseEntity<DocDetailsDTO> putDocument (@PathVariable Long id, @RequestBody DocRequestDTO docRequestDTO) {
+    public ResponseEntity<DocDetailsDTO> putDocument (
+            @PathVariable Long id,
+            @RequestBody DocRequestDTO docRequestDTO) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
         Long userID = 1L;
 
@@ -184,12 +188,21 @@ public class DocController {
     @GetMapping("searchFilter")
     @ResponseBody
     public ResponseEntity<DocSummaryListDTO> searchFilter (
-            @QuerydslPredicate(root = Doc.class) Predicate predicate,
-            @RequestParam String searchTerm,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "sort", required = false) String sort,
-            @PageableDefault Pageable pageable) {
-        return new ResponseEntity<>(docService.getPostBySearchTerm(predicate, pageable, searchTerm), HttpStatus.OK);
+            @RequestParam(value = "searchTerm") String searchTerm,
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
+            @RequestParam(value = "categoryID", required = false) Long categoryID,
+            @RequestParam(value = "subjectID", required = false) Long subjectID) {
+
+        DocSummaryListDTO dtoList = docService.getDocBySearchTerm(
+                searchTerm,
+                page,
+                sortByPublishDtm,
+                categoryID,
+                subjectID
+        );
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @PostMapping("upload")
@@ -202,4 +215,32 @@ public class DocController {
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
+    @GetMapping("downloadURL")
+    @ResponseBody
+    public ResponseEntity<DocDownloadInfoDTO> getDownloadURL (@RequestParam("code") String fileCode) {
+        DocDownloadInfoDTO dto = docService.getDocDownloadInfo(fileCode);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping("getManagementDoc")
+    @ResponseBody
+    public ResponseEntity<DocSummaryWithStateListDTO> getManagementDoc (
+            @RequestParam(value = "searchTerm") String searchTerm,
+            @RequestParam(value = "docState") DocStateType docState,
+            @RequestParam(value = "subjectID", required = false) Long subjectID,
+            @RequestParam(value = "categoryID", required = false) Long categoryID,
+            @RequestParam(value = "page") Integer page
+    ) {
+        DocSummaryWithStateListDTO dtoList = docService.getManagementDoc(
+                searchTerm,
+                docState,
+                subjectID,
+                categoryID,
+                page
+        );
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
 }

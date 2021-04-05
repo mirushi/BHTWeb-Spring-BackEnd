@@ -32,7 +32,7 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
     List<DocQuickSearchResult> quickSearch (Pageable pageable, String searchTerm, String searchTermExact);
 
     @Modifying
-    @Query("UPDATE Doc d SET d.downloadCount = d.downloadCount + 1 WHERE d.id = :docID")
+    @Query("UPDATE Doc d SET d.docFileUpload.downloadCount = d.docFileUpload.downloadCount + 1 WHERE d.id = :docID")
     int incrementDownloadCount(Long docID);
 
     List<Doc> getDocByIdNot (Pageable pageable, Long docID);

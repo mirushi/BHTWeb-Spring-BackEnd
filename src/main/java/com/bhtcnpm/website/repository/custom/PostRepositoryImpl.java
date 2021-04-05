@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.repository.custom;
 
 import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
+import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.PostCategory;
@@ -55,29 +56,28 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
     private PostMapper postMapper = PostMapper.INSTANCE;
 
-    private final String PATH_TO_POST_INDEX;
+    private final PostSuggestionMapper postSuggestionMapper = PostSuggestionMapper.INSTANCE;
 
-    private Environment environment;
-
-    private final PostSuggestionMapper postSuggestionMapper;
+    private final PostQuickSearchResultMapper postQuickSearchResultMapper = PostQuickSearchResultMapper.INSTANCE;
 
     private final IndexReader luceneIndexReader;
 
-    public PostRepositoryImpl (EntityManager em, Environment environment, PostSuggestionMapper postSuggestionMapper) throws IOException {
+    public PostRepositoryImpl (EntityManager em) throws IOException {
         this.em = em;
-        this.environment = environment;
-        this.postSuggestionMapper = postSuggestionMapper;
 
         this.luceneIndexReader = LuceneIndexUtils.getReader("Post");
         this.path = SimpleEntityPathResolver.INSTANCE.createPath(Post.class);
         this.builder = new PathBuilder<Post>(path.getType(), path.getMetadata());
         this.querydsl = new Querydsl(em, builder);
         this.searchSession = Search.session(em);
-        this.PATH_TO_POST_INDEX = environment.getProperty("spring.jpa.properties.hibernate.search.backend.directory.root") + "/Post";
     }
 
-    @Override
-    public PostSummaryListDTO searchBySearchTerm(String sortByPublishDtm, Long postCategoryID ,Integer page, Integer pageSize ,String searchTerm) {
+    private SearchResult<Post> getPostSearchResult (String sortByPublishDtm,
+                                                    Long postCategoryID,
+                                                    Integer page,
+                                                    Integer pageSize,
+                                                    String searchTerm,
+                                                    PostStateType postStateType) {
         SearchScope<Post> scope = searchSession.scope(Post.class);
 
         //Build dynamic sorting condition based on user input.
@@ -106,9 +106,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                     b.filter(f.matchAll());
                     if (StringUtils.isNotEmpty(searchTerm)) {
                         b.must(f.match()
-                                .field("title").boost(2.0f)
-                                .field("summary").boost(1.5f)
-                                .field("contentPlainText")
+                                .field("title").boost(PostBusinessConstant.SEARCH_TITLE_BOOST)
+                                .field("summary").boost(PostBusinessConstant.SEARCH_SUMMARY_BOOST)
+                                .field("contentPlainText").boost(PostBusinessConstant.SEARCH_CONTENT_BOOST)
                                 .matching(searchTerm));
                     }
                     if (postCategoryID != null) {
@@ -116,9 +116,31 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                 .field("categoryID")
                                 .matching(em.getReference(PostCategory.class, postCategoryID)));
                     }
+                    if (postStateType != null) {
+                        b.filter(f.match()
+                                .field("postState")
+                                .matching(postStateType));
+                    }
                 }))
                 .sort(sortFinalStep.toSort())
                 .fetch(page * pageSize, pageSize);
+
+        return searchResult;
+    }
+
+    @Override
+    public PostSummaryListDTO searchBySearchTerm(String sortByPublishDtm,
+                                                 Long postCategoryID,
+                                                 Integer page,
+                                                 Integer pageSize,
+                                                 String searchTerm) {
+
+        SearchResult<Post> searchResult = getPostSearchResult(sortByPublishDtm,
+                postCategoryID,
+                page,
+                pageSize,
+                searchTerm,
+                null);
 
         Long resultCount = searchResult.total().hitCountLowerBound();
 
@@ -127,6 +149,31 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         List<PostSummaryDTO> postSummaryListDTOS = postMapper.postListToPostSummaryDTOs(searchResult.hits());
 
         PostSummaryListDTO finalResult = new PostSummaryListDTO(postSummaryListDTOS, totalPages, resultCount);
+
+        return finalResult;
+    }
+
+    @Override
+    public PostSummaryWithStateListDTO getManagementPost(String sortByPublishDtm,
+                                                         Long postCategoryID,
+                                                         Integer page,
+                                                         Integer pageSize,
+                                                         String searchTerm,
+                                                         PostStateType postStateType) {
+        SearchResult<Post> searchResult = getPostSearchResult(sortByPublishDtm,
+                postCategoryID,
+                page,
+                pageSize,
+                searchTerm,
+                postStateType);
+
+        Long resultCount = searchResult.total().hitCountLowerBound();
+
+        Integer totalPages = (int)Math.ceil((double)resultCount / pageSize);
+
+        List<PostSummaryWithStateDTO> postSummaryListDTOS = postMapper.postListToPostSummaryWithStateDTOList(searchResult.hits());
+
+        PostSummaryWithStateListDTO finalResult = new PostSummaryWithStateListDTO(postSummaryListDTOS, totalPages, resultCount);
 
         return finalResult;
     }
@@ -239,6 +286,30 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         return result;
     }
+
+    public List<PostQuickSearchResult> quickSearch (int page, int pageSize, String searchTerm) {
+        SearchResult<Post> searchResult = searchSession.search(Post.class)
+                .where(f -> f.bool(b -> {
+                    b.filter(f.matchAll());
+                    if (StringUtils.isNotEmpty(searchTerm)) {
+                        b.must(f.match()
+                                .field("title").boost(PostBusinessConstant.SEARCH_TITLE_BOOST)
+                                .field("summary").boost(PostBusinessConstant.SEARCH_SUMMARY_BOOST)
+                                .field("contentPlainText").boost(PostBusinessConstant.SEARCH_CONTENT_BOOST)
+                                .matching(searchTerm));
+                    }
+                }))
+                .fetch(page * pageSize, pageSize);
+
+        //TODO: Consider optimize projection so that the result is projected instead of converting from mapper.
+
+        List<Post> queryResult = searchResult.hits();
+
+        List<PostQuickSearchResult> postQuickSearchResults = postQuickSearchResultMapper.postListToPostQuickSearchResultList(searchResult.hits());
+
+        return postQuickSearchResults;
+    }
+
 
     @PreDestroy
     public void cleanUp() throws IOException {

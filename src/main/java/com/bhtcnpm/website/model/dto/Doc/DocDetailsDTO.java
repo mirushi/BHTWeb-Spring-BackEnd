@@ -18,17 +18,15 @@ public class DocDetailsDTO {
 
     private Long categoryID;
 
-    private String docSubject;
+    private String subject;
 
-    private Long docSubjectID;
+    private Long subjectID;
 
     private String title;
 
     private String description;
 
     private String imageURL;
-
-    private String docURL;
 
     private Set<TagDTO> tags;
 

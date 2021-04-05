@@ -12,8 +12,15 @@ import java.util.List;
 
 public interface PostRepositoryCustom {
     PostSummaryListDTO searchBySearchTerm (String sortByPublishDtm, Long postCategoryID ,Integer page, Integer pageSize ,String searchTerm);
+    PostSummaryWithStateListDTO getManagementPost (String sortByPublishDtm,
+                                                   Long postCategoryID,
+                                                   Integer page,
+                                                   Integer pageSize,
+                                                   String searchTerm,
+                                                   PostStateType postStateType);
     List<PostSuggestionDTO> searchRelatedPost(Long authorID, Long categoryID, Post entity, int page , int pageSize) throws IOException;
     PostSummaryWithStateListDTO searchBySearchTermWithState (Predicate predicate, Pageable pageable);
     PostSummaryWithStateAndFeedbackListDTO getPostSummaryStateFeedback (Predicate predicate, Pageable pageable);
     PostDetailsWithStateListDTO getPostDetailsListWithStateFilter(Predicate predicate, Pageable pageable, PostStateType postStateType);
+    List<PostQuickSearchResult> quickSearch (int page, int pageSize, String searchTerm);
 }

@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostSave;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.search.engine.backend.types.Norms;
 import org.hibernate.search.engine.backend.types.Searchable;
@@ -73,6 +74,9 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private Set<UserWebsiteRole> roles;
 
     @Column(nullable = false)
@@ -87,6 +91,8 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             orphanRemoval = true
     )
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private List<Post> postedPosts;
 
     @OneToMany (
@@ -95,6 +101,8 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             orphanRemoval = true
     )
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private List<Doc> postedDocs;
 
     @OneToMany(
@@ -103,6 +111,8 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             orphanRemoval = true
     )
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private List<UserDocReaction> docReactions;
 
     @OneToMany(
@@ -111,6 +121,8 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             orphanRemoval = true
     )
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private List<Notification> notificationsOfUserOwn;
 
     @OneToMany(
@@ -119,6 +131,8 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             orphanRemoval = true
     )
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private Set<UserPostLike> userPostLikes;
 
     @OneToMany (
@@ -127,10 +141,14 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
             orphanRemoval = true
     )
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private Set<UserPostSave> userPostSaves;
 
     @ManyToMany(mappedBy = "usersSaved")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private Set<Course> savedCourses;
 
     @Transient

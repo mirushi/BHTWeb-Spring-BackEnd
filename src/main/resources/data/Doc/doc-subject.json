@@ -1,0 +1,44 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocSubject",
+    "id": 1,
+    "name": "Toán học phổ thông",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocSubject",
+    "id": 2,
+    "name": "Đại cương",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocSubject",
+    "id": 3,
+    "name": "Ngoại ngữ",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocSubject",
+    "id": 4,
+    "name": "Mẹo vặt",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocSubject",
+    "id": 5,
+    "name": "Xác suất thống kê",
+    "docs": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocSubject",
+    "id": 6,
+    "name": "Giải tích",
+    "docs": [],
+    "version": 0
+  }
+]

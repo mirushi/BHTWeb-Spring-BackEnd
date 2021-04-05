@@ -12,15 +12,21 @@ public interface DocSummaryMapper {
 
     DocSummaryMapper INSTANCE = Mappers.getMapper(DocSummaryMapper.class);
 
-    @Mapping(source = "author.id", target = "authorID")
-    @Mapping(source = "author.name", target = "authorName")
-    @Mapping(source = "category.name", target = "category")
-    @Mapping(source = "category.id", target = "categoryID")
-    @Mapping(source = "subject.name", target = "docSubject")
-    @Mapping(source = "subject.id", target = "docSubjectID")
-    @Mapping(source = "downloadCount", target = "downloads")
-    @Mapping(source = "publishDtm", target = "publishDtm")
-    @Mapping(source = "viewCount", target = "views")
+    @Mapping(target = "authorID", source = "author.id")
+    @Mapping(target = "authorName", source = "author.name")
+    @Mapping(target = "categoryID", source = "category.id")
+    @Mapping(target = "category", source = "category.name")
+    @Mapping(target = "subject", source = "subject.name")
+    @Mapping(target = "subjectID", source = "subject.id")
+    @Mapping(target = "downloads", source = "docFileUpload.downloadCount")
+    @Mapping(target = "views", source = "viewCount")
     DocSummaryDTO docToDocSummaryDTO (Doc doc);
 
+    List<DocSummaryDTO> docListToDocSummaryDTOList (List<Doc> docList);
+
+    @Mapping(target = "docSummary", source = ".")
+    @Mapping(target = "docState", source = "docState")
+    DocSummaryWithStateDTO docToDocSummaryWithStateDTO (Doc doc);
+
+    List<DocSummaryWithStateDTO> docListToDocSummaryWithStateDTOList (List<Doc> docList);
 }

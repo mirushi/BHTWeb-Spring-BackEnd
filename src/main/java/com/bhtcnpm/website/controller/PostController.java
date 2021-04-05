@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.util.List;
 
@@ -213,6 +214,19 @@ public class PostController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping(value = "/savedBy")
+    @ResponseBody
+    public ResponseEntity<PostSummaryListDTO> getPostSavedByUserId (
+            @QuerydslPredicate(root = Post.class) Predicate predicate,
+            @RequestParam("userID") Long userID,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "sort", required = false) String sort,
+            @PageableDefault @Nullable Pageable pageable
+    ) {
+        PostSummaryListDTO postsSavedByUser = postService.getPostSavedByUserID(userID, pageable);
+        return new ResponseEntity(postsSavedByUser, HttpStatus.OK);
+    }
+
     @GetMapping("newactivities")
     @ResponseBody
     public ResponseEntity<List<PostSummaryDTO>> getNewActivities () {
@@ -273,4 +287,21 @@ public class PostController {
     ) {
         return new ResponseEntity<>(postService.getPostDetailsWithState(predicate, pageable, PostStateType.PENDING_APPROVAL), HttpStatus.OK);
     }
+
+    @GetMapping("getManagementPost")
+    @ResponseBody
+    public ResponseEntity<PostSummaryWithStateListDTO> getManagementPost (
+            @RequestParam(value = "searchTerm", required = false) String searchTerm,
+            @RequestParam(value = "postState", required = false) PostStateType postStateType,
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "sortByPublishDtm", required = false) String sortByPublishDtm,
+            @RequestParam(value = "postCategoryID", required = false) Long postCategoryID
+    ) {
+        return new ResponseEntity<>(postService.getManagementPost(searchTerm,
+                postStateType,
+                page,
+                sortByPublishDtm,
+                postCategoryID), HttpStatus.OK);
+    }
+
 }

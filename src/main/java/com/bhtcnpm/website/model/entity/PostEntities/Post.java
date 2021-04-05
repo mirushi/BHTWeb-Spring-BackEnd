@@ -3,25 +3,26 @@ package com.bhtcnpm.website.model.entity.PostEntities;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
-import com.bhtcnpm.website.search.bridge.AuthorValueBridge;
-import com.bhtcnpm.website.search.bridge.PostCategoryValueBridge;
+import com.bhtcnpm.website.search.bridge.UserWebsiteIDValueBridge;
+import com.bhtcnpm.website.search.bridge.PostCategoryIDValueBridge;
 import com.bhtcnpm.website.search.bridge.TagValueBridge;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.Loader;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.hibernate.search.engine.backend.types.*;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
-import org.hibernate.search.mapper.pojo.extractor.builtin.BuiltinContainerExtractors;
-import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -67,12 +68,16 @@ public class Post {
 
     @Column(nullable = false)
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime publishDtm;
 
     @ManyToOne
     private UserWebsite lastUpdatedBy;
 
     @Column
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime lastUpdatedDtm;
 
     @Column(nullable = false)
@@ -95,18 +100,17 @@ public class Post {
     @Column
     private String adminFeedback;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @IndexedEmbedded(name = "author")
-    //TODO: Maybe try to convert GenericField into IndexedEmbedded too.
     @GenericField(
-            valueBridge = @ValueBridgeRef(type = AuthorValueBridge.class),
+            valueBridge = @ValueBridgeRef(type = UserWebsiteIDValueBridge.class),
             searchable = Searchable.YES,
             name = "authorID")
     private UserWebsite author;
 
     @ManyToOne
     @GenericField(
-            valueBridge = @ValueBridgeRef(type = PostCategoryValueBridge.class),
+            valueBridge = @ValueBridgeRef(type = PostCategoryIDValueBridge.class),
             searchable = Searchable.YES,
             name = "categoryID"
     )
@@ -114,15 +118,8 @@ public class Post {
 
     @Enumerated
     @Column(columnDefinition = "smallint")
+    @GenericField(projectable = Projectable.YES, searchable = Searchable.YES)
     private PostStateType postState;
-
-    @OneToMany(
-            mappedBy = "post",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @EqualsAndHashCode.Exclude
-    private List<PostComment> comments;
 
     @OneToMany (
             mappedBy = "userPostLikeId.post",
@@ -130,6 +127,8 @@ public class Post {
             orphanRemoval = true
     )
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private Set<UserPostLike> userPostLikes;
 
     @OneToMany (
@@ -138,6 +137,8 @@ public class Post {
             orphanRemoval = true
     )
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private Set<UserPostSave> userPostSaves;
 
     @ManyToMany(cascade = {
@@ -150,10 +151,15 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     @EqualsAndHashCode.Exclude
-    @KeywordField(searchable = Searchable.YES,
+    @KeywordField(name = "tags_kw", searchable = Searchable.YES,
             valueBridge = @ValueBridgeRef(type = TagValueBridge.class))
+    @IndexedEmbedded(name = "tags_eb")
+    @ToString.Exclude
+    @JsonIgnore
     private Set<Tag> tags;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime deletedDate;
 
     @Version

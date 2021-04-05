@@ -1,10 +1,14 @@
 package com.bhtcnpm.website.service.impl;
 
+import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
+import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
-import com.bhtcnpm.website.model.entity.DocFileUploadRepository;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
+import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.repository.DocFileUploadRepository;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
@@ -14,7 +18,7 @@ import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.DocService;
 import com.bhtcnpm.website.service.GoogleDriveService;
-import com.google.api.services.drive.model.File;
+import com.bhtcnpm.website.util.EnumConverter;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -29,9 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -55,6 +57,8 @@ public class DocServiceImpl implements DocService {
     private final DocSummaryMapper docSummaryMapper;
 
     private final DocRequestMapper docRequestMapper;
+
+    private final DocDownloadInfoMapper docDownloadInfoMapper;
 
     private final DocRepository docRepository;
 
@@ -217,16 +221,50 @@ public class DocServiceImpl implements DocService {
 
         List<DocCommentStatisticDTO> docCommentStatisticDTOs = docCommentRepository.getDocCommentStatistic(docIDs);
 
-        int totalIDs = docReactionStatisticDTOs.size();
+        //Tạo ra một HashMap để search nhanh ra các Statistic ứng với từng docID.
+        Map<Long, DocReactionStatisticDTO> docReactionStatisticDTOMap = new HashMap<>();
+        Map<Long, DocUserOwnReactionStatisticDTO> docUserOwnReactionStatisticDTOMap = new HashMap<>();
+        Map<Long, DocCommentStatisticDTO> docCommentStatisticDTOMap = new HashMap<>();
+
+        for (DocReactionStatisticDTO dto : docReactionStatisticDTOs) {
+            docReactionStatisticDTOMap.put(dto.getDocID(), dto);
+        }
+        for (DocUserOwnReactionStatisticDTO dto : docUserOwnReactionStatisticDTOs) {
+            docUserOwnReactionStatisticDTOMap.put(dto.getDocID(), dto);
+        }
+        for (DocCommentStatisticDTO dto : docCommentStatisticDTOs) {
+            docCommentStatisticDTOMap.put(dto.getDocID(), dto);
+        }
+
+        int totalIDs = docIDs.size();
 
         List<DocStatisticDTO> resultList = new ArrayList<>(totalIDs);
 
         for (int i = 0;i < totalIDs; ++i) {
-            Long docID = docReactionStatisticDTOs.get(i).getDocID();
+            Long docID = docIDs.get(i);
 
-            DocReactionStatisticDTO docReactionStatisticDTO = docReactionStatisticDTOs.get(i);
-            DocUserOwnReactionStatisticDTO docUserOwnReactionStatisticDTO = docUserOwnReactionStatisticDTOs.get(i);
-            DocCommentStatisticDTO docCommentStatisticDTO = docCommentStatisticDTOs.get(i);
+            DocReactionStatisticDTO docReactionStatisticDTO = docReactionStatisticDTOMap.get(docID);
+            if (docReactionStatisticDTO == null) {
+                docReactionStatisticDTO = DocReactionStatisticDTO.builder()
+                        .docID(docID)
+                        .dislikeCount(0L)
+                        .likeCount(0L)
+                        .build();
+            }
+            DocUserOwnReactionStatisticDTO docUserOwnReactionStatisticDTO = docUserOwnReactionStatisticDTOMap.get(docID);
+            if (docUserOwnReactionStatisticDTO == null) {
+                docUserOwnReactionStatisticDTO = DocUserOwnReactionStatisticDTO.builder()
+                        .docID(docID)
+                        .docReactionType(DocReactionType.NONE)
+                        .build();
+            }
+            DocCommentStatisticDTO docCommentStatisticDTO = docCommentStatisticDTOMap.get(docID);
+            if (docCommentStatisticDTO == null) {
+                docCommentStatisticDTO = DocCommentStatisticDTO.builder()
+                        .docID(docID)
+                        .commentCount(0L)
+                        .build();
+            }
 
             resultList.add(new DocStatisticDTO(docID,
                     docReactionStatisticDTO.getLikeCount(), docReactionStatisticDTO.getDislikeCount(),
@@ -247,11 +285,20 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocSummaryListDTO getPostBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
-        //Reset PAGE_SIZE to predefined value.
-        pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
-
-        DocSummaryListDTO queryResult = docRepository.searchBySearchTerm(predicate, pageable, searchTerm);
+    public DocSummaryListDTO getDocBySearchTerm(
+            String searchTerm,
+            Integer page,
+            ApiSortOrder sortByPublishDtm,
+            Long categoryID,
+            Long subjectID
+    ) {
+        DocSummaryListDTO queryResult = docRepository.searchBySearchTerm(
+                searchTerm,
+                page,
+                PAGE_SIZE,
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByPublishDtm),
+                categoryID,
+                subjectID);
 
         return queryResult;
     }
@@ -280,6 +327,7 @@ public class DocServiceImpl implements DocService {
             .fileName(multipartFile.getOriginalFilename())
             .fileSize(multipartFile.getSize())
             .downloadURL(uploadedFile.getWebViewLink())
+            .thumbnailURL(String.format(DocFileUploadConstant.DRIVE_THUMBNAIL_URL, uploadedFile.getId()))
             .uploader(author)
             .build();
 
@@ -291,4 +339,34 @@ public class DocServiceImpl implements DocService {
                 .fileSize(multipartFile.getSize())
                 .build();
     }
+
+    @Override
+    public DocDownloadInfoDTO getDocDownloadInfo(String fileCode) {
+        UUID uuid = UUID.fromString(fileCode);
+
+        DocFileUpload file = docFileUploadRepository.findByCode(UUID.fromString(fileCode));
+
+        return docDownloadInfoMapper.docFileUploadToDocDownloadInfoDTO(file);
+    }
+
+    @Override
+    public DocSummaryWithStateListDTO getManagementDoc(
+            String searchTerm,
+            DocStateType docStateType,
+            Long subjectID,
+            Long categoryID,
+            Integer page
+    ) {
+        DocSummaryWithStateListDTO dtoList = docRepository.getManagementDocs(
+                null,
+                categoryID,
+                subjectID,
+                page,
+                PAGE_SIZE,
+                searchTerm,
+                docStateType
+        );
+        return dtoList;
+    }
+
 }

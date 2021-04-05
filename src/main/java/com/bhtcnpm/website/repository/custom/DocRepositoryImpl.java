@@ -1,12 +1,12 @@
 package com.bhtcnpm.website.repository.custom;
 
-import com.bhtcnpm.website.model.dto.Doc.DocReactionStatisticDTO;
-import com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO;
-import com.bhtcnpm.website.model.dto.Doc.DocSummaryListDTO;
-import com.bhtcnpm.website.model.entity.DocEntities.Doc;
-import com.bhtcnpm.website.model.entity.DocEntities.QDoc;
-import com.bhtcnpm.website.model.entity.DocEntities.QUserDocReaction;
+import com.bhtcnpm.website.constant.business.Doc.DocBusinessConstant;
+import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
+import com.bhtcnpm.website.model.dto.Doc.*;
+import com.bhtcnpm.website.model.entity.DocEntities.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
+import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
+import com.bhtcnpm.website.search.lucene.LuceneIndexUtils;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Predicate;
@@ -14,14 +14,23 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.index.IndexReader;
+import org.hibernate.search.engine.search.query.SearchResult;
+import org.hibernate.search.engine.search.sort.dsl.SortOrder;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.IOException;
 import java.util.List;
 
+@Component
 public class DocRepositoryImpl implements DocRepositoryCustom {
 
     @PersistenceContext
@@ -33,22 +42,32 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     private final EntityPath<Doc> path;
     private final PathBuilder<Doc> builder;
 
+    private final SearchSession searchSession;
+
+    private final IndexReader luceneIndexReader;
+
+    private final DocSummaryMapper docSummaryMapper;
+
     private final Querydsl querydsl;
 
-    public DocRepositoryImpl (EntityManager em) {
+    public DocRepositoryImpl (EntityManager em, DocSummaryMapper docSummaryMapper) throws IOException {
         this.em = em;
         this.path = SimpleEntityPathResolver.INSTANCE.createPath(Doc.class);
         this.builder = new PathBuilder<Doc>(path.getType(), path.getMetadata());
         this.querydsl = new Querydsl(em, builder);
+        this.docSummaryMapper = docSummaryMapper;
+
+        this.luceneIndexReader = LuceneIndexUtils.getReader("Doc");
+        this.searchSession = Search.session(em);
     }
 
     @Override
     public List<DocSummaryDTO> getTrendingDoc(Pageable pageable) {
          JPAQuery query = new JPAQuery<Doc>(em)
-                 .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.name, qDoc.category.id, qDoc.category.name, qDoc.subject.id, qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.downloadCount, qDoc.viewCount, qDoc.version))
+                 .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.name, qDoc.category.id, qDoc.category.name, qDoc.subject.id, qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.docFileUpload.downloadCount, qDoc.viewCount, qDoc.version))
                  .from(qDoc)
                  .join(qUserDocReaction).on(qUserDocReaction.userDocReactionId.doc.id.eq(qDoc.id))
-                 .orderBy(qDoc.downloadCount.desc())
+                 .orderBy(qDoc.docFileUpload.downloadCount.desc())
                  .groupBy(qDoc);
 
          JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
@@ -67,26 +86,112 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     }
 
     @Override
-    public DocSummaryListDTO searchBySearchTerm(Predicate predicate, Pageable pageable, String searchTerm) {
+    public DocSummaryListDTO searchBySearchTerm(String searchTerm,
+                                                Integer page,
+                                                Integer pageSize,
+                                                SortOrder sortByPublishDtm,
+                                                Long categoryID,
+                                                Long subjectID) {
 
-        JPAQuery query = new JPAQuery<Post>(em)
-                .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.name, qDoc.category.id, qDoc.category.name,qDoc.subject.id,qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.downloadCount, qDoc.viewCount, qDoc.version))
-                .from(qDoc)
-                .where(qDoc.title.contains(searchTerm), predicate);
+        //TODO: DocState may need to depend on ACL.
+        SearchResult<Doc> searchResult = getDocSearchResult(
+                sortByPublishDtm,
+                categoryID,
+                subjectID,
+                page,
+                pageSize,
+                searchTerm,
+                null
+        );
 
-        JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
+        Long resultCount = searchResult.total().hitCountLowerBound();
 
-        QueryResults queryResults = finalQuery.fetchResults();
+        Integer totalPages = (int)Math.ceil((double)resultCount / pageSize);
 
-        List<DocSummaryDTO> listSummaryDTOs = queryResults.getResults();
+        List<DocSummaryDTO> listSummaryDTOs = docSummaryMapper.docListToDocSummaryDTOList(searchResult.hits());
 
-        Long resultCount = finalQuery.fetchResults().getTotal();
+        DocSummaryListDTO finalResult = new DocSummaryListDTO(listSummaryDTOs, totalPages, resultCount);
 
-        Integer totalPages = (int)Math.ceil((double)resultCount / pageable.getPageSize());
+        return finalResult;
+    }
 
-        DocSummaryListDTO result = new DocSummaryListDTO(listSummaryDTOs, totalPages, resultCount);
+    @Override
+    public DocSummaryWithStateListDTO getManagementDocs(SortOrder sortByPublishDtm,
+                                                        Long categoryID,
+                                                        Long subjectID,
+                                                        Integer page,
+                                                        Integer pageSize,
+                                                        String searchTerm,
+                                                        DocStateType docStateType) {
+        SearchResult<Doc> searchResult = getDocSearchResult(
+                sortByPublishDtm,
+                categoryID,
+                subjectID,
+                page,
+                pageSize,
+                searchTerm,
+                docStateType
+        );
 
-        return result;
+        Long resultCount = searchResult.total().hitCountLowerBound();
+
+        Integer totalPages = (int)Math.ceil((double)resultCount / pageSize);
+
+        List<DocSummaryWithStateDTO> docSummaryDTOs = docSummaryMapper.docListToDocSummaryWithStateDTOList(searchResult.hits());
+
+        DocSummaryWithStateListDTO finalResult = new DocSummaryWithStateListDTO(
+                docSummaryDTOs,
+                totalPages,
+                resultCount
+        );
+
+        return finalResult;
+    }
+
+    private SearchResult<Doc> getDocSearchResult (SortOrder sortByPublishDtm,
+                                                  Long categoryID,
+                                                  Long subjectID,
+                                                  Integer page,
+                                                  Integer pageSize,
+                                                  String searchTerm,
+                                                  DocStateType docState) {
+        SearchResult<Doc> searchResult = searchSession.search(Doc.class)
+                .where(f -> f.bool(b -> {
+                    b.filter(f.matchAll());
+                    if (StringUtils.isNotEmpty(searchTerm)) {
+                        b.must(f.match()
+                                .field("title").boost(DocBusinessConstant.SEARCH_TITLE_BOOST)
+                                .field("description").boost(DocBusinessConstant.SEARCH_DESCRIPTION_BOOST)
+                                .matching(searchTerm)
+                        );
+                    }
+                    if (categoryID != null) {
+                        b.filter(f.match()
+                                .field("categoryID")
+                                .matching(em.getReference(DocCategory.class, categoryID))
+                        );
+                    }
+                    if (subjectID != null) {
+                        b.filter(f.match()
+                                .field("subjectID")
+                                .matching(em.getReference(DocSubject.class, subjectID))
+                        );
+                    }
+                    if (docState != null) {
+                        b.filter(f.match()
+                                .field("docState")
+                                .matching(docState)
+                        );
+                    }
+                }))
+                .sort(f -> f.composite( b -> {
+                    if (sortByPublishDtm != null) {
+                        b.add(f.field("publishDtm").order(sortByPublishDtm));
+                    }
+                }))
+                .fetch(page * pageSize, pageSize);
+
+        return searchResult;
     }
 
 }
