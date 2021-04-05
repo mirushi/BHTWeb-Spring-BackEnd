@@ -18,7 +18,13 @@ public interface DocService {
 
     DocDetailsListDTO getAllDoc (Predicate predicate, @Min(0)Integer paginator);
 
-    DocSummaryListDTO getAllPendingApprovalDoc (@Min(0)Integer paginator);
+    DocSummaryListDTO getAllPendingApprovalDoc (
+            String searchTerm,
+            DocStateType docState,
+            Long subjectID,
+            Long categoryID,
+            Integer page
+    );
 
     DocSummaryListDTO getMyDocuments (Long userID ,@Min(0)Integer paginator);
 

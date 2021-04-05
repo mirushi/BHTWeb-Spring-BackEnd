@@ -40,7 +40,12 @@ public class DocController {
 
     @GetMapping("pendingDocuments")
     @ResponseBody
-    public ResponseEntity<DocSummaryListDTO> getPendingApprovalDocuments (@NotNull @Min(0) Integer paginator) {
+    public ResponseEntity<DocSummaryListDTO> getPendingApprovalDocuments (
+            @RequestParam(value = "searchTerm") String searchTerm,
+            @RequestParam(value = "docState") DocStateType docState,
+            @RequestParam(value = "subjectID", required = false) Long subjectID,
+            @RequestParam(value = "categoryID", required = false) Long categoryID,
+            @RequestParam(value = "page") Integer page) {
         DocSummaryListDTO result = docService.getAllPendingApprovalDoc(paginator);
 
         return new ResponseEntity<>(result, HttpStatus.OK);

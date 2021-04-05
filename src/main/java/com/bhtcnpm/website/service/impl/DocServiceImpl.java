@@ -86,7 +86,13 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocSummaryListDTO getAllPendingApprovalDoc(@Min(0) Integer paginator) {
+    public DocSummaryListDTO getAllPendingApprovalDoc(
+            String searchTerm,
+            DocStateType docState,
+            Long subjectID,
+            Long categoryID,
+            Integer page
+    ) {
         //Create a pagable.
         Pageable pageable = PageRequest.of(paginator, PAGE_SIZE, Sort.by("publishDtm").descending());
 
