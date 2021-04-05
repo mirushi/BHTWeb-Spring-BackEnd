@@ -7,7 +7,6 @@ import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
-import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.DocFileUploadRepository;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
@@ -88,39 +87,50 @@ public class DocServiceImpl implements DocService {
     @Override
     public DocSummaryListDTO getAllPendingApprovalDoc(
             String searchTerm,
-            DocStateType docState,
             Long subjectID,
             Long categoryID,
-            Integer page
+            Long authorID,
+            Integer page,
+            ApiSortOrder sortByCreatedDtm
     ) {
         //Create a pagable.
-        Pageable pageable = PageRequest.of(paginator, PAGE_SIZE, Sort.by("publishDtm").descending());
+        DocSummaryListDTO dtoList = docRepository.getDocSummaryList(
+                searchTerm,
+                categoryID,
+                subjectID,
+                authorID,
+                DocStateType.PENDING_APPROVAL,
+                page,
+                PAGE_SIZE,
+                null,
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByCreatedDtm)
+        );
 
-        Page<Doc> pendingApprovalDocs = docRepository.findByDocState(pageable ,DocStateType.PENDING_APPROVAL);
-
-
-        List<DocSummaryDTO> docSummaryDTOS = StreamSupport
-                .stream(pendingApprovalDocs.spliterator(), false)
-                .map(docSummaryMapper::docToDocSummaryDTO)
-                .collect(Collectors.toList());
-
-        return new DocSummaryListDTO(docSummaryDTOS, pendingApprovalDocs.getTotalPages(), pendingApprovalDocs.getTotalElements());
+        return dtoList;
     }
 
     @Override
-    public DocSummaryListDTO getMyDocuments(Long userID, @Min(0) Integer paginator) {
-        //Create a pagable.
-        Pageable pageable = PageRequest.of(paginator, PAGE_SIZE, Sort.by("publishDtm").descending());
+    public DocSummaryListDTO getMyDocuments(String searchTerm,
+                                            Long categoryID,
+                                            Long subjectID,
+                                            DocStateType docState,
+                                            Integer page,
+                                            ApiSortOrder sortByPublishDtm,
+                                            ApiSortOrder sortByCreatedDtm,
+                                            Long userID) {
+        DocSummaryListDTO dtoList = docRepository.getDocSummaryList(
+                searchTerm,
+                categoryID,
+                subjectID,
+                userID,
+                docState,
+                page,
+                PAGE_SIZE,
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByPublishDtm),
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByCreatedDtm)
+        );
 
-        Page<Doc> pendingApprovalDocs = docRepository.findByAuthorId(pageable, userID);
-
-
-        List<DocSummaryDTO> docSummaryDTOS = StreamSupport
-                .stream(pendingApprovalDocs.spliterator(), false)
-                .map(docSummaryMapper::docToDocSummaryDTO)
-                .collect(Collectors.toList());
-
-        return new DocSummaryListDTO(docSummaryDTOS, pendingApprovalDocs.getTotalPages(), pendingApprovalDocs.getTotalElements());
+        return dtoList;
     }
 
     @Override
@@ -293,18 +303,23 @@ public class DocServiceImpl implements DocService {
     @Override
     public DocSummaryListDTO getDocBySearchTerm(
             String searchTerm,
-            Integer page,
-            ApiSortOrder sortByPublishDtm,
             Long categoryID,
-            Long subjectID
+            Long subjectID,
+            Long authorID,
+            Integer page,
+            ApiSortOrder sortByPublishDtm
     ) {
-        DocSummaryListDTO queryResult = docRepository.searchBySearchTerm(
+        //TODO: DocState depends on ACL.
+        DocSummaryListDTO queryResult = docRepository.getDocSummaryList(
                 searchTerm,
+                categoryID,
+                subjectID,
+                authorID,
+                null,
                 page,
                 PAGE_SIZE,
                 EnumConverter.apiSortOrderToHSearchSortOrder(sortByPublishDtm),
-                categoryID,
-                subjectID);
+                null);
 
         return queryResult;
     }
@@ -358,19 +373,24 @@ public class DocServiceImpl implements DocService {
     @Override
     public DocSummaryWithStateListDTO getManagementDoc(
             String searchTerm,
-            DocStateType docStateType,
-            Long subjectID,
             Long categoryID,
-            Integer page
+            Long subjectID,
+            Long authorID,
+            DocStateType docState,
+            Integer page,
+            ApiSortOrder sortByPublishDtm,
+            ApiSortOrder sortByCreatedDtm
     ) {
-        DocSummaryWithStateListDTO dtoList = docRepository.getManagementDocs(
-                null,
+        DocSummaryWithStateListDTO dtoList = docRepository.getDocSummaryWithStateList(
+                searchTerm,
                 categoryID,
                 subjectID,
+                authorID,
+                docState,
                 page,
                 PAGE_SIZE,
-                searchTerm,
-                docStateType
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByPublishDtm),
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByCreatedDtm)
         );
         return dtoList;
     }
