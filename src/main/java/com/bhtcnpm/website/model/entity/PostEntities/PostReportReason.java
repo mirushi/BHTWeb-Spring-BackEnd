@@ -4,10 +4,12 @@ import lombok.Data;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "post_report_reason")
 @Data
-public class UserPostReport {
+public class PostReportReason {
     @EmbeddedId
-    private UserPostReportId userPostReportId;
+    private PostReportReasonId postReportReasonId;
 }

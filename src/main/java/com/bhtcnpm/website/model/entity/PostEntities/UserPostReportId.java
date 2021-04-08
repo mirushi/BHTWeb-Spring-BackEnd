@@ -11,26 +11,21 @@ import java.util.Objects;
 
 @Embeddable
 @Data
-public class UserPostLikeId implements Serializable {
-
+public class UserPostReportId implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserWebsite user;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @JoinColumn(name = "post_report_id")
+    private PostReport postReport;
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals (Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserPostLikeId)) return false;
-        UserPostLikeId that = (UserPostLikeId) o;
+        if (!(o instanceof UserPostReportId)) return false;
+        UserPostReportId that = (UserPostReportId) o;
         return Objects.equals(getUser(), that.getUser()) &&
-                Objects.equals(getPost(), that.getPost());
+                Objects.equals(getPostReport(), that.getPostReport());
     }
-
-    @Override
-    public int hashCode() {return Objects.hash(getUser(), getPost());}
-
 }

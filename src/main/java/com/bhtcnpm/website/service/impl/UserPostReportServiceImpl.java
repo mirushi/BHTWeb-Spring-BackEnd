@@ -2,7 +2,7 @@ package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.model.dto.UserPostReport.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
-import com.bhtcnpm.website.model.entity.PostEntities.UserPostReport;
+import com.bhtcnpm.website.model.entity.PostEntities.PostReport;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,7 +40,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
         UserWebsite reporter = userWebsiteRepository.getOne(userId);
         String reason = dto.getReason();
 
-        UserPostReport entity = UserPostReport.builder()
+        PostReport entity = PostReport.builder()
                 .post(postProxy)
                 .reporter(reporter)
                 .reason(reason)
@@ -55,7 +54,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
 
     @Override
     public Boolean resolveReport (Long userId, Long reportId, @Valid UserPostReportResolveRequestDTO dto) throws IDNotFoundException {
-        Optional<UserPostReport> report = userPostReportRepository.findById(reportId);
+        Optional<PostReport> report = userPostReportRepository.findById(reportId);
         UserWebsite resolver = userWebsiteRepository.getOne(userId);
         PostReportActionType actionType = dto.getPostReportActionType();
         String resolvedNote = dto.getResolvedNote();
@@ -64,13 +63,13 @@ public class UserPostReportServiceImpl implements UserPostReportService {
             throw new IDNotFoundException();
         }
 
-        UserPostReport userPostReport = report.get();
-        userPostReport.setResolvedBy(resolver);
-        userPostReport.setResolvedNote(resolvedNote);
-        userPostReport.setResolvedTime(LocalDateTime.now());
-        userPostReport.setActionTaken(actionType);
+        PostReport postReport = report.get();
+        postReport.setResolvedBy(resolver);
+        postReport.setResolvedNote(resolvedNote);
+        postReport.setResolvedTime(LocalDateTime.now());
+        postReport.setActionTaken(actionType);
 
-        userPostReportRepository.save(userPostReport);
+        userPostReportRepository.save(postReport);
 
         return true;
     }
@@ -79,7 +78,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
     public UserPostReportListDTO getUserReports(Pageable pageable, Boolean isResolved) {
         //Reset PAGE_SIZE to predefined value.
         pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
-        Page<UserPostReport> userPostReports;
+        Page<PostReport> userPostReports;
 
         if (isResolved == null) {
             userPostReports = userPostReportRepository.findAll(pageable);
