@@ -32,9 +32,9 @@ public class DocSummaryDTO {
 
     private LocalDateTime publishDtm;
 
-    private Long downloads;
+    private Long downloadCount;
 
-    private Long views;
+    private Long viewCount;
 
     private Short version;
 }

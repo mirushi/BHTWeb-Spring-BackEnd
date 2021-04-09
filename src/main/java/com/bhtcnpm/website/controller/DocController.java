@@ -8,6 +8,7 @@ import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Request;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,56 @@ public class DocController {
             @QuerydslPredicate(root = Doc.class) Predicate predicate,
             @NotNull @Min(0) Integer paginator) {
         DocDetailsListDTO result = docService.getAllDoc(predicate,paginator);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("pendingDocuments")
+    @ResponseBody
+    public ResponseEntity<DocSummaryListDTO> getPendingApprovalDocuments (
+            @RequestParam(value = "searchTerm", required = false) String searchTerm,
+            @RequestParam(value = "docState", required = false) DocStateType docState,
+            @RequestParam(value = "subjectID", required = false) Long subjectID,
+            @RequestParam(value = "categoryID", required = false) Long categoryID,
+            @RequestParam(value = "authorID", required = false) Long authorID,
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "sortByCreatedTime", required = false) ApiSortOrder sortByCreatedTime) {
+        DocSummaryListDTO result = docService.getAllPendingApprovalDoc(
+                searchTerm,
+                subjectID,
+                categoryID,
+                authorID,
+                page,
+                sortByCreatedTime
+        );
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("myDocuments")
+    @ResponseBody
+    public ResponseEntity<DocSummaryWithStateListDTO> getMyDocuments (
+            @RequestParam(value = "searchTerm", required = false) String searchTerm,
+            @RequestParam(value = "subjectID", required = false) Long subjectID,
+            @RequestParam(value = "categoryID", required = false) Long categoryID,
+            @RequestParam(value = "docState", required = false) DocStateType docState,
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
+            @RequestParam(value = "sortByCreatedDtm", required = false) ApiSortOrder sortByCreatedDtm
+    ) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        Long userID = 1L;
+
+        DocSummaryWithStateListDTO result = docService.getMyDocuments(
+                searchTerm,
+                categoryID,
+                subjectID,
+                docState,
+                page,
+                sortByPublishDtm,
+                sortByCreatedDtm,
+                userID
+        );
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -169,18 +220,20 @@ public class DocController {
     @GetMapping("searchFilter")
     @ResponseBody
     public ResponseEntity<DocSummaryListDTO> searchFilter (
-            @RequestParam(value = "searchTerm") String searchTerm,
-            @RequestParam(value = "page") Integer page,
-            @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
+            @RequestParam(value = "searchTerm", required = false) String searchTerm,
             @RequestParam(value = "categoryID", required = false) Long categoryID,
-            @RequestParam(value = "subjectID", required = false) Long subjectID) {
+            @RequestParam(value = "subjectID", required = false) Long subjectID,
+            @RequestParam(value = "authorID", required = false) Long authorID,
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm) {
 
         DocSummaryListDTO dtoList = docService.getDocBySearchTerm(
                 searchTerm,
-                page,
-                sortByPublishDtm,
                 categoryID,
-                subjectID
+                subjectID,
+                authorID,
+                page,
+                sortByPublishDtm
         );
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
@@ -204,21 +257,27 @@ public class DocController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping("getManagementDoc")
+        @GetMapping("getManagementDoc")
     @ResponseBody
     public ResponseEntity<DocSummaryWithStateListDTO> getManagementDoc (
-            @RequestParam(value = "searchTerm") String searchTerm,
-            @RequestParam(value = "docState") DocStateType docState,
+            @RequestParam(value = "searchTerm", required = false) String searchTerm,
             @RequestParam(value = "subjectID", required = false) Long subjectID,
             @RequestParam(value = "categoryID", required = false) Long categoryID,
-            @RequestParam(value = "page") Integer page
+            @RequestParam(value = "authorID", required = false) Long authorID,
+            @RequestParam(value = "docState", required = false) DocStateType docState,
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
+            @RequestParam(value = "sortByCreatedDtm", required = false) ApiSortOrder sortByCreatedDtm
     ) {
         DocSummaryWithStateListDTO dtoList = docService.getManagementDoc(
                 searchTerm,
-                docState,
-                subjectID,
                 categoryID,
-                page
+                subjectID,
+                authorID,
+                docState,
+                page,
+                sortByPublishDtm,
+                sortByCreatedDtm
         );
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);

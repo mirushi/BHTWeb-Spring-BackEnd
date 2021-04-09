@@ -18,6 +18,24 @@ public interface DocService {
 
     DocDetailsListDTO getAllDoc (Predicate predicate, @Min(0)Integer paginator);
 
+    DocSummaryListDTO getAllPendingApprovalDoc (
+            String searchTerm,
+            Long subjectID,
+            Long categoryID,
+            Long authorID,
+            Integer page,
+            ApiSortOrder sortByCreatedDtm
+    );
+
+    DocSummaryWithStateListDTO getMyDocuments (String searchTerm,
+                                      Long categoryID,
+                                      Long subjectID,
+                                      DocStateType docState,
+                                      Integer page,
+                                      ApiSortOrder sortByPublishDtm,
+                                      ApiSortOrder sortByCreatedDtm,
+                                      Long userID);
+
     DocDetailsDTO putDoc (Long docID, Long lastEditedUserID, DocRequestDTO docRequestDTO);
 
     Boolean postApproval (Long docID, Long userID);
@@ -42,20 +60,25 @@ public interface DocService {
 
     DocSummaryListDTO getDocBySearchTerm(
             String searchTerm,
-            Integer page,
-            ApiSortOrder sortByPublishDtm,
             Long categoryID,
-            Long subjectID
+            Long subjectID,
+            Long authorID,
+            Integer page,
+            ApiSortOrder sortByPublishDtm
     );
+
     DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Long userID) throws IOException, FileExtensionNotAllowedException;
 
     DocDownloadInfoDTO getDocDownloadInfo (String fileCode);
 
     DocSummaryWithStateListDTO getManagementDoc(
             String searchTerm,
-            DocStateType docStateType,
-            Long subjectID,
             Long categoryID,
-            Integer page
+            Long subjectID,
+            Long authorID,
+            DocStateType docState,
+            Integer page,
+            ApiSortOrder sortByPublishDtm,
+            ApiSortOrder sortByCreatedDtm
     );
 }

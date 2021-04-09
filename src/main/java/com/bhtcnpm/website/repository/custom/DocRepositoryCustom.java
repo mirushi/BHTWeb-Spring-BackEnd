@@ -21,19 +21,24 @@ public interface DocRepositoryCustom {
 
     List<DocReactionStatisticDTO> getDocStatisticsWithUserID (List<Long> docIds, Long userID);
 
-    DocSummaryListDTO searchBySearchTerm (String searchTerm,
-                                          Integer page,
-                                          Integer pageSize,
-                                          SortOrder sortByPublishDtm,
-                                          Long categoryID,
-                                          Long subjectID);
+    DocSummaryListDTO getDocSummaryList (String searchTerm,
+                                         Long categoryID,
+                                         Long subjectID,
+                                         Long authorID,
+                                         DocStateType docStateType,
+                                         Integer page,
+                                         Integer pageSize,
+                                         SortOrder sortByPublishDtm,
+                                         SortOrder sortByCreatedDtm);
 
-    DocSummaryWithStateListDTO getManagementDocs (SortOrder sortByPublishDtm,
-                                                  Long categoryID,
-                                                  Long subjectID,
-                                                  Integer page,
-                                                  Integer pageSize,
-                                                  String searchTerm,
-                                                  DocStateType docStateType);
+    DocSummaryWithStateListDTO getDocSummaryWithStateList(String searchTerm,
+                                                          Long categoryID,
+                                                          Long subjectID,
+                                                          Long authorID,
+                                                          DocStateType docStateType,
+                                                          Integer page,
+                                                          Integer pageSize,
+                                                          SortOrder sortByPublishDtm,
+                                                          SortOrder sortByCreatedDtm);
 
 }
