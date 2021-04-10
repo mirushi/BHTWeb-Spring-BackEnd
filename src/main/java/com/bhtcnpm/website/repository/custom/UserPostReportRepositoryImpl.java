@@ -25,11 +25,4 @@ public class UserPostReportRepositoryImpl implements UserPostReportRepositoryCus
         this.entityManager = entityManager;
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
-
-    @Override
-    public List<UserPostReport> getUserReports(Pageable pageable, Boolean isResolved) {
-
-
-        return null;
-    }
 }

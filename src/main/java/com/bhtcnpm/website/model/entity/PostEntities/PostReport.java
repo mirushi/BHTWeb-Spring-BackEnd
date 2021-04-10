@@ -12,54 +12,46 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "user_post_report")
+@Table(name = "post_report")
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ValidUPREntity
 @NamedEntityGraph(
-        name = "postreport.reporter-reason",
+        name = "postReport.all",
         attributeNodes = {
-                @NamedAttributeNode(value = "reporters"),
-                @NamedAttributeNode(value = "reasons")
+                @NamedAttributeNode(value = "userPostReports")
         }
 )
 public class PostReport {
-
     @Id
     @GeneratedValue (
             strategy = GenerationType.SEQUENCE,
-            generator = "user_post_report_sequence"
+            generator = "post_report_sequence"
     )
     @SequenceGenerator(
-            name = "user_post_report_sequence",
-            sequenceName = "user_post_report_sequence"
+            name = "post_report_sequence",
+            sequenceName = "post_report_sequence"
     )
     private Long id;
 
-    @OneToMany (
-            mappedBy = "userPostReportId.user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @JoinColumn(name = "reporter_id")
-    private Set<UserPostReport> reporters;
-
     @ManyToOne
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id",
+            unique = true,
+            updatable = false)
     private Post post;
 
-    @OneToMany(
-            mappedBy = "postReportReasonId.userPostReport",
+    @OneToMany (
+            mappedBy = "userPostReportId.postReport",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "reason")
-    private Set<PostReportReason> reasons;
+    private List<UserPostReport> userPostReports;
 
     @Column(name = "report_time")
     private LocalDateTime reportTime;

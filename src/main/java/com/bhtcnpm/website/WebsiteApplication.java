@@ -51,7 +51,8 @@ public class WebsiteApplication {
                 new ClassPathResource("data/Doc/doc-category.json"),
                 new ClassPathResource("data/Doc/doc-file-upload.json"),
                 new ClassPathResource("data/Doc/doc.json"),
-                new ClassPathResource("data/Doc/user-doc-reaction.json")
+                new ClassPathResource("data/Doc/user-doc-reaction.json"),
+                new ClassPathResource("data/report-reason.json")
 //                new ClassPathResource("data/tag-data.json")
         });
         factoryBean.setMapper(objectMapper);

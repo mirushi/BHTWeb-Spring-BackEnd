@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class UserPostReportListDTO {
-    private List<UserPostReportDTO> userPostReportDTOs;
+    private List<PostReportDTO> postReportDTOS;
     private Long totalElements;
     private Integer totalPages;
 }

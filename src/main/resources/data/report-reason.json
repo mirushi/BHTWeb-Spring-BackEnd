@@ -1,0 +1,22 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ReportReason.ReportReason",
+    "id": "1",
+    "reason": "Thông tin không chính xác"
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ReportReason.ReportReason",
+    "id": "2",
+    "reason": "Nội dung vi phạm bản quyền"
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ReportReason.ReportReason",
+    "id": "3",
+    "reason": "Không phù hợp"
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ReportReason.ReportReason",
+    "id": "4",
+    "reason": "Vi phạm nội quy"
+  }
+]

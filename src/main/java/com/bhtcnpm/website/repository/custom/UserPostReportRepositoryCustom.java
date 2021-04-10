@@ -7,5 +7,4 @@ import java.awt.print.Pageable;
 import java.util.List;
 
 public interface UserPostReportRepositoryCustom {
-    List<UserPostReport> getUserReports (Pageable pageable, Boolean isResolved);
 }

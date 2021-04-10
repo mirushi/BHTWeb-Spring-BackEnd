@@ -1,10 +1,9 @@
-package com.bhtcnpm.website.model.entity.PostEntities;
+package com.bhtcnpm.website.model.entity.ReportReason;
 
-import com.bhtcnpm.website.model.entity.ReportReason.ReportReasonFeedbackId;
+import com.bhtcnpm.website.model.entity.DocEntities.UserDocReactionId;
+import com.bhtcnpm.website.model.entity.PostEntities.PostReport;
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
@@ -14,15 +13,13 @@ import java.util.Objects;
 
 @Embeddable
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserPostReportId implements Serializable {
+public class ReportReasonFeedbackId implements Serializable {
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user")
     private UserWebsite user;
 
     @ManyToOne
-    @JoinColumn(name = "post_report_id")
+    @JoinColumn(name = "post_report")
     private PostReport postReport;
 
     @Override
@@ -38,4 +35,5 @@ public class UserPostReportId implements Serializable {
     public int hashCode() {
         return Objects.hash(getUser(), getPostReport());
     }
+
 }

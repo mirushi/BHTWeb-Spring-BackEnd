@@ -83,6 +83,8 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
     private String avatarURL;
 
     @Column(nullable = false)
+    @Deprecated
+    //TODO: Remove this unused field.
     private Boolean banStatus;
 
     @OneToMany (
