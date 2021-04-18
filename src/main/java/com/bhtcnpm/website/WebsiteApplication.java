@@ -13,6 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.config.BootstrapMode;
 import org.springframework.data.repository.init.Jackson2RepositoryPopulatorFactoryBean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -20,7 +21,9 @@ import javax.persistence.PersistenceContext;
 
 @SpringBootApplication
 //Deferred mode is for Hibernate Search 6 startup issue's workaround.
+//https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#_spring_boot
 @EnableJpaRepositories(bootstrapMode = BootstrapMode.DEFERRED)
+@EnableAsync
 public class WebsiteApplication {
 
     @PersistenceContext

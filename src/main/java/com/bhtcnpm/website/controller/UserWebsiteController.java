@@ -37,4 +37,13 @@ public class UserWebsiteController {
 
         return new ResponseEntity<>(authenticatedDTO.getUserDetailsDTO(), authenticatedDTO.getHeaders(), HttpStatus.OK);
     }
+
+    @GetMapping("/verify")
+    @ResponseBody
+    public ResponseEntity verifyAccount (
+            @RequestParam(value = "email")String email,
+            @RequestParam(value = "verificationToken") String verificationToken
+    ) {
+
+    }
 }

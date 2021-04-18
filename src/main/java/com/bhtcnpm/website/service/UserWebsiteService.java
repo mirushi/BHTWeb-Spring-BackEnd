@@ -12,4 +12,6 @@ public interface UserWebsiteService {
 
     @Transactional(readOnly = true)
     UserAuthenticatedDTO loginUser (@Valid UserWebsiteLoginRequestDTO requestDTO);
+
+    boolean verifyEmailToken (String email, String verificationToken);
 }
