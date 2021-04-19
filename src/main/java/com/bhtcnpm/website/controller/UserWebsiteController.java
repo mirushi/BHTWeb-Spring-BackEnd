@@ -44,6 +44,11 @@ public class UserWebsiteController {
             @RequestParam(value = "email")String email,
             @RequestParam(value = "verificationToken") String verificationToken
     ) {
-
+        boolean result = userWebsiteService.verifyEmailToken(email, verificationToken);
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 }

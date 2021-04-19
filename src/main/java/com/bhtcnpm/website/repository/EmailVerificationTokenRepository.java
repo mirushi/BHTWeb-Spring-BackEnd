@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmailVerificationTokenRepository extends JpaRepository<EmailVerificationToken, Long> {
-    boolean existsByUserEmailAndToken(String userEmail, String token);
+    EmailVerificationToken findByUserEmailAndToken (String userEmail, String token);
 }

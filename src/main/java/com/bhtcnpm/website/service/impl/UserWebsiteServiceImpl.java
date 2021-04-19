@@ -5,6 +5,7 @@ import com.bhtcnpm.website.constant.domain.UserWebsiteRole.UWRRequiredRole;
 import com.bhtcnpm.website.model.dto.EmailTemplate;
 import com.bhtcnpm.website.model.dto.UserWebsite.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.UserWebsiteEntities.EmailVerificationToken;
 import com.bhtcnpm.website.model.entity.UserWebsiteRole;
 import com.bhtcnpm.website.repository.EmailVerificationTokenRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
@@ -29,6 +30,7 @@ import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -42,6 +44,7 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
 
     private final UserWebsiteRepository uwRepository;
     private final UserWebsiteRoleRepository uwRoleRepository;
+    private final EmailVerificationTokenRepository evtRepository;
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
     private final UserWebsiteRequestMapper uwCreateRequestMapper;
     private final UserAuthenticatedMapper userAuthenticatedMapper;
@@ -67,10 +70,12 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
 
     private void afterCreatedUser (UserWebsite userWebsite) {
         //Generate verification token.
-        
+        EmailVerificationToken emailVerificationToken = new EmailVerificationToken();
+        emailVerificationToken.setUser(userWebsite);
+        evtRepository.save(emailVerificationToken);
 
         //Send verification token to user.
-        emailService.sendConfirmationEmail(userWebsite.getEmail());
+        emailService.sendConfirmationEmail(userWebsite.getEmail(), emailVerificationToken.getToken());
     }
 
     @Override
@@ -98,8 +103,15 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
 
     @Override
     public boolean verifyEmailToken(String email, String verificationToken) {
-        boolean isVerificationValid = emailVerificationTokenRepository
-                .existsByUserEmailAndToken(email, verificationToken);
+        EmailVerificationToken tokenEntity = emailVerificationTokenRepository
+                .findByUserEmailAndToken(email, verificationToken);
+
+        if (tokenEntity != null) {
+            tokenEntity.setExpirationTime(LocalDateTime.now());
+            emailVerificationTokenRepository.save(tokenEntity);
+            return true;
+        }
+
         return false;
     }
 }
