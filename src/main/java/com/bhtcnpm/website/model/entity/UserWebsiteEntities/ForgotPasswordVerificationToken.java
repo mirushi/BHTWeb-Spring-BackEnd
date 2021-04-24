@@ -13,15 +13,15 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class EmailVerificationToken {
+public class ForgotPasswordVerificationToken {
     @Id
-    @GeneratedValue (
+    @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "email_verification_sequence"
+            generator = "forgot_password_verification_sequence"
     )
     @SequenceGenerator(
-            name = "email_verification_sequence",
-            sequenceName = "email_verification_sequence",
+            name = "forgot_password_verification_sequence",
+            sequenceName = "forgot_password_verification_sequence",
             allocationSize = 50
     )
     private Long id;
@@ -52,12 +52,12 @@ public class EmailVerificationToken {
         SecureRandom random = new SecureRandom();
 
         //Generate token.
-        token = new BigInteger(
-                VTBusinessConstant.MAIL_VERIFY_TOKEN_NUM_CHAR * VTBusinessConstant.BIT_PER_CHAR,
-                random
-        ).toString(32);
+        token = new BigInteger(VTBusinessConstant.MAIL_FORGOT_PASSWORD_VERIFY_TOKEN_NUM_CHAR * VTBusinessConstant.BIT_PER_CHAR,
+                random)
+                .toString(32);
 
         //Generate expirationTime.
-        expirationTime = LocalDateTime.now().plusMinutes(VTBusinessConstant.MAIL_VERIFY_TOKEN_EXPIRATION_TIME);
+        expirationTime = LocalDateTime.now().plusMinutes(VTBusinessConstant.MAIL_FORGOT_PASSWORD_TOKEN_EXPIRATION_TIME);
     }
+
 }

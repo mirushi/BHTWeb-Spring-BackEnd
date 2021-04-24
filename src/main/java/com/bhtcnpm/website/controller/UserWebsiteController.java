@@ -1,9 +1,6 @@
 package com.bhtcnpm.website.controller;
 
-import com.bhtcnpm.website.model.dto.UserWebsite.UserAuthenticatedDTO;
-import com.bhtcnpm.website.model.dto.UserWebsite.UserDetailsDTO;
-import com.bhtcnpm.website.model.dto.UserWebsite.UserWebsiteCreateNewRequestDTO;
-import com.bhtcnpm.website.model.dto.UserWebsite.UserWebsiteLoginRequestDTO;
+import com.bhtcnpm.website.model.dto.UserWebsite.*;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,6 +33,18 @@ public class UserWebsiteController {
         UserAuthenticatedDTO authenticatedDTO = userWebsiteService.loginUser(dto);
 
         return new ResponseEntity<>(authenticatedDTO.getUserDetailsDTO(), authenticatedDTO.getHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot")
+    @ResponseBody
+    public ResponseEntity forgotAccount (@RequestBody UserWebsiteForgotPasswordRequestDTO requestDTO) {
+        boolean result = userWebsiteService.forgotPassword(requestDTO);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/verify")

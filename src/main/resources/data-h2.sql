@@ -12,9 +12,9 @@ VALUES (1, 'ADMIN', 0),
 
 -- INSERT USER.
 INSERT INTO USER_WEBSITE (ID, NAME, DISPLAY_NAME, HASHED_PASSWORD, EMAIL, REPUTATION_SCORE, AVATARURL, BAN_STATUS, VERSION)
-VALUES (user_website_sequence.NEXTVAL, 'dong', 'Nguyen Van Dong', '{bcrypt}$2y$10$nShAWCpLkCxoYKR3hoYFhuaQF2og9q6OMuHFd.YvgLE0mubSfl7eS', '123@gmail.com', 100, 'https://i.ytimg.com/vi/VdhJ_Fm3_mk/maxresdefault.jpg', false, 0),
-       (user_website_sequence.NEXTVAL, 'nghi', 'Luu Bieu Nghi', '{bcrypt}$2y$10$C/itsd7lLBUJ93PzmgUYXuUVRNgVq2ZGqsUCBWn5M1NIhq.DyR3C6' , '456@gmail.com', 300, 'https://www.vippng.com/png/detail/136-1363405_avatar-png-image-with-transparent-background-funny-avatar.png', false, 0),
-       (user_website_sequence.NEXTVAL, 'hai', 'Vu Tuan Hai', '{bcrypt}$2y$10$ASuiBrP65KvyLx7TQ0WMq.MZzg1d9cLerk4sErQH0kYXLRG1siibi' , '456@gmail.com', 300, 'https://media.images.yourquote.in/post/large/0/0/5/223/WGvR1449.jpg', false, 0);
+VALUES (user_website_sequence.NEXTVAL, 'dong', 'Nguyen Van Dong', '{bcrypt}$2y$10$nShAWCpLkCxoYKR3hoYFhuaQF2og9q6OMuHFd.YvgLE0mubSfl7eS', 'niceday0246@gmail.com', 100, 'https://i.ytimg.com/vi/VdhJ_Fm3_mk/maxresdefault.jpg', false, 0),
+       (user_website_sequence.NEXTVAL, 'nghi', 'Luu Bieu Nghi', '{bcrypt}$2y$10$C/itsd7lLBUJ93PzmgUYXuUVRNgVq2ZGqsUCBWn5M1NIhq.DyR3C6' , 'luubieunghi@gmail.com', 300, 'https://www.vippng.com/png/detail/136-1363405_avatar-png-image-with-transparent-background-funny-avatar.png', false, 0),
+       (user_website_sequence.NEXTVAL, 'hai', 'Vu Tuan Hai', '{bcrypt}$2y$10$ASuiBrP65KvyLx7TQ0WMq.MZzg1d9cLerk4sErQH0kYXLRG1siibi' , '17520794@gm.uit.edu.vn', 300, 'https://media.images.yourquote.in/post/large/0/0/5/223/WGvR1449.jpg', false, 0);
 
 -- INSERT ROLES OF USERS.
 INSERT INTO USER_ROLE (USER_ID, ROLE_ID) VALUES

@@ -4,7 +4,11 @@ import com.bhtcnpm.website.model.entity.UserWebsiteEntities.EmailVerificationTok
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 @Repository
 public interface EmailVerificationTokenRepository extends JpaRepository<EmailVerificationToken, Long> {
-    EmailVerificationToken findByUserEmailAndToken (String userEmail, String token);
+    EmailVerificationToken findByUserEmailAndTokenAndExpirationTimeAfter (String userEmail,
+                                                                           String token,
+                                                                           LocalDateTime now);
 }

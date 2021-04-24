@@ -12,37 +12,54 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 @Configuration
 @Slf4j
-public class EmailMessage {
+public class EmailMessageService {
     private static final String PATH_TO_EMAIL_TEMPLATE_CONFIG = "documents/emails/emails.properties";
 
-    private Map<String, EmailTemplate> emailTemplates;
+    private Map<EmailMessageTemplate, EmailTemplate> emailTextTemplates;
+
+    private Map<EmailMessageTemplate, EmailTemplate> emailHTMLTemplates;
 
     private Properties props;
 
     @PostConstruct
     public void postConstruct () throws IOException {
-        emailTemplates = new HashMap<>();
+        emailTextTemplates = new EnumMap<>(EmailMessageTemplate.class);
+        emailHTMLTemplates = new EnumMap<>(EmailMessageTemplate.class);
+
         Resource resource = new ClassPathResource(PATH_TO_EMAIL_TEMPLATE_CONFIG);
         props = PropertiesLoaderUtils.loadProperties(resource);
 
-        addEmailTemplate("confirmRegistration");
+        //Add all email templates to Map.
+        for (EmailMessageTemplate template : EmailMessageTemplate.values()) {
+            addEmailTemplate(template);
+        }
     }
 
-    public EmailTemplate getEmailTemplateByCode (String code) {
-        return emailTemplates.get(code);
+    public EmailTemplate getEmailTemplateByCode (EmailMessageTemplate code, EmailMessageTemplateType type) {
+        Map<EmailMessageTemplate, EmailTemplate> selectedEmailTemplates = null;
+        if (EmailMessageTemplateType.TEXT == type) {
+            selectedEmailTemplates = this.emailTextTemplates;
+        } else if (EmailMessageTemplateType.HTML == type) {
+            selectedEmailTemplates = this.emailHTMLTemplates;
+        } else {
+            throw new IllegalArgumentException("Email message template type is not supported.");
+        }
+
+        return selectedEmailTemplates.get(code);
     }
 
-    private void addEmailTemplate (String templateName) throws IOException {
-        String emailCode = props.getProperty(templateName + ".emailCode");
-        String title = props.getProperty(templateName + ".title");
-        String pathToEmailTemplateText = props.getProperty(templateName + ".content_text");
-        String pathToEmailTemplateHTML = props.getProperty(templateName + ".content_html");
+    private void addEmailTemplate (EmailMessageTemplate template) throws IOException {
+        String emailCode = template.toString();
+        String title = props.getProperty(emailCode + ".title");
+        String pathToEmailTemplateText = props.getProperty(emailCode + ".content_text");
+        String pathToEmailTemplateHTML = props.getProperty(emailCode + ".content_html");
 
         Resource emailContentTextResource =
                 new ClassPathResource("documents/emails/text/" + pathToEmailTemplateText);
@@ -69,7 +86,7 @@ public class EmailMessage {
                 .content(emailContentHTML)
                 .build();
 
-        emailTemplates.put(emailCode + ".text", emailTemplateText);
-        emailTemplates.put(emailCode + ".html", emailTemplateHTML);
+        emailTextTemplates.put(template, emailTemplateText);
+        emailHTMLTemplates.put(template, emailTemplateHTML);
     }
 }

@@ -1,13 +1,13 @@
 package com.bhtcnpm.website.service.impl;
 
-import com.bhtcnpm.website.config.email.EmailMessage;
 import com.bhtcnpm.website.constant.domain.UserWebsiteRole.UWRRequiredRole;
-import com.bhtcnpm.website.model.dto.EmailTemplate;
 import com.bhtcnpm.website.model.dto.UserWebsite.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.UserWebsiteEntities.EmailVerificationToken;
+import com.bhtcnpm.website.model.entity.UserWebsiteEntities.ForgotPasswordVerificationToken;
 import com.bhtcnpm.website.model.entity.UserWebsiteRole;
 import com.bhtcnpm.website.repository.EmailVerificationTokenRepository;
+import com.bhtcnpm.website.repository.ForgotPasswordVerificationTokenRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRoleRepository;
 import com.bhtcnpm.website.security.JwtTokenProvider;
@@ -18,21 +18,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -44,8 +40,8 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
 
     private final UserWebsiteRepository uwRepository;
     private final UserWebsiteRoleRepository uwRoleRepository;
-    private final EmailVerificationTokenRepository evtRepository;
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
+    private final ForgotPasswordVerificationTokenRepository forgotPasswordVerificationTokenRepository;
     private final UserWebsiteRequestMapper uwCreateRequestMapper;
     private final UserAuthenticatedMapper userAuthenticatedMapper;
 
@@ -72,7 +68,7 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
         //Generate verification token.
         EmailVerificationToken emailVerificationToken = new EmailVerificationToken();
         emailVerificationToken.setUser(userWebsite);
-        evtRepository.save(emailVerificationToken);
+        emailVerificationTokenRepository.save(emailVerificationToken);
 
         //Send verification token to user.
         emailService.sendConfirmationEmail(userWebsite.getEmail(), emailVerificationToken.getToken());
@@ -102,9 +98,39 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     }
 
     @Override
+    public boolean forgotPassword(UserWebsiteForgotPasswordRequestDTO requestDTO) {
+        //Remember: Never let client know if email/username exist when forgot password.
+        //TODO: We only allow password reset if account is activated.
+        Optional<UserWebsite> user = uwRepository.findByNameOrDisplayNameOrEmail(requestDTO.getUsername(), null, requestDTO.getEmail());
+
+        if (!user.isPresent()) {
+            return true;
+        }
+
+        ForgotPasswordVerificationToken forgotPassToken = forgotPasswordVerificationTokenRepository.findByUser(user.get());
+        if (forgotPassToken != null) {
+            forgotPasswordVerificationTokenRepository.delete(forgotPassToken);
+        }
+
+        forgotPassToken = new ForgotPasswordVerificationToken();
+
+        forgotPassToken.setUser(user.get());
+
+        forgotPassToken = forgotPasswordVerificationTokenRepository.save(forgotPassToken);
+
+        emailService.sendForgotPasswordEmail(
+                user.get().getEmail(),
+                forgotPassToken.getToken()
+        );
+
+        return true;
+    }
+
+    @Override
     public boolean verifyEmailToken(String email, String verificationToken) {
         EmailVerificationToken tokenEntity = emailVerificationTokenRepository
-                .findByUserEmailAndToken(email, verificationToken);
+                .findByUserEmailAndTokenAndExpirationTimeAfter(email,
+                        verificationToken, LocalDateTime.now());
 
         if (tokenEntity != null) {
             tokenEntity.setExpirationTime(LocalDateTime.now());
