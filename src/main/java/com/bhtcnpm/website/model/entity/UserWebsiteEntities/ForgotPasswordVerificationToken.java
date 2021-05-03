@@ -37,7 +37,6 @@ public class ForgotPasswordVerificationToken {
     @OneToOne
     @JoinColumn(
             name = "user_id",
-            unique = true,
             nullable = false,
             updatable = false
     )

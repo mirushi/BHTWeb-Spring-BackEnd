@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.entity;
 
 import com.bhtcnpm.website.constant.domain.UserWebsite.UWDomainConstant;
+import com.bhtcnpm.website.constant.domain.UserWebsiteRole.UWRRequiredRole;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
@@ -8,6 +9,7 @@ import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostSave;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.search.engine.backend.types.Norms;
 import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
@@ -21,17 +23,18 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user_website")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class UserWebsite implements UserDetails, CredentialsContainer {
-
     @Id
     @GeneratedValue (
             strategy = GenerationType.SEQUENCE,
@@ -46,6 +49,7 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
     @Column(nullable = false, length = UWDomainConstant.NAME_LENGTH)
     @Size(max = UWDomainConstant.NAME_LENGTH)
     @KeywordField(norms = Norms.YES, searchable = Searchable.YES)
+    @NaturalId
     private String name;
 
     @Column(nullable = false, length = UWDomainConstant.DISPLAY_NAME_LENGTH)
@@ -66,24 +70,20 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
     private Long reputationScore;
 
     @ManyToMany (
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+            cascade = { CascadeType.PERSIST },
             fetch = FetchType.EAGER
     )
     @JoinTable (
             name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @JsonIgnore
     private Set<UserWebsiteRole> roles;
 
     @Column(nullable = false)
     private String avatarURL;
-
-    @Column(nullable = false)
-    private Boolean banStatus;
 
     @OneToMany (
             mappedBy = "author",
@@ -159,12 +159,22 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
     @Builder.Default
     private Boolean credentialsNonExpired = true;
 
-    @Transient
     @Builder.Default
-    private Boolean enabled = true;
+    private Boolean enabled = false;
+
+    @Builder.Default
+    private Boolean locked = false;
 
     @Version
     private short version;
+
+    public void removeRole (UserWebsiteRole role) {
+        this.roles.remove(role);
+    }
+
+    public void addRole (UserWebsiteRole role) {
+        this.roles.add(role);
+    }
 
     @Transient
     @Override
@@ -177,6 +187,22 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
                     return new SimpleGrantedAuthority(authority.getPermission());
                 })
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserWebsite)) {
+            return false;
+        }
+        UserWebsite other = (UserWebsite) o;
+
+        return Objects.equals(getName(), other.getName());
+    }
+
+    @Override
+    public int hashCode () {
+        return Objects.hash(getName());
     }
 
     @Override
@@ -200,8 +226,9 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
     }
 
     @Override
+    //TODO: Account is locked when multiple login attempts failed.
     public boolean isAccountNonLocked() {
-        return !this.banStatus;
+        return !locked;
     }
 
     @Override
@@ -210,6 +237,7 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
     }
 
     @Override
+    //Disabled is when the account is disabled by administrator.
     public boolean isEnabled() {
         return this.enabled;
     }

@@ -47,7 +47,18 @@ public class UserWebsiteController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/verify")
+    @PostMapping("/forgot/resetPassword")
+    @ResponseBody
+    public ResponseEntity resetPassword (@RequestBody UserWebsitePasswordResetRequestDTO pwResetDTO) {
+        boolean result = userWebsiteService.resetPassword(pwResetDTO);
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @PostMapping("/verify")
     @ResponseBody
     public ResponseEntity verifyAccount (
             @RequestParam(value = "email")String email,

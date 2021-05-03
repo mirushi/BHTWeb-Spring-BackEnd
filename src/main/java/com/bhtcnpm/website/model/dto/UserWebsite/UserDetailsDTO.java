@@ -10,5 +10,4 @@ public class UserDetailsDTO {
     private String email;
     private Long reputationScore;
     private String avatarURL;
-    private Boolean banStatus;
 }

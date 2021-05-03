@@ -1,15 +1,21 @@
 package com.bhtcnpm.website.model.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "user_website_role")
-@Data
-public class UserWebsiteRole {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserWebsiteRole implements Serializable {
 
     @Id
     @GeneratedValue (
@@ -23,9 +29,10 @@ public class UserWebsiteRole {
     )
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
+    @NaturalId
     private String name;
-    
+
     @ManyToMany (
             cascade = {
                 CascadeType.PERSIST,
@@ -42,4 +49,21 @@ public class UserWebsiteRole {
 
     @Version
     private short version;
+
+    public UserWebsiteRole (Long id) {
+        this.id = id;
+    }
+    
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserWebsiteRole)) return false;
+        UserWebsiteRole other = (UserWebsiteRole)o;
+        return Objects.equals(getName(), other.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName());
+    }
 }

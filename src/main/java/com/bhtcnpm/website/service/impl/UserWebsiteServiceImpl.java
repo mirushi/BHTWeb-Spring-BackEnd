@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -28,8 +29,8 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +46,8 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     private final UserWebsiteRequestMapper uwCreateRequestMapper;
     private final UserAuthenticatedMapper userAuthenticatedMapper;
 
+    private final PasswordEncoder passwordEncoder;
+
     private final AuthenticationManager authManager;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -52,9 +55,9 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
 
     @Override
     public UserAuthenticatedDTO createNewNormalUser(@Valid UserWebsiteCreateNewRequestDTO requestDTO) {
-        UserWebsiteRole normalUserRole = uwRoleRepository.getOne(UWRRequiredRole.USER_ROLE_ID);
+        UserWebsiteRole notVerifiedRole = uwRoleRepository.getOne(UWRRequiredRole.EMAIL_NOT_VERIFIED_ROLE_ID);
         UserWebsite userWebsite = uwCreateRequestMapper
-                .userWebsiteCreateNewRequestToUserWebsite(requestDTO, new HashSet<>(Collections.singletonList(normalUserRole)));
+                .userWebsiteCreateNewRequestToUserWebsite(requestDTO, new HashSet<>(Collections.singletonList(notVerifiedRole)));
 
         userWebsite = uwRepository.save(userWebsite);
         HttpHeaders headers = SecurityUtils.getJwtHeader(userWebsite, jwtTokenProvider);
@@ -68,7 +71,7 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
         //Generate verification token.
         EmailVerificationToken emailVerificationToken = new EmailVerificationToken();
         emailVerificationToken.setUser(userWebsite);
-        emailVerificationTokenRepository.save(emailVerificationToken);
+        emailVerificationToken = emailVerificationTokenRepository.save(emailVerificationToken);
 
         //Send verification token to user.
         emailService.sendConfirmationEmail(userWebsite.getEmail(), emailVerificationToken.getToken());
@@ -100,16 +103,29 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     @Override
     public boolean forgotPassword(UserWebsiteForgotPasswordRequestDTO requestDTO) {
         //Remember: Never let client know if email/username exist when forgot password.
-        //TODO: We only allow password reset if account is activated.
+        //Only return false when there's error in making forgot password request.
+
         Optional<UserWebsite> user = uwRepository.findByNameOrDisplayNameOrEmail(requestDTO.getUsername(), null, requestDTO.getEmail());
 
         if (!user.isPresent()) {
             return true;
         }
 
+        //We only allow password reset if account is not 'EMAIL_NOT_VERIFIED' (aka only verified account can do forgot password).
+        //Because if not, we risk sending multiple forgot password emails to invalid email address.
+        //TODO: We may improve in the future to support for permission checking instead of role checking.
+        if (user.get().getRoles()
+                .stream()
+                .map(UserWebsiteRole::getId)
+                .collect(Collectors.toList()).contains(UWRRequiredRole.EMAIL_NOT_VERIFIED_ROLE_ID)) {
+            throw new IllegalArgumentException("Your email account is not email-verified.");
+        }
+
         ForgotPasswordVerificationToken forgotPassToken = forgotPasswordVerificationTokenRepository.findByUser(user.get());
+
+        //If current token is still active, we'll expire it before assigning a new one.
         if (forgotPassToken != null) {
-            forgotPasswordVerificationTokenRepository.delete(forgotPassToken);
+            forgotPassToken.setExpirationTime(LocalDateTime.now());
         }
 
         forgotPassToken = new ForgotPasswordVerificationToken();
@@ -127,17 +143,52 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     }
 
     @Override
+    public boolean resetPassword(UserWebsitePasswordResetRequestDTO pwResetDTO) {
+        //First we have to make sure that the token is valid.
+        ForgotPasswordVerificationToken token =
+                forgotPasswordVerificationTokenRepository.findByUserEmailAndTokenAndExpirationTimeAfter(
+                        pwResetDTO.getEmail(), pwResetDTO.getToken(), LocalDateTime.now()
+                );
+
+        //Token which user provided is invalid.
+        if (token == null) {
+            return false;
+        }
+
+        //Token is valid, we'll reset the password accordingly to the provided one.
+        String newEncodedPassword = SecurityUtils.getEncodedPassword(pwResetDTO.getPassword(), passwordEncoder);
+
+        UserWebsite user = token.getUser();
+        user.setHashedPassword(newEncodedPassword);
+        uwRepository.save(user);
+
+        //Invalidate token.
+        token.setExpirationTime(LocalDateTime.now());
+
+        return true;
+    }
+
+    @Override
     public boolean verifyEmailToken(String email, String verificationToken) {
         EmailVerificationToken tokenEntity = emailVerificationTokenRepository
                 .findByUserEmailAndTokenAndExpirationTimeAfter(email,
                         verificationToken, LocalDateTime.now());
 
-        if (tokenEntity != null) {
-            tokenEntity.setExpirationTime(LocalDateTime.now());
-            emailVerificationTokenRepository.save(tokenEntity);
-            return true;
+        if (tokenEntity == null) {
+            throw new IllegalArgumentException("Your email & token combination is invalid.");
         }
 
-        return false;
+        tokenEntity.setExpirationTime(LocalDateTime.now());
+        emailVerificationTokenRepository.save(tokenEntity);
+
+        UserWebsiteRole emailNotVerifiedRole = new UserWebsiteRole();
+        emailNotVerifiedRole.setName(UWRRequiredRole.EMAIL_NOT_VERIFIED_ROLE_NAME);
+
+        UserWebsite user = tokenEntity.getUser();
+        user.removeRole(emailNotVerifiedRole);
+        user.addRole(uwRoleRepository.getOne(UWRRequiredRole.USER_ROLE_ID));
+        uwRepository.save(user);
+
+        return true;
     }
 }
