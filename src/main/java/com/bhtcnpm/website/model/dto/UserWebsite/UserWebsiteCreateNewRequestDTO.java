@@ -32,4 +32,6 @@ public class UserWebsiteCreateNewRequestDTO {
 
     @Size(max = UWBusinessConstraint.MAX_AVATAR_URL_LENGTH)
     private String avatarURL;
+
+    private String captcha;
 }

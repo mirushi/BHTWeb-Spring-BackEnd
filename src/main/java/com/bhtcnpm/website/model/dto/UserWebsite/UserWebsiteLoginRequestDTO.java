@@ -18,4 +18,6 @@ public class UserWebsiteLoginRequestDTO {
 
     @NotNull
     private String password;
+
+    private String captcha;
 }

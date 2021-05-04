@@ -7,6 +7,7 @@ import com.p6spy.engine.spy.P6SpyOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -15,6 +16,7 @@ import org.springframework.data.repository.config.BootstrapMode;
 import org.springframework.data.repository.init.Jackson2RepositoryPopulatorFactoryBean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,6 +40,11 @@ public class WebsiteApplication {
         //This is for initialize Hibernate Search indexing when the application is ready.
         springApplication.addListeners(new HibernateSearchEventListener());
         SpringApplication.run(WebsiteApplication.class, args);
+    }
+
+    @Bean
+    public RestTemplate restTemplate (RestTemplateBuilder builder) {
+        return builder.build();
     }
 
     //Populate data for repository.

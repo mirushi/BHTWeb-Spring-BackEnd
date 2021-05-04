@@ -6,12 +6,15 @@ import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.UserWebsiteEntities.EmailVerificationToken;
 import com.bhtcnpm.website.model.entity.UserWebsiteEntities.ForgotPasswordVerificationToken;
 import com.bhtcnpm.website.model.entity.UserWebsiteRole;
+import com.bhtcnpm.website.model.exception.CaptchaInvalidException;
+import com.bhtcnpm.website.model.exception.CaptchaServerErrorException;
 import com.bhtcnpm.website.repository.EmailVerificationTokenRepository;
 import com.bhtcnpm.website.repository.ForgotPasswordVerificationTokenRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRoleRepository;
 import com.bhtcnpm.website.security.JwtTokenProvider;
 import com.bhtcnpm.website.security.util.SecurityUtils;
+import com.bhtcnpm.website.service.CaptchaService;
 import com.bhtcnpm.website.service.EmailService;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import lombok.RequiredArgsConstructor;
@@ -53,8 +56,17 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
 
     private final EmailService emailService;
 
+    private final CaptchaService captchaService;
+
     @Override
-    public UserAuthenticatedDTO createNewNormalUser(@Valid UserWebsiteCreateNewRequestDTO requestDTO) {
+    public UserAuthenticatedDTO createNewNormalUser(@Valid UserWebsiteCreateNewRequestDTO requestDTO)
+            throws CaptchaServerErrorException, CaptchaInvalidException {
+        //TODO: Get user IP address.
+        boolean captchaValid = captchaService.verifyCaptcha(requestDTO.getCaptcha(), null);
+        if (!captchaValid) {
+            return null;
+        }
+
         UserWebsiteRole notVerifiedRole = uwRoleRepository.getOne(UWRRequiredRole.EMAIL_NOT_VERIFIED_ROLE_ID);
         UserWebsite userWebsite = uwCreateRequestMapper
                 .userWebsiteCreateNewRequestToUserWebsite(requestDTO, new HashSet<>(Collections.singletonList(notVerifiedRole)));
@@ -78,7 +90,14 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     }
 
     @Override
-    public UserAuthenticatedDTO loginUser(@Valid UserWebsiteLoginRequestDTO requestDTO) {
+    public UserAuthenticatedDTO loginUser(@Valid UserWebsiteLoginRequestDTO requestDTO)
+            throws CaptchaServerErrorException, CaptchaInvalidException {
+        //TODO: Get user IP address.
+        boolean captchaValid = captchaService.verifyCaptcha(requestDTO.getCaptcha(), null);
+        if (!captchaValid) {
+            return null;
+        }
+
         //Because of constraint validation, we can be sure that only username or email is present. Not both, nor both won't exist.
         String username = requestDTO.getUsername();
         String password = requestDTO.getPassword();
@@ -101,12 +120,20 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     }
 
     @Override
-    public boolean forgotPassword(UserWebsiteForgotPasswordRequestDTO requestDTO) {
+    public boolean forgotPassword(UserWebsiteForgotPasswordRequestDTO requestDTO) throws
+            CaptchaServerErrorException, CaptchaInvalidException {
+        //First and foremost, we must verify whenever CAPTCHA token provided is valid.
+        //TODO: Get user IP address.
+        boolean captchaValid = captchaService.verifyCaptcha(requestDTO.getCaptcha(), null);
+        if (!captchaValid) {
+            return false;
+        }
         //Remember: Never let client know if email/username exist when forgot password.
         //Only return false when there's error in making forgot password request.
 
         Optional<UserWebsite> user = uwRepository.findByNameOrDisplayNameOrEmail(requestDTO.getUsername(), null, requestDTO.getEmail());
 
+        //Never let client know if email/username exists.
         if (!user.isPresent()) {
             return true;
         }
