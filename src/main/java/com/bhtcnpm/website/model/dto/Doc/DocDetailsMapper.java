@@ -19,9 +19,9 @@ public interface DocDetailsMapper {
     @Mapping(source = "category.id", target = "categoryID")
     @Mapping(source = "subject.name", target = "subject")
     @Mapping(source = "subject.id", target = "subjectID")
-    @Mapping(source = "docFileUpload.downloadCount", target = "downloads")
+    @Mapping(source = "docFileUpload.downloadCount", target = "downloadCount")
     @Mapping(source = "publishDtm", target = "publishDtm")
-    @Mapping(source = "viewCount", target = "views")
+    @Mapping(source = "viewCount", target = "viewCount")
     DocDetailsDTO docToDocDetailsDTO (Doc doc);
 
     List<DocDetailsDTO> docListToDocDetailsDTOList (List<Doc> docs);

@@ -1,0 +1,6 @@
+Cảm ơn bạn đã đăng ký tài khoản tại trang BHTCNPM.
+Đây là mã xác nhận tài khoản của bạn: {0}
+Ngoài ra bạn cũng có thể bấm vào liên kết bên dưới để kích hoạt tài khoản:
+{1}.
+Nếu bạn không phải là người thực hiện tạo tài khoản, có thể ai đó đã sai sót khi điền email, bạn có thể bỏ qua email này.
+Trân trọng.

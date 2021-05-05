@@ -1,0 +1,26 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostCategory",
+    "id": 1,
+    "name": "Tin tức",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostCategory",
+    "id": 2,
+    "name": "Kinh nghiệm học tập",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostCategory",
+    "id": 3,
+    "name": "Hoạt động",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostCategory",
+    "id": 4,
+    "name": "Động lực",
+    "version": 0
+  }
+]

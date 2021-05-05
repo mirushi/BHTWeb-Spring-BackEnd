@@ -42,8 +42,7 @@ public abstract class UserWebsiteRequestMapper {
                 .roles(userWebsiteRoles)
                 .accountNonExpired(true)
                 .credentialsNonExpired(true)
-                .enabled(true)
-                .banStatus(false).build();
+                .enabled(true).build();
 
         return userWebsite;
     }

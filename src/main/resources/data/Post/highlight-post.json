@@ -16,7 +16,7 @@
     "_class": "com.bhtcnpm.website.model.entity.PostEntities.HighlightPost",
     "highlightPostId": {
       "post": {
-        "id": 151
+        "id": 3
       }
     },
     "highlightedBy": {
@@ -29,7 +29,7 @@
     "_class": "com.bhtcnpm.website.model.entity.PostEntities.HighlightPost",
     "highlightPostId": {
       "post": {
-        "id": 51
+        "id": 2
       }
     },
     "highlightedBy": {
