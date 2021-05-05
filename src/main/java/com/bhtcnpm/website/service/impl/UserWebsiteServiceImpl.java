@@ -30,9 +30,7 @@ import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -217,5 +215,39 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
         uwRepository.save(user);
 
         return true;
+    }
+
+    @Override
+    public List<String> checkUserExists (String name, String displayName, String email) {
+        List<UserWebsite> userList = uwRepository.findAllByNameOrDisplayNameOrEmail(name, displayName, email);
+        boolean isNameExist = false;
+        boolean isDisplayNameExist = false;
+        boolean isEmailExist = false;
+
+        List<String> existedFields = new ArrayList<>();
+
+        for (UserWebsite user : userList) {
+            if (user.getName().equals(name)) {
+                isNameExist = true;
+            }
+            if (user.getDisplayName().equals(displayName)) {
+                isDisplayNameExist = true;
+            }
+            if (user.getEmail().equals(email)) {
+                isEmailExist = true;
+            }
+        }
+
+        if (isNameExist) {
+            existedFields.add("name");
+        }
+        if (isDisplayNameExist) {
+            existedFields.add("displayName");
+        }
+        if (isEmailExist) {
+            existedFields.add("email");
+        }
+
+        return existedFields;
     }
 }

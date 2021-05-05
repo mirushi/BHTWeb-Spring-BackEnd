@@ -14,6 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -29,16 +34,13 @@ public class CaptchaServiceImpl implements CaptchaService {
     private final RestTemplate restTemplate;
 
     public boolean verifyCaptcha (String captchaToken, String userIPAddress) throws CaptchaServerErrorException, CaptchaInvalidException {
-        CaptchaRequestDTO request = CaptchaRequestDTO.builder()
-                .remoteip(userIPAddress)
-                .response(captchaToken)
-                .secret(G_CAPTCHA_SECRET_KEY)
-                .build();
-
-        HttpEntity<CaptchaRequestDTO> requestBody = new HttpEntity<>(request);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(G_CAPTCHA_VERIFY_URL)
+                .queryParam("secret", G_CAPTCHA_SECRET_KEY)
+                .queryParam("response", captchaToken)
+                .queryParam("remoteip", userIPAddress);
 
         ResponseEntity<CaptchaResponseDTO> response = restTemplate
-                .postForEntity(G_CAPTCHA_VERIFY_URL, requestBody, CaptchaResponseDTO.class);
+                .postForEntity(builder.build().encode().toUri(),null, CaptchaResponseDTO.class);
 
         if (HttpStatus.OK != response.getStatusCode()) {
             throw new CaptchaServerErrorException(CaptchaErrorMessage.CAPTCHA_SERVER_ERROR);

@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.exception.CaptchaServerErrorException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.util.List;
 
 public interface UserWebsiteService {
     UserAuthenticatedDTO createNewNormalUser(@Valid UserWebsiteCreateNewRequestDTO requestDTO) throws CaptchaServerErrorException, CaptchaInvalidException;
@@ -18,4 +19,7 @@ public interface UserWebsiteService {
     boolean resetPassword (UserWebsitePasswordResetRequestDTO pwResetDTO);
 
     boolean verifyEmailToken (String email, String verificationToken);
+
+    //TODO: Do heavy rate-limiting for this API.
+    List<String> checkUserExists (String name, String displayName, String email);
 }

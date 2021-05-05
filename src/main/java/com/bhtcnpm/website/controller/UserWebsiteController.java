@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -75,5 +76,16 @@ public class UserWebsiteController {
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    @GetMapping("/checkUserExists")
+    @ResponseBody
+    public ResponseEntity<List<String>> checkUserWebsiteExist (
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "displayName", required = false) String displayName,
+            @RequestParam(value = "email", required = false) String email
+    ) {
+        List<String> existedFields = userWebsiteService.checkUserExists(name, displayName, email);
+        return new ResponseEntity(existedFields, HttpStatus.OK);
     }
 }
