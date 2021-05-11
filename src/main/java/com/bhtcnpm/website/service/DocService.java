@@ -3,11 +3,8 @@ package com.bhtcnpm.website.service;
 import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
-import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
-import com.google.api.services.drive.model.File;
 import com.querydsl.core.types.Predicate;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;

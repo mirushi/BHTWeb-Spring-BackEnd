@@ -1,9 +1,12 @@
 package com.bhtcnpm.website.constant.security;
 
 public class SecurityConstant {
-    public static final long EXPIRATION_TIME = 432_000_000; //5 days expressed in milliseconds.
+    public static final long REFRESH_TOKEN_EXPIRATION_TIME = 31_536_000_000L; //1 year expressed in milliseconds.
+    public static final long ACCESS_TOKEN_EXPIRATION_TIME = 600_000L; //10 minutes expressed in milliseconds.
+    public static final int MAXIMUM_REFRESH_TOKEN_PER_USER = 20; //Number of refresh token that exist in DB for single user.
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String JWT_TOKEN_HEADER = "Jwt-Token";
+    public static final String JWT_REFRESH_TOKEN_HEADER = "Refresh-Token";
     public static final String TOKEN_CANNOT_BE_VERIFIED = "Token cannot be verified";
     public static final String BHTCNPM_ORG = "Ban hoc tap Cong nghe Phan mem";
     public static final String BHTCNPM_ADMINISTRATION = "User Management Portal";

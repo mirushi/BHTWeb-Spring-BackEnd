@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
+import javax.annotation.security.RolesAllowed;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -44,6 +45,7 @@ public class PostController {
 
     @GetMapping
     @ResponseBody
+    @RolesAllowed("ROLE_POST_READ")
     public ResponseEntity<PostSummaryListDTO> getPostSummary (@QuerydslPredicate(root = Post.class)Predicate predicate, @NotNull @Min(0) Integer paginator) {
         PostSummaryListDTO postSummaryListDTO = postService.getPostSummary(predicate, paginator);
 

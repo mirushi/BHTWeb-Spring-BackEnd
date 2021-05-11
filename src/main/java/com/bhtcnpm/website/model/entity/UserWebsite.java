@@ -200,6 +200,10 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
         return Objects.equals(getName(), other.getName());
     }
 
+    public void setHashedPassword (String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
     @Override
     public int hashCode () {
         return Objects.hash(getName());

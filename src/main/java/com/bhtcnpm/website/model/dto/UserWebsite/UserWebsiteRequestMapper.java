@@ -18,8 +18,6 @@ public abstract class UserWebsiteRequestMapper {
 
     public static final UserWebsiteRequestMapper INSTANCE = Mappers.getMapper(UserWebsiteRequestMapper.class);
 
-    private PasswordEncoder passwordEncoder;
-
     public UserWebsite userWebsiteCreateNewRequestToUserWebsite(UserWebsiteCreateNewRequestDTO createRequestDTO, Set<UserWebsiteRole> userWebsiteRoles) {
         if (createRequestDTO == null) {
             return null;
@@ -36,7 +34,6 @@ public abstract class UserWebsiteRequestMapper {
                 .name(createRequestDTO.getName())
                 .displayName(createRequestDTO.getDisplayName())
                 .email(createRequestDTO.getEmail())
-                .hashedPassword(SecurityUtils.getEncodedPassword(createRequestDTO.getPassword(), passwordEncoder))
                 .avatarURL(avatarURL)
                 .reputationScore(UWBusinessConstant.DEFAULT_REPUTATION_SCORE)
                 .roles(userWebsiteRoles)
@@ -45,10 +42,5 @@ public abstract class UserWebsiteRequestMapper {
                 .enabled(true).build();
 
         return userWebsite;
-    }
-
-    @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
     }
 }

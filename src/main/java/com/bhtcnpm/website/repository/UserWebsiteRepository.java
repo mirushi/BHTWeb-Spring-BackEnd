@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+//TODO: Consider removing hashedPassword from retrieval.
 public interface UserWebsiteRepository extends JpaRepository<UserWebsite, Long> {
     Optional<UserWebsite> findByName (String name);
     Optional<UserWebsite> findByNameOrDisplayNameOrEmail (String name,String displayName, String email);
