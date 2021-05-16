@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -40,7 +41,7 @@ public class HighlightPostServiceImpl implements HighlightPostService {
     }
 
     @Override
-    public void createHighlightPost(HighlightPostRequestDTO dto, Long userID) {
+    public void createHighlightPost(HighlightPostRequestDTO dto, UUID userID) {
         UserWebsite user = userWebsiteRepository.getOne(userID);
         Post post = postRepository.getOne(dto.getPostId());
 

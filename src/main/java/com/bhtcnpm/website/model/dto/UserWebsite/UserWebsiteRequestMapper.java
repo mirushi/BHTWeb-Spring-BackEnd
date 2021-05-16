@@ -36,10 +36,7 @@ public abstract class UserWebsiteRequestMapper {
                 .email(createRequestDTO.getEmail())
                 .avatarURL(avatarURL)
                 .reputationScore(UWBusinessConstant.DEFAULT_REPUTATION_SCORE)
-                .roles(userWebsiteRoles)
-                .accountNonExpired(true)
-                .credentialsNonExpired(true)
-                .enabled(true).build();
+                .roles(userWebsiteRoles).build();
 
         return userWebsite;
     }

@@ -179,7 +179,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<PostSuggestionDTO> searchRelatedPost(Long authorID, Long categoryID, Post entity, int page , int pageSize) throws IOException {
+    public List<PostSuggestionDTO> searchRelatedPost(UUID authorID, Long categoryID, Post entity, int page , int pageSize) throws IOException {
         //TODO: Until Hibernate Search re-implement support for moreLikeThis query, we'll use native Lucene query for relevance matching.
         MoreLikeThis mlt = new MoreLikeThis(luceneIndexReader);
         mlt.setFieldNames(new String[]{"title","summary", "contentPlainText"});

@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 public class PostSummaryDTO {
     private Long id;
-    private Long authorID;
+    private UUID authorID;
     private String authorName;
     private String authorAvatarURL;
     private Long categoryID;

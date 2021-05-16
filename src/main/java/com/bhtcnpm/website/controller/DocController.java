@@ -20,6 +20,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/documents")
@@ -95,7 +96,7 @@ public class DocController {
             @PathVariable Long id,
             @RequestBody DocRequestDTO docRequestDTO) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         DocDetailsDTO docDetailsDTO = docService.putDoc(id, userID, docRequestDTO);
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
@@ -210,7 +211,7 @@ public class DocController {
     @ResponseBody
     public ResponseEntity<DocDetailsDTO> postDoc (@RequestBody DocRequestDTO docRequestDTO) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 51L;
+        UUID userID = DemoUserIDConstant.userID;
 
         DocDetailsDTO docDetailsDTO = docService.createDoc(docRequestDTO, userID);
 
@@ -243,7 +244,7 @@ public class DocController {
     @ResponseBody
     public ResponseEntity<DocUploadDTO> uploadDoc (@RequestParam("file")MultipartFile file) throws IOException, FileExtensionNotAllowedException {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 51L;
+        UUID userID = DemoUserIDConstant.userID;
 
         DocUploadDTO dto = docService.uploadFileToGDrive(file, userID);
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -39,7 +40,7 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public PostCommentDTO postPostComment(PostCommentRequestDTO postCommentRequestDTO, Long postID, Long authorID) {
+    public PostCommentDTO postPostComment(PostCommentRequestDTO postCommentRequestDTO, Long postID, UUID authorID) {
 
         if (postCommentRequestDTO == null) {
             return null;
@@ -53,7 +54,7 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public PostCommentDTO putPostComment(PostCommentRequestDTO postCommentRequestDTO, Long commentID, Long authorID) {
+    public PostCommentDTO putPostComment(PostCommentRequestDTO postCommentRequestDTO, Long commentID, UUID authorID) {
 
         if (postCommentRequestDTO == null) {
             return null;

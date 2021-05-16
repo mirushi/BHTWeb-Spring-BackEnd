@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Validated
@@ -40,7 +41,7 @@ public class PostCommentController {
     @ResponseBody
     public ResponseEntity<PostCommentDTO> postComments(@PathVariable Long postID, @RequestBody PostCommentRequestDTO postCommentRequestDTO) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         PostCommentDTO dto = postCommentService.postPostComment(postCommentRequestDTO, postID, userID);
 
@@ -51,7 +52,7 @@ public class PostCommentController {
     @ResponseBody
     public ResponseEntity<PostCommentDTO> putComment (@PathVariable Long id, @RequestBody PostCommentRequestDTO postCommentRequestDTO) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         PostCommentDTO postCommentDTO = postCommentService.putPostComment(postCommentRequestDTO, id, userID);
 

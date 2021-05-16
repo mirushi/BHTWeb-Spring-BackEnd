@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Mapper
 public abstract class DocCommentMapper {
@@ -35,7 +36,7 @@ public abstract class DocCommentMapper {
         return docCommentListDTO;
     }
 
-    public DocComment docCommentDTOToDocComment (DocCommentRequestDTO docCommentRequestDTO, Long authorID, Long docID, DocComment entity) {
+    public DocComment docCommentDTOToDocComment (DocCommentRequestDTO docCommentRequestDTO, UUID authorID, Long docID, DocComment entity) {
         DocComment docComment = Objects.requireNonNullElseGet(entity, DocComment::new);
 
         if (docCommentRequestDTO == null) {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @RestController
 @Validated
@@ -27,7 +28,7 @@ public class UserPostReportController {
     @ResponseBody
     public ResponseEntity reportPost (@PathVariable("id") Long postID, @RequestBody UserPostReportRequestDTO dto) throws IDNotFoundException {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         userPostReportService.createNewReport(userID, postID, dto);
 
@@ -38,7 +39,7 @@ public class UserPostReportController {
     @ResponseBody
     public ResponseEntity resolveReport (@PathVariable("id") Long reportID, @RequestBody UserPostReportResolveRequestDTO dto) throws IDNotFoundException {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         userPostReportService.resolveReport(userID, reportID, dto);
 

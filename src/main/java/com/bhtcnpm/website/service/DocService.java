@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 public interface DocService {
 
@@ -33,7 +34,7 @@ public interface DocService {
                                       ApiSortOrder sortByCreatedDtm,
                                       Long userID);
 
-    DocDetailsDTO putDoc (Long docID, Long lastEditedUserID, DocRequestDTO docRequestDTO);
+    DocDetailsDTO putDoc (Long docID, UUID lastEditedUserID, DocRequestDTO docRequestDTO);
 
     Boolean postApproval (Long docID, Long userID);
 
@@ -53,7 +54,7 @@ public interface DocService {
 
     public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, Long userID);
 
-    DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, Long userID);
+    DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, UUID userID);
 
     DocSummaryListDTO getDocBySearchTerm(
             String searchTerm,
@@ -64,7 +65,7 @@ public interface DocService {
             ApiSortOrder sortByPublishDtm
     );
 
-    DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Long userID) throws IOException, FileExtensionNotAllowedException;
+    DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, UUID userID) throws IOException, FileExtensionNotAllowedException;
 
     DocDownloadInfoDTO getDocDownloadInfo (String fileCode);
 

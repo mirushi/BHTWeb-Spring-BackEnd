@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -45,7 +46,7 @@ public class PostServiceImpl implements PostService {
     private static final int PAGE_SIZE_NEWEST = 16;
 
     @Override
-    public List<PostStatisticDTO> getPostStatistic(List<Long> postIDs, Long userID) {
+    public List<PostStatisticDTO> getPostStatistic(List<Long> postIDs, UUID userID) {
         List<PostStatisticDTO> postStatisticDTOS = postRepository.getPostStatisticDTOs(postIDs, userID);
 
         return postStatisticDTOS;
@@ -72,7 +73,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean approvePost(Long postID, Long userID) {
+    public Boolean approvePost(Long postID, UUID userID) {
         int rowAffected = postRepository.setPostState(postID, PostStateType.APPROVED);
         return rowAffected == 1;
     }
@@ -84,7 +85,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean createUserPostLike(Long postID, Long userID) {
+    public Boolean createUserPostLike(Long postID, UUID userID) {
         UserPostLikeId id = new UserPostLikeId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
@@ -97,7 +98,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean deleteUserPostLike(Long postID, Long userID) {
+    public Boolean deleteUserPostLike(Long postID, UUID userID) {
         UserPostLikeId id = new UserPostLikeId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
@@ -108,14 +109,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDetailsDTO createPost(PostRequestDTO postRequestDTO, Long userID) {
+    public PostDetailsDTO createPost(PostRequestDTO postRequestDTO, UUID userID) {
         Post post = postMapper.postRequestDTOToPost(postRequestDTO, userID, null);
 
         return postMapper.postToPostDetailsDTO(postRepository.save(post));
     }
 
     @Override
-    public PostDetailsDTO editPost(PostRequestDTO postRequestDTO, Long postID, Long userID) {
+    public PostDetailsDTO editPost(PostRequestDTO postRequestDTO, Long postID, UUID userID) {
         Optional<Post> optionalPost = postRepository.findById(postID);
         if (!optionalPost.isPresent()) {
             return null;
@@ -129,14 +130,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean deletePost(Long userID, Long postID) {
+    public Boolean deletePost(UUID userID, Long postID) {
         //TODO: Consider checking userID permission and saving who deleted the post.
         postRepository.deleteById(postID);
         return true;
     }
 
     @Override
-    public Boolean rejectPost(Long postID, Long userID) {
+    public Boolean rejectPost(Long postID, UUID userID) {
         int rowChanged = postRepository.setPostState(postID, PostStateType.REJECTED);
 
         if (rowChanged == 1) {
@@ -156,7 +157,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean createSavedStatus(Long postID, Long userID) {
+    public Boolean createSavedStatus(Long postID, UUID userID) {
         UserPostSaveId id = new UserPostSaveId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
@@ -169,7 +170,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean deleteSavedStatus(Long postID, Long userID) {
+    public Boolean deleteSavedStatus(Long postID, UUID userID) {
         UserPostSaveId id = new UserPostSaveId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
@@ -178,8 +179,6 @@ public class PostServiceImpl implements PostService {
 
         return true;
     }
-
-
 
     @Override
     public List<PostSummaryDTO> getPostWithActivityCategory() {
@@ -237,7 +236,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostSuggestionDTO> getRelatedPostSameAuthor(Long authorID, Long postID, Integer page) throws IDNotFoundException, IOException {
+    public List<PostSuggestionDTO> getRelatedPostSameAuthor(UUID authorID, Long postID, Integer page) throws IDNotFoundException, IOException {
 
         if (page == null) {
             page = 0;
@@ -266,7 +265,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSummaryListDTO getPostSavedByUserID(Long userID, Pageable pageable) {
+    public PostSummaryListDTO getPostSavedByUserID(UUID userID, Pageable pageable) {
         //Reset PAGE_SIZE to predefined value.
         pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
 

@@ -23,6 +23,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/posts")
@@ -36,7 +37,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<List<PostStatisticDTO>> getPostStatistics (@RequestParam List<Long> postIDs) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         List<PostStatisticDTO> postStatisticDTOS = postService.getPostStatistic(postIDs, userID);
 
@@ -56,7 +57,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<PostDetailsDTO> postPostDetails (@RequestBody PostRequestDTO postRequestDTO) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         PostDetailsDTO detailsDTO = postService.createPost(postRequestDTO, userID);
 
@@ -75,7 +76,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<PostDetailsDTO> putPostDetails (@RequestBody PostRequestDTO postRequestDTO, @PathVariable Long id) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         PostDetailsDTO postDetailsDTO = postService.editPost(postRequestDTO, id, userID);
 
@@ -86,7 +87,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity deletePost (@PathVariable Long id) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         Boolean result = postService.deletePost(userID, id);
 
@@ -101,7 +102,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity postPostApproval (@PathVariable Long id) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         Boolean result = postService.approvePost(id, userID);
 
@@ -130,7 +131,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity postLikeStatus (@PathVariable Long id) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         Boolean result = postService.createUserPostLike(id, userID);
 
@@ -145,7 +146,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity deleteLikeStatus (@PathVariable Long id) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         Boolean result = postService.deleteUserPostLike(id, userID);
 
@@ -160,7 +161,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity postRejection (@PathVariable Long id) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         Boolean result = postService.rejectPost(id, userID);
 
@@ -190,7 +191,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity postSavedStatus (@PathVariable Long id) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         Boolean result = postService.createSavedStatus(id, userID);
 
@@ -205,7 +206,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity deleteSavedStatus (@PathVariable Long id) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         Boolean result = postService.deleteSavedStatus(id, userID);
 
@@ -220,7 +221,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<PostSummaryListDTO> getPostSavedByUserId (
             @QuerydslPredicate(root = Post.class) Predicate predicate,
-            @RequestParam("userID") Long userID,
+            @RequestParam("userID") UUID userID,
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "sort", required = false) String sort,
             @PageableDefault @Nullable Pageable pageable
@@ -254,7 +255,7 @@ public class PostController {
     @GetMapping("relatedSameAuthor")
     @ResponseBody
     public ResponseEntity<List<PostSuggestionDTO>> relatedSameAuthor (
-            @RequestParam("authorID") Long authorID,
+            @RequestParam("authorID") UUID authorID,
             @RequestParam("postID") Long postID,
             @RequestParam(value = "page", required = false) Integer page) throws IDNotFoundException, IOException {
         return new ResponseEntity<>(postService.getRelatedPostSameAuthor(authorID, postID, page), HttpStatus.OK);

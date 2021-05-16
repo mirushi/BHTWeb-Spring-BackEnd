@@ -7,10 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 //TODO: Consider removing hashedPassword from retrieval.
-public interface UserWebsiteRepository extends JpaRepository<UserWebsite, Long> {
+public interface UserWebsiteRepository extends JpaRepository<UserWebsite, UUID> {
     Optional<UserWebsite> findByName (String name);
     Optional<UserWebsite> findByNameOrDisplayNameOrEmail (String name,String displayName, String email);
 

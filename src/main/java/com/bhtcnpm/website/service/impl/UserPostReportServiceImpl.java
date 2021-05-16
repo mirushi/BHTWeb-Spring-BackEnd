@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -36,7 +37,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
     private static final int PAGE_SIZE = 10;
 
     @Override
-    public Boolean createNewReport(Long userId, Long postId, @Valid UserPostReportRequestDTO dto) throws IDNotFoundException {
+    public Boolean createNewReport(UUID userId, Long postId, @Valid UserPostReportRequestDTO dto) throws IDNotFoundException {
         Post postProxy = postRepository.getOne(postId);
         UserWebsite reporter = userWebsiteRepository.getOne(userId);
         String reason = dto.getReason();
@@ -54,7 +55,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
     }
 
     @Override
-    public Boolean resolveReport (Long userId, Long reportId, @Valid UserPostReportResolveRequestDTO dto) throws IDNotFoundException {
+    public Boolean resolveReport (UUID userId, Long reportId, @Valid UserPostReportResolveRequestDTO dto) throws IDNotFoundException {
         Optional<UserPostReport> report = userPostReportRepository.findById(reportId);
         UserWebsite resolver = userWebsiteRepository.getOne(userId);
         PostReportActionType actionType = dto.getPostReportActionType();

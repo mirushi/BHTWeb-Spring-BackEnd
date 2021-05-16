@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Mapper
 public abstract class PostCommentMapper {
@@ -27,7 +28,7 @@ public abstract class PostCommentMapper {
     public abstract PostCommentDTO postCommentToPostCommentDTOChildCommentOnly (PostComment postComment);
 
     public PostComment postCommentDTOToPostComment(PostCommentRequestDTO postCommentRequestDTO,
-                                                   Long postID, Long authorID, PostComment entity) {
+                                                   Long postID, UUID authorID, PostComment entity) {
 
         PostComment postComment = Objects.requireNonNullElseGet(entity, PostComment::new);
 

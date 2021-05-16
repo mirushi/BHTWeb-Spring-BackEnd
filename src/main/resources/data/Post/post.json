@@ -13,7 +13,7 @@
     "contentPlainText": "Vào một đêm đẹp trời trăng thanh gió mát, Bạn được phân bổ vào dự án mới, và tất nhiên là hào khí ngút trời, thế như chẻ tre Hứng khởi vào đọc README.md một hồi, thấy dự án này sao mà cài cắm nhiều thứ thế Nào là php, rồi npm, redis, mysql, elasticsearch, ... Mỗi thứ lại phải kèm theo version bao nhiêu, một tá thư viện, vân vân và mây mây với với hàng tá thứ khác. Định kể thêm tý nữa cho ra vẻ nguy hiểm nhưng mà thôi các bạn cứ hiểu là nhiều nhé \uD83D\uDE05 Lẩm bẩm một hồi, giờ ngồi search google, cài cắm một tá thứ này thì hết bao lâu ta ? Sếp ơi, em cần 1 buổi sáng để setup ạ. Cài chưa xong đã thấy rối tùm lum, cái nọ xung đột cái kia chẳng hạn, lại còn ảnh hưởng tới những chương trình cũ đã cài đặt trong máy nữa chứ, thôi cài lại luôn cả hệ điều hành cho máy. Sếp ơi, em cần thêm 1 buổi nữa để setup ạ -_- Thôi xong, mất thời gian, mệt mỏi với nhưng thao tác phụ mà chưa tập trung được vào việc chính, hic.",
     "adminFeedback": "Feedback của admin về bài post.",
     "author": {
-      "id": 1
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "category": {
       "id": 1
@@ -23,7 +23,7 @@
       {
         "userPostLikeId": {
           "user": {
-            "id": 1
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 1
@@ -35,7 +35,7 @@
       {
         "userPostSaveId": {
           "user": {
-            "id": 2
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 1
@@ -64,7 +64,7 @@
     "contentPlainText": "Câu 1 : Định nghĩa hệ điều hành? - Hệ điều hành là chương trình trung gian giữa phần cứng máy tính và người sử dụng, có chức năng điều khiển và phối hợp việc sử dụng phần cứng và cung cấp các dịch vụ cơ bản cho các ứng dụng. Câu 2 : Cấu trúc hệ thống máy tính gồm những phần nào? - Phần cứng (hardware): Bao gồm các tài nguyên phần cứng của máy tính như CPU, bộ nhớ, các thiết bị I/O. Ví dụ: Chuột, bàn phím, màn hình, … - Hệ điều hành (operating system): Phân phối tài nguyên, điều khiển và phối hợp các hoạt động của các chương trình trong hệ thống. Ví dụ một số loại HĐH: MS – DOS, Linux, Window - Chương trình ứng dụng (application programs): Sử dụng hệ thống tài nguyên để giải quyết một bài toán tính toán nào đó của người sử dụng. Ví dụ: game - Users (people, machines, other computers) Câu 3 : Hệ điều hành có những chức năng gì? - Phân chia thời gian xử lý và định thời CPU. - Phối hợp và đồng bộ hoạt động giữa các processes (coordination & synchronization). - Quản lý tài nguyên hệ thống (thiết bị I/O, bộ nhớ, file chứa dữ liệu,…). - Thực hiện và kiểm soát access control, protection. - Duy trì sự nhất quán (integrity) của hệ thống, kiểm soát lỗi và phục hồi hệ thống khi có lỗi (error recovery). - Cung cấp giao diện làm việc cho users.",
     "adminFeedback": "Feedback của admin về bài post.",
     "author": {
-      "id": 1
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "category": {
       "id": 1
@@ -74,7 +74,7 @@
       {
         "userPostLikeId": {
           "user": {
-            "id": 1
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 2
@@ -86,7 +86,7 @@
       {
         "userPostSaveId": {
           "user": {
-            "id": 2
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 2
@@ -115,7 +115,7 @@
     "contentPlainText": "#StudyWithMe #HĐH Ngoài những kiến thức khô khan mà ta học được trên lớp, phải chăng HĐH chỉ có vậy thôi ? Học thuộc bài, qua môn, xong !!! Tuy nhiên, khi ngẫm lại, thực sự chúng ta có thể thấy, ta có thể học được nhiều thứ từ HĐH chứ không chỉ là những kiến thức khô khan thôi đâu ! Hãy cùng mình khám phá qua bài viết sau nhé ! Trong một mùa hè năm 1997, Robot Pathfinder của NASA đã đổ bộ xuống sao Hoả. Và nó bắt đầu truyền các tín hiệu hình ảnh về Trái Đất để phục vụ mục đích nghiên cứu. Nhưng vài ngày sau đó, có một chuyện không may xảy ra : Việc truyền tin hoàn toàn bị dừng lại. Pathfinder đang bị vướng vào 1 hiệu ứng, gọi là hiệu ứng “trì hoãn” (procrastinating) : Giữ cho chính mình làm việc liên tục nhưng lại hoàn toàn không làm được những việc quan trọng nhất. Chuyện gì đang xảy ra vậy ? Ah, thì ra là có một bug trong trình Định thời của nó. Mỗi hệ điều hành hiện nay, đều có một thứ gọi là “Bộ định thời”, nhằm mục đích điều khiển CPU nên làm một công việc bao lâu trước khi chuyển qua một công việc khác, và chuyển đến công việc nào. Khi mọi thứ diễn ra suôn sẻ, máy tính của mình sẽ vô cùng mượt mà mặc cho rất nhiều chương trình hiện đang chạy, cho một ảo giác như là máy tính ta làm nhiều công việc một lúc vậy. Và chúng ta đều biết chuyện gì sẽ xảy ra nếu như “Bộ định thì” hoạt động không hiệu quả.",
     "adminFeedback": "Feedback của admin về bài post.",
     "author": {
-      "id": 1
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "category": {
       "id": 1
@@ -125,7 +125,7 @@
       {
         "userPostLikeId": {
           "user": {
-            "id": 1
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 3
@@ -137,7 +137,7 @@
       {
         "userPostSaveId": {
           "user": {
-            "id": 2
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 3
@@ -166,7 +166,7 @@
     "contentPlainText": "#StudyWithMe #HĐH Ngoài những kiến thức khô khan mà ta học được trên lớp, phải chăng HĐH chỉ có vậy thôi ? Học thuộc bài, qua môn, xong !!! Tuy nhiên, khi ngẫm lại, thực sự chúng ta có thể thấy, ta có thể học được nhiều thứ từ HĐH chứ không chỉ là những kiến thức khô khan thôi đâu ! Hãy cùng mình khám phá qua bài viết sau nhé ! Trong một mùa hè năm 1997, Robot Pathfinder của NASA đã đổ bộ xuống sao Hoả. Và nó bắt đầu truyền các tín hiệu hình ảnh về Trái Đất để phục vụ mục đích nghiên cứu. Nhưng vài ngày sau đó, có một chuyện không may xảy ra : Việc truyền tin hoàn toàn bị dừng lại. Pathfinder đang bị vướng vào 1 hiệu ứng, gọi là hiệu ứng “trì hoãn” (procrastinating) : Giữ cho chính mình làm việc liên tục nhưng lại hoàn toàn không làm được những việc quan trọng nhất. Chuyện gì đang xảy ra vậy ? Ah, thì ra là có một bug trong trình Định thời của nó. Mỗi hệ điều hành hiện nay, đều có một thứ gọi là “Bộ định thời”, nhằm mục đích điều khiển CPU nên làm một công việc bao lâu trước khi chuyển qua một công việc khác, và chuyển đến công việc nào. Khi mọi thứ diễn ra suôn sẻ, máy tính của mình sẽ vô cùng mượt mà mặc cho rất nhiều chương trình hiện đang chạy, cho một ảo giác như là máy tính ta làm nhiều công việc một lúc vậy. Và chúng ta đều biết chuyện gì sẽ xảy ra nếu như “Bộ định thì” hoạt động không hiệu quả.",
     "adminFeedback": "Feedback của admin về bài post.",
     "author": {
-      "id": 1
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "category": {
       "id": 1
@@ -176,7 +176,7 @@
       {
         "userPostLikeId": {
           "user": {
-            "id": 1
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 4
@@ -188,7 +188,7 @@
       {
         "userPostSaveId": {
           "user": {
-            "id": 2
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 4
@@ -217,7 +217,7 @@
     "contentPlainText": "Không ít người đi làm tại các công ty đặt ra cho mình những suy nghĩ rằng:- \"Tại sao tôi lại phải dốc sức làm việc hết mình? Đây cũng không phải công ty của tôi, tôi chỉ đi làm công và nhận lương hàng tháng, đâu cần phải cố gắng 100% làm gì?\",- \"Anh ta cũng làm cùng 1 công việc như tôi, đâu cần phải làm thật giỏi, mà vẫn có mức lương bằng với tôi thôi\"...- \"Tôi chẳng đam mê gì công việc của mình, tôi chỉ cần làm đúng nhiệm vụ, không cần làm thêm cái gì phát sinh ngoài công việc cả\"...Thật ra, có 3 lí do tại sao bạn nên luôn luôn cố gắng làm việc thật tốt không phải chỉ để nhận lương, hãy cùng xem phía dưới đây nhé:",
     "adminFeedback": "Feedback của admin về bài post.",
     "author": {
-      "id": 1
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "category": {
       "id": 1
@@ -227,7 +227,7 @@
       {
         "userPostLikeId": {
           "user": {
-            "id": 1
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 5
@@ -239,7 +239,7 @@
       {
         "userPostSaveId": {
           "user": {
-            "id": 2
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 5
@@ -268,7 +268,7 @@
     "contentPlainText": "Với những ai chưa biết, tôi muốn giúp các bạn tìm hiểu rõ hơn về con đường đưa Elon Musk trở thành tỷ phú tự thân, đồng thời là nguyên mẫu đời thực của nhân vật Tony Stark trong bộ phim Iron Man (Người Sắt). Tuy nhiên, trước hết, hãy để Richard Branson giải thích ngắn gọn...",
     "adminFeedback": "Feedback của admin về bài post.",
     "author": {
-      "id": 2
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "category": {
       "id": 4
@@ -278,7 +278,7 @@
       {
         "userPostLikeId": {
           "user": {
-            "id": 1
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 6
@@ -290,7 +290,7 @@
       {
         "userPostSaveId": {
           "user": {
-            "id": 2
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 6
@@ -319,7 +319,7 @@
     "contentPlainText": "Cuộc sống luôn ngập tràn những điều bất ngờ thú vị, và con người thì không ngừng khát khao tìm lời giải cho mọi vấn đề hiện hữu quanh mình.Xuyên suốt quá trình chinh phục thế giới, một trong những câu hỏi day dứt và ám ảnh của nhiều người nhất chính là làm thế nào để có được sự may mắn? Theo quan niệm chung thì may mắn là một khái niệm gì đó khá trừu tượng và gần như nghiêng về yếu tố tâm linh nhiều hơn.Nhiều người cho rằng mọi việc xảy ra trên đời này đều có lí do của nó – hệt như một sự sắp đặt của tự nhiên. Và vận may cũng là một phần của quy luật bất biến ấy…Thế nhưng liệu có đúng khi chúng ta cứ thuận theo quan niệm có phần bị động như thế?Chắc hẳn mình và bạn – những người trẻ mang tư duy rộng mở về thế giới sẽ chẳng khi nào chấp nhận nó. Ai cũng nhận thức được chúng ta mới là người kiến tạo nên cuộc đời của chính mình.",
     "adminFeedback": "Feedback của admin về bài post.",
     "author": {
-      "id": 1
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "category": {
       "id": 4
@@ -329,7 +329,7 @@
       {
         "userPostLikeId": {
           "user": {
-            "id": 1
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 7
@@ -341,7 +341,7 @@
       {
         "userPostSaveId": {
           "user": {
-            "id": 2
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 7
@@ -370,7 +370,7 @@
     "contentPlainText": "Đầu tiên, sự siêng năng chăm chỉ luôn là điều quan trọng nhất nếu bạn muốn thành công bất cứ điều gì. Môn Toán thật sự không khó, có điều phải học đúng cách và sự đầu tư đúng hướng thì bạn sẽ giỏi thôi. Không chỉ học trên lớp mà về nhà cũng phải trau dồi và luyện tập thì bạn sẽ cảm thấy môn học này thật sự chẳng khó tí nào đâu!",
     "adminFeedback": "Feedback của admin về bài post.",
     "author": {
-      "id": 3
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "category": {
       "id": 2
@@ -380,7 +380,7 @@
       {
         "userPostLikeId": {
           "user": {
-            "id": 1
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 8
@@ -392,7 +392,7 @@
       {
         "userPostSaveId": {
           "user": {
-            "id": 2
+            "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
           },
           "post": {
             "id": 8

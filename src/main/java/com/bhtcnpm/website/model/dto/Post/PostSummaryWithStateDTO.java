@@ -5,12 +5,13 @@ import lombok.Data;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 public class PostSummaryWithStateDTO {
     private Long id;
-    private Long authorID;
+    private UUID authorID;
     private String authorName;
     private String authorAvatarURL;
     private Long categoryID;
