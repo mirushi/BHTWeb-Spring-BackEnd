@@ -24,6 +24,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Indexed

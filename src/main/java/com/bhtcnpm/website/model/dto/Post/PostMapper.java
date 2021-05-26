@@ -34,14 +34,14 @@ public abstract class PostMapper {
 
     @Mapping(target = "authorID", source = "post.author.id")
     @Mapping(target = "authorName", source = "post.author.name", qualifiedBy = {})
+    @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
-    @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     public abstract PostSummaryDTO postToPostSummaryDTO (Post post);
 
-    @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     @Mapping(target = "authorID", source = "post.author.id")
     @Mapping(target = "authorName", source = "post.author.name", qualifiedBy = {})
+    @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     public abstract PostSummaryWithStateDTO postToPostSummaryWithStateDTO (Post post);
@@ -52,9 +52,9 @@ public abstract class PostMapper {
 
     @Mapping(target = "authorID", source = "post.author.id")
     @Mapping(target = "authorName", source = "post.author.name")
+    @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
-    @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     public abstract PostDetailsDTO postToPostDetailsDTO (Post post);
 
     public PostSummaryListDTO postPageToPostSummaryListDTO (Page<Post> postPage) {

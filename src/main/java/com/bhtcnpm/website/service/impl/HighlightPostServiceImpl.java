@@ -43,7 +43,7 @@ public class HighlightPostServiceImpl implements HighlightPostService {
     @Override
     public void createHighlightPost(HighlightPostRequestDTO dto, UUID userID) {
         UserWebsite user = userWebsiteRepository.getOne(userID);
-        Post post = postRepository.getOne(dto.getPostId());
+        Post post = postRepository.getOne(dto.getId());
 
         highlightPostRepository.createHighlightPost(post, user);
     }

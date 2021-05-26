@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface PostService {
 
     List<PostStatisticDTO> getPostStatistic (List<Long> postIDs, UUID userID);
 
-    PostSummaryListDTO getPostSummary (Predicate predicate, Integer paginator);
+    PostSummaryListDTO getPostSummary (Predicate predicate, Integer paginator, Authentication authentication);
 
     PostDetailsDTO getPostDetails (Long id);
 

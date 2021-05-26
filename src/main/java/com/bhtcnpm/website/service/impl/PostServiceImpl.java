@@ -2,7 +2,9 @@ package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.model.dto.Post.*;
+import com.bhtcnpm.website.model.dto.UserWebsite.SimpleKeycloakAccountWithEntity;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.PostRepository;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -53,10 +56,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSummaryListDTO getPostSummary(Predicate predicate, Integer paginator) {
+    public PostSummaryListDTO getPostSummary(Predicate predicate, Integer paginator, Authentication authentication) {
         Sort sort;
         Pageable pageable = PageRequest.of(paginator, PAGE_SIZE);
         Page<Post> queryResults = postRepository.findAll(predicate, pageable);
+
+        UserWebsite currentUser = ((SimpleKeycloakAccountWithEntity)authentication.getDetails()).getEntity();
 
         PostSummaryListDTO postSummaryListDTO = postMapper.postPageToPostSummaryListDTO(queryResults);
 

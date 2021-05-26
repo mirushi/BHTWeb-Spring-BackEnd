@@ -19,6 +19,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,12 +39,6 @@ public class LoadUserDetailsFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest,
             ServletResponse servletResponse,
             FilterChain filterChain) throws IOException, ServletException {
-        //The load user filter should be applied only once.
-//        if(servletRequest.getAttribute(FILTER_APPLIED) != null) {
-//            filterChain.doFilter(servletRequest, servletResponse);
-//            return;
-//        }
-//        servletRequest.setAttribute(FILTER_APPLIED, Boolean.TRUE);
         log.debug("LoadUserDetailsFilter called!");
 
         SecurityContext securityContext = SecurityContextHolder.getContext();

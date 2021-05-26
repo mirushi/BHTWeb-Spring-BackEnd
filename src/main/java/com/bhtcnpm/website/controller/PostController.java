@@ -13,6 +13,7 @@ import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,9 +47,9 @@ public class PostController {
 
     @GetMapping
     @ResponseBody
-    @RolesAllowed("ROLE_POST_READ")
-    public ResponseEntity<PostSummaryListDTO> getPostSummary (@QuerydslPredicate(root = Post.class)Predicate predicate, @NotNull @Min(0) Integer paginator) {
-        PostSummaryListDTO postSummaryListDTO = postService.getPostSummary(predicate, paginator);
+//    @RolesAllowed("ROLE_POST_READ")
+    public ResponseEntity<PostSummaryListDTO> getPostSummary (@QuerydslPredicate(root = Post.class)Predicate predicate, @NotNull @Min(0) Integer paginator, Authentication authentication) {
+        PostSummaryListDTO postSummaryListDTO = postService.getPostSummary(predicate, paginator, authentication);
 
         return new ResponseEntity<>(postSummaryListDTO, HttpStatus.OK);
     }

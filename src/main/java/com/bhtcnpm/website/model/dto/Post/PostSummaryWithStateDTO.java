@@ -11,15 +11,15 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PostSummaryWithStateDTO {
     private Long id;
+    private String title;
+    private String summary;
+    private String imageURL;
+    private LocalDateTime publishDtm;
+    private Integer readingTime;
     private UUID authorID;
     private String authorName;
     private String authorAvatarURL;
     private Long categoryID;
     private String categoryName;
-    private String imageURL;
-    private LocalDateTime publishDtm;
-    private Integer readingTime;
-    private String summary;
-    private String title;
     private PostStateType postState;
 }
