@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.controller;
 
+import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.model.binding.IgnorePostStateTypeBinding;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
@@ -22,6 +23,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -34,20 +36,20 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping(value = "/statistic")
+    @GetMapping(value = "/statistics")
     @ResponseBody
-    public ResponseEntity<List<PostStatisticDTO>> getPostStatistics (@RequestParam List<Long> postIDs) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        List<PostStatisticDTO> postStatisticDTOS = postService.getPostStatistic(postIDs, userID);
+    public ResponseEntity<List<PostStatisticDTO>> getPostStatistics (
+            @RequestParam @Size(max = PostBusinessConstant.POST_STATISTICS_MAX) List<Long> postIDs,
+            Authentication authentication
+    ) {
+        List<PostStatisticDTO> postStatisticDTOS = postService.getPostStatistic(postIDs, authentication);
 
         return new ResponseEntity<>(postStatisticDTOS, HttpStatus.OK);
     }
 
     @GetMapping
     @ResponseBody
-//    @RolesAllowed("ROLE_POST_READ")
+    @RolesAllowed("ROLE_POST_READ")
     public ResponseEntity<PostSummaryListDTO> getPostSummary (@QuerydslPredicate(root = Post.class)Predicate predicate, @NotNull @Min(0) Integer paginator, Authentication authentication) {
         PostSummaryListDTO postSummaryListDTO = postService.getPostSummary(predicate, paginator, authentication);
 
@@ -67,19 +69,21 @@ public class PostController {
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<PostDetailsDTO> getPostDetails (@PathVariable Long id) {
+    public ResponseEntity<PostDetailsDTO> getPostDetails (@PathVariable @Min(0) Long id) {
         PostDetailsDTO postDetailsDTO = postService.getPostDetails(id);
 
+        if (postDetailsDTO == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(postDetailsDTO, HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<PostDetailsDTO> putPostDetails (@RequestBody PostRequestDTO postRequestDTO, @PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        PostDetailsDTO postDetailsDTO = postService.editPost(postRequestDTO, id, userID);
+    public ResponseEntity<PostDetailsDTO> putPostDetails (@RequestBody PostRequestDTO postRequestDTO,
+                                                          @PathVariable Long id,
+                                                          Authentication authentication) {
+        PostDetailsDTO postDetailsDTO = postService.editPost(postRequestDTO, id, authentication);
 
         return new ResponseEntity<>(postDetailsDTO, HttpStatus.OK);
     }

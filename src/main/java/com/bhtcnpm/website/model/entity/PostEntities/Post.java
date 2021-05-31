@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
+import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
@@ -24,7 +25,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Indexed
@@ -165,4 +165,29 @@ public class Post {
 
     @Version
     private short version;
+
+    @Transient
+    public boolean isDeleted () {
+        //Post is deleted when deletedDate is not null.
+        return this.getDeletedDate() != null;
+    }
+
+    @Transient
+    public PostBusinessState getPostBusinessState() {
+        //Refer to BHTCNPM confluence. Entity state page.
+        if (PostStateType.APPROVED.equals(this.getPostState())
+                && deletedDate == null
+                && publishDtm.isBefore(LocalDateTime.now())) {
+            return PostBusinessState.PUBLIC;
+        }
+        if (!PostStateType.APPROVED.equals(this.getPostState()) && deletedDate == null
+                || this.deletedDate == null && publishDtm.isAfter(LocalDateTime.now())) {
+            return PostBusinessState.UNLISTED;
+        }
+        if (deletedDate != null) {
+            return PostBusinessState.DELETED;
+        }
+        return null;
+    }
+
 }

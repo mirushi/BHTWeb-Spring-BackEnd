@@ -52,6 +52,7 @@ public abstract class PostMapper {
 
     @Mapping(target = "authorID", source = "post.author.id")
     @Mapping(target = "authorName", source = "post.author.name")
+    @Mapping(target = "authorDisplayName", source = "post.author.displayName")
     @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")

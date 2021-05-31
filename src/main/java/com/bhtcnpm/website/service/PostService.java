@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 
 import java.io.IOException;
@@ -14,10 +15,13 @@ import java.util.UUID;
 
 public interface PostService {
 
-    List<PostStatisticDTO> getPostStatistic (List<Long> postIDs, UUID userID);
+    List<PostStatisticDTO> getPostStatistic (List<Long> postIDs, Authentication authentication);
 
     PostSummaryListDTO getPostSummary (Predicate predicate, Integer paginator, Authentication authentication);
 
+    @PreAuthorize(value = "hasPermission(#id, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.GenericPermissionConstant).READ_PERMISSION)")
     PostDetailsDTO getPostDetails (Long id);
 
     Boolean approvePost (Long postID, UUID userID);
@@ -30,7 +34,10 @@ public interface PostService {
 
     PostDetailsDTO createPost (PostRequestDTO postRequestDTO, UUID userID);
 
-    PostDetailsDTO editPost (PostRequestDTO postRequestDTO, Long postID, UUID userID);
+    @PreAuthorize(value = "hasPermission(#postID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.GenericPermissionConstant).UPDATE_PERMISSION)")
+    PostDetailsDTO editPost (PostRequestDTO postRequestDTO, Long postID, Authentication authentication);
 
     Boolean deletePost (UUID userID, Long postID);
 

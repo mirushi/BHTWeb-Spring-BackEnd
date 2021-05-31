@@ -11,6 +11,7 @@ import com.bhtcnpm.website.repository.PostRepository;
 import com.bhtcnpm.website.repository.UserPostLikeRepository;
 import com.bhtcnpm.website.repository.UserPostSaveRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -49,7 +52,8 @@ public class PostServiceImpl implements PostService {
     private static final int PAGE_SIZE_NEWEST = 16;
 
     @Override
-    public List<PostStatisticDTO> getPostStatistic(List<Long> postIDs, UUID userID) {
+    public List<PostStatisticDTO> getPostStatistic(List<Long> postIDs, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
         List<PostStatisticDTO> postStatisticDTOS = postRepository.getPostStatisticDTOs(postIDs, userID);
 
         return postStatisticDTOS;
@@ -60,8 +64,6 @@ public class PostServiceImpl implements PostService {
         Sort sort;
         Pageable pageable = PageRequest.of(paginator, PAGE_SIZE);
         Page<Post> queryResults = postRepository.findAll(predicate, pageable);
-
-        UserWebsite currentUser = ((SimpleKeycloakAccountWithEntity)authentication.getDetails()).getEntity();
 
         PostSummaryListDTO postSummaryListDTO = postMapper.postPageToPostSummaryListDTO(queryResults);
 
@@ -121,7 +123,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDetailsDTO editPost(PostRequestDTO postRequestDTO, Long postID, UUID userID) {
+    public PostDetailsDTO editPost(PostRequestDTO postRequestDTO, Long postID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+        if (userID == null) {
+            throw new AccessDeniedException("You must authenticated before using this API.");
+        }
+
         Optional<Post> optionalPost = postRepository.findById(postID);
         if (!optionalPost.isPresent()) {
             return null;

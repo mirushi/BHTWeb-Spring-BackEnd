@@ -4,6 +4,9 @@ public class PostBusinessConstant {
     //This constant is for maximum posts that will be sent to client when it asks for related posts.
     public static final int RELATED_POST_MAX = 3;
 
+    //Maximum number of postID that single request of get post statistics can handle.
+    public static final int POST_STATISTICS_MAX = 20;
+
     //This constant is for minimum length that a title must have.
     public static final int TITLE_MIN = 10;
     //This constant is for maximum length that a title can have.

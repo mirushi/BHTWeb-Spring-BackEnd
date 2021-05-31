@@ -24,6 +24,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
@@ -36,14 +37,6 @@ import java.security.Security;
 @Profile("dev")
 //TODO: Please disable debug before goes production.
 @EnableWebSecurity(debug = true)
-@EnableGlobalMethodSecurity(
-        //The prePostEnabled property enables Spring Security pre/post annotations
-        prePostEnabled = true,
-        //The securedEnabled property determines if the @Secured annotation should be enabled
-        securedEnabled = true,
-        //The jsr250Enabled property allows us to use the @RoleAllowed annotation
-        jsr250Enabled = true
-)
 @RequiredArgsConstructor
 public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
@@ -138,8 +131,14 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         //Use Keycloak configuration too.
         super.configure(http);
 
-        http//Allow all public URLs.
-            .authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll();
+        //Disable CSRF because this application is REST API only (aka stateless).
+        http
+                .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                //Allow all public URLs.
+                .authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll();
 //        if (isSecurityEnabled == true) {
 //            //All other requests must be authenticated.
 //            http.authorizeRequests().anyRequest().authenticated();

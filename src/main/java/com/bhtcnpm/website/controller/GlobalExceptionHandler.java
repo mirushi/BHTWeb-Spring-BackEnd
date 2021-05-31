@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,10 +19,27 @@ import java.util.Collections;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final String MALFORMED_REQUEST = "Your request is malformed. Please check again.";
+
     @ExceptionHandler(value = {IllegalArgumentException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public final ApiError handleIllegalRequest(IllegalArgumentException illegalArgumentException) {
-        String message = "Your request is malformed. Please check again.";
+        String message = MALFORMED_REQUEST;
+        ApiError apiError = createApiError(HttpStatus.BAD_REQUEST, new ApiErrorDetails(
+                null,
+                null,
+                null,
+                message,
+                ApiErrorReason.ILLEGAL_REQUEST
+        ));
+
+        return apiError;
+    }
+
+    @ExceptionHandler(value = {ConstraintViolationException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public final ApiError handleConstraintViolation (ConstraintViolationException constraintViolationException) {
+        String message = MALFORMED_REQUEST;
         ApiError apiError = createApiError(HttpStatus.BAD_REQUEST, new ApiErrorDetails(
                 null,
                 null,
