@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
 import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -80,7 +81,7 @@ public class PostController {
 
     @PutMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<PostDetailsDTO> putPostDetails (@RequestBody PostRequestDTO postRequestDTO,
+    public ResponseEntity<PostDetailsDTO> putPostDetails (@RequestBody @Valid PostRequestDTO postRequestDTO,
                                                           @PathVariable Long id,
                                                           Authentication authentication) {
         PostDetailsDTO postDetailsDTO = postService.editPost(postRequestDTO, id, authentication);
@@ -91,10 +92,7 @@ public class PostController {
     @DeleteMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity deletePost (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        Boolean result = postService.deletePost(userID, id);
+        Boolean result = postService.deletePost(id);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);

@@ -74,4 +74,11 @@ public class PostCommentServiceImpl implements PostCommentService {
 
         return postCommentMapper.postCommentToPostCommentDTOChildCommentOnly(postComment);
     }
+
+    @Override
+    public boolean deletePostComment(Long commentID) {
+        //TODO: Please change this to soft delete. For now we'll be using permanent delete for testing purpose.
+        postCommentRepository.deleteById(commentID);
+        return true;
+    }
 }

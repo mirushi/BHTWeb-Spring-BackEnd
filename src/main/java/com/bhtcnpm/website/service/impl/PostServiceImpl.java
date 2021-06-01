@@ -142,7 +142,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean deletePost(UUID userID, Long postID) {
+    public Boolean deletePost(Long postID) {
         //TODO: Consider checking userID permission and saving who deleted the post.
         postRepository.deleteById(postID);
         return true;

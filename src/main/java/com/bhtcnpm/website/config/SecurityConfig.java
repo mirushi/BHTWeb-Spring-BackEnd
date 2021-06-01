@@ -41,7 +41,6 @@ import java.security.Security;
 public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     //Variable for specifying whenever Authentication and Authorization should be applied or not.
-    private Boolean isSecurityEnabled = false;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
@@ -139,12 +138,10 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .and()
                 //Allow all public URLs.
                 .authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll();
-//        if (isSecurityEnabled == true) {
-//            //All other requests must be authenticated.
-//            http.authorizeRequests().anyRequest().authenticated();
-//        } else {
-//            http.authorizeRequests().anyRequest().permitAll();
-//        }
+
+            //All other requests must be authenticated.
+            //http.authorizeRequests().anyRequest().authenticated();
+            http.authorizeRequests().anyRequest().permitAll();
 
         //Filter to push user data into SecurityContext.
         //The SecurityConfig of Keycloak will be applied after this configuration.

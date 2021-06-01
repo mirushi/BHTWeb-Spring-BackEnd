@@ -15,4 +15,6 @@ public interface PostCommentService {
     PostCommentDTO postPostComment (PostCommentRequestDTO postCommentRequestDTO, Long postID, UUID authorID);
 
     PostCommentDTO putPostComment (PostCommentRequestDTO postCommentRequestDTO, Long commentID, UUID authorID);
+
+    boolean deletePostComment (Long commentID);
 }

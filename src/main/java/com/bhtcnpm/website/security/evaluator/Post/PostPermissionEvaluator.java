@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.security.Security;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -85,7 +84,53 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
             return this.checkPostUpdatePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
+        //Kiểm tra quyền Delete.
+        if (GenericPermissionConstant.DELETE_PERMISSION.equals(permission)) {
+            return this.checkPostDeletePermission(authentication, authenticatedUserID, state, targetDomainObject);
+        }
+
         this.logger.warn(LogMessage.format("Post permission %s is not supported. Denying access to postID = %s", permission ,targetDomainObject.getId().toString()));
+        return false;
+    }
+
+    private boolean checkPostDeletePermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state, Post targetDomainObject) {
+        //Bắt buộc phải có tài khoản mới được deleted.
+        logger.info("Checking post update permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        //Xét state của Post.
+        if (PostBusinessState.PUBLIC.equals(state)) {
+            if (isOwnerAndContainsAuthority(authentication,
+                    targetDomainObject, PostPermissionConstant.POST_PUBLIC_SELF_DELETE)) {
+                return true;
+            }
+            else if (SecurityUtils.containsAuthority(authentication,
+                    PostPermissionConstant.POST_PUBLIC_ALL_DELETE)) {
+                return true;
+            }
+            return false;
+        }
+        else if (PostBusinessState.UNLISTED.equals(state)) {
+            if (isOwnerAndContainsAuthority(authentication, targetDomainObject,
+                    PostPermissionConstant.POST_UNLISTED_SELF_DELETE)) {
+                return true;
+            }
+            else if (SecurityUtils.containsAuthority(authentication,
+                    PostPermissionConstant.POST_UNLISTED_ALL_DELETE)) {
+                return true;
+            }
+            return false;
+        }
+        else if (PostBusinessState.DELETED.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_DELETED_ALL_DELETE)) {
+                return true;
+            }
+            return false;
+        }
+
         return false;
     }
 
@@ -101,7 +146,7 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
             if (isOwnerAndContainsAuthority(authentication, targetDomainObject, PostPermissionConstant.POST_PUBLIC_SELF_UPDATE)) {
                 return true;
             }
-            else if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_PUBLIC_OTHER_UPDATE)) {
+            else if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_PUBLIC_ALL_UPDATE)) {
                 return true;
             }
             return false;
@@ -110,13 +155,13 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
             if (isOwnerAndContainsAuthority(authentication, targetDomainObject ,PostPermissionConstant.POST_UNLISTED_SELF_UPDATE)) {
                 return true;
             }
-            else if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_UNLISTED_OTHER_UPDATE)) {
+            else if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_UNLISTED_ALL_UPDATE)) {
                 return true;
             }
             return false;
         }
         else if (PostBusinessState.DELETED.equals(state)) {
-            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_DELETED_OTHER_UPDATE)) {
+            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_DELETED_ALL_UPDATE)) {
                 return true;
             }
             return false;

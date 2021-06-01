@@ -45,6 +45,7 @@ public abstract class PostCommentMapper {
         postComment.setPost(postRepository.getOne(postID));
         postComment.setAuthor(userWebsiteRepository.getOne(authorID));
         postComment.setContent(postCommentRequestDTO.getContent());
+        //TODO: Do XSS filter here.
 
         return postComment;
     }

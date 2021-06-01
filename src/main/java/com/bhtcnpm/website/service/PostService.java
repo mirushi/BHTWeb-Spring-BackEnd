@@ -39,7 +39,10 @@ public interface PostService {
             "T(com.bhtcnpm.website.constant.security.evaluator.GenericPermissionConstant).UPDATE_PERMISSION)")
     PostDetailsDTO editPost (PostRequestDTO postRequestDTO, Long postID, Authentication authentication);
 
-    Boolean deletePost (UUID userID, Long postID);
+    @PreAuthorize(value = "hasPermission(#postID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.GenericPermissionConstant).DELETE_PERMISSION)")
+    Boolean deletePost (Long postID);
 
     Boolean rejectPost (Long postID, UUID userID);
 
