@@ -1,8 +1,12 @@
 package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.model.dto.PostComment.*;
-import com.bhtcnpm.website.model.entity.PostEntities.PostComment;
+import com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment;
+import com.bhtcnpm.website.model.entity.PostCommentEntities.UserPostCommentLike;
+import com.bhtcnpm.website.model.entity.PostCommentEntities.UserPostCommentLikeId;
 import com.bhtcnpm.website.repository.PostCommentRepository;
+import com.bhtcnpm.website.repository.UserPostCommentLikeRepository;
+import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.PostCommentService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +29,10 @@ public class PostCommentServiceImpl implements PostCommentService {
     private static final int DEFAULT_PRELOADED_COMMENT_COUNT = 3;
 
     private final PostCommentRepository postCommentRepository;
+
+    private final UserPostCommentLikeRepository userPostCommentLikeRepository;
+
+    private final UserWebsiteRepository userWebsiteRepository;
 
     private final PostCommentMapper postCommentMapper;
 
@@ -106,4 +114,29 @@ public class PostCommentServiceImpl implements PostCommentService {
         postCommentRepository.deleteById(commentID);
         return true;
     }
+
+    @Override
+    public boolean createUserPostCommentLike(Long commentID, UUID userID) {
+        UserPostCommentLikeId id =
+                new UserPostCommentLikeId(userWebsiteRepository.getOne(userID), postCommentRepository.getOne(commentID));
+        UserPostCommentLike entity = new UserPostCommentLike(id);
+        userPostCommentLikeRepository.save(entity);
+        return true;
+    }
+
+    @Override
+    public boolean deleteUserPostCommentLike (Long commentID, UUID userID) {
+        UserPostCommentLikeId id =
+                new UserPostCommentLikeId(userWebsiteRepository.getOne(userID), postCommentRepository.getOne(commentID));
+        userPostCommentLikeRepository.deleteById(id);
+        return true;
+    }
+
+    @Override
+    public List<PostCommentStatisticDTO> getCommentStatistics (List<Long> commentIDs, UUID userID) {
+        List<PostCommentStatisticDTO> postCommentStatisticDTOs = postCommentRepository.getPostCommentStatisticDTOs(commentIDs, userID);
+
+        return postCommentStatisticDTOs;
+    }
+
 }

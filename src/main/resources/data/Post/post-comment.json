@@ -1,6 +1,6 @@
 [
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -69,7 +69,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment thứ nhì",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -81,7 +81,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -93,7 +93,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -105,7 +105,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -117,7 +117,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -129,7 +129,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -141,7 +141,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -153,7 +153,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -165,7 +165,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -177,7 +177,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -189,7 +189,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -201,7 +201,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -213,7 +213,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -225,7 +225,7 @@
     "version": 0
   },
   {
-    "_class": "com.bhtcnpm.website.model.entity.PostEntities.PostComment",
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment đầu tiên",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"

@@ -1,9 +1,6 @@
 package com.bhtcnpm.website.controller;
 
-import com.bhtcnpm.website.model.dto.PostComment.PostCommentChildDTO;
-import com.bhtcnpm.website.model.dto.PostComment.PostCommentDTO;
-import com.bhtcnpm.website.model.dto.PostComment.PostCommentListDTO;
-import com.bhtcnpm.website.model.dto.PostComment.PostCommentRequestDTO;
+import com.bhtcnpm.website.model.dto.PostComment.*;
 import com.bhtcnpm.website.service.PostCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
 
@@ -86,6 +84,48 @@ public class PostCommentController {
         } else {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping(value = "/posts/comments/{commentID}/likeStatus")
+    @ResponseBody
+    public ResponseEntity postLikeStatus (@PathVariable Long commentID) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        UUID userID = DemoUserIDConstant.userID;
+
+        boolean result = postCommentService.createUserPostCommentLike(commentID, userID);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping(value = "/posts/comments/{commentID}/likeStatus")
+    @ResponseBody
+    public ResponseEntity deleteLikeStatus (@PathVariable Long commentID) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        UUID userID = DemoUserIDConstant.userID;
+
+        boolean result = postCommentService.deleteUserPostCommentLike(commentID, userID);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping(value = "/posts/comments/statistics")
+    @ResponseBody
+    public ResponseEntity<List<PostCommentStatisticDTO>> getPostCommentStatistics (
+            @RequestParam List<Long> commentIDs
+    ) {
+        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
+        UUID userID = DemoUserIDConstant.userID;
+        List<PostCommentStatisticDTO> postCommentStatisticDTOs = postCommentService.getCommentStatistics(commentIDs, userID);
+
+        return new ResponseEntity<>(postCommentStatisticDTOs, HttpStatus.OK);
     }
 
 }

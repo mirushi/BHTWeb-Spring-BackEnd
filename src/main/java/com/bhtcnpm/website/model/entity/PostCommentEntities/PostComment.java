@@ -1,5 +1,6 @@
-package com.bhtcnpm.website.model.entity.PostEntities;
+package com.bhtcnpm.website.model.entity.PostCommentEntities;
 
+import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -7,7 +8,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -52,17 +52,13 @@ public class PostComment {
     @EqualsAndHashCode.Exclude
     private List<PostComment> childComments;
 
-    @ManyToMany (cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(
-            name = "post_comment_user_like",
-            joinColumns = @JoinColumn(name = "post_comment_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+    @OneToMany(
+            mappedBy = "userPostCommentLikeId.postComment",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     @EqualsAndHashCode.Exclude
-    private Set<UserWebsite> likedByUsers;
+    private Set<UserPostCommentLike> userPostCommentLikes;
 
     @Version
     private short version;
