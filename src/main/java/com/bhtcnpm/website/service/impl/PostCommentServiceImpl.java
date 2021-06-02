@@ -1,15 +1,17 @@
 package com.bhtcnpm.website.service.impl;
 
-import com.bhtcnpm.website.model.dto.PostComment.PostCommentDTO;
-import com.bhtcnpm.website.model.dto.PostComment.PostCommentMapper;
-import com.bhtcnpm.website.model.dto.PostComment.PostCommentRequestDTO;
+import com.bhtcnpm.website.model.dto.PostComment.*;
 import com.bhtcnpm.website.model.entity.PostEntities.PostComment;
 import com.bhtcnpm.website.repository.PostCommentRepository;
 import com.bhtcnpm.website.service.PostCommentService;
+import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,39 +20,62 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 public class PostCommentServiceImpl implements PostCommentService {
+    private static final int PAGE_SIZE = 10;
+
+    private static final int DEFAULT_PRELOADED_COMMENT_COUNT = 3;
 
     private final PostCommentRepository postCommentRepository;
 
     private final PostCommentMapper postCommentMapper;
 
     @Override
-    public List<PostCommentDTO> getPostCommentsByPostID(Long postID) {
-        List<PostCommentDTO> postCommentDTOs = postCommentRepository.getPostCommentDTOsParentOnly(postID);
+    public PostCommentListDTO getPostCommentsByPostID(Long postID, Pageable pageable) {
+        pageable = PaginatorUtils.getPageableWithNewPageSize(pageable, PAGE_SIZE);
 
-        return postCommentDTOs;
+        Page<PostCommentDTO> postCommentDTOs = postCommentRepository.getPostCommentDTOsParentOnly(postID, pageable);
+
+        return postCommentMapper.postCommentPageToPostCommentListDTO(postCommentDTOs);
     }
 
     @Override
-    public List<PostCommentDTO> getChildComments(Long parentCommentID) {
+    public List<PostCommentChildDTO> getChildComments(Long parentCommentID) {
         List<PostComment> queryResult = postCommentRepository.getPostCommentByParentCommentId(parentCommentID);
 
-        List<PostCommentDTO> postCommentDTOs = postCommentMapper.postCommentListToPostCommentDTOListChildCommentOnly(queryResult);
+        List<PostCommentChildDTO> postCommentDTOs = postCommentMapper.postCommentListToPostCommentChildDTOList(queryResult);
 
         return postCommentDTOs;
     }
 
     @Override
     public PostCommentDTO postPostComment(PostCommentRequestDTO postCommentRequestDTO, Long postID, UUID authorID) {
-
         if (postCommentRequestDTO == null) {
             return null;
         }
 
-        PostComment postComment = postCommentMapper.postCommentDTOToPostComment(postCommentRequestDTO, postID, authorID,null);
+        PostComment postComment = postCommentMapper.postCommentDTOToPostComment(postCommentRequestDTO, postID, null, authorID,null);
 
         postCommentRepository.save(postComment);
 
         return postCommentMapper.postCommentToPostCommentDTOChildCommentOnly(postComment);
+    }
+
+    @Override
+    public PostCommentChildDTO postChildComment(PostCommentRequestDTO postCommentRequestDTO, Long parentCommentID, UUID authorID) {
+        Optional<PostComment> parentComment = postCommentRepository.findById(parentCommentID);
+        if (parentComment.isEmpty()) {
+            throw new IllegalArgumentException("Parent comment not found.");
+        }
+
+        PostComment parentEntity = parentComment.get();
+        //We don't want it to be nested too deep.
+        if (parentEntity.getParentComment() != null) {
+            throw new IllegalArgumentException("Cannot nest comment. Maximum comment depth is 2.");
+        }
+
+        PostComment childEntity = postCommentMapper.postCommentDTOToPostComment(postCommentRequestDTO, parentEntity.getPost().getId(), parentCommentID, authorID, null);
+        postCommentRepository.save(childEntity);
+
+        return postCommentMapper.postCommentToPostCommentChildDTO(childEntity);
     }
 
     @Override
@@ -68,7 +93,7 @@ public class PostCommentServiceImpl implements PostCommentService {
         PostComment postComment = optionalPostComment.get();
 
         postComment = postCommentMapper.postCommentDTOToPostComment(
-                postCommentRequestDTO, postComment.getPost().getId(), postComment.getAuthor().getId(), postComment);
+                postCommentRequestDTO, postComment.getPost().getId(), postComment.getParentComment().getId() ,postComment.getAuthor().getId(), postComment);
 
         postComment = postCommentRepository.save(postComment);
 

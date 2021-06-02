@@ -61,6 +61,7 @@ public class WebsiteApplication {
                 new ClassPathResource("data/Post/post-category.json"),
                 new ClassPathResource("data/Post/post.json"),
                 new ClassPathResource("data/Post/highlight-post.json"),
+                new ClassPathResource("data/Post/post-comment.json"),
                 new ClassPathResource("data/Doc/doc-subject.json"),
                 new ClassPathResource("data/Doc/doc-category.json"),
                 new ClassPathResource("data/Doc/doc-file-upload.json"),

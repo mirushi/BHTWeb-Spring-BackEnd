@@ -3,18 +3,20 @@ package com.bhtcnpm.website.model.entity.PostEntities;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "post_comment")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostComment {
-
     @Id
     @GeneratedValue (
             strategy = GenerationType.SEQUENCE,
@@ -38,7 +40,7 @@ public class PostComment {
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonBackReference
     private PostComment parentComment;
 
     @OneToMany(
@@ -46,7 +48,7 @@ public class PostComment {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JsonBackReference
+    @JsonManagedReference
     @EqualsAndHashCode.Exclude
     private List<PostComment> childComments;
 
@@ -64,4 +66,15 @@ public class PostComment {
 
     @Version
     private short version;
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PostComment)) return false;
+        PostComment other = (PostComment) o;
+        return id != null && id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {return getClass().hashCode();}
 }
