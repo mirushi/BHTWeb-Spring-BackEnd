@@ -12,9 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -39,7 +40,7 @@ public class DocCommentServiceImpl implements DocCommentService {
     }
 
     @Override
-    public Boolean postDocComment (DocCommentRequestDTO requestDTO, Long authorID, Long docID) {
+    public Boolean postDocComment (DocCommentRequestDTO requestDTO, UUID authorID, Long docID) {
         DocComment docComment = docCommentMapper.docCommentDTOToDocComment(requestDTO, authorID, docID, null);
 
         docCommentRepository.save(docComment);
@@ -47,7 +48,7 @@ public class DocCommentServiceImpl implements DocCommentService {
     }
 
     @Override
-    public DocCommentDTO putDocComment(DocCommentRequestDTO requestDTO, Long commentID, Long userID) {
+    public DocCommentDTO putDocComment(DocCommentRequestDTO requestDTO, Long commentID, UUID userID) {
         //TODO: Please check if user has sufficient right to change comment.
         Optional<DocComment> optionalDocComment = docCommentRepository.findById(commentID);
 
@@ -66,7 +67,7 @@ public class DocCommentServiceImpl implements DocCommentService {
     }
 
     @Override
-    public Boolean deleteDocComment(Long commentID, Long userID) {
+    public Boolean deleteDocComment(Long commentID, UUID userID) {
         //TODO: Please check if user has enough permission to perform delete comment.
         DocComment comment = docCommentRepository.getOne(commentID);
         docCommentRepository.delete(comment);

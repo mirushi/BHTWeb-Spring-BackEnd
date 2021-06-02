@@ -3,7 +3,7 @@
     "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
     "id": 1,
     "author": {
-      "id": 1
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "lastEditedUser": null,
     "category": {
@@ -38,7 +38,7 @@
     "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
     "id": 2,
     "author": {
-      "id": 2
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "lastEditedUser": null,
     "category": {
@@ -73,7 +73,7 @@
     "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
     "id": 3,
     "author": {
-      "id": 3
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "lastEditedUser": null,
     "category": {
@@ -108,7 +108,7 @@
     "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
     "id": 4,
     "author": {
-      "id": 2
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "lastEditedUser": null,
     "category": {
@@ -143,7 +143,7 @@
     "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
     "id": 5,
     "author": {
-      "id": 2
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "lastEditedUser": null,
     "category": {

@@ -15,6 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.config.BootstrapMode;
 import org.springframework.data.repository.init.Jackson2RepositoryPopulatorFactoryBean;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -60,11 +61,13 @@ public class WebsiteApplication {
                 new ClassPathResource("data/Post/post-category.json"),
                 new ClassPathResource("data/Post/post.json"),
                 new ClassPathResource("data/Post/highlight-post.json"),
+                new ClassPathResource("data/Post/post-comment.json"),
                 new ClassPathResource("data/Doc/doc-subject.json"),
                 new ClassPathResource("data/Doc/doc-category.json"),
                 new ClassPathResource("data/Doc/doc-file-upload.json"),
                 new ClassPathResource("data/Doc/doc.json"),
-                new ClassPathResource("data/Doc/user-doc-reaction.json")
+                new ClassPathResource("data/Doc/user-doc-reaction.json"),
+                new ClassPathResource("data/report-reason.json")
 //                new ClassPathResource("data/tag-data.json")
         });
         factoryBean.setMapper(objectMapper);

@@ -31,9 +31,18 @@ public class CaptchaServiceImpl implements CaptchaService {
     @Value("${com.google.recaptcha.verify.url}")
     private String G_CAPTCHA_VERIFY_URL;
 
+    @Value("${com.google.recaptcha.bypass}")
+    //TODO: Make sure you'll disable bypass captcha on production environments.
+    private boolean BYPASS_CAPTCHA;
+
     private final RestTemplate restTemplate;
 
     public boolean verifyCaptcha (String captchaToken, String userIPAddress) throws CaptchaServerErrorException, CaptchaInvalidException {
+
+        if (BYPASS_CAPTCHA) {
+            return true;
+        }
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(G_CAPTCHA_VERIFY_URL)
                 .queryParam("secret", G_CAPTCHA_SECRET_KEY)
                 .queryParam("response", captchaToken)

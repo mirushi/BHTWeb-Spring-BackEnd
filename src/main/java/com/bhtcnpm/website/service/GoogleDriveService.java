@@ -19,6 +19,7 @@ import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class GoogleDriveService {
     private static final String APPLICATION_NAME = "BHTWeb";
@@ -119,7 +120,7 @@ public class GoogleDriveService {
         return subFolder.getId();
     }
 
-    public static com.google.api.services.drive.model.File createGoogleFileWithUserID (String googleFolderIdParent, Long userID, String contentType, String customFileName, byte[] uploadData) throws IOException {
+    public static com.google.api.services.drive.model.File createGoogleFileWithUserID (String googleFolderIdParent, UUID userID, String contentType, String customFileName, byte[] uploadData) throws IOException {
         //Get subfolder of userID to upload file.
         String userFolderID = GoogleDriveService.createOrGetSubFolderIdWithName(googleFolderIdParent, userID.toString());
 

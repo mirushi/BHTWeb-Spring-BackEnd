@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Mapper
@@ -33,14 +34,14 @@ public abstract class PostMapper {
 
     @Mapping(target = "authorID", source = "post.author.id")
     @Mapping(target = "authorName", source = "post.author.name", qualifiedBy = {})
+    @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
-    @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     public abstract PostSummaryDTO postToPostSummaryDTO (Post post);
 
-    @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     @Mapping(target = "authorID", source = "post.author.id")
     @Mapping(target = "authorName", source = "post.author.name", qualifiedBy = {})
+    @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     public abstract PostSummaryWithStateDTO postToPostSummaryWithStateDTO (Post post);
@@ -51,9 +52,10 @@ public abstract class PostMapper {
 
     @Mapping(target = "authorID", source = "post.author.id")
     @Mapping(target = "authorName", source = "post.author.name")
+    @Mapping(target = "authorDisplayName", source = "post.author.displayName")
+    @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
-    @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     public abstract PostDetailsDTO postToPostDetailsDTO (Post post);
 
     public PostSummaryListDTO postPageToPostSummaryListDTO (Page<Post> postPage) {
@@ -66,7 +68,7 @@ public abstract class PostMapper {
 
     public abstract List<PostSummaryDTO> postPageToPostSummaryDTOList (Page<Post> postPage);
 
-    public Post postRequestDTOToPost (PostRequestDTO postRequestDTO, Long userID, Post entity) {
+    public Post postRequestDTOToPost (PostRequestDTO postRequestDTO, UUID userID, Post entity) {
         Post post = Objects.requireNonNullElseGet(entity, Post::new);
         String contentCleansed = stripDangerousHTMLTag(postRequestDTO.getContent());
         String contentPlainText = stripAllHTMLTag(postRequestDTO.getContent());

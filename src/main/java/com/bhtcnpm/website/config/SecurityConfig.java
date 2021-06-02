@@ -1,101 +1,150 @@
 package com.bhtcnpm.website.config;
 
 import com.bhtcnpm.website.constant.security.SecurityConstant;
-import com.bhtcnpm.website.security.filter.JwtAccessDeniedHandler;
-import com.bhtcnpm.website.security.filter.JwtAuthenticationEntryPoint;
-import com.bhtcnpm.website.security.filter.JwtAuthorizationFilter;
+import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.filter.LoadUserDetailsFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
+import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
+import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticatedActionsFilter;
+import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter;
+import org.keycloak.adapters.springsecurity.filter.KeycloakPreAuthActionsFilter;
+import org.keycloak.adapters.springsecurity.filter.KeycloakSecurityContextRequestFilter;
+import org.keycloak.adapters.springsecurity.management.HttpSessionManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-@Configuration
+import java.security.Security;
+
+@KeycloakConfiguration
 @Profile("dev")
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+//TODO: Please disable debug before goes production.
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     //Variable for specifying whenever Authentication and Authorization should be applied or not.
-    private Boolean isSecurityEnabled = false;
-
-    public static final String DEFAULT_ENCODING_ALGO = "{bcrypt}";
-
-    @Qualifier("jpaUserDetailsService")
-    private final UserDetailsService jpaUserDetailsService;
-
-    private final JwtAuthorizationFilter jwtAuthorizationFilter;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
-    @Bean
-    public PasswordEncoder passwordEncoder () {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    @Autowired
+    private UserWebsiteRepository userWebsiteRepository;
+
+    /**
+     * Registers the KeycloakAuthenticationProvider with the authentication manager.
+     */
+    @Autowired
+    public void configureGlobal (AuthenticationManagerBuilder auth) throws Exception {
+        KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
+        auth.authenticationProvider(keycloakAuthenticationProvider);
     }
 
-    //For use with Spring Data JPA SPeL.
+    /**
+     * Use application.properties for Keycloak configuration.
+     */
+
     @Bean
-    public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
-        return new SecurityEvaluationContextExtension();
+    public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
+        return new KeycloakSpringBootConfigResolver();
+    }
+
+    /**
+     * Defines the session authentication strategy.
+     */
+    @Bean
+    @Override
+    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new NullAuthenticatedSessionStrategy();
+    }
+
+    /**
+     * Custom filter for account retrieval and/or creation.
+     * **/
+    @Bean
+    protected LoadUserDetailsFilter loadUserDetailsFilter() {
+        return new LoadUserDetailsFilter(userWebsiteRepository);
+    }
+
+    /**
+     * Prevent double bean registration.
+     * */
+    @Bean
+    public FilterRegistrationBean keycloakAuthenticationProcessingFilterRegistrationBean(
+            KeycloakAuthenticationProcessingFilter filter) {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean keycloakPreAuthActionsFilterRegistrationBean(
+            KeycloakPreAuthActionsFilter filter) {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean keycloakAuthenticatedActionsFilterBean(
+            KeycloakAuthenticatedActionsFilter filter) {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean keycloakSecurityContextRequestFilterBean(
+            KeycloakSecurityContextRequestFilter filter) {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
+    }
+
+    @Override
+    //TODO: Remove this before applying to production environment. Below is for development profile only.
+    public void configure (WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(SecurityConstant.DEV_PUBLIC_URLS);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-            .cors() //Enable CSRF for JWT.
-            .and()
-            //JWT is stateless. We don't do tracking.
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            //Allow all public URLs.
-            .authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll()
-            .and()
-            //TODO: Remove this before applying to production environment. Below is for development profile only.
-            .authorizeRequests().antMatchers(SecurityConstant.DEV_PUBLIC_URLS).permitAll();
+        //Use Keycloak configuration too.
+        super.configure(http);
 
-        if (isSecurityEnabled == true) {
+        //Disable CSRF because this application is REST API only (aka stateless).
+        http
+                .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                //Allow all public URLs.
+                .authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll();
+
             //All other requests must be authenticated.
-            http.authorizeRequests().anyRequest().authenticated();
-        } else {
+            //http.authorizeRequests().anyRequest().authenticated();
             http.authorizeRequests().anyRequest().permitAll();
-        }
 
-        http.exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler)
-            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-            .and()
-            .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        //Allow frame for H2 console.
-        //TODO: Remove this before applying to production environment. Below is for development profile only.
-        http.headers().frameOptions().sameOrigin();
+        //Filter to push user data into SecurityContext.
+        //The SecurityConfig of Keycloak will be applied after this configuration.
+        http.addFilterAfter(loadUserDetailsFilter(), KeycloakAuthenticatedActionsFilter.class);
     }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(jpaUserDetailsService).passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean () throws Exception {
-        return super.authenticationManagerBean();
-    }
-
 }

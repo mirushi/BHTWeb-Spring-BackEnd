@@ -11,8 +11,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.search.engine.backend.types.Norms;
+import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +27,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
@@ -34,17 +37,15 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserWebsite implements UserDetails, CredentialsContainer {
+public class UserWebsite {
+    //New account will automatically be created if not found in db.
     @Id
-    @GeneratedValue (
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_website_sequence"
+    @GenericField(
+            name = "id",
+            searchable = Searchable.YES,
+            projectable = Projectable.YES
     )
-    @SequenceGenerator(
-            name = "user_website_sequence",
-            sequenceName = "user_website_sequence"
-    )
-    private Long id;
+    private UUID id;
 
     @Column(nullable = false, length = UWDomainConstant.NAME_LENGTH)
     @Size(max = UWDomainConstant.NAME_LENGTH)
@@ -52,22 +53,21 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
     @NaturalId
     private String name;
 
-    @Column(nullable = false, length = UWDomainConstant.DISPLAY_NAME_LENGTH)
-    @Size(max = UWDomainConstant.DISPLAY_NAME_LENGTH)
-    @FullTextField(norms = Norms.YES, searchable = Searchable.YES)
-    private String displayName;
-
-    @Column(nullable = false, length = UWDomainConstant.PASSWORD_LENGTH)
-    @Size(max = UWDomainConstant.PASSWORD_LENGTH)
-    private String hashedPassword;
-
     @Column(nullable = false, length = UWDomainConstant.EMAIL_LENGTH)
     @Size(max = UWDomainConstant.EMAIL_LENGTH)
     @Email
     private String email;
 
+    @Column(nullable = false, length = UWDomainConstant.DISPLAY_NAME_LENGTH)
+    @Size(max = UWDomainConstant.DISPLAY_NAME_LENGTH)
+    @FullTextField(norms = Norms.YES, searchable = Searchable.YES)
+    private String displayName;
+
     @Column(nullable = false)
     private Long reputationScore;
+
+    @Column(nullable = false)
+    private String avatarURL;
 
     @ManyToMany (
             cascade = { CascadeType.PERSIST },
@@ -81,9 +81,6 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<UserWebsiteRole> roles;
-
-    @Column(nullable = false)
-    private String avatarURL;
 
     @OneToMany (
             mappedBy = "author",
@@ -151,43 +148,8 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
     @JsonIgnore
     private Set<Course> savedCourses;
 
-    @Transient
-    @Builder.Default
-    private Boolean accountNonExpired = true;
-
-    @Transient
-    @Builder.Default
-    private Boolean credentialsNonExpired = true;
-
-    @Builder.Default
-    private Boolean enabled = false;
-
-    @Builder.Default
-    private Boolean locked = false;
-
     @Version
     private short version;
-
-    public void removeRole (UserWebsiteRole role) {
-        this.roles.remove(role);
-    }
-
-    public void addRole (UserWebsiteRole role) {
-        this.roles.add(role);
-    }
-
-    @Transient
-    @Override
-    public Set<GrantedAuthority> getAuthorities () {
-        return this.roles.stream()
-                .map(UserWebsiteRole::getAuthorities)
-                .distinct()
-                .flatMap(Set::stream)
-                .map(authority -> {
-                    return new SimpleGrantedAuthority(authority.getPermission());
-                })
-                .collect(Collectors.toSet());
-    }
 
     @Override
     public boolean equals (Object o) {
@@ -197,48 +159,11 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
         }
         UserWebsite other = (UserWebsite) o;
 
-        return Objects.equals(getName(), other.getName());
+        return Objects.equals(getId(), other.getId());
     }
 
     @Override
     public int hashCode () {
-        return Objects.hash(getName());
-    }
-
-    @Override
-    public void eraseCredentials() {
-        this.hashedPassword = null;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.hashedPassword;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.name;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.accountNonExpired;
-    }
-
-    @Override
-    //TODO: Account is locked when multiple login attempts failed.
-    public boolean isAccountNonLocked() {
-        return !locked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
-    }
-
-    @Override
-    //Disabled is when the account is disabled by administrator.
-    public boolean isEnabled() {
-        return this.enabled;
+        return Objects.hash(getId());
     }
 }

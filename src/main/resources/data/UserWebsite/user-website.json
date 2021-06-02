@@ -1,50 +1,12 @@
 [
   {
     "_class": "com.bhtcnpm.website.model.entity.UserWebsite",
-    "id": 1,
-    "name": "dong",
-    "displayName": "Nguyen Van Dong",
-    "hashedPassword": "{bcrypt}$2a$10$ZybiaIvOc6nXwu.yQpudF.S2XXz.Eomue1NTDND19Lxy7ZM9EYDzW",
+    "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18",
+    "name": "mirushi",
+    "displayName": "Luu Bieu Nghi",
     "email": "niceday0246@gmail.com",
     "reputationScore": 100,
     "avatarURL": "https://ziclife.com/wp-content/uploads/2020/08/cute-profile-picture-32.jpg",
-    "roles": [
-      {"id": 3}
-    ],
-    "enabled": true,
-    "locked": false,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.UserWebsite",
-    "id": 2,
-    "name": "nghi",
-    "displayName": "Luu Bieu Nghi",
-    "hashedPassword": "{bcrypt}$2a$10$XnkfNcAacMZ4jVMXb3Wlz.x44FjzpX/Ktxs1nKv/61KuWbpTPXe6C",
-    "email": "luubieunghi@gmail.com",
-    "reputationScore": 300,
-    "avatarURL": "https://www.vippng.com/png/detail/136-1363405_avatar-png-image-with-transparent-background-funny-avatar.png",
-    "roles": [
-      {"id": 4}
-    ],
-    "enabled": true,
-    "locked": false,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.UserWebsite",
-    "id": 3,
-    "name": "hai",
-    "displayName": "Vu Tuan Hai",
-    "hashedPassword": "{bcrypt}$2a$10$rE5T5rdk.x0zBc8hgnMFG.5yHnh6IXP7lvLBiiOiOyndOFAX5H7FO",
-    "email": "17520794@gm.uit.edu.vn",
-    "reputationScore": 300,
-    "avatarURL": "https://media.images.yourquote.in/post/large/0/0/5/223/WGvR1449.jpg",
-    "roles": [
-      {"id": 3}
-    ],
-    "enabled": true,
-    "locked": false,
     "version": 0
   }
 ]

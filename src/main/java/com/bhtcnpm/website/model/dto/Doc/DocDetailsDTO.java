@@ -5,12 +5,13 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 public class DocDetailsDTO {
     private Long id;
 
-    private Long authorID;
+    private UUID authorID;
 
     private String authorName;
 

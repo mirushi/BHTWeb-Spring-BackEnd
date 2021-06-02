@@ -1,31 +1,12 @@
 package com.bhtcnpm.website.model.dto.UserPostReport;
 
+import com.bhtcnpm.website.model.dto.ReportReason.ReportReasonDTO;
 import com.bhtcnpm.website.model.dto.UserWebsite.UserSummaryMapper;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostReport;
-import org.mapstruct.InjectionStrategy;
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.springframework.data.domain.Page;
+import org.mapstruct.factory.Mappers;
 
-import java.util.List;
-
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = {UserSummaryMapper.class})
-public abstract class UserPostReportMapper {
-    @Mapping(target = "postId", source = "post.id")
-    @Mapping(target = "reporter", source = "userPostReport.reporter")
-    @Mapping(target = "title", source = "userPostReport.post.title")
-    @Mapping(target = "content", source = "userPostReport.post.content")
-    @Mapping(target = "postImageURL", source = "userPostReport.post.imageURL")
-    public abstract UserPostReportDTO userPostReportToUserPostReportDTO (UserPostReport userPostReport);
-
-    public abstract List<UserPostReportDTO> userPostReportListToUserPostReportDTOList (List<UserPostReport> userPostReports);
-
-    public UserPostReportListDTO userPostReportPageToUserPostReportListDTO (Page<UserPostReport> userPostReports) {
-        UserPostReportListDTO dto = new UserPostReportListDTO();
-        dto.setUserPostReportDTOs(this.userPostReportListToUserPostReportDTOList(userPostReports.getContent()));
-        dto.setTotalPages(userPostReports.getTotalPages());
-        dto.setTotalElements(userPostReports.getTotalElements());
-
-        return dto;
-    }
+@Mapper
+public class UserPostReportMapper {
 }

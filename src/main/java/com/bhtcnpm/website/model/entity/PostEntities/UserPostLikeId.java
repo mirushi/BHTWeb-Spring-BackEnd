@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
-import com.bhtcnpm.website.model.entity.DocEntities.UserDocReactionId;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.Data;
 

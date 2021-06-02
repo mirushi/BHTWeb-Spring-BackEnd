@@ -29,7 +29,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.util.*;
@@ -134,7 +134,7 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocDetailsDTO putDoc(Long docID, Long lastEditedUserID, DocRequestDTO docRequestDTO) {
+    public DocDetailsDTO putDoc(Long docID, UUID lastEditedUserID, DocRequestDTO docRequestDTO) {
         Doc oldDoc = null;
 
         if (docID != null) {
@@ -291,7 +291,7 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, Long userID) {
+    public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, UUID userID) {
 
         Doc doc = docRequestMapper.updateDocFromDocRequestDTO(userID, docRequestDTO, null);
 
@@ -325,7 +325,7 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Long userID) throws IOException, FileExtensionNotAllowedException {
+    public DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, UUID userID) throws IOException, FileExtensionNotAllowedException {
         byte[] fileContent = multipartFile.getBytes();
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 

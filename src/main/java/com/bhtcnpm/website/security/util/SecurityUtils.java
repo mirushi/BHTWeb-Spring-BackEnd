@@ -1,34 +1,71 @@
 package com.bhtcnpm.website.security.util;
 
-import com.bhtcnpm.website.config.SecurityConfig;
 import com.bhtcnpm.website.constant.security.SecurityConstant;
-import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.security.JwtTokenProvider;
-import org.apache.commons.lang3.StringUtils;
+import com.bhtcnpm.website.model.entity.UserWebsiteEntities.RefreshToken;
+import lombok.extern.slf4j.Slf4j;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.security.Principal;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Slf4j
 public class SecurityUtils {
-    public static String getDefaultEncodingPrefixedPassword (String password) {
-        return StringUtils.prependIfMissingIgnoreCase(password, SecurityConfig.DEFAULT_ENCODING_ALGO);
+
+    public static UUID getUserID (Authentication authentication) {
+        if (authentication == null) {
+            return null;
+        }
+        if (!(authentication instanceof KeycloakAuthenticationToken)) {
+            return null;
+        }
+        if (!(authentication.getPrincipal() instanceof Principal)) {
+            return null;
+        }
+        Principal principalObj = (Principal) authentication.getPrincipal();
+        if (principalObj == null) {
+            return null;
+        }
+        return UUID.fromString(principalObj.getName());
     }
 
-    public static String getEncodedPassword (String password, PasswordEncoder passwordEncoder) {
-        String prefixedPassword = getDefaultEncodingPrefixedPassword(password);
-        return passwordEncoder.encode(prefixedPassword);
+    public static boolean containsAuthority (Authentication authentication, String authority) {
+        if (authority == null) {
+            return false;
+        }
+        if (authentication == null) {
+            return false;
+        }
+        if (authentication.getAuthorities() == null) {
+            return false;
+        }
+
+        return authentication.getAuthorities().contains(new SimpleGrantedAuthority(authority));
     }
 
-    public static HttpHeaders getJwtHeader (UserWebsite userWebsite, JwtTokenProvider jwtTokenProvider) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(SecurityConstant.JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(userWebsite));
+    public static boolean containsAuthorities (Authentication authentication, String... authorities) {
+        if (authorities == null || authorities.length == 0) {
+            return false;
+        }
+        if (authentication == null) {
+            return false;
+        }
+        if (authentication.getAuthorities() == null) {
+            return false;
+        }
 
-        return headers;
-    }
-
-    public static void authenticateUser (String username, String normalPassword, AuthenticationManager authManager) {
-        String prefixedPassword = SecurityUtils.getDefaultEncodingPrefixedPassword(normalPassword);
-        authManager.authenticate(new UsernamePasswordAuthenticationToken(username, prefixedPassword));
+        return authentication.getAuthorities().containsAll(
+                Arrays.stream(authorities)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList())
+        );
     }
 }
