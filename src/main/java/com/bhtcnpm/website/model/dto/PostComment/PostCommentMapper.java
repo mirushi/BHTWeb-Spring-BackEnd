@@ -1,17 +1,18 @@
 package com.bhtcnpm.website.model.dto.PostComment;
 
-import com.bhtcnpm.website.model.entity.PostEntities.PostComment;
+import com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment;
 import com.bhtcnpm.website.repository.PostCommentRepository;
 import com.bhtcnpm.website.repository.PostRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Mapper
 public abstract class PostCommentMapper {
@@ -22,12 +23,20 @@ public abstract class PostCommentMapper {
     protected UserWebsiteRepository userWebsiteRepository;
 
     @Mapping(target = "authorID", source = "author.id")
-    @Mapping(target = "avatarURL", source = "author.avatarURL")
+    @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     @Mapping(target = "childCommentCount", ignore = true)
     public abstract PostCommentDTO postCommentToPostCommentDTOChildCommentOnly (PostComment postComment);
 
+    @Mapping(target = "authorID", source = "author.id")
+    @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
+    public abstract PostCommentChildDTO postCommentToPostCommentChildDTO (PostComment postComment);
+
+    public PostCommentListDTO postCommentPageToPostCommentListDTO (Page<PostCommentDTO> postCommentDTOS) {
+        return new PostCommentListDTO(postCommentDTOS.getContent(), postCommentDTOS.getTotalPages(), postCommentDTOS.getTotalElements());
+    }
+
     public PostComment postCommentDTOToPostComment(PostCommentRequestDTO postCommentRequestDTO,
-                                                   Long postID, Long authorID, PostComment entity) {
+                                                   Long postID, Long parentCommentID, UUID authorID, PostComment entity) {
 
         PostComment postComment = Objects.requireNonNullElseGet(entity, PostComment::new);
 
@@ -35,8 +44,8 @@ public abstract class PostCommentMapper {
             return entity;
         }
 
-        if (postCommentRequestDTO.getParentCommentID() != null) {
-            postComment.setParentComment(postCommentRepository.getOne(postCommentRequestDTO.getParentCommentID()));
+        if (parentCommentID != null) {
+            postComment.setParentComment(postCommentRepository.getOne(parentCommentID));
         } else {
             postComment.setParentComment(null);
         }
@@ -44,9 +53,12 @@ public abstract class PostCommentMapper {
         postComment.setPost(postRepository.getOne(postID));
         postComment.setAuthor(userWebsiteRepository.getOne(authorID));
         postComment.setContent(postCommentRequestDTO.getContent());
+        //TODO: Do XSS filter here.
 
         return postComment;
     }
+
+    public abstract List<PostCommentChildDTO> postCommentListToPostCommentChildDTOList (List<PostComment> postComments);
 
     public abstract List<PostCommentDTO> postCommentListToPostCommentDTOListChildCommentOnly (List<PostComment> postComments);
 

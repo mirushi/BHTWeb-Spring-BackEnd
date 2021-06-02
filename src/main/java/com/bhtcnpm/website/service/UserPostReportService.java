@@ -8,10 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.UUID;
 
 @Validated
 public interface UserPostReportService {
-    Boolean createNewReport(Long userId, Long postId, @Valid UserPostReportRequestDTO dto) throws IDNotFoundException;
-    Boolean resolveReport (Long userId, Long reportId, @Valid UserPostReportResolveRequestDTO dto) throws IDNotFoundException;
+    Boolean createNewReport(UUID userId, Long postId, @Valid UserPostReportRequestDTO dto) throws IDNotFoundException;
+    Boolean resolveReport (UUID userId, Long reportId, @Valid UserPostReportResolveRequestDTO dto) throws IDNotFoundException;
     UserPostReportListDTO getUserReports (Pageable pageable, Boolean isResolved);
 }

@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class PostSummaryWithStateAndFeedbackListDTO {
-    List<PostSummaryWithStateAndFeedbackDTO> dtos;
+    List<PostSummaryWithStateAndFeedbackDTO> postSummaryWithStateAndFeedbackDTOs;
     private Integer totalPages;
     private Long totalElements;
 }

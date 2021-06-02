@@ -7,7 +7,6 @@ import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
-import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.DocFileUploadRepository;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
@@ -30,7 +29,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.util.*;
@@ -53,6 +52,8 @@ public class DocServiceImpl implements DocService {
     private static final String DRIVE_UPLOAD_DEFAULT_FOLDER_ID = "1mg_iZfewkU93WhcFfKYf38irvW1Gr-wn";
 
     private final DocDetailsMapper docDetailsMapper;
+
+    private final DocSummaryMapper docSummaryMapper;
 
     private final DocRequestMapper docRequestMapper;
 
@@ -84,7 +85,56 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocDetailsDTO putDoc(Long docID, Long lastEditedUserID, DocRequestDTO docRequestDTO) {
+    public DocSummaryListDTO getAllPendingApprovalDoc(
+            String searchTerm,
+            Long subjectID,
+            Long categoryID,
+            Long authorID,
+            Integer page,
+            ApiSortOrder sortByCreatedDtm
+    ) {
+        //Create a pagable.
+        DocSummaryListDTO dtoList = docRepository.getDocSummaryList(
+                searchTerm,
+                categoryID,
+                subjectID,
+                authorID,
+                DocStateType.PENDING_APPROVAL,
+                page,
+                PAGE_SIZE,
+                null,
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByCreatedDtm)
+        );
+
+        return dtoList;
+    }
+
+    @Override
+    public DocSummaryWithStateListDTO getMyDocuments(String searchTerm,
+                                            Long categoryID,
+                                            Long subjectID,
+                                            DocStateType docState,
+                                            Integer page,
+                                            ApiSortOrder sortByPublishDtm,
+                                            ApiSortOrder sortByCreatedDtm,
+                                            Long userID) {
+        DocSummaryWithStateListDTO dtoList = docRepository.getDocSummaryWithStateList(
+                searchTerm,
+                categoryID,
+                subjectID,
+                userID,
+                docState,
+                page,
+                PAGE_SIZE,
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByPublishDtm),
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByCreatedDtm)
+        );
+
+        return dtoList;
+    }
+
+    @Override
+    public DocDetailsDTO putDoc(Long docID, UUID lastEditedUserID, DocRequestDTO docRequestDTO) {
         Doc oldDoc = null;
 
         if (docID != null) {
@@ -241,7 +291,7 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, Long userID) {
+    public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, UUID userID) {
 
         Doc doc = docRequestMapper.updateDocFromDocRequestDTO(userID, docRequestDTO, null);
 
@@ -253,24 +303,29 @@ public class DocServiceImpl implements DocService {
     @Override
     public DocSummaryListDTO getDocBySearchTerm(
             String searchTerm,
-            Integer page,
-            ApiSortOrder sortByPublishDtm,
             Long categoryID,
-            Long subjectID
+            Long subjectID,
+            Long authorID,
+            Integer page,
+            ApiSortOrder sortByPublishDtm
     ) {
-        DocSummaryListDTO queryResult = docRepository.searchBySearchTerm(
+        //TODO: DocState depends on ACL.
+        DocSummaryListDTO queryResult = docRepository.getDocSummaryList(
                 searchTerm,
+                categoryID,
+                subjectID,
+                authorID,
+                null,
                 page,
                 PAGE_SIZE,
                 EnumConverter.apiSortOrderToHSearchSortOrder(sortByPublishDtm),
-                categoryID,
-                subjectID);
+                null);
 
         return queryResult;
     }
 
     @Override
-    public DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Long userID) throws IOException, FileExtensionNotAllowedException {
+    public DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, UUID userID) throws IOException, FileExtensionNotAllowedException {
         byte[] fileContent = multipartFile.getBytes();
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 
@@ -318,19 +373,24 @@ public class DocServiceImpl implements DocService {
     @Override
     public DocSummaryWithStateListDTO getManagementDoc(
             String searchTerm,
-            DocStateType docStateType,
-            Long subjectID,
             Long categoryID,
-            Integer page
+            Long subjectID,
+            Long authorID,
+            DocStateType docState,
+            Integer page,
+            ApiSortOrder sortByPublishDtm,
+            ApiSortOrder sortByCreatedDtm
     ) {
-        DocSummaryWithStateListDTO dtoList = docRepository.getManagementDocs(
-                null,
+        DocSummaryWithStateListDTO dtoList = docRepository.getDocSummaryWithStateList(
+                searchTerm,
                 categoryID,
                 subjectID,
+                authorID,
+                docState,
                 page,
                 PAGE_SIZE,
-                searchTerm,
-                docStateType
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByPublishDtm),
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByCreatedDtm)
         );
         return dtoList;
     }

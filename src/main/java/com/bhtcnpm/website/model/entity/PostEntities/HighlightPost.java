@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HighlightPost {
-
     @EmbeddedId
     private HighlightPostId highlightPostId;
 

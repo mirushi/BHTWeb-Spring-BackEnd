@@ -1,17 +1,19 @@
 package com.bhtcnpm.website.controller;
 
-import com.bhtcnpm.website.model.dto.UserWebsite.UserAuthenticatedDTO;
-import com.bhtcnpm.website.model.dto.UserWebsite.UserDetailsDTO;
-import com.bhtcnpm.website.model.dto.UserWebsite.UserWebsiteCreateNewRequestDTO;
-import com.bhtcnpm.website.model.dto.UserWebsite.UserWebsiteLoginRequestDTO;
+import com.bhtcnpm.website.model.dto.UserWebsite.*;
+import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.exception.CaptchaInvalidException;
+import com.bhtcnpm.website.model.exception.CaptchaServerErrorException;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -21,20 +23,14 @@ public class UserWebsiteController {
 
     private final UserWebsiteService userWebsiteService;
 
-    @PostMapping("/register")
+    @GetMapping("/checkUserExists")
     @ResponseBody
-    public ResponseEntity<UserDetailsDTO> register (@RequestBody UserWebsiteCreateNewRequestDTO dto) {
-        UserAuthenticatedDTO authenticatedDTO = userWebsiteService.createNewNormalUser(dto);
-
-        return new ResponseEntity<>(authenticatedDTO.getUserDetailsDTO(), authenticatedDTO.getHeaders(), HttpStatus.OK);
-    }
-
-    @PostMapping("/login")
-    @ResponseBody
-    public ResponseEntity<UserDetailsDTO> login (@RequestBody UserWebsiteLoginRequestDTO dto) {
-
-        UserAuthenticatedDTO authenticatedDTO = userWebsiteService.loginUser(dto);
-
-        return new ResponseEntity<>(authenticatedDTO.getUserDetailsDTO(), authenticatedDTO.getHeaders(), HttpStatus.OK);
+    public ResponseEntity<List<String>> checkUserWebsiteExist (
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "displayName", required = false) String displayName,
+            @RequestParam(value = "email", required = false) String email
+    ) {
+        List<String> existedFields = userWebsiteService.checkUserExists(name, displayName, email);
+        return new ResponseEntity(existedFields, HttpStatus.OK);
     }
 }

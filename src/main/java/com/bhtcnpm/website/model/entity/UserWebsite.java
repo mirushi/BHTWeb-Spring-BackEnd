@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.entity;
 
 import com.bhtcnpm.website.constant.domain.UserWebsite.UWDomainConstant;
+import com.bhtcnpm.website.constant.domain.UserWebsiteRole.UWRRequiredRole;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
@@ -8,9 +9,12 @@ import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostSave;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.search.engine.backend.types.Norms;
+import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,71 +25,62 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user_website")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserWebsite implements UserDetails, CredentialsContainer {
-
+public class UserWebsite {
+    //New account will automatically be created if not found in db.
     @Id
-    @GeneratedValue (
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_website_sequence"
+    @GenericField(
+            name = "id",
+            searchable = Searchable.YES,
+            projectable = Projectable.YES
     )
-    @SequenceGenerator(
-            name = "user_website_sequence",
-            sequenceName = "user_website_sequence"
-    )
-    private Long id;
+    private UUID id;
 
     @Column(nullable = false, length = UWDomainConstant.NAME_LENGTH)
     @Size(max = UWDomainConstant.NAME_LENGTH)
     @KeywordField(norms = Norms.YES, searchable = Searchable.YES)
+    @NaturalId
     private String name;
-
-    @Column(nullable = false, length = UWDomainConstant.DISPLAY_NAME_LENGTH)
-    @Size(max = UWDomainConstant.DISPLAY_NAME_LENGTH)
-    @FullTextField(norms = Norms.YES, searchable = Searchable.YES)
-    private String displayName;
-
-    @Column(nullable = false, length = UWDomainConstant.PASSWORD_LENGTH)
-    @Size(max = UWDomainConstant.PASSWORD_LENGTH)
-    private String hashedPassword;
 
     @Column(nullable = false, length = UWDomainConstant.EMAIL_LENGTH)
     @Size(max = UWDomainConstant.EMAIL_LENGTH)
     @Email
     private String email;
 
+    @Column(nullable = false, length = UWDomainConstant.DISPLAY_NAME_LENGTH)
+    @Size(max = UWDomainConstant.DISPLAY_NAME_LENGTH)
+    @FullTextField(norms = Norms.YES, searchable = Searchable.YES)
+    private String displayName;
+
     @Column(nullable = false)
     private Long reputationScore;
-
-    @ManyToMany (
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
-            fetch = FetchType.EAGER
-    )
-    @JoinTable (
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    private Set<UserWebsiteRole> roles;
 
     @Column(nullable = false)
     private String avatarURL;
 
-    @Column(nullable = false)
-    @Deprecated
-    //TODO: Remove this unused field.
-    private Boolean banStatus;
+    @ManyToMany (
+            cascade = { CascadeType.PERSIST },
+            fetch = FetchType.EAGER
+    )
+    @JoinTable (
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<UserWebsiteRole> roles;
 
     @OneToMany (
             mappedBy = "author",
@@ -153,66 +148,22 @@ public class UserWebsite implements UserDetails, CredentialsContainer {
     @JsonIgnore
     private Set<Course> savedCourses;
 
-    @Transient
-    @Builder.Default
-    private Boolean accountNonExpired = true;
-
-    @Transient
-    @Builder.Default
-    private Boolean credentialsNonExpired = true;
-
-    @Transient
-    @Builder.Default
-    private Boolean enabled = true;
-
     @Version
     private short version;
 
-    @Transient
     @Override
-    public Set<GrantedAuthority> getAuthorities () {
-        return this.roles.stream()
-                .map(UserWebsiteRole::getAuthorities)
-                .distinct()
-                .flatMap(Set::stream)
-                .map(authority -> {
-                    return new SimpleGrantedAuthority(authority.getPermission());
-                })
-                .collect(Collectors.toSet());
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserWebsite)) {
+            return false;
+        }
+        UserWebsite other = (UserWebsite) o;
+
+        return Objects.equals(getId(), other.getId());
     }
 
     @Override
-    public void eraseCredentials() {
-        this.hashedPassword = null;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.hashedPassword;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.name;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.accountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return !this.banStatus;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
+    public int hashCode () {
+        return Objects.hash(getId());
     }
 }

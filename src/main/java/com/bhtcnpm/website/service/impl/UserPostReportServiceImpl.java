@@ -13,10 +13,9 @@ import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -41,9 +41,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
     private static final int PAGE_SIZE = 10;
 
     @Override
-    public Boolean createNewReport(Long userId,
-                                   Long postId,
-                                   @Valid UserPostReportRequestDTO dto) throws IDNotFoundException {
+    public Boolean createNewReport(UUID userId, Long postId, @Valid UserPostReportRequestDTO dto) throws IDNotFoundException {
         Post postProxy = postRepository.getOne(postId);
 
         String feedback = dto.getFeedback();
@@ -119,7 +117,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
     }
 
     @Override
-    public Boolean resolveReport (Long userId, Long reportId, @Valid UserPostReportResolveRequestDTO dto) throws IDNotFoundException {
+    public Boolean resolveReport (UUID userId, Long reportId, @Valid UserPostReportResolveRequestDTO dto) throws IDNotFoundException {
         Optional<PostReport> report = postReportRepository.findById(reportId);
         UserWebsite resolver = userWebsiteRepository.getOne(userId);
         PostReportActionType actionType = dto.getPostReportActionType();

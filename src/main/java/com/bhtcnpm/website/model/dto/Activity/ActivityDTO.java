@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class ActivityDTO {
@@ -14,12 +15,12 @@ public class ActivityDTO {
     private Long id;
 
     @NotNull
-    private Long actorActiveID;
+    private UUID actorActiveID;
 
     @NotNull
     private String actorActiveName;
 
-    private Long actorPassiveID;
+    private UUID actorPassiveID;
     private String actorPassiveName;
 
     @PastOrPresent

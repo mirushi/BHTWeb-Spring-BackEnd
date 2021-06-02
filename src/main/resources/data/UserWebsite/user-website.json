@@ -1,0 +1,12 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.UserWebsite",
+    "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18",
+    "name": "mirushi",
+    "displayName": "Luu Bieu Nghi",
+    "email": "niceday0246@gmail.com",
+    "reputationScore": 100,
+    "avatarURL": "https://ziclife.com/wp-content/uploads/2020/08/cute-profile-picture-32.jpg",
+    "version": 0
+  }
+]

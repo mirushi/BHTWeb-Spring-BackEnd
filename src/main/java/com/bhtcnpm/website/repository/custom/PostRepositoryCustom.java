@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 public interface PostRepositoryCustom {
     PostSummaryListDTO searchBySearchTerm (String sortByPublishDtm, Long postCategoryID ,Integer page, Integer pageSize ,String searchTerm);
@@ -18,7 +19,7 @@ public interface PostRepositoryCustom {
                                                    Integer pageSize,
                                                    String searchTerm,
                                                    PostStateType postStateType);
-    List<PostSuggestionDTO> searchRelatedPost(Long authorID, Long categoryID, Post entity, int page , int pageSize) throws IOException;
+    List<PostSuggestionDTO> searchRelatedPost(UUID authorID, Long categoryID, Post entity, int page , int pageSize) throws IOException;
     PostSummaryWithStateListDTO searchBySearchTermWithState (Predicate predicate, Pageable pageable);
     PostSummaryWithStateAndFeedbackListDTO getPostSummaryStateFeedback (Predicate predicate, Pageable pageable);
     PostDetailsWithStateListDTO getPostDetailsListWithStateFilter(Predicate predicate, Pageable pageable, PostStateType postStateType);

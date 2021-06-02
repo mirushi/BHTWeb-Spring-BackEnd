@@ -38,7 +38,7 @@ public abstract class DocRequestMapper {
     @Mapping(target = "subjectID", source = "subject.id")
     public abstract DocRequestDTO docToDocRequestDTO (Doc doc);
 
-    public Doc updateDocFromDocRequestDTO (Long lastEditedUserID, DocRequestDTO docRequestDTO, Doc entity) {
+    public Doc updateDocFromDocRequestDTO (UUID lastEditedUserID, DocRequestDTO docRequestDTO, Doc entity) {
         Doc newDoc = Objects.requireNonNullElseGet(entity, Doc::new);
 
         if (docRequestDTO == null) {

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class UserPostSaveRepositoryImpl implements UserPostSaveRepositoryCustom {
@@ -47,7 +48,7 @@ public class UserPostSaveRepositoryImpl implements UserPostSaveRepositoryCustom 
     }
 
     @Override
-    public PostSummaryListDTO findByUserPostSaveIdUserId(Long userID, Pageable pageable) {
+    public PostSummaryListDTO findByUserPostSaveIdUserId(UUID userID, Pageable pageable) {
 
         JPAQuery query = new JPAQuery<UserPostSave>(em)
                 .select(Projections.constructor(PostSummaryDTO.class,
@@ -65,7 +66,7 @@ public class UserPostSaveRepositoryImpl implements UserPostSaveRepositoryCustom 
                 .from(qUserPostSave)
                 .innerJoin(qPost)
                 .on(qUserPostSave.userPostSaveId.post.id.eq(qPost.id))
-                .where(qPost.id.eq(userID));
+                .where(qUserPostSave.userPostSaveId.user.id.eq(userID));
 
         JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
 

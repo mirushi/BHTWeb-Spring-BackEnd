@@ -2,7 +2,10 @@ package com.bhtcnpm.website.model.dto.Post;
 
 import lombok.Data;
 
+import javax.validation.constraints.Min;
+
 @Data
 public class HighlightPostRequestDTO {
-    private Long postId;
+    @Min(0)
+    private Long id;
 }

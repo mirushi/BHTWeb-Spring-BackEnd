@@ -7,7 +7,7 @@
       }
     },
     "highlightedBy": {
-      "id": 1
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "rank": 1,
     "highlightDtm": "2021-03-27T07:11:06"
@@ -16,11 +16,11 @@
     "_class": "com.bhtcnpm.website.model.entity.PostEntities.HighlightPost",
     "highlightPostId": {
       "post": {
-        "id": 151
+        "id": 3
       }
     },
     "highlightedBy": {
-      "id": 1
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "rank": 2,
     "highlightDtm": "2021-03-27T07:11:06"
@@ -29,11 +29,11 @@
     "_class": "com.bhtcnpm.website.model.entity.PostEntities.HighlightPost",
     "highlightPostId": {
       "post": {
-        "id": 51
+        "id": 2
       }
     },
     "highlightedBy": {
-      "id": 1
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "rank": 3,
     "highlightDtm": "2021-03-27T07:11:06"

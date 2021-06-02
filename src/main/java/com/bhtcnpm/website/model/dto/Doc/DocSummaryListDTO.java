@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class DocSummaryListDTO {
-    private List<DocSummaryDTO> docSummaries;
+    private List<DocSummaryDTO> docSummaryDTOs;
     private Integer totalPages;
     private Long totalElements;
 }

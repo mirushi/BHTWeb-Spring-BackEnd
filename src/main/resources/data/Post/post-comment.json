@@ -1,0 +1,239 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "childComments": [
+      {
+        "content": "Child comment nè",
+        "author": {
+          "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+        },
+        "post": {
+          "id": 2
+        },
+        "childComments": null,
+        "version": 0
+      },
+      {
+        "content": "Child comment tiếp nè",
+        "author": {
+          "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+        },
+        "post": {
+          "id": 2
+        },
+        "childComments": null,
+        "version": 0
+      },
+      {
+        "content": "Child comment tiếp nè",
+        "author": {
+          "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+        },
+        "post": {
+          "id": 2
+        },
+        "childComments": null,
+        "version": 0
+      },
+      {
+        "content": "Child comment tiếp nè",
+        "author": {
+          "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+        },
+        "post": {
+          "id": 2
+        },
+        "childComments": null,
+        "version": 0
+      },
+      {
+        "content": "Child comment tiếp nè",
+        "author": {
+          "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+        },
+        "post": {
+          "id": 2
+        },
+        "childComments": null,
+        "version": 0
+      }
+    ],
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment thứ nhì",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
+    "content": "Comment đầu tiên",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "post": {
+      "id": 2
+    },
+    "parentComment": null,
+    "version": 0
+  }
+]

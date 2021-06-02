@@ -15,8 +15,9 @@ import com.bhtcnpm.website.service.UserDocReactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,7 +47,7 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
     }
 
     @Override
-    public UserDocReactionDTO putUserReactionForDoc(Long userID, UserDocReactionUserOwnDTO userDocReactionUserOwnDTO) {
+    public UserDocReactionDTO putUserReactionForDoc(UUID userID, UserDocReactionUserOwnDTO userDocReactionUserOwnDTO) {
         UserDocReactionId userDocReactionId = new UserDocReactionId();
 
         UserWebsite user = userWebsiteRepository.getOne(userID);

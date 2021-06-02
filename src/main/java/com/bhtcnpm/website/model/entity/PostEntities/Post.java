@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
+import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
@@ -11,9 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Loader;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -28,7 +27,10 @@ import java.util.Set;
 @Entity
 @Indexed
 @Table(name = "post")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE post SET DELETED_DATE = "+ "20210302" +" WHERE id = ? AND VERSION = ?")
 @Loader(namedQuery = "findPostById")
 @NamedQuery(name = "findPostById", query = "SELECT p FROM Post p WHERE p.id = ?1 AND p.deletedDate IS NULL")
@@ -164,4 +166,41 @@ public class Post {
 
     @Version
     private short version;
+
+    @Transient
+    public boolean isDeleted () {
+        //Post is deleted when deletedDate is not null.
+        return this.getDeletedDate() != null;
+    }
+
+    @Transient
+    public PostBusinessState getPostBusinessState() {
+        //Refer to BHTCNPM confluence. Entity state page.
+        if (PostStateType.APPROVED.equals(this.getPostState())
+                && deletedDate == null
+                && publishDtm.isBefore(LocalDateTime.now())) {
+            return PostBusinessState.PUBLIC;
+        }
+        if (!PostStateType.APPROVED.equals(this.getPostState()) && deletedDate == null
+                || this.deletedDate == null && publishDtm.isAfter(LocalDateTime.now())) {
+            return PostBusinessState.UNLISTED;
+        }
+        if (deletedDate != null) {
+            return PostBusinessState.DELETED;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Post)) return false;
+        Post other = (Post)o;
+        return id != null && id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode () {
+        return getClass().hashCode();
+    }
 }

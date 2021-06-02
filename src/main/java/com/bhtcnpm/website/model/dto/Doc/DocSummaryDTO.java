@@ -6,13 +6,14 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 public class DocSummaryDTO {
     private Long id;
 
-    private Long authorID;
+    private UUID authorID;
 
     private String authorName;
 
@@ -32,9 +33,9 @@ public class DocSummaryDTO {
 
     private LocalDateTime publishDtm;
 
-    private Long downloads;
+    private Long downloadCount;
 
-    private Long views;
+    private Long viewCount;
 
     private Short version;
 }

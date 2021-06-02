@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/posts/highlightPosts")
@@ -38,7 +39,7 @@ public class HighlightPostController {
     @ResponseBody
     public ResponseEntity createHighlightPost (@RequestBody HighlightPostRequestDTO highlightPostRequestDTO) {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
+        UUID userID = DemoUserIDConstant.userID;
 
         highlightPostService.createHighlightPost(highlightPostRequestDTO, userID);
 

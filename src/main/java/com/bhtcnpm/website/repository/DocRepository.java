@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.custom.DocRepositoryCustom;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -35,4 +36,8 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
     int incrementDownloadCount(Long docID);
 
     List<Doc> getDocByIdNot (Pageable pageable, Long docID);
+
+    Page<Doc> findByDocState (Pageable pageable, DocStateType docStateType);
+
+    Page<Doc> findByAuthorId (Pageable pageable, Long authorID);
 }

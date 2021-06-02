@@ -16,6 +16,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredicateExecutor<Post>, JpaSpecificationExecutor<Post>, PostRepositoryCustom {
     @Query("SELECT new com.bhtcnpm.website.model.dto.Post.PostStatisticDTO(p.id, COUNT(DISTINCT pc.id) ,COUNT(DISTINCT uLiked.userPostLikeId.user.id), " +
@@ -26,7 +27,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
             "LEFT JOIN PostComment pc ON p.id = pc.post.id " +
             "WHERE p.id IN :postIDs " +
             "GROUP BY p.id")
-    List<PostStatisticDTO> getPostStatisticDTOs (List<Long> postIDs, Long userID);
+    List<PostStatisticDTO> getPostStatisticDTOs (List<Long> postIDs, UUID userID);
 
     @Modifying
     @Query("UPDATE Post as p " +

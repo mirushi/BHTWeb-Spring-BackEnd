@@ -7,20 +7,26 @@ import com.p6spy.engine.spy.P6SpyOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.config.BootstrapMode;
 import org.springframework.data.repository.init.Jackson2RepositoryPopulatorFactoryBean;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @SpringBootApplication
 //Deferred mode is for Hibernate Search 6 startup issue's workaround.
+//https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#_spring_boot
 @EnableJpaRepositories(bootstrapMode = BootstrapMode.DEFERRED)
+@EnableAsync
 public class WebsiteApplication {
 
     @PersistenceContext
@@ -37,6 +43,11 @@ public class WebsiteApplication {
         SpringApplication.run(WebsiteApplication.class, args);
     }
 
+    @Bean
+    public RestTemplate restTemplate (RestTemplateBuilder builder) {
+        return builder.build();
+    }
+
     //Populate data for repository.
     @Bean
     @Transactional
@@ -45,8 +56,12 @@ public class WebsiteApplication {
         InjectableValues injects = new InjectableValues.Std().addValue(EntityManager.class, entityManager);
         objectMapper.setInjectableValues(injects);
         factoryBean.setResources(new Resource[]{
-                new ClassPathResource("data/post.json"),
-                new ClassPathResource("data/highlight-post.json"),
+                new ClassPathResource("data/UserWebsite/user-website-role.json"),
+                new ClassPathResource("data/UserWebsite/user-website.json"),
+                new ClassPathResource("data/Post/post-category.json"),
+                new ClassPathResource("data/Post/post.json"),
+                new ClassPathResource("data/Post/highlight-post.json"),
+                new ClassPathResource("data/Post/post-comment.json"),
                 new ClassPathResource("data/Doc/doc-subject.json"),
                 new ClassPathResource("data/Doc/doc-category.json"),
                 new ClassPathResource("data/Doc/doc-file-upload.json"),

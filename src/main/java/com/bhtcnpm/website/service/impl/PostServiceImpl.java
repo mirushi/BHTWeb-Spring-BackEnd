@@ -2,13 +2,16 @@ package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.model.dto.Post.*;
+import com.bhtcnpm.website.model.dto.UserWebsite.SimpleKeycloakAccountWithEntity;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.PostRepository;
 import com.bhtcnpm.website.repository.UserPostLikeRepository;
 import com.bhtcnpm.website.repository.UserPostSaveRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +19,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -45,14 +52,15 @@ public class PostServiceImpl implements PostService {
     private static final int PAGE_SIZE_NEWEST = 16;
 
     @Override
-    public List<PostStatisticDTO> getPostStatistic(List<Long> postIDs, Long userID) {
+    public List<PostStatisticDTO> getPostStatistic(List<Long> postIDs, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
         List<PostStatisticDTO> postStatisticDTOS = postRepository.getPostStatisticDTOs(postIDs, userID);
 
         return postStatisticDTOS;
     }
 
     @Override
-    public PostSummaryListDTO getPostSummary(Predicate predicate, Integer paginator) {
+    public PostSummaryListDTO getPostSummary(Predicate predicate, Integer paginator, Authentication authentication) {
         Sort sort;
         Pageable pageable = PageRequest.of(paginator, PAGE_SIZE);
         Page<Post> queryResults = postRepository.findAll(predicate, pageable);
@@ -72,7 +80,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean approvePost(Long postID, Long userID) {
+    public Boolean approvePost(Long postID, UUID userID) {
         int rowAffected = postRepository.setPostState(postID, PostStateType.APPROVED);
         return rowAffected == 1;
     }
@@ -84,7 +92,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean createUserPostLike(Long postID, Long userID) {
+    public Boolean createUserPostLike(Long postID, UUID userID) {
         UserPostLikeId id = new UserPostLikeId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
@@ -97,7 +105,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean deleteUserPostLike(Long postID, Long userID) {
+    public Boolean deleteUserPostLike(Long postID, UUID userID) {
         UserPostLikeId id = new UserPostLikeId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
@@ -108,14 +116,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDetailsDTO createPost(PostRequestDTO postRequestDTO, Long userID) {
+    public PostDetailsDTO createPost(PostRequestDTO postRequestDTO, UUID userID) {
         Post post = postMapper.postRequestDTOToPost(postRequestDTO, userID, null);
 
         return postMapper.postToPostDetailsDTO(postRepository.save(post));
     }
 
     @Override
-    public PostDetailsDTO editPost(PostRequestDTO postRequestDTO, Long postID, Long userID) {
+    public PostDetailsDTO editPost(PostRequestDTO postRequestDTO, Long postID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+        if (userID == null) {
+            throw new AccessDeniedException("You must authenticated before using this API.");
+        }
+
         Optional<Post> optionalPost = postRepository.findById(postID);
         if (!optionalPost.isPresent()) {
             return null;
@@ -129,14 +142,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean deletePost(Long userID, Long postID) {
+    public Boolean deletePost(Long postID) {
         //TODO: Consider checking userID permission and saving who deleted the post.
         postRepository.deleteById(postID);
         return true;
     }
 
     @Override
-    public Boolean rejectPost(Long postID, Long userID) {
+    public Boolean rejectPost(Long postID, UUID userID) {
         int rowChanged = postRepository.setPostState(postID, PostStateType.REJECTED);
 
         if (rowChanged == 1) {
@@ -156,7 +169,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean createSavedStatus(Long postID, Long userID) {
+    public Boolean createSavedStatus(Long postID, UUID userID) {
         UserPostSaveId id = new UserPostSaveId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
@@ -169,7 +182,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean deleteSavedStatus(Long postID, Long userID) {
+    public Boolean deleteSavedStatus(Long postID, UUID userID) {
         UserPostSaveId id = new UserPostSaveId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
@@ -178,8 +191,6 @@ public class PostServiceImpl implements PostService {
 
         return true;
     }
-
-
 
     @Override
     public List<PostSummaryDTO> getPostWithActivityCategory() {
@@ -237,7 +248,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostSuggestionDTO> getRelatedPostSameAuthor(Long authorID, Long postID, Integer page) throws IDNotFoundException, IOException {
+    public List<PostSuggestionDTO> getRelatedPostSameAuthor(UUID authorID, Long postID, Integer page) throws IDNotFoundException, IOException {
 
         if (page == null) {
             page = 0;
@@ -266,7 +277,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSummaryListDTO getPostSavedByUserID(Long userID, Pageable pageable) {
+    public PostSummaryListDTO getPostSavedByUserID(UUID userID, Pageable pageable) {
         //Reset PAGE_SIZE to predefined value.
         pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
 

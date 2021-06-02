@@ -18,8 +18,8 @@ public interface DocSummaryMapper {
     @Mapping(target = "category", source = "category.name")
     @Mapping(target = "subject", source = "subject.name")
     @Mapping(target = "subjectID", source = "subject.id")
-    @Mapping(target = "downloads", source = "docFileUpload.downloadCount")
-    @Mapping(target = "views", source = "viewCount")
+    @Mapping(target = "downloadCount", source = "docFileUpload.downloadCount")
+    @Mapping(target = "viewCount", source = "viewCount")
     DocSummaryDTO docToDocSummaryDTO (Doc doc);
 
     List<DocSummaryDTO> docListToDocSummaryDTOList (List<Doc> docList);

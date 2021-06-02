@@ -5,12 +5,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface UserWebsiteRepository extends JpaRepository<UserWebsite, Long> {
+//TODO: Consider removing hashedPassword from retrieval.
+public interface UserWebsiteRepository extends JpaRepository<UserWebsite, UUID> {
     Optional<UserWebsite> findByName (String name);
     Optional<UserWebsite> findByNameOrDisplayNameOrEmail (String name,String displayName, String email);
+
+    List<UserWebsite> findAllByNameOrDisplayNameOrEmail (String name, String displayName, String email);
 
     @Query("SELECT uw.name FROM UserWebsite uw WHERE uw.email = :email")
     String findUsernameByEmail (String email);

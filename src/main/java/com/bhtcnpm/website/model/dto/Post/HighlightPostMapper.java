@@ -12,6 +12,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.UUID;
 
 @Mapper(componentModel = "spring", uses = PostMapper.class)
 public abstract class HighlightPostMapper {
@@ -25,7 +26,7 @@ public abstract class HighlightPostMapper {
 
     public abstract List<HighlightPostDTO> highlightPostListToHighlightPostDTOList (List<HighlightPost> highlightPostList);
 
-    public HighlightPost highlightPostRequestToHighlightPost (HighlightPostUpdateDTO dto, Long userID) {
+    public HighlightPost highlightPostRequestToHighlightPost (HighlightPostUpdateDTO dto, UUID userID) {
         Post postProxy = postRepository.getOne(dto.getId());
         UserWebsite user = userWebsiteRepository.getOne(userID);
 
