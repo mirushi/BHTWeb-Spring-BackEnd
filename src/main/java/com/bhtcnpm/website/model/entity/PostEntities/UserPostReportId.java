@@ -28,8 +28,8 @@ public class UserPostReportId implements Serializable {
     @Override
     public boolean equals (Object o) {
         if (this == o) return true;
-        if (!(o instanceof ReportReasonFeedbackId)) return false;
-        ReportReasonFeedbackId that = (ReportReasonFeedbackId) o;
+        if (!(o instanceof UserPostReportId)) return false;
+        UserPostReportId that = (UserPostReportId) o;
         return Objects.equals(getUser(), that.getUser()) &&
                 Objects.equals(getPostReport(), that.getPostReport());
     }

@@ -24,7 +24,7 @@ public class UserPostReportController {
 
     private final UserPostReportService userPostReportService;
 
-    @PostMapping("/post/{id}/report")
+    @PostMapping("/posts/{id}/report")
     @ResponseBody
     public ResponseEntity reportPost (@PathVariable("id") Long postID, @RequestBody UserPostReportRequestDTO dto) throws IDNotFoundException {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
@@ -35,7 +35,7 @@ public class UserPostReportController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping("/post/resolveReport/{id}")
+    @PostMapping("/posts/resolveReport/{id}")
     @ResponseBody
     public ResponseEntity resolveReport (@PathVariable("id") Long reportID, @RequestBody UserPostReportResolveRequestDTO dto) throws IDNotFoundException {
         //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
@@ -46,7 +46,7 @@ public class UserPostReportController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/post/report")
+    @GetMapping("/posts/report")
     @ResponseBody
     public ResponseEntity<UserPostReportListDTO> getUserReports (@RequestParam(value = "page", required = false) Integer page,
                                                                  @RequestParam(value = "sort", required = false) String sort,

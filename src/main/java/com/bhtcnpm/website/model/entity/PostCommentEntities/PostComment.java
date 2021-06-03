@@ -36,7 +36,7 @@ public class PostComment {
     @ManyToOne
     private UserWebsite author;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)

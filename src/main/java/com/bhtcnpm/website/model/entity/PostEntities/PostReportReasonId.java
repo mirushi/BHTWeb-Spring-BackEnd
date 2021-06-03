@@ -35,7 +35,7 @@ public class PostReportReasonId implements Serializable {
         if (this == o) return true;
         if (!(o instanceof PostReportReasonId)) return false;
         PostReportReasonId that = (PostReportReasonId) o;
-        return Objects.equals(getUserPostReport(), that.getReportReason()) &&
+        return Objects.equals(getUserPostReport(), that.getUserPostReport()) &&
                 Objects.equals(getReportReason(), that.getReportReason());
     }
 

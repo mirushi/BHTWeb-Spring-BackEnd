@@ -1,9 +1,8 @@
-package com.bhtcnpm.website.model.dto.UserPostReport;
+package com.bhtcnpm.website.model.dto.PostCommentReport;
 
 import com.bhtcnpm.website.model.dto.ReportReason.ReportReasonDTO;
 import com.bhtcnpm.website.model.dto.UserWebsite.UserSummaryDTO;
-import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
+import com.bhtcnpm.website.model.entity.enumeration.PostCommentReportAction.PostCommentReportActionType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,11 +10,11 @@ import java.util.List;
 import java.util.Set;
 
 @Data
-public class PostReportDTO {
+public class PostCommentReportDTO {
     private Long id;
+    private Long commentID;
     private Long postID;
-    private String postImageURL;
-    private String title;
+    private String postTitle;
     private String content;
     private List<UserSummaryDTO> reporters;
     private Set<ReportReasonDTO> reportReasons;
@@ -24,5 +23,5 @@ public class PostReportDTO {
     private LocalDateTime resolvedTime;
     private String resolvedNote;
     private UserSummaryDTO resolvedBy;
-    private PostReportActionType actionTaken;
+    private PostCommentReportActionType actionTaken;
 }
