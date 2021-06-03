@@ -153,12 +153,6 @@ public class UserPostReportServiceImpl implements UserPostReportService {
             postReports = postReportRepository.findAllByResolvedTimeIsNull(pageable);
         }
 
-        //Initialize lazy proxy.
-        //TODO: N+1 issue. Fix or not ?
-        for (PostReport report : postReports.getContent()) {
-            Hibernate.initialize(report.getUserPostReports());
-        }
-
         return postReportMapper.userPostReportPageToUserPostReportListDTO(postReports);
     }
 }

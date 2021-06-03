@@ -2,6 +2,7 @@ package com.bhtcnpm.website.model.entity.PostCommentEntities;
 
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostCommentReportAction.PostCommentReportActionType;
+import com.bhtcnpm.website.model.validator.PostCommentReport.ValidPCREntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-//TODO: Add validation.
+@ValidPCREntity
 @NamedEntityGraph(
         name = "postCommentReport.all",
         attributeNodes = {

@@ -13,7 +13,6 @@ import com.bhtcnpm.website.repository.*;
 import com.bhtcnpm.website.service.PostCommentReportService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -154,12 +153,6 @@ public class PostCommentReportServiceImpl implements PostCommentReportService {
             postCommentReports = postCommentReportRepository.findAllByResolvedTimeNotNull(pageable);
         } else {
             postCommentReports = postCommentReportRepository.findAllByResolvedTimeIsNull(pageable);
-        }
-
-        //Initialize lazy proxy.
-        //TODO: N+1 issue. Fix or not ?
-        for (PostCommentReport report : postCommentReports.getContent()) {
-            Hibernate.initialize(report.getUserPostCommentReports());
         }
 
         return postCommentReportMapper.userPostCommentReportPageToUserPostCommentReportListDTO(postCommentReports);

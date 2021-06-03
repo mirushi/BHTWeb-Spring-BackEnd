@@ -23,16 +23,22 @@ public abstract class PostCommentMapper {
     protected UserWebsiteRepository userWebsiteRepository;
 
     @Mapping(target = "authorID", source = "author.id")
+    @Mapping(target = "authorDisplayName", source = "author.displayName")
     @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     @Mapping(target = "childCommentCount", ignore = true)
     public abstract PostCommentDTO postCommentToPostCommentDTOChildCommentOnly (PostComment postComment);
 
     @Mapping(target = "authorID", source = "author.id")
+    @Mapping(target = "authorDisplayName", source = "author.displayName")
     @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     public abstract PostCommentChildDTO postCommentToPostCommentChildDTO (PostComment postComment);
 
     public PostCommentListDTO postCommentPageToPostCommentListDTO (Page<PostCommentDTO> postCommentDTOS) {
-        return new PostCommentListDTO(postCommentDTOS.getContent(), postCommentDTOS.getTotalPages(), postCommentDTOS.getTotalElements());
+        return PostCommentListDTO.builder()
+                .postCommentDTOs(postCommentDTOS.getContent())
+                .totalPages(postCommentDTOS.getTotalPages())
+                .totalElements(postCommentDTOS.getTotalElements())
+                .build();
     }
 
     public PostComment postCommentDTOToPostComment(PostCommentRequestDTO postCommentRequestDTO,

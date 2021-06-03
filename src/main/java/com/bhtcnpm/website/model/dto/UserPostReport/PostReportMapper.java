@@ -15,8 +15,7 @@ import java.util.stream.Collectors;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         imports = Collectors.class,
         uses = {UserSummaryMapper.class,
-                ReportReasonMapper.class,
-                UserPostReportMapper.class})
+                ReportReasonMapper.class})
 public interface PostReportMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "postID", source = "post.id")
