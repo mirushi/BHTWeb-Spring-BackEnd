@@ -14,8 +14,7 @@ import java.util.UUID;
 
 @Repository
 public interface PostCommentRepository extends JpaRepository<PostComment, Long> {
-    //TODO: Please fix performance problems because we'll fetch all children comments with this.
-    @Query("SELECT new com.bhtcnpm.website.model.dto.PostComment.PostCommentDTO(pc.id, pc.author.id, pc.author.avatarURL, pc.content, COUNT(childComments.id) ) " +
+    @Query("SELECT new com.bhtcnpm.website.model.dto.PostComment.PostCommentDTO(pc, COUNT(childComments.id) ) " +
             "FROM PostComment pc " +
             "LEFT JOIN pc.childComments childComments " +
             "WHERE pc.post.id = :postID AND pc.parentComment IS NULL " +

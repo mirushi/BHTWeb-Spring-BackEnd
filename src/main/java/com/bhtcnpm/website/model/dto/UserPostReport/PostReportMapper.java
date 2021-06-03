@@ -15,23 +15,27 @@ import java.util.stream.Collectors;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         imports = Collectors.class,
         uses = {UserSummaryMapper.class,
-                ReportReasonMapper.class,
-                UserPostReportMapper.class})
+                ReportReasonMapper.class})
 public interface PostReportMapper {
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "postId", source = "post.id")
-    @Mapping(target = "reporters",
-            source = "postReport.userPostReports")
+    @Mapping(target = "postID", source = "post.id")
+    @Mapping(target = "postImageURL", source = "postReport.post.imageURL")
     @Mapping(target = "title", source = "postReport.post.title")
     @Mapping(target = "content", source = "postReport.post.content")
-    @Mapping(target = "postImageURL", source = "postReport.post.imageURL")
+    @Mapping(target = "reporters",
+            source = "postReport.userPostReports")
+    @Mapping(target = "reportReasons", source = "postReport.userPostReports")
     @Mapping(target = "feedbacks", expression = "java(" +
             "postReport.getUserPostReports()" +
             ".stream()" +
             ".map(obj -> obj.getFeedback())" +
             ".collect(Collectors.toList())" +
             ")")
-    @Mapping(target = "reportReasons", source = "postReport.userPostReports")
+    @Mapping(target = "reportTime", source = "reportTime")
+    @Mapping(target = "resolvedTime", source = "resolvedTime")
+    @Mapping(target = "resolvedNote", source = "resolvedNote")
+    @Mapping(target = "resolvedBy", source = "resolvedBy")
+    @Mapping(target = "actionTaken", source = "actionTaken")
     PostReportDTO userPostReportToUserPostReportDTO (PostReport postReport);
 
     List<PostReportDTO> userPostReportListToUserPostReportDTOList (List<PostReport> postReports);

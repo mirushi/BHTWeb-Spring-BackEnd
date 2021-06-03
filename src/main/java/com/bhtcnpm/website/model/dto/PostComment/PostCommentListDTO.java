@@ -7,6 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
+@Builder
 @AllArgsConstructor
 public class PostCommentListDTO {
     private List<PostCommentDTO> postCommentDTOs;

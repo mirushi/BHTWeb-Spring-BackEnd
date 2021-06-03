@@ -5,8 +5,11 @@ import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -36,8 +39,18 @@ public class PostComment {
     @ManyToOne
     private UserWebsite author;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Post post;
+
+    @Column(name = "submit_dtm",
+            nullable = false,
+            updatable = false)
+    @CreationTimestamp
+    private LocalDateTime submitDtm;
+
+    @Column(name = "last_edited_dtm",nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime lastEditedDtm;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

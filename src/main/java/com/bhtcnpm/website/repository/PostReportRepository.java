@@ -21,6 +21,5 @@ public interface PostReportRepository extends JpaRepository<PostReport, Long>, U
     @EntityGraph(value = "postReport.all")
     Page<PostReport> findAllByResolvedTimeIsNull (Pageable pageable);
 
-
     PostReport findByPost (Post post);
 }
