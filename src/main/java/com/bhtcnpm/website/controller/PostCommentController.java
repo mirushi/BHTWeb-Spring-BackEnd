@@ -36,8 +36,9 @@ public class PostCommentController {
 
     @GetMapping(value = "/posts/comments/{commentID}/children")
     @ResponseBody
-    public ResponseEntity<List<PostCommentChildDTO>> getChildComments (@PathVariable Long commentID) {
-        List<PostCommentChildDTO> postCommentDTOs = postCommentService.getChildComments(commentID);
+    public ResponseEntity<List<PostCommentChildDTO>> getChildComments (@PathVariable Long commentID,
+                                                                       @PageableDefault @Nullable Pageable pageable) {
+        List<PostCommentChildDTO> postCommentDTOs = postCommentService.getChildComments(commentID, pageable);
 
         return new ResponseEntity<>(postCommentDTOs, HttpStatus.OK);
     }

@@ -21,7 +21,7 @@ public interface PostCommentRepository extends JpaRepository<PostComment, Long> 
             "GROUP BY pc ")
     Page<PostCommentDTO> getPostCommentDTOsParentOnly(Long postID, Pageable pageable);
 
-    List<PostComment> getPostCommentByParentCommentId(Long parentCommentId);
+    List<PostComment> getPostCommentByParentCommentId(Long parentCommentId, Pageable pageable);
 
     @Query("SELECT new com.bhtcnpm.website.model.dto.PostComment.PostCommentStatisticDTO(pc.id, COUNT(DISTINCT uLiked.userPostCommentLikeId.user.id), " +
             "CASE WHEN EXISTS (SELECT 1 FROM pc.userPostCommentLikes uLikedSub WHERE uLikedSub.userPostCommentLikeId.user.id = :userID) THEN true ELSE false END) " +
