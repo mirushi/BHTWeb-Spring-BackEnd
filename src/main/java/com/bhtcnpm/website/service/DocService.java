@@ -52,7 +52,7 @@ public interface DocService {
 
     List<DocSummaryDTO> getTrending ();
 
-    public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, Long userID);
+    public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, UUID userID);
 
     DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, UUID userID);
 

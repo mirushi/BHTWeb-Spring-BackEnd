@@ -11,6 +11,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface UserDocReactionRepository extends JpaRepository<UserDocReaction, Long>, QuerydslPredicateExecutor<UserDocReaction>, UserDocReactionRepositoryCustom {
@@ -33,5 +34,5 @@ public interface UserDocReactionRepository extends JpaRepository<UserDocReaction
             "FROM UserDocReaction usr " +
             "WHERE usr.userDocReactionId.doc.id IN :docIDs AND usr.userDocReactionId.user.id = :userID " +
             "ORDER BY usr.userDocReactionId.doc.id ASC ")
-    List<DocUserOwnReactionStatisticDTO> getDocUserOwnReactionStatisticDTO (List<Long> docIDs, Long userID);
+    List<DocUserOwnReactionStatisticDTO> getDocUserOwnReactionStatisticDTO (List<Long> docIDs, UUID userID);
 }
