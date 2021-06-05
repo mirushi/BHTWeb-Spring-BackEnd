@@ -100,8 +100,13 @@ public class PostCommentServiceImpl implements PostCommentService {
 
         PostComment postComment = optionalPostComment.get();
 
+        Long parentCommentId = null;
+        if (postComment.getParentComment() != null) {
+            parentCommentId = postComment.getParentComment().getId();
+        }
+
         postComment = postCommentMapper.postCommentDTOToPostComment(
-                postCommentRequestDTO, postComment.getPost().getId(), postComment.getParentComment().getId() ,postComment.getAuthor().getId(), postComment);
+                postCommentRequestDTO, postComment.getPost().getId(),parentCommentId ,postComment.getAuthor().getId(), postComment);
 
         postComment = postCommentRepository.save(postComment);
 
