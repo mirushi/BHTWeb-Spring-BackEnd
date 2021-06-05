@@ -229,7 +229,7 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, Long userID) {
+    public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, UUID userID) {
 
         List<DocReactionStatisticDTO> docReactionStatisticDTOs = userDocReactionRepository.getDocReactionStatisticsDTO(docIDs);
 
