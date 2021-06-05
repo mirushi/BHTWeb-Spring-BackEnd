@@ -26,6 +26,8 @@ import java.util.UUID;
 public class PostCommentServiceImpl implements PostCommentService {
     private static final int PAGE_SIZE = 10;
 
+    private static final int CHILD_PAGE_SIZE = 100;
+
     private static final int DEFAULT_PRELOADED_COMMENT_COUNT = 3;
 
     private final PostCommentRepository postCommentRepository;
@@ -46,8 +48,10 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public List<PostCommentChildDTO> getChildComments(Long parentCommentID) {
-        List<PostComment> queryResult = postCommentRepository.getPostCommentByParentCommentId(parentCommentID);
+    public List<PostCommentChildDTO> getChildComments(Long parentCommentID, Pageable pageable) {
+        pageable = PaginatorUtils.getPageableWithNewPageSize(pageable, CHILD_PAGE_SIZE);
+
+        List<PostComment> queryResult = postCommentRepository.getPostCommentByParentCommentId(parentCommentID, pageable);
 
         List<PostCommentChildDTO> postCommentDTOs = postCommentMapper.postCommentListToPostCommentChildDTOList(queryResult);
 

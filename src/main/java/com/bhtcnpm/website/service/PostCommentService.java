@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface PostCommentService {
     PostCommentListDTO getPostCommentsByPostID (Long postID, Pageable pageable);
 
-    List<PostCommentChildDTO> getChildComments (Long parentCommentID);
+    List<PostCommentChildDTO> getChildComments (Long parentCommentID, Pageable pageable);
 
     PostCommentDTO postPostComment (PostCommentRequestDTO postCommentRequestDTO, Long postID, UUID authorID);
 
