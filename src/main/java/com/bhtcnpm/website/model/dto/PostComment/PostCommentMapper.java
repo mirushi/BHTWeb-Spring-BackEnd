@@ -47,7 +47,7 @@ public abstract class PostCommentMapper {
         PostComment postComment = Objects.requireNonNullElseGet(entity, PostComment::new);
 
         if (postID == null || postCommentRequestDTO == null || authorID == null) {
-            return entity;
+            throw new IllegalArgumentException("PostID, PostCommentRequestDTO and authorID cannot be null.");
         }
 
         if (parentCommentID != null) {
