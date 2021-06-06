@@ -18,6 +18,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmb
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -26,7 +27,6 @@ import java.util.Set;
 //Making class becomes immutable for indexing inside other entities.
 @RequiredArgsConstructor
 @ToString
-@EqualsAndHashCode
 @AllArgsConstructor
 @Builder
 @Indexed
@@ -70,4 +70,15 @@ public class Tag {
 
     @Version
     private short version;
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tag)) return false;
+        Tag other = (Tag)o;
+        return id != null && id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {return getClass().hashCode();}
 }
