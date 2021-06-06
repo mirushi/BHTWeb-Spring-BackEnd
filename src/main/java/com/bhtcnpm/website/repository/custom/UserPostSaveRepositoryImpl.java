@@ -53,16 +53,16 @@ public class UserPostSaveRepositoryImpl implements UserPostSaveRepositoryCustom 
         JPAQuery query = new JPAQuery<UserPostSave>(em)
                 .select(Projections.constructor(PostSummaryDTO.class,
                         qPost.id,
+                        qPost.title,
+                        qPost.summary,
+                        qPost.imageURL,
+                        qPost.publishDtm,
+                        qPost.readingTime,
                         qPost.author.id,
                         qPost.author.name,
                         qPost.author.avatarURL,
                         qPost.category.id,
-                        qPost.category.name,
-                        qPost.imageURL,
-                        qPost.publishDtm,
-                        qPost.readingTime,
-                        qPost.summary,
-                        qPost.title))
+                        qPost.category.name))
                 .from(qUserPostSave)
                 .innerJoin(qPost)
                 .on(qUserPostSave.userPostSaveId.post.id.eq(qPost.id))
