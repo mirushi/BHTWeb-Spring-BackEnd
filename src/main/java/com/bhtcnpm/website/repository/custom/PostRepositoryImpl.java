@@ -267,7 +267,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     @Override
     public PostDetailsWithStateListDTO getPostDetailsListWithStateFilter(Predicate predicate, Pageable pageable, PostStateType postStateType) {
         JPAQuery query = new JPAQuery<Post>(em)
-                .select(Projections.constructor(PostDetailsWithStateDTO.class, qPost.id, qPost.author.id, qPost.author.name, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.content, qPost.title, qPost.postState))
+                .select(Projections.constructor(PostDetailsWithStateDTO.class, qPost.id, qPost.title, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.content,  qPost.author.id, qPost.author.name, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.postState))
                 .from(qPost)
                 .where(predicate)
                 .where(qPost.postState.eq(postStateType));
