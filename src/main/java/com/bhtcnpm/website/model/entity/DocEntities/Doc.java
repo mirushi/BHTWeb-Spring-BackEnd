@@ -8,13 +8,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.search.engine.backend.types.*;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
+import org.jsoup.nodes.Document;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
@@ -27,7 +26,10 @@ import java.util.Set;
 @Entity(name = "Doc")
 @Indexed
 @Table(name = "doc")
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @SQLDelete(sql = "UPDATE doc SET DELETED_DATE = "+ "20210302" +" WHERE id = ? AND VERSION = ?")
 @Loader(namedQuery = "findDocById")
 @NamedQuery(name = "findDocById",
@@ -162,4 +164,15 @@ public class Doc {
 
     @Version
     private short version;
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Doc)) return false;
+        Doc other = (Doc) o;
+        return id != null && id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {return getClass().hashCode();}
 }
