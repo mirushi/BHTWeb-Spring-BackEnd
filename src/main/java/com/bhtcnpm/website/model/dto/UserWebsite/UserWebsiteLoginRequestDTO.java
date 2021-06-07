@@ -1,6 +1,6 @@
 package com.bhtcnpm.website.model.dto.UserWebsite;
 
-import com.bhtcnpm.website.model.validator.UserWebsite.ValidUWLoginRequest;
+import com.bhtcnpm.website.model.validator.dto.UserWebsite.ValidUWLoginRequest;
 import lombok.Data;
 
 import javax.validation.constraints.Email;

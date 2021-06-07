@@ -1,10 +1,7 @@
-package com.bhtcnpm.website.model.validator.UserWebsite;
+package com.bhtcnpm.website.model.validator.dto.UserWebsite;
 
 import com.bhtcnpm.website.model.dto.UserWebsite.UserWebsiteLoginRequestDTO;
-import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

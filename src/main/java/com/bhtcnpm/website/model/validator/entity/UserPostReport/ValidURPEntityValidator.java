@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.model.validator.UserPostReport;
+package com.bhtcnpm.website.model.validator.entity.UserPostReport;
 
 import com.bhtcnpm.website.model.entity.PostEntities.PostReport;
 

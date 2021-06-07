@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.model.validator.PostCommentReport;
+package com.bhtcnpm.website.model.validator.entity.PostCommentReport;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

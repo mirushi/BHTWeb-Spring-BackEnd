@@ -1,6 +1,4 @@
-package com.bhtcnpm.website.model.validator.UserPostReport;
-
-import com.bhtcnpm.website.model.validator.UserWebsite.ValidUWCreateNewRequestValidator;
+package com.bhtcnpm.website.model.validator.entity.UserPostReport;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

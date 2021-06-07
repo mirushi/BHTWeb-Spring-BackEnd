@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
+import com.bhtcnpm.website.constant.domain.Post.PostApprovalState;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
@@ -189,6 +190,17 @@ public class Post {
             return PostBusinessState.DELETED;
         }
         return null;
+    }
+
+    @Transient
+    public PostApprovalState getPostApprovalState() {
+        if (PostStateType.APPROVED.equals(postState)) {
+            return PostApprovalState.APPROVED;
+        }
+        if (PostStateType.REJECTED.equals(postState)) {
+            return PostApprovalState.REJECTED;
+        }
+        return PostApprovalState.PENDING;
     }
 
     @Override

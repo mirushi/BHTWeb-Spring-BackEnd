@@ -6,6 +6,8 @@ import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
+import com.bhtcnpm.website.model.validator.dto.Post.PostFeedback;
+import com.bhtcnpm.website.model.validator.dto.Post.PostID;
 import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +42,7 @@ public class PostController {
     @GetMapping(value = "/statistics")
     @ResponseBody
     public ResponseEntity<List<PostStatisticDTO>> getPostStatistics (
-            @RequestParam @Size(max = PostBusinessConstant.POST_STATISTICS_MAX) List<Long> postIDs,
+            @RequestParam @Size(max = PostBusinessConstant.POST_STATISTICS_MAX) List<@PostID Long> postIDs,
             Authentication authentication
     ) {
         List<PostStatisticDTO> postStatisticDTOS = postService.getPostStatistic(postIDs, authentication);
@@ -50,8 +52,8 @@ public class PostController {
 
     @GetMapping
     @ResponseBody
-    @RolesAllowed("ROLE_POST_READ")
-    public ResponseEntity<PostSummaryListDTO> getPostSummary (@QuerydslPredicate(root = Post.class)Predicate predicate, @NotNull @Min(0) Integer paginator, Authentication authentication) {
+    public ResponseEntity<PostSummaryListDTO> getPostSummary (@QuerydslPredicate(root = Post.class) Predicate predicate,
+                                                              @NotNull @Min(0) Integer paginator, Authentication authentication) {
         PostSummaryListDTO postSummaryListDTO = postService.getPostSummary(predicate, paginator, authentication);
 
         return new ResponseEntity<>(postSummaryListDTO, HttpStatus.OK);
@@ -59,11 +61,9 @@ public class PostController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<PostDetailsDTO> postPostDetails (@RequestBody PostRequestDTO postRequestDTO) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        PostDetailsDTO detailsDTO = postService.createPost(postRequestDTO, userID);
+    public ResponseEntity<PostDetailsDTO> postPostDetails (@RequestBody @Valid PostRequestDTO postRequestDTO,
+                                                           Authentication authentication) {
+        PostDetailsDTO detailsDTO = postService.createPost(postRequestDTO, authentication);
 
         return new ResponseEntity<>(detailsDTO, HttpStatus.OK);
     }
@@ -91,7 +91,7 @@ public class PostController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity deletePost (@PathVariable Long id) {
+    public ResponseEntity deletePost (@PathVariable @Min(0) Long id) {
         Boolean result = postService.deletePost(id);
 
         if (result) {
@@ -103,11 +103,8 @@ public class PostController {
 
     @PostMapping(value = "/{id}/approval")
     @ResponseBody
-    public ResponseEntity postPostApproval (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        Boolean result = postService.approvePost(id, userID);
+    public ResponseEntity postPostApproval (@PathVariable @PostID Long id, Authentication authentication) {
+        Boolean result = postService.approvePost(id, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -118,10 +115,7 @@ public class PostController {
 
     @DeleteMapping(value = "/{id}/approval")
     @ResponseBody
-    public ResponseEntity postDeleteApproval (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
+    public ResponseEntity postDeleteApproval (@PathVariable @PostID Long id) {
         Boolean result = postService.deletePostApproval(id);
 
         if (result) {
@@ -132,11 +126,9 @@ public class PostController {
 
     @PostMapping(value = "/{id}/likeStatus")
     @ResponseBody
-    public ResponseEntity postLikeStatus (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        Boolean result = postService.createUserPostLike(id, userID);
+    public ResponseEntity postLikeStatus (@PathVariable @PostID Long id,
+                                          Authentication authentication) {
+        Boolean result = postService.createUserPostLike(id, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -147,11 +139,9 @@ public class PostController {
 
     @DeleteMapping(value = "/{id}/likeStatus")
     @ResponseBody
-    public ResponseEntity deleteLikeStatus (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        Boolean result = postService.deleteUserPostLike(id, userID);
+    public ResponseEntity deleteLikeStatus (@PathVariable @PostID Long id,
+                                            Authentication authentication) {
+        Boolean result = postService.deleteUserPostLike(id, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -162,11 +152,10 @@ public class PostController {
 
     @PostMapping(value = "/{id}/rejection")
     @ResponseBody
-    public ResponseEntity postRejection (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
+    public ResponseEntity postRejection (@PathVariable @PostID Long id,
+                                         Authentication authentication) {
 
-        Boolean result = postService.rejectPost(id, userID);
+        Boolean result = postService.rejectPost(id, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -177,10 +166,9 @@ public class PostController {
 
     @PostMapping(value = "/{id}/rejectionWithFeedback")
     @ResponseBody
-    public ResponseEntity postRejectionWithFeedback (@PathVariable Long id, @RequestBody String feedback) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
+    public ResponseEntity postRejectionWithFeedback (@PathVariable @PostID Long id,
+                                                     @RequestBody @PostFeedback String feedback,
+                                                     Authentication authentication) {
         Boolean result = postService.rejectPostWithFeedback(id, feedback);
 
         if (result) {
@@ -192,11 +180,9 @@ public class PostController {
 
     @PostMapping(value = "/{id}/savedStatus")
     @ResponseBody
-    public ResponseEntity postSavedStatus (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        Boolean result = postService.createSavedStatus(id, userID);
+    public ResponseEntity postSavedStatus (@PathVariable @PostID Long id,
+                                           Authentication authentication) {
+        Boolean result = postService.createSavedStatus(id, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -207,11 +193,8 @@ public class PostController {
 
     @DeleteMapping(value = "/{id}/savedStatus")
     @ResponseBody
-    public ResponseEntity deleteSavedStatus (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        Boolean result = postService.deleteSavedStatus(id, userID);
+    public ResponseEntity deleteSavedStatus (@PathVariable @PostID Long id, Authentication authentication) {
+        Boolean result = postService.deleteSavedStatus(id, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -251,8 +234,9 @@ public class PostController {
             @RequestParam String searchTerm,
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) String sortByPublishDtm,
-            @RequestParam(value = "postCategoryID", required = false) Long postCategoryID) {
-        return new ResponseEntity<>(postService.getPostBySearchTerm(sortByPublishDtm, page, searchTerm, postCategoryID), HttpStatus.OK);
+            @RequestParam(value = "postCategoryID", required = false) Long postCategoryID,
+            Authentication authentication) {
+        return new ResponseEntity<>(postService.getPostBySearchTerm(sortByPublishDtm, page, searchTerm, postCategoryID, authentication), HttpStatus.OK);
     }
 
     @GetMapping("relatedSameAuthor")

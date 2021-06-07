@@ -11,10 +11,13 @@ import com.bhtcnpm.website.repository.PostRepository;
 import com.bhtcnpm.website.repository.UserPostLikeRepository;
 import com.bhtcnpm.website.repository.UserPostSaveRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.predicate.Post.PostPredicateGenerator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -62,8 +65,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostSummaryListDTO getPostSummary(Predicate predicate, Integer paginator, Authentication authentication) {
         Sort sort;
+        BooleanExpression filterExpression = PostPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
         Pageable pageable = PageRequest.of(paginator, PAGE_SIZE);
-        Page<Post> queryResults = postRepository.findAll(predicate, pageable);
+
+        Page<Post> queryResults = postRepository.findAll(filterExpression.and(predicate), pageable);
 
         PostSummaryListDTO postSummaryListDTO = postMapper.postPageToPostSummaryListDTO(queryResults);
 
@@ -80,7 +85,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean approvePost(Long postID, UUID userID) {
+    public Boolean approvePost(Long postID, Authentication authentication) {
         int rowAffected = postRepository.setPostState(postID, PostStateType.APPROVED);
         return rowAffected == 1;
     }
@@ -92,7 +97,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean createUserPostLike(Long postID, UUID userID) {
+    public Boolean createUserPostLike(Long postID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+
         UserPostLikeId id = new UserPostLikeId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
@@ -105,18 +112,32 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean deleteUserPostLike(Long postID, UUID userID) {
+    public Boolean deleteUserPostLike(Long postID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+
+        if (userID == null) {
+            throw new IllegalArgumentException("Cannot extract userID from authentication.");
+        }
+
         UserPostLikeId id = new UserPostLikeId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
 
-        userPostLikeRepository.deleteById(id);
+        try {
+            userPostLikeRepository.deleteById(id);
+        } catch (Exception exception) {
+            return false;
+        }
 
         return true;
     }
 
     @Override
-    public PostDetailsDTO createPost(PostRequestDTO postRequestDTO, UUID userID) {
+    public PostDetailsDTO createPost(PostRequestDTO postRequestDTO, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+        if (userID == null) {
+            throw new IllegalArgumentException("Cannot create post. Not authenticated.");
+        }
         Post post = postMapper.postRequestDTOToPost(postRequestDTO, userID, null);
 
         return postMapper.postToPostDetailsDTO(postRepository.save(post));
@@ -149,7 +170,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean rejectPost(Long postID, UUID userID) {
+    public Boolean rejectPost(Long postID, Authentication authentication) {
         int rowChanged = postRepository.setPostState(postID, PostStateType.REJECTED);
 
         if (rowChanged == 1) {
@@ -169,7 +190,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean createSavedStatus(Long postID, UUID userID) {
+    public Boolean createSavedStatus(Long postID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+        if (userID == null) {
+            throw new IllegalArgumentException("UserID not found. Cannot perform save.");
+        }
+
         UserPostSaveId id = new UserPostSaveId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
@@ -182,7 +208,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean deleteSavedStatus(Long postID, UUID userID) {
+    public Boolean deleteSavedStatus(Long postID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+
+        if (userID == null) {
+            throw new IllegalArgumentException("Cannot extract userID from authentication.");
+        }
+
         UserPostSaveId id = new UserPostSaveId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
@@ -212,7 +244,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSummaryListDTO getPostBySearchTerm(String sortByPublishDtm, Integer page, String searchTerm, Long postCategoryID) {
+    public PostSummaryListDTO getPostBySearchTerm(String sortByPublishDtm, Integer page, String searchTerm, Long postCategoryID, Authentication authentication) {
+        BooleanExpression filterExpression = PostPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
+
         PostSummaryListDTO postSummaryListDTO = postRepository.searchBySearchTerm(sortByPublishDtm, postCategoryID, page, PAGE_SIZE , searchTerm);
         return postSummaryListDTO;
     }

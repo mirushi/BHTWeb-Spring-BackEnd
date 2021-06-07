@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.model.validator.UserWebsite;
+package com.bhtcnpm.website.model.validator.dto.UserWebsite;
 
 import com.bhtcnpm.website.model.dto.UserWebsite.UserWebsiteCreateNewRequestDTO;
 import com.bhtcnpm.website.model.entity.UserWebsite;

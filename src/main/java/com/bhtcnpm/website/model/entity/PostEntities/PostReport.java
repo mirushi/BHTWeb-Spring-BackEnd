@@ -2,18 +2,15 @@ package com.bhtcnpm.website.model.entity.PostEntities;
 
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
-import com.bhtcnpm.website.model.validator.UserPostReport.ValidUPREntity;
+import com.bhtcnpm.website.model.validator.entity.UserPostReport.ValidUPREntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "post_report")

@@ -38,13 +38,7 @@ public class SecurityUtils {
     }
 
     public static boolean containsAuthority (Authentication authentication, String authority) {
-        if (authority == null) {
-            return false;
-        }
-        if (authentication == null) {
-            return false;
-        }
-        if (authentication.getAuthorities() == null) {
+        if (authority == null || authentication == null || authentication.getAuthorities() == null) {
             return false;
         }
 
@@ -67,5 +61,12 @@ public class SecurityUtils {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList())
         );
+    }
+
+    public static boolean isAnonymousUser (Authentication authentication) {
+        if (authentication == null || authentication != null && "anonymousUser".equals(authentication.toString())) {
+            return true;
+        }
+        return false;
     }
 }
