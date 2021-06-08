@@ -163,7 +163,11 @@ public class Post {
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @GenericField(searchable = Searchable.YES)
     private LocalDateTime deletedDate;
+
+    @ManyToOne
+    private UserWebsite deletedBy;
 
     @Version
     private short version;

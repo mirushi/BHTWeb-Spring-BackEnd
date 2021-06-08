@@ -1,10 +1,9 @@
 package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
+import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.model.dto.Post.*;
-import com.bhtcnpm.website.model.dto.UserWebsite.SimpleKeycloakAccountWithEntity;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
-import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.PostRepository;
@@ -17,7 +16,6 @@ import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,8 +25,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+
 import java.io.IOException;
-import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -65,10 +64,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostSummaryListDTO getPostSummary(Predicate predicate, Integer paginator, Authentication authentication) {
         Sort sort;
-        BooleanExpression filterExpression = PostPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
+        BooleanExpression authorizationFilter = PostPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
         Pageable pageable = PageRequest.of(paginator, PAGE_SIZE);
 
-        Page<Post> queryResults = postRepository.findAll(filterExpression.and(predicate), pageable);
+        Page<Post> queryResults = postRepository.findAll(authorizationFilter.and(predicate), pageable);
 
         PostSummaryListDTO postSummaryListDTO = postMapper.postPageToPostSummaryListDTO(queryResults);
 
@@ -87,13 +86,21 @@ public class PostServiceImpl implements PostService {
     @Override
     public Boolean approvePost(Long postID, Authentication authentication) {
         int rowAffected = postRepository.setPostState(postID, PostStateType.APPROVED);
-        return rowAffected == 1;
+        if (rowAffected == 1) {
+            postRepository.indexPost(postID);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public Boolean deletePostApproval(Long postID) {
         int rowAffected = postRepository.setPostState(postID, PostStateType.PENDING_APPROVAL);
-        return rowAffected == 1;
+        if (rowAffected == 1) {
+            postRepository.indexPost(postID);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -139,8 +146,9 @@ public class PostServiceImpl implements PostService {
             throw new IllegalArgumentException("Cannot create post. Not authenticated.");
         }
         Post post = postMapper.postRequestDTOToPost(postRequestDTO, userID, null);
+        post = postRepository.save(post);
 
-        return postMapper.postToPostDetailsDTO(postRepository.save(post));
+        return postMapper.postToPostDetailsDTO(post);
     }
 
     @Override
@@ -163,9 +171,25 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Boolean deletePost(Long postID) {
-        //TODO: Consider checking userID permission and saving who deleted the post.
+    public Boolean deletePost(Long postID, Authentication authentication) {
+//        UUID userID = SecurityUtils.getUserID(authentication);
+//        if (userID == null) {
+//            throw new IllegalArgumentException("Cannot extract userID from authentication.");
+//        }
+//
+//        Optional<Post> post = postRepository.findById(postID);
+//        if (post.isEmpty()) {
+//            throw new IDNotFoundException();
+//        }
+//        Post entity = post.get();
+//
+//        entity.setDeletedDate(LocalDateTime.now());
+//        entity.setDeletedBy(userWebsiteRepository.getOne(userID));
+//
+//        postRepository.removeIndexPost(entity);
+
         postRepository.deleteById(postID);
+
         return true;
     }
 
@@ -174,6 +198,7 @@ public class PostServiceImpl implements PostService {
         int rowChanged = postRepository.setPostState(postID, PostStateType.REJECTED);
 
         if (rowChanged == 1) {
+            postRepository.indexPost(postID);
             return true;
         }
         return false;
@@ -184,6 +209,7 @@ public class PostServiceImpl implements PostService {
         int rowChanged = postRepository.setPostStateAndFeedback(postID, PostStateType.PENDING_FIX, feedback);
 
         if (rowChanged == 1) {
+            postRepository.indexPost(postID);
             return true;
         }
         return false;
@@ -228,7 +254,9 @@ public class PostServiceImpl implements PostService {
     public List<PostSummaryDTO> getPostWithActivityCategory() {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE_NEW_ACTIVITIES);
 
-        List<Post> queryResult = postRepository.findByCategoryNameOrderByPublishDtmDesc(pageable,"Hoạt động");
+        BooleanExpression postBusinessState = PostPredicateGenerator.getBooleanExpressionOnBusinessState(PostBusinessState.PUBLIC);
+
+        List<Post> queryResult = postRepository.findByCategoryNameOrderByPublishDtmDesc(postBusinessState, pageable,"Hoạt động");
 
         return postMapper.postListToPostSummaryDTOs(queryResult);
     }
@@ -238,16 +266,16 @@ public class PostServiceImpl implements PostService {
         Sort sort = Sort.by("publishDtm").descending();
         Pageable pageable = PageRequest.of(0, PAGE_SIZE_NEWEST, sort);
 
-        Page<Post> queryResult = postRepository.findAll(pageable);
+        BooleanExpression postBusinessState = PostPredicateGenerator.getBooleanExpressionOnBusinessState(PostBusinessState.PUBLIC);
+
+        Page<Post> queryResult = postRepository.findAll(postBusinessState, pageable);
 
         return postMapper.postPageToPostSummaryDTOList(queryResult);
     }
 
     @Override
     public PostSummaryListDTO getPostBySearchTerm(String sortByPublishDtm, Integer page, String searchTerm, Long postCategoryID, Authentication authentication) {
-        BooleanExpression filterExpression = PostPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
-
-        PostSummaryListDTO postSummaryListDTO = postRepository.searchBySearchTerm(sortByPublishDtm, postCategoryID, page, PAGE_SIZE , searchTerm);
+        PostSummaryListDTO postSummaryListDTO = postRepository.searchBySearchTerm(sortByPublishDtm, postCategoryID, page, PAGE_SIZE , searchTerm, authentication);
         return postSummaryListDTO;
     }
 
@@ -262,27 +290,37 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDetailsWithStateListDTO getPostDetailsWithState(Predicate predicate, Pageable pageable, PostStateType postStateType) {
+    public PostDetailsWithStateListDTO getPostDetailsWithState(Predicate predicate, Pageable pageable, PostStateType postStateType, Authentication authentication) {
         //Reset PAGE_SIZE to predefined value.
         pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
 
-        PostDetailsWithStateListDTO queryResult = postRepository.getPostDetailsListWithStateFilter(predicate, pageable, postStateType);
+        BooleanExpression authorizationFilter = PostPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
+        BooleanExpression postBusinessState = PostPredicateGenerator.getBooleanExpressionNotDeleted();
+
+        PostDetailsWithStateListDTO queryResult = postRepository.getPostDetailsListWithStateFilter(
+                authorizationFilter.and(postBusinessState).and(predicate),
+                pageable,
+                postStateType
+        );
 
         return queryResult;
     }
 
     @Override
-    public PostSummaryWithStateAndFeedbackListDTO getPostWithStateAndFeedback(Predicate predicate, Pageable pageable) {
+    public PostSummaryWithStateAndFeedbackListDTO getPostWithStateAndFeedbackUserOwn(Predicate predicate, Pageable pageable, Authentication authentication) {
+        BooleanExpression userOwn = PostPredicateGenerator.getBooleanExpressionUserOwn(authentication);
+        BooleanExpression notDeleted = PostPredicateGenerator.getBooleanExpressionNotDeleted();
+
         //Reset PAGE_SIZE to predefined value.
         pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
 
-        PostSummaryWithStateAndFeedbackListDTO queryResult = postRepository.getPostSummaryStateFeedback(predicate, pageable);
+        PostSummaryWithStateAndFeedbackListDTO queryResult = postRepository.getPostSummaryStateFeedback(userOwn.and(notDeleted).and(predicate), pageable);
 
         return queryResult;
     }
 
     @Override
-    public List<PostSuggestionDTO> getRelatedPostSameAuthor(UUID authorID, Long postID, Integer page) throws IDNotFoundException, IOException {
+    public List<PostSuggestionDTO> getRelatedPostSameAuthor(UUID authorID, Long postID, Integer page, Authentication authentication) throws IDNotFoundException, IOException {
 
         if (page == null) {
             page = 0;
@@ -293,11 +331,12 @@ public class PostServiceImpl implements PostService {
             throw new IDNotFoundException();
         }
 
-        return postRepository.searchRelatedPost(authorID, null ,optEntity.get(), page ,PostBusinessConstant.RELATED_POST_MAX);
+        return postRepository.searchRelatedPost(authorID, null ,optEntity.get(), page ,PostBusinessConstant.RELATED_POST_MAX,
+                PostBusinessState.PUBLIC, authentication);
     }
 
     @Override
-    public List<PostSuggestionDTO> getRelatedPostSameCategory(Long categoryID, Long postID, Integer page) throws IDNotFoundException, IOException {
+    public List<PostSuggestionDTO> getRelatedPostSameCategory(Long categoryID, Long postID, Integer page, Authentication authentication) throws IDNotFoundException, IOException {
         if (page == null) {
             page = 0;
         }
@@ -307,26 +346,35 @@ public class PostServiceImpl implements PostService {
             throw new IDNotFoundException();
         }
 
-        return postRepository.searchRelatedPost(null, categoryID ,optEntity.get(), page ,PostBusinessConstant.RELATED_POST_MAX);
+        return postRepository.searchRelatedPost(null, categoryID ,optEntity.get(), page ,PostBusinessConstant.RELATED_POST_MAX,
+                PostBusinessState.PUBLIC, authentication);
     }
 
     @Override
-    public PostSummaryListDTO getPostSavedByUserID(UUID userID, Pageable pageable) {
+    public PostSummaryListDTO getPostSavedByUserOwn(Authentication authentication, Pageable pageable) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+        if (userID == null) {
+            throw new IllegalArgumentException("Cannot extract userID from authentication.");
+        }
+        BooleanExpression authorizationFilter = PostPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
+        BooleanExpression postBusinessStateFilter = PostPredicateGenerator.getBooleanExpressionOnBusinessState(PostBusinessState.PUBLIC);
+
         //Reset PAGE_SIZE to predefined value.
         pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
 
-        PostSummaryListDTO result = userPostSaveRepository.findByUserPostSaveIdUserId(userID, pageable);
+        PostSummaryListDTO result = userPostSaveRepository.findByUserPostSaveIdUserId(userID, postBusinessStateFilter ,authorizationFilter, pageable);
         return result;
     }
 
     @Override
-    public PostSummaryWithStateListDTO getManagementPost(String searchTerm, PostStateType postStateType, Integer page, String sortByPublishDtm, Long postCategoryID) {
+    public PostSummaryWithStateListDTO getManagementPost(String searchTerm, PostStateType postStateType, Integer page, String sortByPublishDtm, Long postCategoryID, Authentication authentication) {
         PostSummaryWithStateListDTO dto = postRepository.getManagementPost(sortByPublishDtm,
                 postCategoryID,
                 page,
                 PAGE_SIZE,
                 searchTerm,
-                postStateType);
+                postStateType,
+                authentication);
         return dto;
     }
 

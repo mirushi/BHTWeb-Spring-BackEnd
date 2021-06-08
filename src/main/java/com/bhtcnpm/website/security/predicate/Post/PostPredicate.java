@@ -5,7 +5,9 @@ import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+//Chỉ nên sử dụng class này trong class PostPredicateGenerator.
 public class PostPredicate {
     private static QPost qPost = QPost.post;
 
@@ -24,6 +26,8 @@ public class PostPredicate {
     public static BooleanExpression notDeleted () {
         return qPost.deletedDate.isNull();
     }
+
+    public static BooleanExpression userOwn (UUID userID) {return qPost.author.id.eq(userID);}
 
     public static BooleanExpression postPublishDtmReached() {
         return qPost.publishDtm.loe(LocalDateTime.now());

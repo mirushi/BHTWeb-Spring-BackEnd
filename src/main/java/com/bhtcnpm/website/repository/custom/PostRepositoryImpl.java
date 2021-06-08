@@ -2,6 +2,7 @@ package com.bhtcnpm.website.repository.custom;
 
 import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
+import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.PostCategory;
@@ -9,10 +10,12 @@ import com.bhtcnpm.website.model.entity.PostEntities.QPost;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.search.lucene.LuceneIndexUtils;
+import com.bhtcnpm.website.security.predicate.Post.PostHibernateSearchPredicateGenerator;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -21,16 +24,18 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queries.mlt.MoreLikeThis;
 import org.apache.lucene.search.Query;
 import org.hibernate.search.backend.lucene.LuceneExtension;
+import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.engine.search.sort.dsl.SortFinalStep;
 import org.hibernate.search.engine.search.sort.dsl.SortThenStep;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.scope.SearchScope;
 import org.hibernate.search.mapper.orm.session.SearchSession;
-import org.springframework.core.env.Environment;
+import org.hibernate.search.mapper.orm.work.SearchIndexingPlan;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
@@ -77,8 +82,10 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                                     Integer page,
                                                     Integer pageSize,
                                                     String searchTerm,
-                                                    PostStateType postStateType) {
-        SearchScope<Post> scope = searchSession.scope(Post.class);
+                                                    PostStateType postStateType,
+                                                    PostBusinessState postBusinessState,
+                                                    Authentication authentication) {
+        SearchScope<Post> scope = getSearchScope();
 
         //Build dynamic sorting condition based on user input.
         //Intermediate step.
@@ -101,9 +108,19 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
             sortFinalStep = sortThenStep.then().score();
         }
 
+        //Filter search result based on user reading permission.
+        SearchPredicate authorizationFilteringPredicate = PostHibernateSearchPredicateGenerator.getSearchPredicateOnAuthentication(authentication, scope);
+
+        //Generate predicate based on business state of post.
+        SearchPredicate businessStateFilteringPredicate = PostHibernateSearchPredicateGenerator.getSearchPredicateOnBusinessState(postBusinessState, scope);
+
         SearchResult<Post> searchResult = searchSession.search(Post.class)
                 .where(f -> f.bool(b -> {
                     b.filter(f.matchAll());
+                    b.must(authorizationFilteringPredicate);
+                    if (businessStateFilteringPredicate != null) {
+                        b.must(businessStateFilteringPredicate);
+                    }
                     if (StringUtils.isNotEmpty(searchTerm)) {
                         b.must(f.match()
                                 .field("title").boost(PostBusinessConstant.SEARCH_TITLE_BOOST)
@@ -133,14 +150,17 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                                  Long postCategoryID,
                                                  Integer page,
                                                  Integer pageSize,
-                                                 String searchTerm) {
+                                                 String searchTerm,
+                                                 Authentication authentication) {
 
         SearchResult<Post> searchResult = getPostSearchResult(sortByPublishDtm,
                 postCategoryID,
                 page,
                 pageSize,
                 searchTerm,
-                null);
+                null,
+                PostBusinessState.PUBLIC,
+                authentication);
 
         Long resultCount = searchResult.total().hitCountLowerBound();
 
@@ -159,13 +179,16 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                                          Integer page,
                                                          Integer pageSize,
                                                          String searchTerm,
-                                                         PostStateType postStateType) {
+                                                         PostStateType postStateType,
+                                                         Authentication authentication) {
         SearchResult<Post> searchResult = getPostSearchResult(sortByPublishDtm,
                 postCategoryID,
                 page,
                 pageSize,
                 searchTerm,
-                postStateType);
+                postStateType,
+                null,
+                authentication);
 
         Long resultCount = searchResult.total().hitCountLowerBound();
 
@@ -179,7 +202,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<PostSuggestionDTO> searchRelatedPost(UUID authorID, Long categoryID, Post entity, int page , int pageSize) throws IOException {
+    public List<PostSuggestionDTO> searchRelatedPost(UUID authorID, Long categoryID, Post entity, int page , int pageSize,
+                                                     PostBusinessState postBusinessState, Authentication authentication) throws IOException {
         //TODO: Until Hibernate Search re-implement support for moreLikeThis query, we'll use native Lucene query for relevance matching.
         MoreLikeThis mlt = new MoreLikeThis(luceneIndexReader);
         mlt.setFieldNames(new String[]{"title","summary", "contentPlainText"});
@@ -194,10 +218,17 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         Query query = mlt.like(filteredDocument);
 
+        SearchScope<Post> scope = getSearchScope();
+
+        SearchPredicate postBusinessStatePredicate = PostHibernateSearchPredicateGenerator.getSearchPredicateOnBusinessState(postBusinessState, scope);
+        SearchPredicate authorizationPredicate = PostHibernateSearchPredicateGenerator.getSearchPredicateOnAuthentication(authentication, scope);
+
         SearchResult<Post> searchResults = searchSession.search(Post.class)
                 .extension(LuceneExtension.get())
                 .where(f -> f.bool(b -> {
                         b.must(f.fromLuceneQuery(query));
+                        b.must(postBusinessStatePredicate);
+                        b.must(authorizationPredicate);
                         b.mustNot(f.match()
                                 .field("id")
                                 .matching(entity.getId()));
@@ -211,6 +242,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                     .field("categoryID")
                                     .matching(em.getReference(PostCategory.class, categoryID)));
                         }
+
                     })
                 ).fetch(page * pageSize, pageSize);
 
@@ -310,6 +342,35 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return postQuickSearchResults;
     }
 
+    private SearchScope<Post> getSearchScope () {return searchSession.scope(Post.class);}
+
+    @Override
+    public void indexPost(Long postID) {
+        Post post = em.getReference(Post.class, postID);
+        indexPost(post);
+    }
+
+    @Override
+    public void indexPost(Post post) {
+        SearchIndexingPlan indexingPlan = searchSession.indexingPlan();
+        indexingPlan.addOrUpdate(post);
+        em.flush();
+        indexingPlan.execute();
+    }
+
+    @Override
+    public void removeIndexPost(Long postID) {
+        Post post = em.getReference(Post.class, postID);
+        indexPost(post);
+    }
+
+    @Override
+    public void removeIndexPost(Post post) {
+        SearchIndexingPlan indexingPlan = searchSession.indexingPlan();
+        indexingPlan.delete(post);
+        em.flush();
+        indexingPlan.execute();
+    }
 
     @PreDestroy
     public void cleanUp() throws IOException {

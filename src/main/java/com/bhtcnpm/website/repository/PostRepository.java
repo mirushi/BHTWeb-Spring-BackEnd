@@ -1,14 +1,11 @@
 package com.bhtcnpm.website.repository;
 
-import com.bhtcnpm.website.model.dto.Post.PostQuickSearchResult;
 import com.bhtcnpm.website.model.dto.Post.PostStatisticDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.custom.PostRepositoryCustom;
-import org.springframework.data.domain.Page;
+import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -41,5 +38,5 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
             "WHERE p.id = :postID")
     int setPostStateAndFeedback (Long postID, PostStateType postStateType, String feedBack);
 
-    List<Post> findByCategoryNameOrderByPublishDtmDesc (Pageable pageable, String categoryName);
+    List<Post> findByCategoryNameOrderByPublishDtmDesc (Predicate predicate, Pageable pageable, String categoryName);
 }

@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
+import com.bhtcnpm.website.model.validator.dto.Pagination;
 import com.bhtcnpm.website.model.validator.dto.Post.PostFeedback;
 import com.bhtcnpm.website.model.validator.dto.Post.PostID;
 import com.bhtcnpm.website.service.PostService;
@@ -21,11 +22,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.List;
@@ -53,7 +51,7 @@ public class PostController {
     @GetMapping
     @ResponseBody
     public ResponseEntity<PostSummaryListDTO> getPostSummary (@QuerydslPredicate(root = Post.class) Predicate predicate,
-                                                              @NotNull @Min(0) Integer paginator, Authentication authentication) {
+                                                              @NotNull @Pagination Integer paginator, Authentication authentication) {
         PostSummaryListDTO postSummaryListDTO = postService.getPostSummary(predicate, paginator, authentication);
 
         return new ResponseEntity<>(postSummaryListDTO, HttpStatus.OK);
@@ -70,7 +68,7 @@ public class PostController {
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<PostDetailsDTO> getPostDetails (@PathVariable @Min(0) Long id) {
+    public ResponseEntity<PostDetailsDTO> getPostDetails (@PathVariable @PostID Long id) {
         PostDetailsDTO postDetailsDTO = postService.getPostDetails(id);
 
         if (postDetailsDTO == null) {
@@ -82,7 +80,7 @@ public class PostController {
     @PutMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity<PostDetailsDTO> putPostDetails (@RequestBody @Valid PostRequestDTO postRequestDTO,
-                                                          @PathVariable Long id,
+                                                          @PathVariable @PostID Long id,
                                                           Authentication authentication) {
         PostDetailsDTO postDetailsDTO = postService.editPost(postRequestDTO, id, authentication);
 
@@ -91,8 +89,9 @@ public class PostController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity deletePost (@PathVariable @Min(0) Long id) {
-        Boolean result = postService.deletePost(id);
+    public ResponseEntity deletePost (@PathVariable @PostID Long id,
+                                      Authentication authentication) {
+        Boolean result = postService.deletePost(id, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -103,7 +102,8 @@ public class PostController {
 
     @PostMapping(value = "/{id}/approval")
     @ResponseBody
-    public ResponseEntity postPostApproval (@PathVariable @PostID Long id, Authentication authentication) {
+    public ResponseEntity postPostApproval (@PathVariable @PostID Long id,
+                                            Authentication authentication) {
         Boolean result = postService.approvePost(id, authentication);
 
         if (result) {
@@ -193,7 +193,8 @@ public class PostController {
 
     @DeleteMapping(value = "/{id}/savedStatus")
     @ResponseBody
-    public ResponseEntity deleteSavedStatus (@PathVariable @PostID Long id, Authentication authentication) {
+    public ResponseEntity deleteSavedStatus (@PathVariable @PostID Long id,
+                                             Authentication authentication) {
         Boolean result = postService.deleteSavedStatus(id, authentication);
 
         if (result) {
@@ -203,16 +204,14 @@ public class PostController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping(value = "/savedBy")
+    @GetMapping(value = "/savedPost")
     @ResponseBody
-    public ResponseEntity<PostSummaryListDTO> getPostSavedByUserId (
+    public ResponseEntity<PostSummaryListDTO> getPostSavedByUserOwn(
             @QuerydslPredicate(root = Post.class) Predicate predicate,
-            @RequestParam("userID") UUID userID,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "sort", required = false) String sort,
-            @PageableDefault @Nullable Pageable pageable
+            @PageableDefault @Nullable Pageable pageable,
+            Authentication authentication
     ) {
-        PostSummaryListDTO postsSavedByUser = postService.getPostSavedByUserID(userID, pageable);
+        PostSummaryListDTO postsSavedByUser = postService.getPostSavedByUserOwn(authentication, pageable);
         return new ResponseEntity(postsSavedByUser, HttpStatus.OK);
     }
 
@@ -232,7 +231,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<PostSummaryListDTO> searchFilter (
             @RequestParam String searchTerm,
-            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "page") @Pagination Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) String sortByPublishDtm,
             @RequestParam(value = "postCategoryID", required = false) Long postCategoryID,
             Authentication authentication) {
@@ -243,28 +242,28 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<List<PostSuggestionDTO>> relatedSameAuthor (
             @RequestParam("authorID") UUID authorID,
-            @RequestParam("postID") Long postID,
-            @RequestParam(value = "page", required = false) Integer page) throws IDNotFoundException, IOException {
-        return new ResponseEntity<>(postService.getRelatedPostSameAuthor(authorID, postID, page), HttpStatus.OK);
+            @RequestParam("postID") @PostID Long postID,
+            @RequestParam(value = "page", required = false) @Pagination Integer page,
+            Authentication authentication) throws IDNotFoundException, IOException {
+        return new ResponseEntity<>(postService.getRelatedPostSameAuthor(authorID, postID, page, authentication), HttpStatus.OK);
     }
 
     @GetMapping("relatedSameCategory")
     @ResponseBody
     public ResponseEntity<List<PostSuggestionDTO>> relatedSameCategory (
             @RequestParam("categoryID") Long categoryID,
-            @RequestParam("postID") Long postID,
-            @RequestParam(value = "page", required = false) Integer page) throws IDNotFoundException, IOException {
-        return new ResponseEntity<>(postService.getRelatedPostSameCategory(categoryID, postID, page), HttpStatus.OK);
+            @RequestParam("postID") @PostID Long postID,
+            @RequestParam(value = "page", required = false) @Pagination Integer page, Authentication authentication) throws IDNotFoundException, IOException {
+        return new ResponseEntity<>(postService.getRelatedPostSameCategory(categoryID, postID, page, authentication), HttpStatus.OK);
     }
 
     @GetMapping("myPosts")
     @ResponseBody
     public ResponseEntity<PostSummaryWithStateAndFeedbackListDTO> getMyPosts (
             @QuerydslPredicate(root = Post.class) Predicate predicate,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "sort", required = false) String sort,
-            @PageableDefault @Nullable Pageable pageable) {
-        return new ResponseEntity<>(postService.getPostWithStateAndFeedback(predicate, pageable), HttpStatus.OK);
+            @PageableDefault @Nullable Pageable pageable,
+            Authentication authentication) {
+        return new ResponseEntity<>(postService.getPostWithStateAndFeedbackUserOwn(predicate, pageable, authentication), HttpStatus.OK);
     }
 
     @GetMapping("pendingApproval")
@@ -273,9 +272,10 @@ public class PostController {
             @QuerydslPredicate(root = Post.class, bindings = IgnorePostStateTypeBinding.class) Predicate predicate,
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "sort", required = false) String sort,
-            @PageableDefault @Nullable Pageable pageable
+            @PageableDefault @Nullable Pageable pageable,
+            Authentication authentication
     ) {
-        return new ResponseEntity<>(postService.getPostDetailsWithState(predicate, pageable, PostStateType.PENDING_APPROVAL), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getPostDetailsWithState(predicate, pageable, PostStateType.PENDING_APPROVAL, authentication), HttpStatus.OK);
     }
 
     @GetMapping("getManagementPost")
@@ -285,13 +285,15 @@ public class PostController {
             @RequestParam(value = "postState", required = false) PostStateType postStateType,
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) String sortByPublishDtm,
-            @RequestParam(value = "postCategoryID", required = false) Long postCategoryID
+            @RequestParam(value = "postCategoryID", required = false) Long postCategoryID,
+            Authentication authentication
     ) {
         return new ResponseEntity<>(postService.getManagementPost(searchTerm,
                 postStateType,
                 page,
                 sortByPublishDtm,
-                postCategoryID), HttpStatus.OK);
+                postCategoryID,
+                authentication), HttpStatus.OK);
     }
 
 }
