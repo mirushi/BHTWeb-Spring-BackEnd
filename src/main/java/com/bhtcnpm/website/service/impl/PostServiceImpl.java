@@ -2,14 +2,17 @@ package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
+import com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
+import com.bhtcnpm.website.model.validator.dto.Post.PostID;
 import com.bhtcnpm.website.repository.PostRepository;
 import com.bhtcnpm.website.repository.UserPostLikeRepository;
 import com.bhtcnpm.website.repository.UserPostSaveRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.evaluator.Post.PostPermissionEvaluator;
 import com.bhtcnpm.website.security.predicate.Post.PostPredicateGenerator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.PostService;
@@ -28,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,6 +50,8 @@ public class PostServiceImpl implements PostService {
     private final UserWebsiteRepository userWebsiteRepository;
 
     private final PostMapper postMapper;
+
+    private final PostPermissionEvaluator postPermissionEvaluator;
 
     private static final int PAGE_SIZE = 10;
 
@@ -376,6 +382,38 @@ public class PostServiceImpl implements PostService {
                 postStateType,
                 authentication);
         return dto;
+    }
+
+    @Override
+    public List<PostAvailableActionDTO> getAvailablePostAction(List<Long> postIDs, Authentication authentication) {
+        List<PostAvailableActionDTO> postAvailableActionDTOList = new ArrayList<>();
+
+        for (Long postID : postIDs) {
+            PostAvailableActionDTO postAvailableActionDTO = new PostAvailableActionDTO();
+            postAvailableActionDTO.setId(postID);
+            List<String> availableAction = new ArrayList<>();
+
+            if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.READ_PERMISSION)) {
+                availableAction.add(PostActionPermissionRequest.READ_PERMISSION);
+            }
+            if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.DELETE_PERMISSION)) {
+                availableAction.add(PostActionPermissionRequest.DELETE_PERMISSION);
+            }
+            if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.SAVE_PERMISSION)) {
+                availableAction.add(PostActionPermissionRequest.SAVE_PERMISSION);
+            }
+            if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.LIKE_PERMISSION)) {
+                availableAction.add(PostActionPermissionRequest.LIKE_PERMISSION);
+            }
+            if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.APPROVE_PERMISSION)) {
+                availableAction.add(PostActionPermissionRequest.APPROVE_PERMISSION);
+            }
+
+            postAvailableActionDTO.setAvailableActions(availableAction);
+
+            postAvailableActionDTOList.add(postAvailableActionDTO);
+        }
+        return postAvailableActionDTOList;
     }
 
 }

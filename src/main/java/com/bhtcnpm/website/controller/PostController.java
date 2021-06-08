@@ -1,14 +1,15 @@
 package com.bhtcnpm.website.controller;
 
-import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.model.binding.IgnorePostStateTypeBinding;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.model.validator.dto.Pagination;
+import com.bhtcnpm.website.model.validator.dto.Post.PostActionRequestSize;
 import com.bhtcnpm.website.model.validator.dto.Post.PostFeedback;
 import com.bhtcnpm.website.model.validator.dto.Post.PostID;
+import com.bhtcnpm.website.model.validator.dto.Post.PostStatisticRequestSize;
 import com.bhtcnpm.website.service.PostService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -40,12 +40,23 @@ public class PostController {
     @GetMapping(value = "/statistics")
     @ResponseBody
     public ResponseEntity<List<PostStatisticDTO>> getPostStatistics (
-            @RequestParam @Size(max = PostBusinessConstant.POST_STATISTICS_MAX) List<@PostID Long> postIDs,
+            @RequestParam @PostStatisticRequestSize List<@PostID Long> postIDs,
             Authentication authentication
     ) {
         List<PostStatisticDTO> postStatisticDTOS = postService.getPostStatistic(postIDs, authentication);
 
         return new ResponseEntity<>(postStatisticDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/actionAvailable")
+    @ResponseBody
+    public ResponseEntity<List<PostAvailableActionDTO>> getPostActionAvailable (
+            @RequestParam @PostActionRequestSize List<@PostID Long> postIDs,
+            Authentication authentication
+    ) {
+        List<PostAvailableActionDTO> availableActionDTOList = postService.getAvailablePostAction(postIDs, authentication);
+
+        return new ResponseEntity<>(availableActionDTOList, HttpStatus.OK);
     }
 
     @GetMapping

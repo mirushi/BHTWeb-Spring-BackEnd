@@ -7,6 +7,9 @@ public class PostBusinessConstant {
     //Maximum number of postID that single request of get post statistics can handle.
     public static final int POST_STATISTICS_MAX = 20;
 
+    //Maximum number of postID that single request of get post action can handle.
+    public static final int POST_ACTION_MAX = 20;
+
     //This constant is for minimum length that a title must have.
     public static final int TITLE_MIN = 5;
     //This constant is for maximum length that a title can have.

@@ -3,7 +3,7 @@ package com.bhtcnpm.website.security.evaluator.Post;
 import com.bhtcnpm.website.constant.domain.Post.PostApprovalState;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.GenericOwnership;
-import com.bhtcnpm.website.constant.security.evaluator.PostInternalPermissionRequest;
+import com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest;
 import com.bhtcnpm.website.constant.security.permission.PostPermissionConstant;
 import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
@@ -78,32 +78,32 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
         }
 
         //Kiểm tra quyền Read.
-        if (PostInternalPermissionRequest.READ_PERMISSION.equals(permission)) {
+        if (PostActionPermissionRequest.READ_PERMISSION.equals(permission)) {
             return this.checkPostReadPermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
         //Kiểm tra quyền Edit.
-        if (PostInternalPermissionRequest.UPDATE_PERMISSION.equals(permission)) {
+        if (PostActionPermissionRequest.UPDATE_PERMISSION.equals(permission)) {
             return this.checkPostUpdatePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
         //Kiểm tra quyền Delete.
-        if (PostInternalPermissionRequest.DELETE_PERMISSION.equals(permission)) {
+        if (PostActionPermissionRequest.DELETE_PERMISSION.equals(permission)) {
             return this.checkPostDeletePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
         //Kiểm tra quyền Save.
-        if (PostInternalPermissionRequest.SAVE_PERMISSION.equals(permission)) {
+        if (PostActionPermissionRequest.SAVE_PERMISSION.equals(permission)) {
             return this.checkPostSavePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
         //Kiểm tra quyền Like.
-        if (PostInternalPermissionRequest.LIKE_PERMISSION.equals(permission)) {
+        if (PostActionPermissionRequest.LIKE_PERMISSION.equals(permission)) {
             return this.checkPostLikePermission(authentication, authenticatedUserID, state);
         }
 
         //Kiểm tra quyền Approve/Reject của user.
-        if (PostInternalPermissionRequest.APPROVE_PERMISSION.equals(permission)) {
+        if (PostActionPermissionRequest.APPROVE_PERMISSION.equals(permission)) {
             return this.checkPostApprovePermission(authentication, authenticatedUserID, approvalState);
         }
 
