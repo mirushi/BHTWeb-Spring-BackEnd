@@ -396,6 +396,9 @@ public class PostServiceImpl implements PostService {
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.READ_PERMISSION)) {
                 availableAction.add(PostActionPermissionRequest.READ_PERMISSION);
             }
+            if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.UPDATE_PERMISSION)) {
+                availableAction.add(PostActionPermissionRequest.UPDATE_PERMISSION);
+            }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.DELETE_PERMISSION)) {
                 availableAction.add(PostActionPermissionRequest.DELETE_PERMISSION);
             }
