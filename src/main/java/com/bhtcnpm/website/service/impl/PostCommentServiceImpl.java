@@ -7,11 +7,13 @@ import com.bhtcnpm.website.model.entity.PostCommentEntities.UserPostCommentLikeI
 import com.bhtcnpm.website.repository.PostCommentRepository;
 import com.bhtcnpm.website.repository.UserPostCommentLikeRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.PostCommentService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -59,20 +61,31 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public PostCommentDTO postPostComment(PostCommentRequestDTO postCommentRequestDTO, Long postID, UUID authorID) {
+    public PostCommentDTO postPostComment(PostCommentRequestDTO postCommentRequestDTO, Long postID, Authentication authentication) {
+        UUID authorID = SecurityUtils.getUserID(authentication);
+        if (authorID == null) {
+            throw new IllegalArgumentException("Cannot extract userID from authentication.");
+        }
+
         if (postCommentRequestDTO == null) {
             return null;
         }
 
         PostComment postComment = postCommentMapper.postCommentDTOToPostComment(postCommentRequestDTO, postID, null, authorID,null);
 
-        postCommentRepository.save(postComment);
+        postComment = postCommentRepository.save(postComment);
 
         return postCommentMapper.postCommentToPostCommentDTOChildCommentOnly(postComment);
     }
 
     @Override
-    public PostCommentChildDTO postChildComment(PostCommentRequestDTO postCommentRequestDTO, Long parentCommentID, UUID authorID) {
+    public PostCommentChildDTO postChildComment(PostCommentRequestDTO postCommentRequestDTO, Long parentCommentID, Authentication authentication) {
+        UUID authorID = SecurityUtils.getUserID(authentication);
+
+        if (authorID == null) {
+            throw new IllegalArgumentException("Cannot extract userID from authentication.");
+        }
+
         Optional<PostComment> parentComment = postCommentRepository.findById(parentCommentID);
         if (parentComment.isEmpty()) {
             throw new IllegalArgumentException("Parent comment not found.");
@@ -91,8 +104,7 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public PostCommentDTO putPostComment(PostCommentRequestDTO postCommentRequestDTO, Long commentID, UUID authorID) {
-
+    public PostCommentDTO putPostComment(PostCommentRequestDTO postCommentRequestDTO, Long commentID, Authentication authentication) {
         if (postCommentRequestDTO == null) {
             return null;
         }
@@ -125,7 +137,12 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public boolean createUserPostCommentLike(Long commentID, UUID userID) {
+    public boolean createUserPostCommentLike(Long commentID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+        if (userID == null) {
+            throw new IllegalArgumentException("Cannot extract user ID from authentication.");
+        }
+
         UserPostCommentLikeId id =
                 new UserPostCommentLikeId(userWebsiteRepository.getOne(userID), postCommentRepository.getOne(commentID));
         UserPostCommentLike entity = new UserPostCommentLike(id);
@@ -134,7 +151,13 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public boolean deleteUserPostCommentLike (Long commentID, UUID userID) {
+    public boolean deleteUserPostCommentLike (Long commentID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+
+        if (userID == null) {
+            throw new IllegalArgumentException("Cannot extract userID from authentication.");
+        }
+
         UserPostCommentLikeId id =
                 new UserPostCommentLikeId(userWebsiteRepository.getOne(userID), postCommentRepository.getOne(commentID));
         userPostCommentLikeRepository.deleteById(id);
@@ -142,7 +165,9 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public List<PostCommentStatisticDTO> getCommentStatistics (List<Long> commentIDs, UUID userID) {
+    public List<PostCommentStatisticDTO> getCommentStatistics (List<Long> commentIDs, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+
         List<PostCommentStatisticDTO> postCommentStatisticDTOs = postCommentRepository.getPostCommentStatisticDTOs(commentIDs, userID);
 
         return postCommentStatisticDTOs;

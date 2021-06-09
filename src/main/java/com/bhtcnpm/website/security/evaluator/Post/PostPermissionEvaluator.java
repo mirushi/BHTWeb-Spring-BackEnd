@@ -107,8 +107,7 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
             return this.checkPostApprovePermission(authentication, authenticatedUserID, approvalState);
         }
 
-        this.logger.warn(LogMessage.format("Post permission %s is not supported. Denying access to postID = %s", permission ,targetDomainObject.getId().toString()));
-        return false;
+        throw new IllegalArgumentException(String.format("Post permission %s is not supported. Denying access to postID = %s", permission));
     }
 
     private boolean checkPostApprovePermission (Authentication authentication, UUID authenticatedUserID, PostApprovalState approvalState) {

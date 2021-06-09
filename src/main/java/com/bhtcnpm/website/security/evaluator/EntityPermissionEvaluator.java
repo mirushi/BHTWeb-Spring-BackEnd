@@ -2,6 +2,7 @@ package com.bhtcnpm.website.security.evaluator;
 
 import com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant;
 import com.bhtcnpm.website.security.evaluator.Post.PostPermissionEvaluator;
+import com.bhtcnpm.website.security.evaluator.PostComment.PostCommentPermissionEvaluator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 public class EntityPermissionEvaluator implements PermissionEvaluator {
 
     private final PostPermissionEvaluator postPermissionEvaluator;
+    private final PostCommentPermissionEvaluator postCommentPermissionEvaluator;
 
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
@@ -26,6 +28,9 @@ public class EntityPermissionEvaluator implements PermissionEvaluator {
         switch (targetType) {
             case ObjectTypeConstant.POST_OBJECT: {
                 return postPermissionEvaluator.hasPermission(authentication, targetDomainObject, permissionString);
+            }
+            case ObjectTypeConstant.POSTCOMMENT_OBJECT: {
+                return postCommentPermissionEvaluator.hasPermission(authentication, targetDomainObject, permissionString);
             }
         }
 
@@ -42,6 +47,9 @@ public class EntityPermissionEvaluator implements PermissionEvaluator {
         switch (targetType) {
             case ObjectTypeConstant.POST_OBJECT: {
                 return postPermissionEvaluator.hasPermission(authentication, targetId, permissionString);
+            }
+            case ObjectTypeConstant.POSTCOMMENT_OBJECT: {
+                return postCommentPermissionEvaluator.hasPermission(authentication, targetId, permissionString);
             }
         }
         return false;
