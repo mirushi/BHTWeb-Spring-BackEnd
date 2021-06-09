@@ -39,4 +39,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
     int setPostStateAndFeedback (Long postID, PostStateType postStateType, String feedBack);
 
     List<Post> findByCategoryNameOrderByPublishDtmDesc (Predicate predicate, Pageable pageable, String categoryName);
+
+    boolean existsByCategoryId (Long postCategoryID);
 }
