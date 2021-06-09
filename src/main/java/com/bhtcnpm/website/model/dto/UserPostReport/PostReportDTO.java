@@ -9,6 +9,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 public class PostReportDTO {
@@ -17,6 +18,7 @@ public class PostReportDTO {
     private String postImageURL;
     private String title;
     private String content;
+    private UserSummaryDTO author;
     private List<UserSummaryDTO> reporters;
     private Set<ReportReasonDTO> reportReasons;
     private List<String> feedbacks;

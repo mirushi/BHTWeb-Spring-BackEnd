@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public interface PostCommentReportMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "commentID", source = "postComment.id")
+    @Mapping(target = "author", source = "postComment.author")
     @Mapping(target = "postID", source = "postComment.post.id")
     @Mapping(target = "postTitle", source = "postComment.post.title")
     @Mapping(target = "content", source = "postComment.content")
