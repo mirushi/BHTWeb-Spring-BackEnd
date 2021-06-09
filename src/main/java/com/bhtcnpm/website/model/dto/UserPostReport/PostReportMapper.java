@@ -22,6 +22,7 @@ public interface PostReportMapper {
     @Mapping(target = "postImageURL", source = "postReport.post.imageURL")
     @Mapping(target = "title", source = "postReport.post.title")
     @Mapping(target = "content", source = "postReport.post.content")
+    @Mapping(target = "author", source = "postReport.post.author")
     @Mapping(target = "reporters",
             source = "postReport.userPostReports")
     @Mapping(target = "reportReasons", source = "postReport.userPostReports")

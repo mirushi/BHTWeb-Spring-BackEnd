@@ -8,11 +8,13 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 public class PostCommentReportDTO {
     private Long id;
     private Long commentID;
+    private UserSummaryDTO author;
     private Long postID;
     private String postTitle;
     private String content;
