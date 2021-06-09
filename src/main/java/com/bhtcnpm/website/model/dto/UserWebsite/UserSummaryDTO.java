@@ -8,5 +8,5 @@ import java.util.UUID;
 public class UserSummaryDTO {
     private UUID id;
     private String avatarURL;
-    private String name;
+    private String displayName;
 }
