@@ -135,6 +135,10 @@ public class UserPostReportServiceImpl implements UserPostReportService {
 
         postReportRepository.save(postReport);
 
+        if (PostReportActionType.DELETE.equals(actionType)) {
+            postRepository.deleteById(postReport.getPost().getId());
+        }
+
         return true;
     }
 

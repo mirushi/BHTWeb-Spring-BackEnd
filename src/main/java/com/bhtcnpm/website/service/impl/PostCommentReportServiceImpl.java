@@ -138,6 +138,10 @@ public class PostCommentReportServiceImpl implements PostCommentReportService {
 
         postCommentReportRepository.save(postCommentReport);
 
+        if (PostCommentReportActionType.DELETE.equals(actionType)) {
+            postCommentRepository.deleteById(postCommentReport.getPostComment().getId());
+        }
+
         return true;
     }
 
