@@ -50,7 +50,6 @@ public class PostController {
 
     @GetMapping
     @ResponseBody
-    @RolesAllowed("ROLE_POST_READ")
     public ResponseEntity<PostSummaryListDTO> getPostSummary (@QuerydslPredicate(root = Post.class)Predicate predicate, @NotNull @Min(0) Integer paginator, Authentication authentication) {
         PostSummaryListDTO postSummaryListDTO = postService.getPostSummary(predicate, paginator, authentication);
 
