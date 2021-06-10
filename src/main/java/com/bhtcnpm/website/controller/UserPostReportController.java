@@ -4,6 +4,8 @@ import com.bhtcnpm.website.model.dto.UserPostReport.UserPostReportListDTO;
 import com.bhtcnpm.website.model.dto.UserPostReport.UserPostReportRequestDTO;
 import com.bhtcnpm.website.model.dto.UserPostReport.UserPostReportResolveRequestDTO;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
+import com.bhtcnpm.website.model.validator.dto.Post.PostID;
+import com.bhtcnpm.website.model.validator.dto.PostReport.PostReportID;
 import com.bhtcnpm.website.service.UserPostReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -27,8 +30,8 @@ public class UserPostReportController {
 
     @PostMapping("/posts/{id}/report")
     @ResponseBody
-    public ResponseEntity reportPost (@PathVariable("id") Long postID,
-                                      @RequestBody UserPostReportRequestDTO dto,
+    public ResponseEntity reportPost (@PathVariable("id") @PostID Long postID,
+                                      @RequestBody @Valid UserPostReportRequestDTO dto,
                                       Authentication authentication) throws IDNotFoundException {
         userPostReportService.createNewReport(postID, dto, authentication);
 
@@ -37,8 +40,8 @@ public class UserPostReportController {
 
     @PostMapping("/posts/resolveReport/{id}")
     @ResponseBody
-    public ResponseEntity resolveReport (@PathVariable("id") Long reportID,
-                                         @RequestBody UserPostReportResolveRequestDTO dto,
+    public ResponseEntity resolveReport (@PathVariable("id") @PostReportID Long reportID,
+                                         @RequestBody @Valid UserPostReportResolveRequestDTO dto,
                                          Authentication authentication) throws IDNotFoundException {
         userPostReportService.resolveReport(reportID, dto, authentication);
 
@@ -47,9 +50,7 @@ public class UserPostReportController {
 
     @GetMapping("/posts/report")
     @ResponseBody
-    public ResponseEntity<UserPostReportListDTO> getUserReports (@RequestParam(value = "page", required = false) Integer page,
-                                                                 @RequestParam(value = "sort", required = false) String sort,
-                                                                 @PageableDefault @Nullable Pageable pageable,
+    public ResponseEntity<UserPostReportListDTO> getUserReports (@PageableDefault @Nullable Pageable pageable,
                                                                  @Nullable Boolean isResolvedReport) {
         UserPostReportListDTO list = userPostReportService.getUserReports(pageable, isResolvedReport);
 
