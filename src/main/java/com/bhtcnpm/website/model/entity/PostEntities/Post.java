@@ -32,7 +32,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE post SET DELETED_DATE = "+ "20210302" +" WHERE id = ? AND VERSION = ?")
+@SQLDelete(sql = "UPDATE post SET DELETED_DATE = "+ "CURRENT_TIMESTAMP()" +" WHERE id = ? AND VERSION = ?")
 @Loader(namedQuery = "findPostById")
 @NamedQuery(name = "findPostById", query = "SELECT p FROM Post p WHERE p.id = ?1 AND p.deletedDate IS NULL")
 @Where(clause = "DELETED_DATE is NULL")

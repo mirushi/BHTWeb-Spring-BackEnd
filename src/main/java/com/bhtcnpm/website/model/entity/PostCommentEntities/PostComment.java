@@ -7,7 +7,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,6 +22,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE post_comment SET DELETED_DATE = "+ "CURRENT_TIMESTAMP()" +" WHERE id = ? AND VERSION = ?")
+@Where(clause = "DELETED_DATE is NULL")
 public class PostComment {
     @Id
     @GeneratedValue (
@@ -73,6 +77,9 @@ public class PostComment {
     )
     @EqualsAndHashCode.Exclude
     private Set<UserPostCommentLike> userPostCommentLikes;
+
+    @Column(name = "deleted_date")
+    private LocalDateTime deletedDate;
 
     @Version
     private short version;
