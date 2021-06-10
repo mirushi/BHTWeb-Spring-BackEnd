@@ -7,12 +7,13 @@ import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.*;
+import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.UserPostReportService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.UUID;
 
 @Service
@@ -41,8 +41,10 @@ public class UserPostReportServiceImpl implements UserPostReportService {
     private static final int PAGE_SIZE = 10;
 
     @Override
-    public Boolean createNewReport(UUID userId, Long postId, @Valid UserPostReportRequestDTO dto) throws IDNotFoundException {
-        Post postProxy = postRepository.getOne(postId);
+    public Boolean createNewReport(Long postID, @Valid UserPostReportRequestDTO dto, Authentication authentication) throws IDNotFoundException {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        Post postProxy = postRepository.getOne(postID);
 
         String feedback = dto.getFeedback();
 
@@ -56,10 +58,11 @@ public class UserPostReportServiceImpl implements UserPostReportService {
                     .post(postProxy)
                     .reportTime(LocalDateTime.now())
                     .build();
-            postReportRepository.save(postReport);
         }
+        //Cập nhật lại thời gian report mới nhất.
+        postReportRepository.save(postReport);
 
-        UserWebsite reporter = userWebsiteRepository.getOne(userId);
+        UserWebsite reporter = userWebsiteRepository.getOne(userID);
 
         //Lấy ra tất cả những lý do mà người dùng đã chọn.
         List<Long> reasons = dto.getReasonIds();
@@ -117,9 +120,11 @@ public class UserPostReportServiceImpl implements UserPostReportService {
     }
 
     @Override
-    public Boolean resolveReport (UUID userId, Long reportId, @Valid UserPostReportResolveRequestDTO dto) throws IDNotFoundException {
+    public Boolean resolveReport (Long reportId, @Valid UserPostReportResolveRequestDTO dto, Authentication authentication) throws IDNotFoundException {
+        UUID userID = SecurityUtils.getUserID(authentication);
+
         Optional<PostReport> report = postReportRepository.findById(reportId);
-        UserWebsite resolver = userWebsiteRepository.getOne(userId);
+        UserWebsite resolver = userWebsiteRepository.getOne(userID);
         PostReportActionType actionType = dto.getPostReportActionType();
         String resolvedNote = dto.getResolvedNote();
 

@@ -144,6 +144,13 @@ public class Post {
     @JsonIgnore
     private Set<UserPostSave> userPostSaves;
 
+    @OneToOne(
+            mappedBy = "post",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private PostReport postReport;
+
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE

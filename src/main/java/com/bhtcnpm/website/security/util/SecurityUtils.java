@@ -20,6 +20,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SecurityUtils {
 
+    public static UUID getUserIDOnNullThrowException(Authentication authentication) {
+        UUID userID = getUserID(authentication);
+        if (userID == null) {
+            throw new IllegalArgumentException("Cannot extract user ID from authentication.");
+        }
+        return userID;
+    }
+
     public static UUID getUserID (Authentication authentication) {
         if (authentication == null) {
             return null;

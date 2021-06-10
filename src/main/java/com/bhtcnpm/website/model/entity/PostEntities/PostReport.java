@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -37,7 +38,7 @@ public class PostReport {
     )
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "post_id",
             unique = true,
             updatable = false)
@@ -51,6 +52,7 @@ public class PostReport {
     private List<UserPostReport> userPostReports;
 
     @Column(name = "report_time")
+    @UpdateTimestamp
     private LocalDateTime reportTime;
 
     @Column(name = "resolved_time")
