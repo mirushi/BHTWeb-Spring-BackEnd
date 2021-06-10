@@ -83,7 +83,81 @@ public class PostCommentPermissionEvaluator implements SimplePermissionEvaluator
             return checkPostDeletePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
+        //Kiểm tra quyền Reply.
+        if (PostCommentActionPermissionRequest.REPLY_PERMISSION.equals(permission)) {
+            return checkPostReplyPermission(authentication, authenticatedUserID, state, targetDomainObject);
+        }
+
+        //Kiểm tra quyền Like.
+        if (PostCommentActionPermissionRequest.LIKE_PERMISSION.equals(permission)) {
+            return checkLikePermission(authentication, authenticatedUserID, state, targetDomainObject);
+        }
+
+        //Kiểm tra quyền Read.
+        if (PostCommentActionPermissionRequest.READ_PERMISSION.equals(permission)) {
+            return checkReadPermission(state);
+        }
+
         throw new IllegalArgumentException("Post comment request permission is not supported.");
+    }
+
+    private boolean checkReadPermission (PostCommentBusinessState state) {
+        if (PostCommentBusinessState.PUBLIC.equals(state)) {
+            return true;
+        }
+        if (PostCommentBusinessState.DELETE.equals(state)) {
+            return false;
+        }
+
+        return false;
+    }
+
+    private boolean checkLikePermission (Authentication authentication,
+                                              UUID authenticatedUserID,
+                                              PostCommentBusinessState state,
+                                              PostComment targetDomainObject) {
+        //Bắt buộc phải có tài khoản mới được reply.
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        //Xét state của Post Comment.
+        if (PostCommentBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, PostCommentPermissionConstant.POSTCOMMENT_PUBLIC_ALL_LIKE)) {
+                return true;
+            }
+        }
+
+        if (PostCommentBusinessState.DELETE.equals(state)) {
+            return false;
+        }
+
+        return false;
+    }
+
+    private boolean checkPostReplyPermission (Authentication authentication,
+                                              UUID authenticatedUserID,
+                                              PostCommentBusinessState state,
+                                              PostComment targetDomainObject) {
+        //Bắt buộc phải có tài khoản mới được reply.
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        //Xét state của Post Comment.
+        if (PostCommentBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, PostCommentPermissionConstant.POSTCOMMENT_PUBLIC_SELF_CREATE)) {
+                return true;
+            }
+        }
+
+        if (PostCommentBusinessState.DELETE.equals(state)) {
+            return false;
+        }
+
+        return false;
     }
 
     private boolean checkPostDeletePermission (Authentication authentication,

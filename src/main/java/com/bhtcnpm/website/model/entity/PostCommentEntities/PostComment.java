@@ -86,8 +86,13 @@ public class PostComment {
 
     @Transient
     public PostCommentBusinessState getPostCommentBusinessState() {
-        //Always return public because atm there's no post other states.
-        return PostCommentBusinessState.PUBLIC;
+        if (deletedDate == null) {
+            return PostCommentBusinessState.PUBLIC;
+        }
+        if (deletedDate != null) {
+            return PostCommentBusinessState.DELETE;
+        }
+        return null;
     }
 
     @Override
