@@ -392,7 +392,7 @@ public class PostServiceImpl implements PostService {
             if (postID == null) {
                 continue;
             }
-            
+
             PostAvailableActionDTO postAvailableActionDTO = new PostAvailableActionDTO();
             postAvailableActionDTO.setId(postID);
             List<String> availableAction = new ArrayList<>();

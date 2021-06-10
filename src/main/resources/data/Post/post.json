@@ -419,7 +419,7 @@
     "readingTime": 300,
     "content": "Khi còn ngồi trên ghế nhà trường hoặc sinh viên thì mình thường xuyên sử dụng hệ đề hành window cho đến khi đi thực tập có họ bắt cài hệ điều hành ubuntu. Ôi nhìn lạ hoắc một sự mới mẻ và mới đầu trải nghiệm nó nói thật là mình thấy chả có thú vị gì cả. Tại sao lại k dùng window mà lại cài cái này \uD83D\uDE03 . Từ đó mình tìm hiểu thêm về linux và cũng tự giải thích được cho bản thân tại sao lại phải dùng linux (đơn giản vì nó nhẹ và free, mã nguồn mở và bảo mật .... ). Đặc biệt với lập trình web thì cần phải biết và làm việc ở mức độ cơ bản được với server đối với các dòng lệnh nên hôm nay mình cũng xin tổng hợp và chia sẻ lại những gì mình nghĩ là cơ bản và cần thiết để mọi người có 1 cái nhìn tổng quan và mới mẻ hơn về linux cũng như biến những cái trước mọi người coi lại phức tạp thành đơn giản hơn.\nOke bắt đầu thôi nào.",
     "contentPlainText": "Khi còn ngồi trên ghế nhà trường hoặc sinh viên thì mình thường xuyên sử dụng hệ đề hành window cho đến khi đi thực tập có họ bắt cài hệ điều hành ubuntu. Ôi nhìn lạ hoắc một sự mới mẻ và mới đầu trải nghiệm nó nói thật là mình thấy chả có thú vị gì cả. Tại sao lại k dùng window mà lại cài cái này \uD83D\uDE03 . Từ đó mình tìm hiểu thêm về linux và cũng tự giải thích được cho bản thân tại sao lại phải dùng linux (đơn giản vì nó nhẹ và free, mã nguồn mở và bảo mật .... ). Đặc biệt với lập trình web thì cần phải biết và làm việc ở mức độ cơ bản được với server đối với các dòng lệnh nên hôm nay mình cũng xin tổng hợp và chia sẻ lại những gì mình nghĩ là cơ bản và cần thiết để mọi người có 1 cái nhìn tổng quan và mới mẻ hơn về linux cũng như biến những cái trước mọi người coi lại phức tạp thành đơn giản hơn.\nOke bắt đầu thôi nào.",
-    "adminFeedback": "Feedback của admin về bài post.",
+    "adminFeedback": "",
     "author": {
       "id": "343f0c68-9cc4-474e-9da2-89626c04c0da"
     },
@@ -450,7 +450,7 @@
     "readingTime": 300,
     "content": "Tiếp tục với series về phân tích CVE wordpress, Hôm nay mình sẽ đi phân tích CVE về lỗ hổng XSS: CVE-2019-20042.\n\nPhiên bản bị ảnh hưởng bao gồm các phiên bản trước 5.3.0. Điều này đã được vá trong WordPress phiên bản 5.3.1, cùng với tất cả các phiên bản WordPress trước đó từ 3.7 đến 5.3 thông qua một bản phát hành nhỏ.\n\nLỗ hổng XSS xảy ra do hàm wp_targeted_link_rel() nằm trong wp-includes/formatting.php của Wordpress xử lí thay thế khoảng trắng bằng ký tự \" . Hacker có thể dựa vào đó để thoát khỏi thuộc tính hiện tại khiến XSS được thực thi.\n\nBên cạnh đó ta cũng sẽ tìm hiểu 1 lỗi XSS trên BuddyPress (1 plugin của Wordpress).",
     "contentPlainText": "Tiếp tục với series về phân tích CVE wordpress, Hôm nay mình sẽ đi phân tích CVE về lỗ hổng XSS: CVE-2019-20042.\n\nPhiên bản bị ảnh hưởng bao gồm các phiên bản trước 5.3.0. Điều này đã được vá trong WordPress phiên bản 5.3.1, cùng với tất cả các phiên bản WordPress trước đó từ 3.7 đến 5.3 thông qua một bản phát hành nhỏ.\n\nLỗ hổng XSS xảy ra do hàm wp_targeted_link_rel() nằm trong wp-includes/formatting.php của Wordpress xử lí thay thế khoảng trắng bằng ký tự \" . Hacker có thể dựa vào đó để thoát khỏi thuộc tính hiện tại khiến XSS được thực thi.\n\nBên cạnh đó ta cũng sẽ tìm hiểu 1 lỗi XSS trên BuddyPress (1 plugin của Wordpress).",
-    "adminFeedback": "Feedback của admin về bài post.",
+    "adminFeedback": "",
     "author": {
       "id": "343f0c68-9cc4-474e-9da2-89626c04c0da"
     },
@@ -483,7 +483,7 @@
     "readingTime": 300,
     "content": "\n\nEnum là một trong những API mạnh mẽ được yêu thích nhất trong Swift. Thực tế là trong Swift thì Enum được phát triển cẩn thận để người dùng có thể sử dụng trong nhiều trường hợp với nhiều type khác nhau.\n\n    Tuy nhiên vẫn có một số loại trường hợp chúng ta cần tránh khi sử dụng Enum vì rất có thể chúng ta sẽ tự làm chúng ta trở nên ngớ ngẩn cũng như việc code trở nên khó đọc khó hnhau\n",
     "contentPlainText": "\n\nEnum là một trong những API mạnh mẽ được yêu thích nhất trong Swift. Thực tế là trong Swift thì Enum được phát triển cẩn thận để người dùng có thể sử dụng trong nhiều trường hợp với nhiều type khác nhau.\n\n    Tuy nhiên vẫn có một số loại trường hợp chúng ta cần tránh khi sử dụng Enum vì rất có thể chúng ta sẽ tự làm chúng ta trở nên ngớ ngẩn cũng như việc code trở nên khó đọc khó hnhau\n",
-    "adminFeedback": "Feedback của admin về bài post.",
+    "adminFeedback": "Bài post hay. Tuy nhiên bạn nên format lại để người dùng dễ đọc hơn.",
     "author": {
       "id": "343f0c68-9cc4-474e-9da2-89626c04c0da"
     },
@@ -516,7 +516,7 @@
     "readingTime": 300,
     "content": "1) Amdahl's law\n\nĐể tôn trọng tác quyền, một định lý hoặc quy luật sẽ được đặt tên theo tác giả đó. Amdahl đã phát minh Amdahl's law với mục đích ước lượng, tính toán con số speedup cho toàn bộ chương trình với công thức sau:\n\nQuay lại bài toán salad, một vài task có khả năng thực thi đồng thời và một vài task phải thực thi tuần tự. Mình ước lượng một con số P = 0.8 (khá cao). Với công thức trên, ta tính được overall speedup như sau.",
     "contentPlainText": "1) Amdahl's law\n\nĐể tôn trọng tác quyền, một định lý hoặc quy luật sẽ được đặt tên theo tác giả đó. Amdahl đã phát minh Amdahl's law với mục đích ước lượng, tính toán con số speedup cho toàn bộ chương trình với công thức sau:\n\nQuay lại bài toán salad, một vài task có khả năng thực thi đồng thời và một vài task phải thực thi tuần tự. Mình ước lượng một con số P = 0.8 (khá cao). Với công thức trên, ta tính được overall speedup như sau:",
-    "adminFeedback": "Feedback của admin về bài post.",
+    "adminFeedback": "",
     "author": {
       "id": "343f0c68-9cc4-474e-9da2-89626c04c0da"
     },
