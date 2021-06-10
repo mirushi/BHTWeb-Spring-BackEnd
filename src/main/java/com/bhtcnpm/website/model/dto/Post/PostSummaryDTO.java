@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.dto.Post;
 
+import com.bhtcnpm.website.model.validator.dto.Post.*;
 import lombok.*;
 
 import java.time.LocalDateTime;

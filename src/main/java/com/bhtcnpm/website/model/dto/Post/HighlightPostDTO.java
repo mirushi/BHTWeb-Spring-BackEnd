@@ -13,12 +13,7 @@ import javax.validation.constraints.NotNull;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 public class HighlightPostDTO {
-    @Valid
-    @NotNull
     private PostSummaryDTO postSummaryDTO;
 
-    @NotNull
-    @Min(value = HighlightPostBusinessConstant.RANK_MIN)
-    @Max(value = HighlightPostBusinessConstant.RANK_MAX)
     private Integer rank;
 }

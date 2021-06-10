@@ -52,13 +52,14 @@ public class UserPostReportServiceImpl implements UserPostReportService {
         PostReport postReport = postReportRepository
                 .findByPost(postProxy);
 
-        //Post report chưa tồn tại trên hệ thống thì tạo mới.
-        if (postReport == null) {
+        //Post report chưa tồn tại trên hệ thống hoặc đã được xử lý 1 lần trước đó thì tạo mới.
+        if (postReport == null || postReport.getActionTaken() != null) {
             postReport = PostReport.builder()
                     .post(postProxy)
                     .reportTime(LocalDateTime.now())
                     .build();
         }
+
         //Cập nhật lại thời gian report mới nhất.
         postReportRepository.save(postReport);
 

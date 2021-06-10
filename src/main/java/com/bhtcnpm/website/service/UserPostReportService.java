@@ -17,7 +17,7 @@ import java.util.UUID;
 public interface UserPostReportService {
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).READ_PERMISSION) and " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).READ_PERMISSION) and " +
             "hasRole(T(com.bhtcnpm.website.constant.security.permission.PostReportPermissionConstant).POSTREPORT_PUBLIC_ALL_CREATE)")
     Boolean createNewReport(Long postID, @Valid UserPostReportRequestDTO dto, Authentication authentication) throws IDNotFoundException;
 

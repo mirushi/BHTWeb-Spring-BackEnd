@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.constant.security.evaluator;
+package com.bhtcnpm.website.constant.security.evaluator.permission;
 
 public class PostActionPermissionRequest {
     public static final String READ_PERMISSION = "read";

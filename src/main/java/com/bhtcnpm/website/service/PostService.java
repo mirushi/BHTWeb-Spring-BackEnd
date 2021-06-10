@@ -22,34 +22,34 @@ import java.util.UUID;
 public interface PostService {
     @PreFilter(filterTarget = "postIDs", value = "hasPermission(filterObject, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).READ_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).READ_PERMISSION)")
     List<PostStatisticDTO> getPostStatistic (List<@PostID Long> postIDs, Authentication authentication);
 
     PostSummaryListDTO getPostSummary (Predicate predicate, @Pagination Integer paginator, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#id, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).READ_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).READ_PERMISSION)")
     PostDetailsDTO getPostDetails (@PostID Long id);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).APPROVE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).APPROVE_PERMISSION)")
     Boolean approvePost (@PostID Long postID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).APPROVE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).APPROVE_PERMISSION)")
     Boolean deletePostApproval (@PostID Long postID);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).LIKE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).LIKE_PERMISSION)")
     Boolean createUserPostLike(@PostID Long postID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).LIKE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).LIKE_PERMISSION)")
     Boolean deleteUserPostLike(@PostID Long postID, Authentication authentication);
 
     @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.PostPermissionConstant).POST_PENDING_SELF_CREATE)")
@@ -57,32 +57,32 @@ public interface PostService {
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).UPDATE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).UPDATE_PERMISSION)")
     PostDetailsDTO editPost (@Valid PostRequestDTO postRequestDTO, @PostID Long postID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).DELETE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).DELETE_PERMISSION)")
     Boolean deletePost(@PostID Long postID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).APPROVE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).APPROVE_PERMISSION)")
     Boolean rejectPost (@PostID Long postID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).APPROVE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).APPROVE_PERMISSION)")
     Boolean rejectPostWithFeedback (@PostID Long postID, String feedback);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).SAVE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).SAVE_PERMISSION)")
     Boolean createSavedStatus (@PostID Long postID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).SAVE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).SAVE_PERMISSION)")
     Boolean deleteSavedStatus (@PostID Long postID, Authentication authentication);
 
     List<PostSummaryDTO> getPostWithActivityCategory();
@@ -101,12 +101,12 @@ public interface PostService {
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).READ_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).READ_PERMISSION)")
     List<PostSuggestionDTO> getRelatedPostSameAuthor (UUID authorID, @PostID Long postID, @Pagination Integer page, Authentication authentication) throws IDNotFoundException, IOException;
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).READ_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).READ_PERMISSION)")
     List<PostSuggestionDTO> getRelatedPostSameCategory (@PostCategoryID Long categoryID, @PostID Long postID, @Pagination Integer page, Authentication authentication) throws IDNotFoundException, IOException;
 
     @PreAuthorize(value = "isAuthenticated()")

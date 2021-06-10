@@ -15,43 +15,43 @@ import java.util.UUID;
 public interface PostCommentService {
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).READ_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).READ_PERMISSION)")
     PostCommentListDTO getPostCommentsByPostID (@PostID Long postID, Pageable pageable);
 
     @PreAuthorize(value = "hasPermission(#parentCommentID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POSTCOMMENT_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostCommentActionPermissionRequest).READ_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentActionPermissionRequest).READ_PERMISSION)")
     List<PostCommentChildDTO> getChildComments (@PostCommentID Long parentCommentID, Pageable pageable);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest).READ_PERMISSION) and " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).READ_PERMISSION) and " +
             "hasRole(T(com.bhtcnpm.website.constant.security.permission.PostCommentPermissionConstant).POSTCOMMENT_PUBLIC_SELF_CREATE)")
     PostCommentDTO postPostComment (@Valid PostCommentRequestDTO postCommentRequestDTO, @PostID Long postID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#parentCommentID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POSTCOMMENT_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostCommentActionPermissionRequest).REPLY_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentActionPermissionRequest).REPLY_PERMISSION)")
     PostCommentChildDTO postChildComment (@Valid PostCommentRequestDTO postCommentRequestDTO, @PostCommentID Long parentCommentID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#commentID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POSTCOMMENT_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostCommentActionPermissionRequest).UPDATE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentActionPermissionRequest).UPDATE_PERMISSION)")
     PostCommentDTO putPostComment (@Valid PostCommentRequestDTO postCommentRequestDTO, @PostCommentID Long commentID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#commentID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POSTCOMMENT_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostCommentActionPermissionRequest).DELETE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentActionPermissionRequest).DELETE_PERMISSION)")
     boolean deletePostComment (@PostCommentID Long commentID);
 
     @PreAuthorize(value = "hasPermission(#commentID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POSTCOMMENT_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostCommentActionPermissionRequest).LIKE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentActionPermissionRequest).LIKE_PERMISSION)")
     boolean createUserPostCommentLike (@PostCommentID Long commentID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#commentID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POSTCOMMENT_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.PostCommentActionPermissionRequest).LIKE_PERMISSION)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentActionPermissionRequest).LIKE_PERMISSION)")
     boolean deleteUserPostCommentLike (@PostCommentID Long commentID, Authentication authentication);
 
     @PreAuthorize(value = "permitAll()")

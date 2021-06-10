@@ -3,7 +3,9 @@ package com.bhtcnpm.website.security.evaluator.Post;
 import com.bhtcnpm.website.constant.domain.Post.PostApprovalState;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.GenericOwnership;
-import com.bhtcnpm.website.constant.security.evaluator.PostActionPermissionRequest;
+import com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest;
+import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest;
+import com.bhtcnpm.website.constant.security.permission.HighlightPostPermissionConstant;
 import com.bhtcnpm.website.constant.security.permission.PostPermissionConstant;
 import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
@@ -107,7 +109,29 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
             return this.checkPostApprovePermission(authentication, authenticatedUserID, approvalState);
         }
 
+        //Kiểm tra quyền Highlight post của user.
+        if (HighlightPostPermissionRequest.HIGHLIGHT_POST_MANAGE.equals(permission)) {
+            return this.checkPostHighlightPermission(authentication, authenticatedUserID, state);
+        }
+
         throw new IllegalArgumentException(String.format("Post permission %s is not supported. Denying access to postID = %s", permission));
+    }
+
+    private boolean checkPostHighlightPermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state) {
+        //Bắt buộc phải có tài khoản mới được highlight post.
+        logger.info("Checking post save permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        if (PostBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, HighlightPostPermissionConstant.HIGHLIGHTPOST_PUBLIC_ALL_MANAGE)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean checkPostApprovePermission (Authentication authentication, UUID authenticatedUserID, PostApprovalState approvalState) {

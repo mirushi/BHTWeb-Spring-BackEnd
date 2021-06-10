@@ -38,9 +38,8 @@ public class PostReport {
     )
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "post_id",
-            unique = true,
             updatable = false)
     private Post post;
 
