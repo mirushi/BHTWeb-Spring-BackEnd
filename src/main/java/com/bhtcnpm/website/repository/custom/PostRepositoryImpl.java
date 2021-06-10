@@ -342,6 +342,20 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return postQuickSearchResults;
     }
 
+    @Override
+    public List<Post> findByCategoryNameOrderByPublishDtmDesc(Predicate predicate, Pageable pageable, String categoryName) {
+        JPAQuery<Post> query = new JPAQuery<Post>(em)
+                .select(qPost)
+                .from(qPost)
+                .where(predicate)
+                .where(qPost.category.name.eq(categoryName))
+                .orderBy(qPost.publishDtm.desc());
+
+        JPQLQuery<Post> finalQuery = querydsl.applyPagination(pageable, query);
+
+        return finalQuery.fetch();
+    }
+
     private SearchScope<Post> getSearchScope () {return searchSession.scope(Post.class);}
 
     @Override

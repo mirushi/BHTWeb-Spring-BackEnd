@@ -3,6 +3,7 @@ package com.bhtcnpm.website.controller;
 import com.bhtcnpm.website.model.dto.Post.HighlightPostDTO;
 import com.bhtcnpm.website.model.dto.Post.HighlightPostRequestDTO;
 import com.bhtcnpm.website.model.dto.Post.HighlightPostUpdateListDTO;
+import com.bhtcnpm.website.model.validator.dto.Post.PostID;
 import com.bhtcnpm.website.service.HighlightPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +40,7 @@ public class HighlightPostController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity createHighlightPost (@RequestBody HighlightPostRequestDTO highlightPostRequestDTO,
+    public ResponseEntity createHighlightPost (@RequestBody @Valid HighlightPostRequestDTO highlightPostRequestDTO,
                                                Authentication authentication) {
         highlightPostService.createHighlightPost(highlightPostRequestDTO.getId(), authentication);
 
@@ -47,7 +49,7 @@ public class HighlightPostController {
 
     @DeleteMapping
     @ResponseBody
-    public ResponseEntity deleteHighlightPost (@RequestParam("id") Long postID) {
+    public ResponseEntity deleteHighlightPost (@RequestParam("id") @PostID Long postID) {
         highlightPostService.deleteHighlightPost(postID);
 
         return new ResponseEntity(HttpStatus.OK);
@@ -55,7 +57,7 @@ public class HighlightPostController {
 
     @PostMapping("stickToTop")
     @ResponseBody
-    public ResponseEntity stickHighlightPost (@RequestParam("id") Long postID) {
+    public ResponseEntity stickHighlightPost (@RequestParam("id") @PostID Long postID) {
         highlightPostService.stickToTop(postID);
 
         return new ResponseEntity(HttpStatus.OK);

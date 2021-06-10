@@ -28,6 +28,7 @@ public interface PostRepositoryCustom {
     PostSummaryWithStateAndFeedbackListDTO getPostSummaryStateFeedback (Predicate predicate, Pageable pageable);
     PostDetailsWithStateListDTO getPostDetailsListWithStateFilter(Predicate predicate, Pageable pageable, PostStateType postStateType);
     List<PostQuickSearchResult> quickSearch (int page, int pageSize, String searchTerm);
+    List<Post> findByCategoryNameOrderByPublishDtmDesc (Predicate predicate, Pageable pageable, String categoryName);
     void indexPost (Long postID);
     void indexPost (Post post);
     void removeIndexPost (Long postID);

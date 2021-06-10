@@ -15,7 +15,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import java.util.List;
 import java.util.UUID;
 
-public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredicateExecutor<Post>, JpaSpecificationExecutor<Post>, PostRepositoryCustom {
+public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredicateExecutor<Post>, PostRepositoryCustom {
     @Query("SELECT new com.bhtcnpm.website.model.dto.Post.PostStatisticDTO(p.id, COUNT(DISTINCT pc.id) ,COUNT(DISTINCT uLiked.userPostLikeId.user.id), " +
             "CASE WHEN EXISTS (SELECT 1 FROM p.userPostLikes uLikedSub WHERE uLikedSub.userPostLikeId.user.id = :userID) THEN true ELSE false END, " +
             "CASE WHEN EXISTS (SELECT 1 FROM p.userPostSaves uSavedSub WHERE uSavedSub.userPostSaveId.user.id = :userID) THEN true ELSE false END) " +
@@ -37,8 +37,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
             "SET p.postState = :postStateType, p.adminFeedback = :feedBack " +
             "WHERE p.id = :postID")
     int setPostStateAndFeedback (Long postID, PostStateType postStateType, String feedBack);
-
-    List<Post> findByCategoryNameOrderByPublishDtmDesc (Predicate predicate, Pageable pageable, String categoryName);
 
     boolean existsByCategoryId (Long postCategoryID);
 }
