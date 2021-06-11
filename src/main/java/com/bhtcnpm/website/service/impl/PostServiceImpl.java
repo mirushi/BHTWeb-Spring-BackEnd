@@ -1,7 +1,9 @@
 package com.bhtcnpm.website.service.impl;
 
+import com.bhtcnpm.website.constant.business.Post.PostActionAvailablePermission;
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
+import com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest;
 import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
@@ -396,22 +398,31 @@ public class PostServiceImpl implements PostService {
             List<String> availableAction = new ArrayList<>();
 
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.READ_PERMISSION)) {
-                availableAction.add(PostActionPermissionRequest.READ_PERMISSION);
+                availableAction.add(PostActionAvailablePermission.READ_PERMISSION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.UPDATE_PERMISSION)) {
-                availableAction.add(PostActionPermissionRequest.UPDATE_PERMISSION);
+                availableAction.add(PostActionAvailablePermission.UPDATE_PERMISSION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.DELETE_PERMISSION)) {
-                availableAction.add(PostActionPermissionRequest.DELETE_PERMISSION);
+                availableAction.add(PostActionAvailablePermission.DELETE_PERMISSION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.SAVE_PERMISSION)) {
-                availableAction.add(PostActionPermissionRequest.SAVE_PERMISSION);
+                availableAction.add(PostActionAvailablePermission.SAVE_PERMISSION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.LIKE_PERMISSION)) {
-                availableAction.add(PostActionPermissionRequest.LIKE_PERMISSION);
+                availableAction.add(PostActionAvailablePermission.LIKE_PERMISSION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.APPROVE_PERMISSION)) {
-                availableAction.add(PostActionPermissionRequest.APPROVE_PERMISSION);
+                availableAction.add(PostActionAvailablePermission.APPROVE_PERMISSION);
+            }
+            if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.REPORT_PERMISSION)) {
+                availableAction.add(PostActionAvailablePermission.REPORT_PERMISSION);
+            }
+            if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.COMMENT_PERMISSION)) {
+                availableAction.add(PostActionAvailablePermission.COMMENT_PERMISSION);
+            }
+            if (postPermissionEvaluator.hasPermission(authentication, postID, HighlightPostPermissionRequest.HIGHLIGHT_POST_MANAGE)) {
+                availableAction.add(PostActionAvailablePermission.HIGHLIGHT_PERMISSION);
             }
 
             postAvailableActionDTO.setAvailableActions(availableAction);

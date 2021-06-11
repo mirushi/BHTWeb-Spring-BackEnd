@@ -7,6 +7,7 @@ import com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostP
 import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest;
 import com.bhtcnpm.website.constant.security.permission.HighlightPostPermissionConstant;
 import com.bhtcnpm.website.constant.security.permission.PostPermissionConstant;
+import com.bhtcnpm.website.constant.security.permission.PostReportPermissionConstant;
 import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.repository.PostRepository;
@@ -109,12 +110,57 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
             return this.checkPostApprovePermission(authentication, authenticatedUserID, approvalState);
         }
 
-        //Kiểm tra quyền Highlight post của user.
+        //Kiểm tra quyền report của user.
+        if (PostActionPermissionRequest.REPORT_PERMISSION.equals(permission)) {
+            return this.checkPostReportPermission(authentication, authenticatedUserID, state);
+        }
+
+        //Kiểm tra quyền bình luận vào bài post của user.
+        if (PostActionPermissionRequest.COMMENT_PERMISSION.equals(permission)) {
+            return this.checkPostCommentPermission(authentication, authenticatedUserID, state);
+        }
+
+            //Kiểm tra quyền Highlight post của user.
         if (HighlightPostPermissionRequest.HIGHLIGHT_POST_MANAGE.equals(permission)) {
             return this.checkPostHighlightPermission(authentication, authenticatedUserID, state);
         }
 
         throw new IllegalArgumentException(String.format("Post permission %s is not supported. Denying access to postID = %s", permission));
+    }
+
+    private boolean checkPostCommentPermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state) {
+        //Bắt buộc phải có tài khoản mới được highlight post.
+        logger.info("Checking post save permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        //Xét state của Post.
+        if (PostBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, PostReportPermissionConstant.POSTREPORT_PUBLIC_ALL_CREATE)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkPostReportPermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state) {
+        //Bắt buộc phải có tài khoản mới được highlight post.
+        logger.info("Checking post save permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        if (PostBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, PostReportPermissionConstant.POSTREPORT_PUBLIC_ALL_CREATE)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean checkPostHighlightPermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state) {
