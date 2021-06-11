@@ -55,4 +55,6 @@ public interface PostCommentService {
 
     @PreAuthorize(value = "permitAll()")
     List<PostCommentStatisticDTO> getCommentStatistics (@PostCommentStatisticRequestSize List<@PostCommentID Long> commentIDs, Authentication authentication);
+
+    List<PostCommentAvailableActionDTO> getAvailablePostCommentAction (List<Long> postCommentIDs, Authentication authentication);
 }

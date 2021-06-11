@@ -1,5 +1,7 @@
 package com.bhtcnpm.website.service.impl;
 
+import com.bhtcnpm.website.constant.business.PostComment.PostCommentActionAvailableConstant;
+import com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentActionPermissionRequest;
 import com.bhtcnpm.website.model.dto.PostComment.*;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.UserPostCommentLike;
@@ -7,6 +9,7 @@ import com.bhtcnpm.website.model.entity.PostCommentEntities.UserPostCommentLikeI
 import com.bhtcnpm.website.repository.PostCommentRepository;
 import com.bhtcnpm.website.repository.UserPostCommentLikeRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.evaluator.PostComment.PostCommentPermissionEvaluator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.PostCommentService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,6 +43,8 @@ public class PostCommentServiceImpl implements PostCommentService {
     private final UserWebsiteRepository userWebsiteRepository;
 
     private final PostCommentMapper postCommentMapper;
+
+    private final PostCommentPermissionEvaluator postCommentPermissionEvaluator;
 
     @Override
     public PostCommentListDTO getPostCommentsByPostID(Long postID, Pageable pageable) {
@@ -171,6 +177,45 @@ public class PostCommentServiceImpl implements PostCommentService {
         List<PostCommentStatisticDTO> postCommentStatisticDTOs = postCommentRepository.getPostCommentStatisticDTOs(commentIDs, userID);
 
         return postCommentStatisticDTOs;
+    }
+
+    @Override
+    public List<PostCommentAvailableActionDTO> getAvailablePostCommentAction(List<Long> postCommentIDs, Authentication authentication) {
+        List<PostCommentAvailableActionDTO> postCommentAvailableActionDTOList = new ArrayList<>();
+
+        for (Long postCommentID : postCommentIDs) {
+            if (postCommentID == null) {
+                continue;
+            }
+
+            PostCommentAvailableActionDTO postCommentAvailableActionDTO = new PostCommentAvailableActionDTO();
+            postCommentAvailableActionDTO.setId(postCommentID);
+            List<String> availableActionList = new ArrayList<>();
+
+            if (postCommentPermissionEvaluator.hasPermission(authentication, postCommentID, PostCommentActionPermissionRequest.READ_PERMISSION)) {
+                availableActionList.add(PostCommentActionAvailableConstant.READ_ACTION);
+            }
+            if (postCommentPermissionEvaluator.hasPermission(authentication, postCommentID, PostCommentActionPermissionRequest.UPDATE_PERMISSION)) {
+                availableActionList.add(PostCommentActionAvailableConstant.UPDATE_ACTION);
+            }
+            if (postCommentPermissionEvaluator.hasPermission(authentication, postCommentID, PostCommentActionPermissionRequest.DELETE_PERMISSION)) {
+                availableActionList.add(PostCommentActionAvailableConstant.DELETE_ACTION);
+            }
+            if (postCommentPermissionEvaluator.hasPermission(authentication, postCommentID, PostCommentActionPermissionRequest.LIKE_PERMISSION)) {
+                availableActionList.add(PostCommentActionAvailableConstant.LIKE_ACTION);
+            }
+            if (postCommentPermissionEvaluator.hasPermission(authentication, postCommentID, PostCommentActionPermissionRequest.REPLY_PERMISSION)) {
+                availableActionList.add(PostCommentActionAvailableConstant.REPLY_ACTION);
+            }
+            if (postCommentPermissionEvaluator.hasPermission(authentication, postCommentID, PostCommentActionPermissionRequest.REPORT_PERMISSION)) {
+                availableActionList.add(PostCommentActionAvailableConstant.REPORT_ACTION);
+            }
+
+            postCommentAvailableActionDTO.setAvailableActions(availableActionList);
+            postCommentAvailableActionDTOList.add(postCommentAvailableActionDTO);
+        }
+
+        return postCommentAvailableActionDTOList;
     }
 
 }

@@ -124,4 +124,15 @@ public class PostCommentController {
         return new ResponseEntity<>(postCommentStatisticDTOs, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/posts/comments/actionAvailable")
+    @ResponseBody
+    public ResponseEntity<List<PostCommentAvailableActionDTO>> getPostCommentActionAvailable (
+            @RequestParam List<Long> postCommentIDs,
+            Authentication authentication
+    ) {
+        List<PostCommentAvailableActionDTO> availableActionDTOList = postCommentService.getAvailablePostCommentAction(postCommentIDs, authentication);
+
+        return new ResponseEntity<>(availableActionDTOList, HttpStatus.OK);
+    }
+
 }
