@@ -69,6 +69,9 @@ public class UserWebsite {
     @Column(nullable = false)
     private String avatarURL;
 
+    @Column(nullable = false)
+    private String aboutMe;
+
     @ManyToMany (
             cascade = { CascadeType.PERSIST },
             fetch = FetchType.EAGER

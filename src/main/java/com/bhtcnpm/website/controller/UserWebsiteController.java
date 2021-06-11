@@ -1,19 +1,15 @@
 package com.bhtcnpm.website.controller;
 
 import com.bhtcnpm.website.model.dto.UserWebsite.*;
-import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.model.exception.CaptchaInvalidException;
-import com.bhtcnpm.website.model.exception.CaptchaServerErrorException;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -23,14 +19,27 @@ public class UserWebsiteController {
 
     private final UserWebsiteService userWebsiteService;
 
-    @GetMapping("/checkUserExists")
+    @GetMapping("/summary")
     @ResponseBody
-    public ResponseEntity<List<String>> checkUserWebsiteExist (
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "displayName", required = false) String displayName,
-            @RequestParam(value = "email", required = false) String email
-    ) {
-        List<String> existedFields = userWebsiteService.checkUserExists(name, displayName, email);
-        return new ResponseEntity(existedFields, HttpStatus.OK);
+    public ResponseEntity<UserSummaryWithStatisticDTO> getUserSummaryWithStatistic (Authentication authentication) {
+        UserSummaryWithStatisticDTO userSummaryWithStatisticDTO = userWebsiteService.getUserSummaryWithStatistic(authentication);
+
+        return new ResponseEntity<>(userSummaryWithStatisticDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/details")
+    @ResponseBody
+    public ResponseEntity<UserDetailsWithStatisticDTO> getUserDetailsWithStatistic (Authentication authentication) {
+        UserDetailsWithStatisticDTO userDetailsWithStatisticDTO = userWebsiteService.getUserDetailsOwnWithStatistic(authentication);
+
+        return new ResponseEntity<>(userDetailsWithStatisticDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("{id}")
+    @ResponseBody
+    public ResponseEntity<UserDetailsWithStatisticDTO> getSpecificUserDetailsWithStatistic (@PathVariable("id") UUID userID) {
+        UserDetailsWithStatisticDTO userDetailsWithStatisticDTO = userWebsiteService.getSpecificUserDetailsWithStatistic(userID);
+
+        return new ResponseEntity<>(userDetailsWithStatisticDTO, HttpStatus.OK);
     }
 }

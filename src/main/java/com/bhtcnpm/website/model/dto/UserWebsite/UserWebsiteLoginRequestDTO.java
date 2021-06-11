@@ -10,7 +10,6 @@ import javax.validation.constraints.Pattern;
 @Data
 @ValidUWLoginRequest
 public class UserWebsiteLoginRequestDTO {
-    @Pattern(regexp = "^[A-Za-z0-9]*$")
     private String username;
 
     @Email
