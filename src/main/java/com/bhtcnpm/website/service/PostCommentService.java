@@ -25,8 +25,7 @@ public interface PostCommentService {
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).READ_PERMISSION) and " +
-            "hasRole(T(com.bhtcnpm.website.constant.security.permission.PostCommentPermissionConstant).POSTCOMMENT_PUBLIC_SELF_CREATE)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).COMMENT_PERMISSION)")
     PostCommentDTO postPostComment (@Valid PostCommentRequestDTO postCommentRequestDTO, @PostID Long postID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#parentCommentID, " +
