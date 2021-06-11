@@ -25,6 +25,9 @@ public class PostRequestDTO {
     @PostCategoryID
     private Long categoryID;
 
+    @PostPublishDtm
+    private LocalDateTime publishDtm;
+
     @PostTag
     private Set<TagDTO> tags;
 }

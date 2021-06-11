@@ -8,7 +8,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.lang.annotation.*;
 
-@Pattern(regexp = "(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\\.(?:jpe?g|gif|png))(?:\\?([^#]*))?(?:#(.*))?")
 @Size(max = GenericBusinessConstant.URL_MAX_LENGTH)
 @Constraint(validatedBy = {})
 @Documented

@@ -95,7 +95,12 @@ public abstract class PostMapper {
         //Calculate reading time.
         post.setReadingTime(calculateReadTime(postRequestDTO.getContent()));
 
-        post.setPublishDtm(LocalDateTime.now());
+        if (postRequestDTO.getPublishDtm() == null) {
+            post.setPublishDtm(LocalDateTime.now());
+        } else {
+            post.setPublishDtm(postRequestDTO.getPublishDtm());
+        }
+
         post.setTags(tagMapper.tagDTOListToTagList(postRequestDTO.getTags()));
         post.setTitle(postRequestDTO.getTitle());
         post.setSummary(postRequestDTO.getSummary());
