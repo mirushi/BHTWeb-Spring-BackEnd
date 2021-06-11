@@ -143,17 +143,7 @@ public class Post {
     @ToString.Exclude
     @JsonIgnore
     private Set<UserPostSave> userPostSaves;
-
-    @OneToMany(
-            mappedBy = "post",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    private Set<PostReport> postReport;
-
+    
     @OneToOne(
             mappedBy = "highlightPostId.post",
             cascade = CascadeType.ALL,
