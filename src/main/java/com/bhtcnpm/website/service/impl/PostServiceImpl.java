@@ -259,7 +259,7 @@ public class PostServiceImpl implements PostService {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE_NEW_ACTIVITIES);
 
         BooleanExpression postBusinessState = PostPredicateGenerator.getBooleanExpressionOnBusinessState(PostBusinessState.PUBLIC);
-        
+
         List<Post> queryResult = postRepository.findByCategoryNameOrderByPublishDtmDesc(postBusinessState, pageable,"Hoạt động");
 
         return postMapper.postListToPostSummaryDTOs(queryResult);

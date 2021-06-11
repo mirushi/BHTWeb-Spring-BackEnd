@@ -4,6 +4,7 @@ import com.bhtcnpm.website.constant.domain.PostComment.PostCommentBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.GenericOwnership;
 import com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentActionPermissionRequest;
 import com.bhtcnpm.website.constant.security.permission.PostCommentPermissionConstant;
+import com.bhtcnpm.website.constant.security.permission.PostCommentReportPermissionConstant;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment;
 import com.bhtcnpm.website.repository.PostCommentRepository;
 import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
@@ -95,7 +96,29 @@ public class PostCommentPermissionEvaluator implements SimplePermissionEvaluator
             return checkReadPermission(state);
         }
 
+        //Kiểm tra quyền Report.
+        if (PostCommentActionPermissionRequest.REPORT_PERMISSION.equals(permission)) {
+            return checkReportPermission(authentication, authenticatedUserID, state);
+        }
+
         throw new IllegalArgumentException("Post comment request permission is not supported.");
+    }
+
+    private boolean checkReportPermission (Authentication authentication, UUID authenticatedUserID, PostCommentBusinessState state) {
+        //Bắt buộc phải có tài khoản mới được reply.
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        //Xét state của Post Comment.
+        if (PostCommentBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, PostCommentReportPermissionConstant.POSTCOMMENTREPORT_PUBLIC_ALL_CREATE)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean checkReadPermission (PostCommentBusinessState state) {
