@@ -23,24 +23,32 @@
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 55,
     "content": "physics",
+    "posts": [
+    ],
     "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 56,
     "content": "physical-education",
+    "posts": [
+    ],
     "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 57,
     "content": "computer-programming",
+    "posts": [
+    ],
     "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.Tag",
     "id": 58,
     "content": "algorithm",
+    "posts": [
+    ],
     "version": 0
   },
   {
@@ -48,7 +56,8 @@
     "id": 59,
     "content": "data-structure",
     "docs": [],
-    "posts": [],
+    "posts": [
+    ],
     "version": 0
   },
   {
@@ -56,7 +65,8 @@
     "id": 60,
     "content": "programming-paradigm",
     "docs": [],
-    "posts": [],
+    "posts": [
+    ],
     "version": 0
   }
 ]

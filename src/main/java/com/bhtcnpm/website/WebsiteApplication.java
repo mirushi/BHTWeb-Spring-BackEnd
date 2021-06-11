@@ -58,6 +58,7 @@ public class WebsiteApplication {
         factoryBean.setResources(new Resource[]{
                 new ClassPathResource("data/UserWebsite/user-website-role.json"),
                 new ClassPathResource("data/UserWebsite/user-website.json"),
+                new ClassPathResource("data/tag-data.json"),
                 new ClassPathResource("data/Post/post-category.json"),
                 new ClassPathResource("data/Post/post.json"),
                 new ClassPathResource("data/Post/highlight-post.json"),
@@ -68,7 +69,6 @@ public class WebsiteApplication {
                 new ClassPathResource("data/Doc/doc.json"),
                 new ClassPathResource("data/Doc/user-doc-reaction.json"),
                 new ClassPathResource("data/report-reason.json")
-//                new ClassPathResource("data/tag-data.json")
         });
         factoryBean.setMapper(objectMapper);
 

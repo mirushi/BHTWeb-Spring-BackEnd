@@ -82,7 +82,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDetailsDTO getPostDetails(Long id) {
-        Optional<Post> post = postRepository.findById(id);
+        Optional<Post> post = postRepository.findByIDWithTags(id);
         if (post.isPresent()) {
             return postMapper.postToPostDetailsDTO(post.get());
         }
@@ -164,7 +164,7 @@ public class PostServiceImpl implements PostService {
             throw new AccessDeniedException("You must authenticated before using this API.");
         }
 
-        Optional<Post> optionalPost = postRepository.findById(postID);
+        Optional<Post> optionalPost = postRepository.findByIDWithTags(postID);
         if (!optionalPost.isPresent()) {
             return null;
         }

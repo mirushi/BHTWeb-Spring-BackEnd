@@ -143,7 +143,7 @@ public class Post {
     @ToString.Exclude
     @JsonIgnore
     private Set<UserPostSave> userPostSaves;
-    
+
     @OneToOne(
             mappedBy = "highlightPostId.post",
             cascade = CascadeType.ALL,
@@ -154,7 +154,8 @@ public class Post {
     @JsonIgnore
     private HighlightPost highlightPost;
 
-    @ManyToMany(cascade = {
+    @ManyToMany(
+            cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
@@ -168,7 +169,6 @@ public class Post {
             valueBridge = @ValueBridgeRef(type = TagValueBridge.class))
     @IndexedEmbedded(name = "tags_eb")
     @ToString.Exclude
-    @JsonIgnore
     private Set<Tag> tags;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

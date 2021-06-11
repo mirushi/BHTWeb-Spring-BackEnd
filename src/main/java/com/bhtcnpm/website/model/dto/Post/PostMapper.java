@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Mapper
+@Mapper(uses = {TagMapper.class})
 public abstract class PostMapper {
 
     public static final PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
@@ -56,6 +56,7 @@ public abstract class PostMapper {
     @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "tags", source = "tags")
     public abstract PostDetailsDTO postToPostDetailsDTO (Post post);
 
     public PostSummaryListDTO postPageToPostSummaryListDTO (Page<Post> postPage) {
