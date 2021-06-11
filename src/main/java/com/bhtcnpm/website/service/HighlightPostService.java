@@ -18,16 +18,16 @@ public interface HighlightPostService {
     List<Long> getAllHighlightedPostIDs ();
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest).HIGHLIGHT_POST_MANAGE)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest).HIGHLIGHT_POST_CREATE)")
     void createHighlightPost (@PostID Long postID, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest).HIGHLIGHT_POST_MANAGE)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest).HIGHLIGHT_POST_DELETE)")
     void deleteHighlightPost (@PostID Long postID);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest).HIGHLIGHT_POST_MANAGE)")
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest).HIGHLIGHT_POST_STICKTOTOP)")
     void stickToTop (@PostID Long postID);
 }

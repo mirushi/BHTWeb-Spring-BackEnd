@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.security.evaluator.Post;
 
+import com.bhtcnpm.website.constant.business.Post.HighlightPostBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Post.PostApprovalState;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.GenericOwnership;
@@ -8,6 +9,8 @@ import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPerm
 import com.bhtcnpm.website.constant.security.permission.HighlightPostPermissionConstant;
 import com.bhtcnpm.website.constant.security.permission.PostPermissionConstant;
 import com.bhtcnpm.website.constant.security.permission.PostReportPermissionConstant;
+import com.bhtcnpm.website.model.entity.PostEntities.HighlightPost;
+import com.bhtcnpm.website.repository.HighlightPostRepository;
 import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.repository.PostRepository;
@@ -33,6 +36,8 @@ import java.util.UUID;
 public class PostPermissionEvaluator implements SimplePermissionEvaluator {
 
     private final PostRepository postRepository;
+
+    private final HighlightPostRepository highlightPostRepository;
 
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -120,17 +125,66 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
             return this.checkPostCommentPermission(authentication, authenticatedUserID, state);
         }
 
-            //Kiểm tra quyền Highlight post của user.
-        if (HighlightPostPermissionRequest.HIGHLIGHT_POST_MANAGE.equals(permission)) {
-            return this.checkPostHighlightPermission(authentication, authenticatedUserID, state);
+        //Kiểm tra quyền tạo Highlight post của user.
+        if (HighlightPostPermissionRequest.HIGHLIGHT_POST_CREATE.equals(permission)) {
+            return this.checkPostHighlightPermission(authentication, authenticatedUserID, state, targetDomainObject);
+        }
+
+        //Kiểm tra quyền xoá một highlight post của user.
+        if (HighlightPostPermissionRequest.HIGHLIGHT_POST_DELETE.equals(permission)) {
+            return this.checkPostHighlightDeletePermission(authentication, authenticatedUserID, targetDomainObject);
+        }
+
+        //Kiểm tra quyền stickToTop của một highlight post của user.
+        if (HighlightPostPermissionRequest.HIGHLIGHT_POST_STICKTOTOP.equals(permission)) {
+            return this.checkPostHighlightStickToTop(authentication, authenticatedUserID, targetDomainObject);
         }
 
         throw new IllegalArgumentException(String.format("Post permission %s is not supported. Denying access to postID = %s", permission));
     }
 
+    private boolean checkPostHighlightStickToTop (Authentication authentication, UUID authenticatedUserID, Post post) {
+        //Bắt buộc phải có tài khoản mới được xoá highlight post.
+        logger.info("Checking post highlight delete permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        if (SecurityUtils.containsAuthority(authentication, HighlightPostPermissionConstant.HIGHLIGHTPOST_PUBLIC_ALL_MANAGE)) {
+            Optional<HighlightPost> object = highlightPostRepository.findByHighlightPostIdPost(post);
+            if (object.isPresent()) {
+                HighlightPost highlightPost = object.get();
+                if (highlightPost.getRank() != HighlightPostBusinessConstant.RANK_MIN) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkPostHighlightDeletePermission(Authentication authentication, UUID authenticatedUserID, Post post) {
+        //Bắt buộc phải có tài khoản mới được xoá highlight post.
+        logger.info("Checking post highlight delete permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        if (SecurityUtils.containsAuthority(authentication, HighlightPostPermissionConstant.HIGHLIGHTPOST_PUBLIC_ALL_MANAGE)) {
+            Optional<HighlightPost> object = highlightPostRepository.findByHighlightPostIdPost(post);
+            if (object.isPresent()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private boolean checkPostCommentPermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state) {
         //Bắt buộc phải có tài khoản mới được highlight post.
-        logger.info("Checking post save permission.");
+        logger.info("Checking post comment permission.");
         if (authenticatedUserID == null) {
             logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
             return false;
@@ -163,7 +217,7 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
         return false;
     }
 
-    private boolean checkPostHighlightPermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state) {
+    private boolean checkPostHighlightPermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state, Post post) {
         //Bắt buộc phải có tài khoản mới được highlight post.
         logger.info("Checking post save permission.");
         if (authenticatedUserID == null) {
@@ -173,7 +227,10 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
 
         if (PostBusinessState.PUBLIC.equals(state)) {
             if (SecurityUtils.containsAuthority(authentication, HighlightPostPermissionConstant.HIGHLIGHTPOST_PUBLIC_ALL_MANAGE)) {
-                return true;
+                Optional<HighlightPost> highlightPost = highlightPostRepository.findByHighlightPostIdPost(post);
+                if (highlightPost.isEmpty()) {
+                    return true;
+                }
             }
         }
 

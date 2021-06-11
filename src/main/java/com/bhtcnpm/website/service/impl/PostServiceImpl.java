@@ -1,6 +1,6 @@
 package com.bhtcnpm.website.service.impl;
 
-import com.bhtcnpm.website.constant.business.Post.PostActionAvailablePermission;
+import com.bhtcnpm.website.constant.business.Post.PostActionAvailableConstant;
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest;
@@ -398,31 +398,37 @@ public class PostServiceImpl implements PostService {
             List<String> availableAction = new ArrayList<>();
 
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.READ_PERMISSION)) {
-                availableAction.add(PostActionAvailablePermission.READ_PERMISSION);
+                availableAction.add(PostActionAvailableConstant.READ_ACTION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.UPDATE_PERMISSION)) {
-                availableAction.add(PostActionAvailablePermission.UPDATE_PERMISSION);
+                availableAction.add(PostActionAvailableConstant.UPDATE_ACTION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.DELETE_PERMISSION)) {
-                availableAction.add(PostActionAvailablePermission.DELETE_PERMISSION);
+                availableAction.add(PostActionAvailableConstant.DELETE_ACTION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.SAVE_PERMISSION)) {
-                availableAction.add(PostActionAvailablePermission.SAVE_PERMISSION);
+                availableAction.add(PostActionAvailableConstant.SAVE_ACTION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.LIKE_PERMISSION)) {
-                availableAction.add(PostActionAvailablePermission.LIKE_PERMISSION);
+                availableAction.add(PostActionAvailableConstant.LIKE_ACTION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.APPROVE_PERMISSION)) {
-                availableAction.add(PostActionAvailablePermission.APPROVE_PERMISSION);
+                availableAction.add(PostActionAvailableConstant.APPROVE_ACTION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.REPORT_PERMISSION)) {
-                availableAction.add(PostActionAvailablePermission.REPORT_PERMISSION);
+                availableAction.add(PostActionAvailableConstant.REPORT_ACTION);
             }
             if (postPermissionEvaluator.hasPermission(authentication, postID, PostActionPermissionRequest.COMMENT_PERMISSION)) {
-                availableAction.add(PostActionAvailablePermission.COMMENT_PERMISSION);
+                availableAction.add(PostActionAvailableConstant.COMMENT_ACTION);
             }
-            if (postPermissionEvaluator.hasPermission(authentication, postID, HighlightPostPermissionRequest.HIGHLIGHT_POST_MANAGE)) {
-                availableAction.add(PostActionAvailablePermission.HIGHLIGHT_PERMISSION);
+            if (postPermissionEvaluator.hasPermission(authentication, postID, HighlightPostPermissionRequest.HIGHLIGHT_POST_CREATE)) {
+                availableAction.add(PostActionAvailableConstant.HIGHLIGHT_CREATE_ACTION);
+            }
+            if (postPermissionEvaluator.hasPermission(authentication, postID, HighlightPostPermissionRequest.HIGHLIGHT_POST_DELETE)) {
+                availableAction.add(PostActionAvailableConstant.HIGHLIGHT_DELETE_ACTION);
+            }
+            if (postPermissionEvaluator.hasPermission(authentication, postID, HighlightPostPermissionRequest.HIGHLIGHT_POST_STICKTOTOP)) {
+                availableAction.add(PostActionAvailableConstant.HIGHLIGHT_STICKTOTOP_ACTION);
             }
 
             postAvailableActionDTO.setAvailableActions(availableAction);
