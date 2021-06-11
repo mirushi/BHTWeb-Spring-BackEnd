@@ -1,6 +1,8 @@
 package com.bhtcnpm.website.security.util;
 
 import com.bhtcnpm.website.constant.security.SecurityConstant;
+import com.bhtcnpm.website.model.dto.UserWebsite.SimpleKeycloakAccountWithEntity;
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.UserWebsiteEntities.RefreshToken;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.KeycloakPrincipal;
@@ -19,6 +21,16 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class SecurityUtils {
+
+    public static UserWebsite getUserWebsiteEntityFromAuthenticationToken (Authentication authentication) {
+        if (!(authentication.getDetails() instanceof SimpleKeycloakAccountWithEntity)) {
+            throw new IllegalArgumentException("Unsupported authentication token.");
+        }
+
+        SimpleKeycloakAccountWithEntity kcAccount = (SimpleKeycloakAccountWithEntity) authentication.getDetails();
+
+        return kcAccount.getEntity();
+    }
 
     public static UUID getUserIDOnNullThrowException(Authentication authentication) {
         UUID userID = getUserID(authentication);

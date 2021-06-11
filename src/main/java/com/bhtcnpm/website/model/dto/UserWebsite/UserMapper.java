@@ -5,6 +5,7 @@ import com.bhtcnpm.website.model.entity.PostEntities.UserPostReport;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,5 +55,18 @@ public interface UserMapper {
     @Mapping(target = "postCount", source = "statisticDTO.postCount")
     @Mapping(target = "docCount", source = "statisticDTO.docCount")
     UserDetailsWithStatisticDTO userWebsiteToUserWebsiteDetailsWithStatisticDTO(UserWebsite userWebsite, UserStatisticDTO statisticDTO);
+
+    @Mapping(target = "id", source = "userWebsite.id")
+    @Mapping(target = "name", source = "userWebsite.name")
+    @Mapping(target = "displayName", source = "userWebsite.displayName")
+    @Mapping(target = "reputationScore", source = "userWebsite.reputationScore")
+    @Mapping(target = "avatarURL", source = "userWebsite.avatarURL")
+    @Mapping(target = "email", source = "userWebsite.email")
+    @Mapping(target = "aboutMe", source = "userWebsite.aboutMe")
+    UserDetailsDTO userWebsiteToUserDetailsDTO (UserWebsite userWebsite);
+
+    @Mapping(target = "displayName", source = "displayName")
+    @Mapping(target = "aboutMe", source = "aboutMe")
+    void updateUserWebsiteFromUserRequestDTO (UserRequestDTO userRequestDTO, @MappingTarget UserWebsite userWebsite);
 
 }

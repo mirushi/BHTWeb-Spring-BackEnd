@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -42,4 +44,23 @@ public class UserWebsiteController {
 
         return new ResponseEntity<>(userDetailsWithStatisticDTO, HttpStatus.OK);
     }
+
+    @PutMapping("/details")
+    @ResponseBody
+    public ResponseEntity<UserDetailsDTO> putUserDetailsOwn (@RequestBody @Valid UserRequestDTO userRequestDTO,
+                                                             Authentication authentication) {
+        UserDetailsDTO userDetailsDTO = userWebsiteService.putUserDetails(userRequestDTO, authentication);
+
+        return new ResponseEntity<>(userDetailsDTO, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/details")
+    @ResponseBody
+    public ResponseEntity<UserDetailsDTO> putUserDetailsSpecific (@PathVariable("id") UUID userID,
+                                                                  @RequestBody @Valid UserRequestDTO userRequestDTO) {
+        UserDetailsDTO userDetailsDTO = userWebsiteService.putSpecificUserDetails(userRequestDTO, userID);
+
+        return new ResponseEntity<>(userDetailsDTO, HttpStatus.OK);
+    }
+
 }

@@ -84,4 +84,31 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
         return userDetailsWithStatisticDTO;
     }
 
+    @Override
+    public UserDetailsDTO putUserDetails(UserRequestDTO userRequestDTO, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+        UserWebsite entity = SecurityUtils.getUserWebsiteEntityFromAuthenticationToken(authentication);
+
+        userMapper.updateUserWebsiteFromUserRequestDTO(userRequestDTO, entity);
+
+        entity = uwRepository.save(entity);
+
+        return userMapper.userWebsiteToUserDetailsDTO(entity);
+    }
+
+    @Override
+    public UserDetailsDTO putSpecificUserDetails(UserRequestDTO userRequestDTO, UUID userID) {
+        Optional<UserWebsite> object = uwRepository.findById(userID);
+
+        if (object.isEmpty()) {
+            throw new IDNotFoundException();
+        }
+
+        UserWebsite entity = object.get();
+        userMapper.updateUserWebsiteFromUserRequestDTO(userRequestDTO, entity);
+        entity = uwRepository.save(entity);
+
+        return userMapper.userWebsiteToUserDetailsDTO(entity);
+    }
+
 }
