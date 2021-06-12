@@ -15,14 +15,16 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
-import org.hibernate.annotations.Loader;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 import org.hibernate.search.engine.backend.types.*;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -71,6 +73,9 @@ public class Post {
     @Column(length = PostDomainConstant.IMAGEURL_LENGTH)
     private String imageURL;
 
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime submitDtm;
+
     @Column(nullable = false)
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -83,6 +88,7 @@ public class Post {
     @Column
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @UpdateTimestamp
     private LocalDateTime lastUpdatedDtm;
 
     @Column(nullable = false)

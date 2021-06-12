@@ -14,6 +14,7 @@ public class PostSummaryWithStateAndFeedbackDTO {
     private String title;
     private String summary;
     private String imageURL;
+    private LocalDateTime submitDtm;
     private LocalDateTime publishDtm;
     private Integer readingTime;
     private UUID authorID;

@@ -44,6 +44,7 @@ public abstract class PostMapper {
     @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "submitDtm", source = "submitDtm")
     public abstract PostSummaryWithStateDTO postToPostSummaryWithStateDTO (Post post);
 
     public abstract List<PostSummaryWithStateDTO> postListToPostSummaryWithStateDTOList (List<Post> postList);
@@ -94,6 +95,10 @@ public abstract class PostMapper {
 
         //Calculate reading time.
         post.setReadingTime(calculateReadTime(postRequestDTO.getContent()));
+
+        if (post.getSubmitDtm() == null) {
+            post.setSubmitDtm(LocalDateTime.now());
+        }
 
         //TH cho cập nhật publishDtm: Khi entity chưa có publishDtm.
         //TH không cho cập nhật publishDtm: Khi entity đã có publishDtm.

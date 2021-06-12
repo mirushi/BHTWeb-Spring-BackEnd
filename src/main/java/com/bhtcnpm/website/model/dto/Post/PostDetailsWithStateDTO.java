@@ -13,6 +13,7 @@ public class PostDetailsWithStateDTO {
     private Long id;
     private String title;
     private String imageURL;
+    private LocalDateTime submitDtm;
     private LocalDateTime publishDtm;
     private Integer readingTime;
     private String content;

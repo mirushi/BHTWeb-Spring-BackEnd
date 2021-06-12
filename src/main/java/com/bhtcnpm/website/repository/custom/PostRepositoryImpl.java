@@ -255,7 +255,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public PostSummaryWithStateListDTO searchBySearchTermWithState(Predicate predicate, Pageable pageable) {
 
         JPAQuery query = new JPAQuery<Post>(em)
-                .select(Projections.constructor(PostSummaryWithStateDTO.class, qPost.id, qPost.author.id, qPost.author.name, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.summary, qPost.title, qPost.postState))
+                .select(Projections.constructor(PostSummaryWithStateDTO.class, qPost.id, qPost.title, qPost.summary, qPost.imageURL, qPost.submitDtm, qPost.publishDtm, qPost.readingTime, qPost.author.id, qPost.author.name, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.postState))
                 .from(qPost)
                 .where(predicate);
 
@@ -277,7 +277,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     @Override
     public PostSummaryWithStateAndFeedbackListDTO getPostSummaryStateFeedback(Predicate predicate, Pageable pageable) {
         JPAQuery query = new JPAQuery<Post>(em)
-                .select(Projections.constructor(PostSummaryWithStateAndFeedbackDTO.class, qPost.id,qPost.title, qPost.summary, qPost.imageURL, qPost.publishDtm,qPost.readingTime , qPost.author.id, qPost.author.name, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.adminFeedback ,qPost.postState))
+                .select(Projections.constructor(PostSummaryWithStateAndFeedbackDTO.class, qPost.id,qPost.title, qPost.summary, qPost.imageURL, qPost.submitDtm, qPost.publishDtm,qPost.readingTime , qPost.author.id, qPost.author.name, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.adminFeedback ,qPost.postState))
                 .from(qPost)
                 .where(predicate);
 
@@ -299,7 +299,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     @Override
     public PostDetailsWithStateListDTO getPostDetailsListWithStateFilter(Predicate predicate, Pageable pageable, PostStateType postStateType) {
         JPAQuery query = new JPAQuery<Post>(em)
-                .select(Projections.constructor(PostDetailsWithStateDTO.class, qPost.id, qPost.title, qPost.imageURL, qPost.publishDtm, qPost.readingTime, qPost.content,  qPost.author.id, qPost.author.name, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.postState))
+                .select(Projections.constructor(PostDetailsWithStateDTO.class, qPost.id, qPost.title, qPost.imageURL, qPost.submitDtm, qPost.publishDtm, qPost.readingTime, qPost.content,  qPost.author.id, qPost.author.name, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.postState))
                 .from(qPost)
                 .where(predicate)
                 .where(qPost.postState.eq(postStateType));
