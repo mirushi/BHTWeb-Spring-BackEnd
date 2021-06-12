@@ -89,7 +89,7 @@ public interface PostService {
 
     List<PostSummaryDTO> getPostNewest();
 
-    PostSummaryListDTO getPostBySearchTerm (String sortByPublishDtm, @Pagination Integer page, String searchTerm, @PostCategoryID Long postCategoryID, Authentication authentication);
+    PostSummaryListDTO getPostBySearchTerm (String sortByPublishDtm, @Pagination Integer page, String searchTerm, @PostCategoryID Long postCategoryID, Long tagID, Authentication authentication);
 
     PostSummaryWithStateListDTO getPostWithStateBySearchTerm (Predicate predicate, Pageable pageable);
 

@@ -7,6 +7,7 @@ import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.PostCategory;
 import com.bhtcnpm.website.model.entity.PostEntities.QPost;
+import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.search.lucene.LuceneIndexUtils;
@@ -82,6 +83,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                                     Integer page,
                                                     Integer pageSize,
                                                     String searchTerm,
+                                                    String tagContent,
                                                     PostStateType postStateType,
                                                     PostBusinessState postBusinessState,
                                                     Authentication authentication) {
@@ -138,6 +140,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                 .field("postState")
                                 .matching(postStateType));
                     }
+                    if (tagContent != null) {
+                        b.filter(f.match()
+                                .field("tags_eb.content")
+                                .matching(tagContent));
+                    }
                 }))
                 .sort(sortFinalStep.toSort())
                 .fetch(page * pageSize, pageSize);
@@ -151,6 +158,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                                  Integer page,
                                                  Integer pageSize,
                                                  String searchTerm,
+                                                 String tagContent,
                                                  Authentication authentication) {
 
         SearchResult<Post> searchResult = getPostSearchResult(sortByPublishDtm,
@@ -158,6 +166,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 page,
                 pageSize,
                 searchTerm,
+                tagContent,
                 null,
                 PostBusinessState.PUBLIC,
                 authentication);
@@ -186,6 +195,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 page,
                 pageSize,
                 searchTerm,
+                null,
                 postStateType,
                 null,
                 authentication);

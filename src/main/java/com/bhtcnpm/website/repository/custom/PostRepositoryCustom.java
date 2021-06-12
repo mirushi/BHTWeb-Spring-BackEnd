@@ -3,6 +3,7 @@ package com.bhtcnpm.website.repository.custom;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
+import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PostRepositoryCustom {
-    PostSummaryListDTO searchBySearchTerm (String sortByPublishDtm, Long postCategoryID , Integer page, Integer pageSize , String searchTerm, Authentication authentication);
+    PostSummaryListDTO searchBySearchTerm (String sortByPublishDtm, Long postCategoryID , Integer page, Integer pageSize, String searchTerm, String tagContent, Authentication authentication);
     PostSummaryWithStateListDTO getManagementPost (String sortByPublishDtm,
                                                    Long postCategoryID,
                                                    Integer page,

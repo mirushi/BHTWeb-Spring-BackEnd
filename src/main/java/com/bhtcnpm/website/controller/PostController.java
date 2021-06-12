@@ -245,8 +245,9 @@ public class PostController {
             @RequestParam(value = "page") @Pagination Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) String sortByPublishDtm,
             @RequestParam(value = "postCategoryID", required = false) Long postCategoryID,
+            @RequestParam(value = "tags", required = false) Long tagID,
             Authentication authentication) {
-        return new ResponseEntity<>(postService.getPostBySearchTerm(sortByPublishDtm, page, searchTerm, postCategoryID, authentication), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getPostBySearchTerm(sortByPublishDtm, page, searchTerm, postCategoryID, tagID, authentication), HttpStatus.OK);
     }
 
     @GetMapping("relatedSameAuthor")

@@ -269,10 +269,6 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
             if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_PUBLIC_ALL_LIKE)) {
                 return true;
             }
-        } else if (PostBusinessState.UNLISTED.equals(state)) {
-            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_UNLISTED_ALL_LIKE)) {
-                return true;
-            }
         }
 
         return false;
@@ -289,10 +285,6 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
         //Xét state của Post.
         if (PostBusinessState.PUBLIC.equals(state)) {
             if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_PUBLIC_ALL_SAVE)) {
-                return true;
-            }
-        } else if (PostBusinessState.UNLISTED.equals(state)) {
-            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_UNLISTED_ALL_SAVE)) {
                 return true;
             }
         }

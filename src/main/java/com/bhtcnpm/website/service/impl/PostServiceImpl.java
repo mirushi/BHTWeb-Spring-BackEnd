@@ -7,12 +7,10 @@ import com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostP
 import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
+import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
-import com.bhtcnpm.website.repository.PostRepository;
-import com.bhtcnpm.website.repository.UserPostLikeRepository;
-import com.bhtcnpm.website.repository.UserPostSaveRepository;
-import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.repository.*;
 import com.bhtcnpm.website.security.evaluator.Post.PostPermissionEvaluator;
 import com.bhtcnpm.website.security.predicate.Post.PostPredicateGenerator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
@@ -49,6 +47,8 @@ public class PostServiceImpl implements PostService {
     private final UserPostSaveRepository userPostSaveRepository;
 
     private final UserWebsiteRepository userWebsiteRepository;
+
+    private final TagRepository tagRepository;
 
     private final PostMapper postMapper;
 
@@ -281,8 +281,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSummaryListDTO getPostBySearchTerm(String sortByPublishDtm, Integer page, String searchTerm, Long postCategoryID, Authentication authentication) {
-        PostSummaryListDTO postSummaryListDTO = postRepository.searchBySearchTerm(sortByPublishDtm, postCategoryID, page, PAGE_SIZE , searchTerm, authentication);
+    public PostSummaryListDTO getPostBySearchTerm(String sortByPublishDtm, Integer page, String searchTerm, Long postCategoryID, Long tagID, Authentication authentication) {
+        String tagContent = null;
+
+        if (tagID != null) {
+            Optional<Tag> object = tagRepository.findById(tagID);
+            if (object.isPresent()) {
+                tagContent = object.get().getContent();
+            }
+        }
+
+        PostSummaryListDTO postSummaryListDTO = postRepository.searchBySearchTerm(sortByPublishDtm, postCategoryID, page, PAGE_SIZE , searchTerm, tagContent, authentication);
         return postSummaryListDTO;
     }
 
