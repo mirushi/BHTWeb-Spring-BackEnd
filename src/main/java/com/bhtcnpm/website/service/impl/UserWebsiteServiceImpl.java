@@ -87,7 +87,13 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     @Override
     public UserDetailsDTO putUserDetails(UserRequestDTO userRequestDTO, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
-        UserWebsite entity = SecurityUtils.getUserWebsiteEntityFromAuthenticationToken(authentication);
+        Optional<UserWebsite> object = uwRepository.findById(userID);
+
+        if (object.isEmpty()) {
+            throw new IllegalArgumentException("userID not found.");
+        }
+
+        UserWebsite entity = object.get();
 
         userMapper.updateUserWebsiteFromUserRequestDTO(userRequestDTO, entity);
 

@@ -29,7 +29,6 @@ public class PostDetailsDTO {
     @PostImageURL
     private String imageURL;
 
-    @PostPublishDtm
     private LocalDateTime publishDtm;
 
     @PostReadingTime
