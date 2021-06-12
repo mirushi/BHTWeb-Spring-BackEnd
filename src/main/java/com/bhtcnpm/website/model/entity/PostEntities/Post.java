@@ -2,6 +2,7 @@ package com.bhtcnpm.website.model.entity.PostEntities;
 
 import com.bhtcnpm.website.constant.domain.Post.PostApprovalState;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
+import com.bhtcnpm.website.constant.domain.Post.PostDomainConstant;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
@@ -49,7 +50,7 @@ public class Post {
     @GenericField(name = "id", searchable = Searchable.YES, projectable = Projectable.YES)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = PostDomainConstant.TITLE_LENGTH)
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,
@@ -59,7 +60,7 @@ public class Post {
             sortable = Sortable.YES)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = PostDomainConstant.SUMMARY_LENGTH)
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,
@@ -67,6 +68,7 @@ public class Post {
             searchable = Searchable.YES)
     private String summary;
 
+    @Column(length = PostDomainConstant.IMAGEURL_LENGTH)
     private String imageURL;
 
     @Column(nullable = false)
@@ -91,7 +93,7 @@ public class Post {
     private String content;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, length = PostDomainConstant.CONTENT_PLAIN_TEXT_LENGTH)
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,

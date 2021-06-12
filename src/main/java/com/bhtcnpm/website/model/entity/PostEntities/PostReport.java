@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
+import com.bhtcnpm.website.constant.domain.PostReport.PostReportDomainConstant;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
 import com.bhtcnpm.website.model.validator.entity.UserPostReport.ValidUPREntity;
@@ -61,7 +62,7 @@ public class PostReport {
     @ManyToOne
     private UserWebsite resolvedBy;
 
-    @Column(name = "resolved_note")
+    @Column(name = "resolved_note", length = PostReportDomainConstant.RESOLVED_NOTE_LENGTH)
     private String resolvedNote;
 
     @Enumerated
