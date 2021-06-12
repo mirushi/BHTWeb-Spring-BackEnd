@@ -6,7 +6,6 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import java.lang.annotation.*;
 
-@NotNull
 @Constraint(validatedBy = {})
 @Documented
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE })
