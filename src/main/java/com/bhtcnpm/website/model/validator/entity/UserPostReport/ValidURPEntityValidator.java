@@ -6,9 +6,9 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class ValidURPEntityValidator implements ConstraintValidator <ValidUPREntity, PostReport> {
+
     @Override
     public void initialize(ValidUPREntity constraintAnnotation) {
-
     }
 
     @Override

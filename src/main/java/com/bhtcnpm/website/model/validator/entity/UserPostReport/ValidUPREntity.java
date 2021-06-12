@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = {ValidURPEntityValidator.class})
 @Documented
 public @interface ValidUPREntity {
-    String message() default "${fieldName} is invalid.";
+    String message() default "User post report entity is invalid.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
