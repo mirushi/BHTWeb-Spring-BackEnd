@@ -49,6 +49,12 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     }
 
     @Override
+    public UserFullStatisticDTO getUserStatisticDTO(UUID userID) {
+        UserFullStatisticDTO statisticDTO = uwRepository.getUserWebsiteFullStatistic(userID);
+        return statisticDTO;
+    }
+
+    @Override
     public UserDetailsWithStatisticDTO getUserDetailsOwnWithStatistic(Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 

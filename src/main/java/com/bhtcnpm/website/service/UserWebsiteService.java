@@ -12,6 +12,9 @@ public interface UserWebsiteService {
     @PreAuthorize(value = "isAuthenticated()")
     UserSummaryWithStatisticDTO getUserSummaryWithStatistic(Authentication authentication);
 
+    @PreAuthorize(value = "permitAll()")
+    UserFullStatisticDTO getUserStatisticDTO (UUID userID);
+
     @PreAuthorize(value = "isAuthenticated()")
     UserDetailsWithStatisticDTO getUserDetailsOwnWithStatistic(Authentication authentication);
 
