@@ -14,12 +14,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredicateExecutor<Post>, PostRepositoryCustom {
-    @Query("SELECT new com.bhtcnpm.website.model.dto.Post.PostStatisticDTO(p.id, COUNT(DISTINCT pc.id) ,COUNT(DISTINCT uLiked.userPostLikeId.user.id), " +
+    @Query("SELECT new com.bhtcnpm.website.model.dto.Post.PostStatisticDTO(p.id, COUNT(DISTINCT pc.id) ,COUNT(DISTINCT uLiked.userPostLikeId.user.id), COUNT(DISTINCT pv.id), " +
             "CASE WHEN EXISTS (SELECT 1 FROM p.userPostLikes uLikedSub WHERE uLikedSub.userPostLikeId.user.id = :userID) THEN true ELSE false END, " +
             "CASE WHEN EXISTS (SELECT 1 FROM p.userPostSaves uSavedSub WHERE uSavedSub.userPostSaveId.user.id = :userID) THEN true ELSE false END) " +
             "FROM Post p " +
             "LEFT JOIN p.userPostLikes uLiked " +
             "LEFT JOIN PostComment pc ON p.id = pc.post.id " +
+            "LEFT JOIN PostView pv ON p.id = pv.post.id " +
             "WHERE p.id IN :postIDs " +
             "GROUP BY p.id")
     List<PostStatisticDTO> getPostStatisticDTOs (List<Long> postIDs, UUID userID);

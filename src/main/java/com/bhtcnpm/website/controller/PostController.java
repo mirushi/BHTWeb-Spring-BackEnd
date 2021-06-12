@@ -11,6 +11,8 @@ import com.bhtcnpm.website.model.validator.dto.Post.PostFeedback;
 import com.bhtcnpm.website.model.validator.dto.Post.PostID;
 import com.bhtcnpm.website.model.validator.dto.Post.PostStatisticRequestSize;
 import com.bhtcnpm.website.service.PostService;
+import com.bhtcnpm.website.service.PostViewService;
+import com.bhtcnpm.website.util.HttpIPUtils;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -36,6 +40,8 @@ import java.util.UUID;
 public class PostController {
 
     private final PostService postService;
+
+    private final PostViewService postViewService;
 
     @GetMapping(value = "/statistics")
     @ResponseBody
@@ -79,12 +85,19 @@ public class PostController {
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<PostDetailsDTO> getPostDetails (@PathVariable @PostID Long id) {
+    public ResponseEntity<PostDetailsDTO> getPostDetails (@PathVariable @PostID Long id,
+                                                          HttpServletRequest servletRequest,
+                                                          Authentication authentication) {
         PostDetailsDTO postDetailsDTO = postService.getPostDetails(id);
 
         if (postDetailsDTO == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
+
+        String ipAddress = HttpIPUtils.getClientIPAddress(servletRequest);
+
+        postViewService.addPostView(id, authentication, ipAddress);
+
         return new ResponseEntity<>(postDetailsDTO, HttpStatus.OK);
     }
 

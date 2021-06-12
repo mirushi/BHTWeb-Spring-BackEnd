@@ -15,6 +15,7 @@ import com.bhtcnpm.website.security.evaluator.Post.PostPermissionEvaluator;
 import com.bhtcnpm.website.security.predicate.Post.PostPredicateGenerator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.PostService;
+import com.bhtcnpm.website.service.PostViewService;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,8 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
 
     private final PostPermissionEvaluator postPermissionEvaluator;
+
+    private final PostViewService postViewService;
 
     private static final int PAGE_SIZE = 10;
 
