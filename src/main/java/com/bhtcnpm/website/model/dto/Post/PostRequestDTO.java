@@ -25,7 +25,6 @@ public class PostRequestDTO {
     @PostCategoryID
     private Long categoryID;
 
-    @PostPublishDtm
     private LocalDateTime publishDtm;
 
     @PostTag
