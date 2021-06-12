@@ -95,11 +95,15 @@ public abstract class PostMapper {
         //Calculate reading time.
         post.setReadingTime(calculateReadTime(postRequestDTO.getContent()));
 
-        if (postRequestDTO.getPublishDtm() == null && post.getPublishDtm() == null
-                || postRequestDTO.getPublishDtm().isBefore(LocalDateTime.now())) {
-            post.setPublishDtm(LocalDateTime.now());
-        } else {
-            post.setPublishDtm(postRequestDTO.getPublishDtm());
+        //TH cho cập nhật publishDtm: Khi entity chưa có publishDtm.
+        //TH không cho cập nhật publishDtm: Khi entity đã có publishDtm.
+        //TODO: Tạm thời không cho cập nhật thời gian publishDtm của post. Chỉ cho cập nhật trong TH chưa có publishDtm.
+        if (post.getPublishDtm() == null) {
+            if (postRequestDTO.getPublishDtm() == null || postRequestDTO.getPublishDtm().isBefore(LocalDateTime.now())) {
+                post.setPublishDtm(LocalDateTime.now());
+            } else {
+                post.setPublishDtm(postRequestDTO.getPublishDtm());
+            }
         }
 
         post.setTags(tagMapper.tagDTOListToTagList(postRequestDTO.getTags()));
