@@ -75,9 +75,11 @@ public class PostServiceImpl implements PostService {
     public PostSummaryListDTO getPostSummary(Predicate predicate, Integer paginator, Authentication authentication) {
         Sort sort;
         BooleanExpression authorizationFilter = PostPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
+        BooleanExpression publicPostFilter = PostPredicateGenerator.getBooleanExpressionOnBusinessState(PostBusinessState.PUBLIC);
+
         Pageable pageable = PageRequest.of(paginator, PAGE_SIZE);
 
-        Page<Post> queryResults = postRepository.findAll(authorizationFilter.and(predicate), pageable);
+        Page<Post> queryResults = postRepository.findAll(authorizationFilter.and(predicate).and(publicPostFilter), pageable);
 
         PostSummaryListDTO postSummaryListDTO = postMapper.postPageToPostSummaryListDTO(queryResults);
 
