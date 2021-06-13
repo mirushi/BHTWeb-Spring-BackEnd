@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,7 +36,7 @@ public class SecurityUtils {
     public static UUID getUserIDOnNullThrowException(Authentication authentication) {
         UUID userID = getUserID(authentication);
         if (userID == null) {
-            throw new IllegalArgumentException("Cannot extract user ID from authentication.");
+            throw new AccessDeniedException("Cannot extract user ID from authentication.");
         }
         return userID;
     }

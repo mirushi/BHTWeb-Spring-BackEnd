@@ -18,7 +18,9 @@ public interface UserWebsiteService {
     @PreAuthorize(value = "isAuthenticated()")
     UserDetailsWithStatisticDTO getUserDetailsOwnWithStatistic(Authentication authentication);
 
-    @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.UserWebsitePermissionConstant).USER_ALL_ALL_READ)")
+    @PreAuthorize(value = "hasPermission(#userID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).USER_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.UserWebsiteActionPermissionRequest).READ_DETAIL_PERMISSION)")
     UserDetailsWithStatisticDTO getSpecificUserDetailsWithStatistic (UUID userID);
 
     @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.UserWebsitePermissionConstant).USER_ALL_SELF_UPDATE)")
@@ -28,4 +30,8 @@ public interface UserWebsiteService {
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).USER_OBJECT, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.permission.UserWebsiteActionPermissionRequest).UPDATE_PERMISSION)")
     UserDetailsDTO putSpecificUserDetails (@Valid UserRequestDTO userRequestDTO, UUID userID);
+
+    @PreAuthorize(value = "permitAll()")
+    List<UserWebsiteAvailableActionDTO> getUserWebsiteAvailableAction (List<UUID> userIDs, Authentication authentication);
+
 }

@@ -1,9 +1,12 @@
 package com.bhtcnpm.website.service.impl;
 
+import com.bhtcnpm.website.constant.business.UserWebsite.UserWebsiteActionAvailableConstant;
+import com.bhtcnpm.website.constant.security.evaluator.permission.UserWebsiteActionPermissionRequest;
 import com.bhtcnpm.website.model.dto.UserWebsite.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.evaluator.UserWebsite.UserWebsitePermissionEvaluator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     //Repositories
     private final UserWebsiteRepository uwRepository;
     private final UserMapper userMapper;
+    private final UserWebsitePermissionEvaluator userWebsitePermissionEvaluator;
 
     @Override
     public UserSummaryWithStatisticDTO getUserSummaryWithStatistic(Authentication authentication) {
@@ -121,6 +125,34 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
         entity = uwRepository.save(entity);
 
         return userMapper.userWebsiteToUserDetailsDTO(entity);
+    }
+
+    @Override
+    public List<UserWebsiteAvailableActionDTO> getUserWebsiteAvailableAction(List<UUID> userIDs, Authentication authentication) {
+        List<UserWebsiteAvailableActionDTO> userWebsiteAvailableActionDTOList = new ArrayList<>();
+
+        for (UUID userID : userIDs) {
+            if (userID == null) {
+                continue;
+            }
+
+            UserWebsiteAvailableActionDTO userWebsiteAvailableActionDTO = new UserWebsiteAvailableActionDTO();
+            userWebsiteAvailableActionDTO.setId(userID);
+            List<String> availableActionList = new ArrayList<>();
+
+            if (userWebsitePermissionEvaluator.hasPermission(authentication, userID, UserWebsiteActionPermissionRequest.READ_DETAIL_PERMISSION)) {
+                availableActionList.add(UserWebsiteActionAvailableConstant.READ_ACTION);
+            }
+
+            if (userWebsitePermissionEvaluator.hasPermission(authentication, userID, UserWebsiteActionPermissionRequest.UPDATE_PERMISSION)) {
+                availableActionList.add(UserWebsiteActionAvailableConstant.UPDATE_ACTION);
+            }
+
+            userWebsiteAvailableActionDTO.setAvailableActions(availableActionList);
+            userWebsiteAvailableActionDTOList.add(userWebsiteAvailableActionDTO);
+        }
+
+        return userWebsiteAvailableActionDTOList;
     }
 
 }

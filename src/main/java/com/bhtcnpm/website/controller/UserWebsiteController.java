@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -69,6 +70,15 @@ public class UserWebsiteController {
         UserDetailsDTO userDetailsDTO = userWebsiteService.putSpecificUserDetails(userRequestDTO, userID);
 
         return new ResponseEntity<>(userDetailsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/actionAvailable")
+    @ResponseBody
+    public ResponseEntity<List<UserWebsiteAvailableActionDTO>> getUserWebsiteAvailableActions (@RequestParam List<UUID> userIDs,
+                                                                                               Authentication authentication) {
+        List<UserWebsiteAvailableActionDTO> availableActionDTOs = userWebsiteService.getUserWebsiteAvailableAction(userIDs, authentication);
+
+        return new ResponseEntity<>(availableActionDTOs, HttpStatus.OK);
     }
 
 }
