@@ -8,4 +8,8 @@ public class PostCommentPredicate {
     private static QPostComment qPostComment = QPostComment.postComment;
 
     public static BooleanExpression notDeleted() {return qPostComment.deletedDate.isNull();}
+
+    public static BooleanExpression deleted() {return qPostComment.deletedDate.isNotNull();}
+
+    public static BooleanExpression postCommentPublicBusinessState () {return notDeleted();}
 }
