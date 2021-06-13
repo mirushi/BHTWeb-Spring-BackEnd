@@ -9,6 +9,6 @@ import java.util.UUID;
 public interface PostViewRepository extends JpaRepository<PostView, Long> {
     @Query("SELECT CASE WHEN (COUNT(pv) > 0) THEN TRUE ELSE FALSE END " +
             "FROM PostView pv " +
-            "WHERE pv.post.id = :postID AND (pv.user.id = :userID OR pv.ipAddress = :ipAddress)")
+            "WHERE pv.post.id = :postID AND (pv.user.id = :userID OR pv.ipAddress = :ipAddress AND pv.user.id IS NULL)")
     boolean existsByPostIdAndUserIdOrIpAddress (Long postID, UUID userID, String ipAddress);
 }

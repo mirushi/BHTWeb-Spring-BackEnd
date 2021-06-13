@@ -29,7 +29,7 @@ public class UserWebsiteController {
         return new ResponseEntity<>(userSummaryWithStatisticDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/statistic")
+    @GetMapping("/{id}/statistics")
     @ResponseBody
     public ResponseEntity<UserFullStatisticDTO> getUserFullStatistic (@PathVariable("id") UUID userID) {
         UserFullStatisticDTO userFullStatisticDTO = userWebsiteService.getUserStatisticDTO(userID);
