@@ -60,6 +60,14 @@ public abstract class PostMapper {
     @Mapping(target = "tags", source = "tags")
     public abstract PostDetailsDTO postToPostDetailsDTO (Post post);
 
+    public PostSummaryListDTO postSummaryDTOListToPostSummaryListDTO (List<PostSummaryDTO> postSummaryDTOList, Integer totalPages, Long totalElements) {
+        return new PostSummaryListDTO(postSummaryDTOList, totalPages, totalElements);
+    }
+
+    public PostSummaryListDTO postListToPostSummaryListDTO (List<Post> postList, Integer totalPages, Long totalElements) {
+        return new PostSummaryListDTO(postListToPostSummaryDTOs(postList), totalPages, totalElements);
+    }
+
     public PostSummaryListDTO postPageToPostSummaryListDTO (Page<Post> postPage) {
         return new PostSummaryListDTO(postListToPostSummaryDTOs(postPage.getContent()), postPage.getTotalPages(), postPage.getTotalElements());
     }

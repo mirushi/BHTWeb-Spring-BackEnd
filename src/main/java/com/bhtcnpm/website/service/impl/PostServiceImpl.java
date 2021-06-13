@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.service.impl;
 
+import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.business.Post.PostActionAvailableConstant;
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
@@ -20,7 +21,9 @@ import com.bhtcnpm.website.service.PostService;
 import com.bhtcnpm.website.service.PostViewService;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import lombok.RequiredArgsConstructor;
+import org.jboss.logging.annotations.Pos;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -74,18 +77,35 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSummaryListDTO getPostSummary(Predicate predicate, Integer paginator, Authentication authentication) {
+    public PostSummaryListDTO getPostSummary(Predicate predicate, Integer paginator, boolean mostLiked, boolean mostViewed, Authentication authentication) {
+        //Only allow sort by one field at a time.
+        if (mostLiked && mostViewed) {
+            throw new IllegalArgumentException("Only use mostLiked or mostViewed one at a time.");
+        }
+
         Sort sort;
-        BooleanExpression authorizationFilter = PostPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
-        BooleanExpression publicPostFilter = PostPredicateGenerator.getBooleanExpressionOnBusinessState(PostBusinessState.PUBLIC);
+
+        BooleanExpression authorizationExpression = PostPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
+        BooleanExpression postAllowedBusinessState = PostPredicateGenerator.getBooleanExpressionOnBusinessState(PostBusinessState.PUBLIC);
+        BooleanExpression finalPredicate = authorizationExpression.and(postAllowedBusinessState).and(predicate);
 
         Pageable pageable = PageRequest.of(paginator, PAGE_SIZE);
 
-        Page<Post> queryResults = postRepository.findAll(authorizationFilter.and(predicate).and(publicPostFilter), pageable);
+        PostSummaryListDTO finalResult;
 
-        PostSummaryListDTO postSummaryListDTO = postMapper.postPageToPostSummaryListDTO(queryResults);
+        if (mostLiked) {
+            Page<PostSummaryDTO> postSummaryDTOPage = postRepository.getPostOrderByLikeCountDESC(finalPredicate, pageable);
+            finalResult = postMapper.postSummaryPageToPostSummaryListDTO(postSummaryDTOPage);
+        }
+        else if (mostViewed) {
+            Page<PostSummaryDTO> postSummaryDTOPage = postRepository.getPostOrderByViewCountDESC(finalPredicate, pageable);
+            finalResult = postMapper.postSummaryPageToPostSummaryListDTO(postSummaryDTOPage);
+        } else {
+            Page<Post> postResult = postRepository.findAll(finalPredicate, pageable);
+            finalResult = postMapper.postPageToPostSummaryListDTO(postResult);
+        }
 
-        return postSummaryListDTO;
+        return finalResult;
     }
 
     @Override

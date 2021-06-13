@@ -13,6 +13,7 @@ import java.util.UUID;
 //Chỉ nên sử dụng class này expose ra bên ngoài.
 @Slf4j
 public class PostPredicateGenerator {
+
     public static BooleanExpression getBooleanExpressionNotDeleted() {
         return PostPredicate.notDeleted();
     }

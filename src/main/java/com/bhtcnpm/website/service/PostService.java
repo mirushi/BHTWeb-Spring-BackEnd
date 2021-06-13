@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.service;
 
+import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
@@ -25,7 +26,7 @@ public interface PostService {
             "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).READ_PERMISSION)")
     List<PostStatisticDTO> getPostStatistic (List<@PostID Long> postIDs, Authentication authentication);
 
-    PostSummaryListDTO getPostSummary (Predicate predicate, @Pagination Integer paginator, Authentication authentication);
+    PostSummaryListDTO getPostSummary (Predicate predicate, @Pagination Integer paginator, boolean mostLiked, boolean mostViewed, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#id, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +

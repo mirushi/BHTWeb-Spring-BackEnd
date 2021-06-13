@@ -2,6 +2,7 @@ package com.bhtcnpm.website.security.predicate.Post;
 
 import com.bhtcnpm.website.model.entity.PostEntities.QPost;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.time.LocalDateTime;

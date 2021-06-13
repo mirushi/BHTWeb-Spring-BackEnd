@@ -1,10 +1,13 @@
 package com.bhtcnpm.website.repository;
 
 import com.bhtcnpm.website.model.dto.Post.PostStatisticDTO;
+import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
+import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.custom.PostRepositoryCustom;
 import com.querydsl.core.types.Predicate;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -24,6 +27,20 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
             "WHERE p.id IN :postIDs AND pc.deletedDate IS NULL " +
             "GROUP BY p.id")
     List<PostStatisticDTO> getPostStatisticDTOs (List<Long> postIDs, UUID userID);
+
+    @Query("SELECT NEW com.bhtcnpm.website.model.dto.Post.PostSummaryDTO(post.id, post.title, post.summary, post.imageURL, post.publishDtm, post.readingTime, post.author.id, post.author.name, post.author.avatarURL, post.category.id, post.category.name) " +
+            "FROM Post post " +
+            "LEFT JOIN PostView pv ON post.id = pv.post.id " +
+            "GROUP BY post " +
+            "ORDER BY COUNT(DISTINCT pv.id) DESC ")
+    Page<PostSummaryDTO> getPostOrderByViewCountDESC(Predicate predicate, Pageable pageable);
+
+    @Query("SELECT NEW com.bhtcnpm.website.model.dto.Post.PostSummaryDTO(post.id, post.title, post.summary, post.imageURL, post.publishDtm, post.readingTime, post.author.id, post.author.name, post.author.avatarURL, post.category.id, post.category.name) " +
+            "FROM Post post " +
+            "LEFT JOIN UserPostLike pl ON post.id = pl.userPostLikeId.post.id " +
+            "GROUP BY post " +
+            "ORDER BY COUNT(DISTINCT pl.userPostLikeId.user.id) DESC ")
+    Page<PostSummaryDTO> getPostOrderByLikeCountDESC (Predicate predicate, Pageable pageable);
 
     @Modifying
     @Query("UPDATE Post as p " +
