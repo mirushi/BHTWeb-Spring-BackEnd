@@ -33,7 +33,9 @@ public class PostViewServiceImpl implements PostViewService {
 
         PostView postView = new PostView();
         postView.setPost(postRepository.getOne(postID));
-        postView.setUser(uwRepository.getOne(userID));
+        if (userID != null) {
+            postView.setUser(uwRepository.getOne(userID));
+        }
         postView.setIpAddress(ipAddress);
 
         postViewRepository.save(postView);
