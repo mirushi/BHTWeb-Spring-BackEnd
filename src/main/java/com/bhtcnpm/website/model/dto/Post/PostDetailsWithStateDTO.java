@@ -18,7 +18,7 @@ public class PostDetailsWithStateDTO {
     private Integer readingTime;
     private String content;
     private UUID authorID;
-    private String authorName;
+    private String authorDisplayName;
     private String authorAvatarURL;
     private Long categoryID;
     private String categoryName;

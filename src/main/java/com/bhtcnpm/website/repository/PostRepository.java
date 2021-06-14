@@ -28,14 +28,14 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
             "GROUP BY p.id")
     List<PostStatisticDTO> getPostStatisticDTOs (List<Long> postIDs, UUID userID);
 
-    @Query("SELECT NEW com.bhtcnpm.website.model.dto.Post.PostSummaryDTO(post.id, post.title, post.summary, post.imageURL, post.publishDtm, post.readingTime, post.author.id, post.author.name, post.author.avatarURL, post.category.id, post.category.name) " +
+    @Query("SELECT NEW com.bhtcnpm.website.model.dto.Post.PostSummaryDTO(post.id, post.title, post.summary, post.imageURL, post.publishDtm, post.readingTime, post.author.id, post.author.displayName, post.author.avatarURL, post.category.id, post.category.name) " +
             "FROM Post post " +
             "LEFT JOIN PostView pv ON post.id = pv.post.id " +
             "GROUP BY post " +
             "ORDER BY COUNT(DISTINCT pv.id) DESC ")
     Page<PostSummaryDTO> getPostOrderByViewCountDESC(Predicate predicate, Pageable pageable);
 
-    @Query("SELECT NEW com.bhtcnpm.website.model.dto.Post.PostSummaryDTO(post.id, post.title, post.summary, post.imageURL, post.publishDtm, post.readingTime, post.author.id, post.author.name, post.author.avatarURL, post.category.id, post.category.name) " +
+    @Query("SELECT NEW com.bhtcnpm.website.model.dto.Post.PostSummaryDTO(post.id, post.title, post.summary, post.imageURL, post.publishDtm, post.readingTime, post.author.id, post.author.displayName, post.author.avatarURL, post.category.id, post.category.name) " +
             "FROM Post post " +
             "LEFT JOIN UserPostLike pl ON post.id = pl.userPostLikeId.post.id " +
             "GROUP BY post " +

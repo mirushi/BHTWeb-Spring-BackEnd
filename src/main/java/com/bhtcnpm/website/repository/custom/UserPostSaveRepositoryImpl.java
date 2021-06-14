@@ -1,7 +1,5 @@
 package com.bhtcnpm.website.repository.custom;
 
-import com.bhtcnpm.website.model.dto.Post.PostDetailsWithStateDTO;
-import com.bhtcnpm.website.model.dto.Post.PostDetailsWithStateListDTO;
 import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
 import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
@@ -12,12 +10,10 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
-import org.hibernate.search.mapper.orm.Search;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
@@ -70,7 +66,7 @@ public class UserPostSaveRepositoryImpl implements UserPostSaveRepositoryCustom 
                         qPost.publishDtm,
                         qPost.readingTime,
                         qPost.author.id,
-                        qPost.author.name,
+                        qPost.author.displayName,
                         qPost.author.avatarURL,
                         qPost.category.id,
                         qPost.category.name))

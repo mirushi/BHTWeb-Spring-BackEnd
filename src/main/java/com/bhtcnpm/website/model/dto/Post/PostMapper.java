@@ -33,14 +33,14 @@ public abstract class PostMapper {
     protected TagMapper tagMapper;
 
     @Mapping(target = "authorID", source = "post.author.id")
-    @Mapping(target = "authorName", source = "post.author.name", qualifiedBy = {})
+    @Mapping(target = "authorDisplayName", source = "post.author.displayName", qualifiedBy = {})
     @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     public abstract PostSummaryDTO postToPostSummaryDTO (Post post);
 
     @Mapping(target = "authorID", source = "post.author.id")
-    @Mapping(target = "authorName", source = "post.author.name", qualifiedBy = {})
+    @Mapping(target = "authorDisplayName", source = "post.author.displayName", qualifiedBy = {})
     @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")

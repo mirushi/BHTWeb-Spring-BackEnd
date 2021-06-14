@@ -18,12 +18,12 @@ public class PostSummaryDTO {
     private LocalDateTime publishDtm;
     private Integer readingTime;
     private UUID authorID;
-    private String authorName;
+    private String authorDisplayName;
     private String authorAvatarURL;
     private Long categoryID;
     private String categoryName;
 
-    public PostSummaryDTO(Long id, String title, String summary, String imageURL, LocalDateTime publishDtm, Integer readingTime, UUID authorID, String authorName, String authorAvatarURL, Long categoryID, String categoryName) {
+    public PostSummaryDTO(Long id, String title, String summary, String imageURL, LocalDateTime publishDtm, Integer readingTime, UUID authorID, String authorDisplayName, String authorAvatarURL, Long categoryID, String categoryName) {
         this.id = id;
         this.title = title;
         this.summary = summary;
@@ -31,7 +31,7 @@ public class PostSummaryDTO {
         this.publishDtm = publishDtm;
         this.readingTime = readingTime;
         this.authorID = authorID;
-        this.authorName = authorName;
+        this.authorDisplayName = authorDisplayName;
         this.authorAvatarURL = authorAvatarURL;
         this.categoryID = categoryID;
         this.categoryName = categoryName;

@@ -18,7 +18,7 @@ public class PostSummaryWithStateDTO {
     private LocalDateTime publishDtm;
     private Integer readingTime;
     private UUID authorID;
-    private String authorName;
+    private String authorDisplayName;
     private String authorAvatarURL;
     private Long categoryID;
     private String categoryName;
