@@ -26,7 +26,7 @@ public interface PostService {
             "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).READ_PERMISSION)")
     List<PostStatisticDTO> getPostStatistic (List<@PostID Long> postIDs, Authentication authentication);
 
-    PostSummaryListDTO getPostSummary (Predicate predicate, @Pagination Integer paginator, boolean mostLiked, boolean mostViewed, Authentication authentication);
+    PostSummaryListDTO getPostSummary (Predicate predicate, Pageable pageable, boolean mostLiked, boolean mostViewed, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#id, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +

@@ -71,8 +71,8 @@ public class PostController {
     public ResponseEntity<PostSummaryListDTO> getPostSummary (@QuerydslPredicate(root = Post.class) Predicate predicate,
                                                               @RequestParam(value = "mostLiked", required = false) boolean mostLiked,
                                                               @RequestParam(value = "mostViewed", required = false) boolean mostViewed,
-                                                              @NotNull @Pagination Integer paginator, Authentication authentication) {
-        PostSummaryListDTO postSummaryListDTO = postService.getPostSummary(predicate, paginator, mostLiked, mostViewed, authentication);
+                                                              @PageableDefault @Nullable Pageable pageable, Authentication authentication) {
+        PostSummaryListDTO postSummaryListDTO = postService.getPostSummary(predicate, pageable, mostLiked, mostViewed, authentication);
 
         return new ResponseEntity<>(postSummaryListDTO, HttpStatus.OK);
     }

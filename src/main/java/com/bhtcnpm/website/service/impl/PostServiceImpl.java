@@ -19,6 +19,7 @@ import com.bhtcnpm.website.security.predicate.PostComment.PostCommentPredicateGe
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.PostService;
 import com.bhtcnpm.website.service.PostViewService;
+import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -77,7 +78,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSummaryListDTO getPostSummary(Predicate predicate, Integer paginator, boolean mostLiked, boolean mostViewed, Authentication authentication) {
+    public PostSummaryListDTO getPostSummary(Predicate predicate, Pageable pageable, boolean mostLiked, boolean mostViewed, Authentication authentication) {
         //Only allow sort by one field at a time.
         if (mostLiked && mostViewed) {
             throw new IllegalArgumentException("Only use mostLiked or mostViewed one at a time.");
@@ -89,7 +90,7 @@ public class PostServiceImpl implements PostService {
         BooleanExpression postAllowedBusinessState = PostPredicateGenerator.getBooleanExpressionOnBusinessState(PostBusinessState.PUBLIC);
         BooleanExpression finalPredicate = authorizationExpression.and(postAllowedBusinessState).and(predicate);
 
-        Pageable pageable = PageRequest.of(paginator, PAGE_SIZE);
+        pageable = PaginatorUtils.getPageableWithNewPageSize(pageable, PAGE_SIZE);
 
         PostSummaryListDTO finalResult;
 
