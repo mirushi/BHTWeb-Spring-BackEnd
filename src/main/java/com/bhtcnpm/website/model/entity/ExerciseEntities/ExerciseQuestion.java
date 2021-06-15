@@ -31,8 +31,8 @@ public class ExerciseQuestion {
     @Column(name = "rank")
     private Integer rank;
 
-    @Column(name = "explaination")
-    private String explaination;
+    @Column(name = "explanation")
+    private String explanation;
 
     @ManyToOne
     private Exercise exercise;

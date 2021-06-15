@@ -29,11 +29,14 @@ public class Exercise {
     )
     private Long id;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
     private String description;
 
-    private Long suggestedDuration;
+    @Column(name = "suggested_duration")
+    private Integer suggestedDuration;
 
     @Column(name = "submit_dtm", nullable = false, updatable = false)
     private LocalDateTime submitDtm;
