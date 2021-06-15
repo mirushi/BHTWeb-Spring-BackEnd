@@ -9,10 +9,7 @@ import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +24,9 @@ public class ExerciseSubjectController {
     @GetMapping
     @ResponseBody
     public ResponseEntity<List<ExerciseSubjectSummaryDTO>> getExerciseSubject (
+            //This input is for doc displaying purpose only.
+            //This is unknown why removing this cause the doc don't display QuerydslPredicate.
+            @RequestParam(required = false) Integer thisInputIsOptionalAndDontHaveEffect,
             @QuerydslPredicate(root = ExerciseSubject.class) Predicate predicate) {
         List<ExerciseSubjectSummaryDTO> exerciseSubjectSummaryDTOList = exerciseSubjectService.getExerciseSubject(predicate);
 

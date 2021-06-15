@@ -40,5 +40,17 @@
     "id": 7,
     "name": "Bộ môn Toán Lý",
     "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubjectFaculty",
+    "id": 8,
+    "name": "Phòng Đào tạo Đại học",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubjectFaculty",
+    "id": 9,
+    "name": "Khác",
+    "version": 0
   }
 ]
