@@ -1,0 +1,44 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubjectFaculty",
+    "id": 1,
+    "name": "Công nghệ Phần mềm",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubjectFaculty",
+    "id": 2,
+    "name": "Hệ thống Thông tin",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubjectFaculty",
+    "id": 3,
+    "name": "Kỹ thuật Máy tính",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubjectFaculty",
+    "id": 4,
+    "name": "Mạng máy tính và Truyền thông",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubjectFaculty",
+    "id": 5,
+    "name": "Khoa học Máy tính",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubjectFaculty",
+    "id": 6,
+    "name": "Khoa học và Kỹ thuật Thông tins",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubjectFaculty",
+    "id": 7,
+    "name": "Bộ môn Toán Lý",
+    "version": 0
+  }
+]

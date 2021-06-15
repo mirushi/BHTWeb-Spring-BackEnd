@@ -63,6 +63,13 @@ public class Exercise {
     )
     private Set<Tag> tags;
 
+    @OneToMany(
+            mappedBy = "exercise",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<ExerciseAttempt> exerciseAttempts;
+
     @Version
     private short version;
 

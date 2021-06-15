@@ -1,10 +1,8 @@
 package com.bhtcnpm.website.service.impl;
 
-import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.business.Post.PostActionAvailableConstant;
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
-import com.bhtcnpm.website.constant.domain.PostComment.PostCommentBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest;
 import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest;
 import com.bhtcnpm.website.model.dto.Post.*;
@@ -15,16 +13,13 @@ import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.*;
 import com.bhtcnpm.website.security.evaluator.Post.PostPermissionEvaluator;
 import com.bhtcnpm.website.security.predicate.Post.PostPredicateGenerator;
-import com.bhtcnpm.website.security.predicate.PostComment.PostCommentPredicateGenerator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.PostService;
 import com.bhtcnpm.website.service.PostViewService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import lombok.RequiredArgsConstructor;
-import org.jboss.logging.annotations.Pos;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,11 +27,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

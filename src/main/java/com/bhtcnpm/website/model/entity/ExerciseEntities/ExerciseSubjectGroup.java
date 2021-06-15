@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExerciseSubjectGroup {
+    public class ExerciseSubjectGroup {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
