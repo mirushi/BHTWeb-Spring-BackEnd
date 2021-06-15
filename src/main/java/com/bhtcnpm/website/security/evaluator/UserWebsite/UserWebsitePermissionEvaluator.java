@@ -75,11 +75,8 @@ public class UserWebsitePermissionEvaluator implements SimplePermissionEvaluator
 
         //Kiểm tra quyền read details.
         if (UserWebsiteActionPermissionRequest.READ_DETAIL_PERMISSION.equals(permission)) {
-            //Only allow authenticated user to access user details information.
-            if (SecurityUtils.containsAuthority(authentication, UserWebsitePermissionConstant.USER_ALL_ALL_READ)) {
-                return true;
-            }
-            return false;
+            //Everyone is allowed to read specific user details.
+            return true;
         }
 
         throw new IllegalArgumentException("Permission not supported.");
