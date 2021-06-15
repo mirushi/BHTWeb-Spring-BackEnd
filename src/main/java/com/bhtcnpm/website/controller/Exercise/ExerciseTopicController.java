@@ -1,16 +1,47 @@
 package com.bhtcnpm.website.controller.Exercise;
 
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseTopicDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseTopicWithExerciseListDTO;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic;
+import com.bhtcnpm.website.service.Exercise.ExerciseTopicService;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/exercises/topics")
 @Validated
 @RequiredArgsConstructor
 public class ExerciseTopicController {
 
+    private final ExerciseTopicService exerciseTopicService;
 
+    @GetMapping("/exercises/topics")
+    @ResponseBody
+    public ResponseEntity<List<ExerciseTopicDTO>> getExerciseTopics (
+            //This input is for doc displaying purpose only.
+            //It is unknown why removing this cause the doc don't display QuerydslPredicate.
+            @RequestParam(required = false) Integer thisInputIsOptionalAndDontHaveEffect,
+            @QuerydslPredicate(root = ExerciseTopic.class) Predicate predicate) {
+        List<ExerciseTopicDTO> exerciseTopicDTOList = exerciseTopicService.getAllExerciseTopicsBySubject(predicate);
 
+        return new ResponseEntity<>(exerciseTopicDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping("/exercises/topicsWithExercises")
+    @ResponseBody
+    public ResponseEntity<List<ExerciseTopicWithExerciseListDTO>> getExerciseTopicsWithExerciseList (
+            @RequestParam Long subjectID, Authentication authentication
+    ) {
+        List<ExerciseTopicWithExerciseListDTO> exerciseTopicWithExerciseListDTOs = exerciseTopicService
+                .getAllExerciseTopicsWithExerciseList(subjectID, authentication);
+
+        return new ResponseEntity<>(exerciseTopicWithExerciseListDTOs, HttpStatus.OK);
+    }
 }

@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.service.Exercise.impl;
 
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO;
 import com.bhtcnpm.website.model.dto.Exercise.mapper.ExerciseMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
@@ -36,9 +37,26 @@ public class ExerciseServiceImpl implements ExerciseService {
             exerciseSummaryDTOList = exerciseMapper.exerciseIterableToExerciseSummaryDTOList(exerciseIterable);
         } else {
             BooleanExpression userAttempt = ExercisePredicateGenerator.getBooleanExpressionExerciseUserAttempt(userID);
-            exerciseSummaryDTOList = exerciseRepository.getExerciseSummaryWithUserAttempt(userAttempt.and(predicate));
+            exerciseSummaryDTOList = exerciseRepository.getExerciseSummaryWithUserAttempts(userAttempt.and(predicate));
         }
 
         return exerciseSummaryDTOList;
+    }
+
+    @Override
+    public List<ExerciseSummaryWithTopicDTO> getExerciseWithTopic(Predicate predicate, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+
+        List<ExerciseSummaryWithTopicDTO> exerciseSummaryWithTopicDTOList;
+
+        if (userID == null) {
+            Iterable<Exercise> exerciseIterable = exerciseRepository.findAll(predicate);
+            exerciseSummaryWithTopicDTOList = exerciseMapper.exerciseIterableToExerciseSummaryWithTopicDTOList(exerciseIterable);
+        } else {
+            BooleanExpression userAttempt = ExercisePredicateGenerator.getBooleanExpressionExerciseUserAttempt(userID);
+            exerciseSummaryWithTopicDTOList = exerciseRepository.getExerciseSummaryWithTopicAndUserAttempts(userAttempt.and(predicate));
+        }
+
+        return exerciseSummaryWithTopicDTOList;
     }
 }

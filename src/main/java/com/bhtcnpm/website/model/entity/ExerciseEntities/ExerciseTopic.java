@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "exercise_topic")
@@ -13,6 +14,12 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedEntityGraph(
+        name = "exercises.all",
+        attributeNodes = {
+                @NamedAttributeNode(value = "exercises")
+        }
+)
 public class ExerciseTopic {
     @Id
     @GeneratedValue(
@@ -30,6 +37,13 @@ public class ExerciseTopic {
 
     @ManyToOne
     private ExerciseSubject subject;
+
+    @OneToMany (
+            mappedBy = "topic",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Exercise> exercises;
 
     @Version
     private short version;

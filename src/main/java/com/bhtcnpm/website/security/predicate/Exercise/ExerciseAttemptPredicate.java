@@ -6,7 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import java.util.UUID;
 
 public class ExerciseAttemptPredicate {
-    private static QExerciseAttempt qExerciseAttempt;
+    private static QExerciseAttempt qExerciseAttempt = QExerciseAttempt.exerciseAttempt;
 
     public static BooleanExpression attemptOfUser (UUID userID) { return qExerciseAttempt.user.id.eq(userID); }
 }

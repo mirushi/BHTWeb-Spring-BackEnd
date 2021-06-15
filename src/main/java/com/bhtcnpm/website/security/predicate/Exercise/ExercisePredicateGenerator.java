@@ -8,4 +8,7 @@ public class ExercisePredicateGenerator {
     public static BooleanExpression getBooleanExpressionExerciseUserAttempt (UUID userID) {
         return ExerciseAttemptPredicate.attemptOfUser(userID);
     }
+    public static BooleanExpression getBooleanExpressionAllExerciseOfSubject (Long subjectID) {
+        return ExercisePredicate.bySubjectID(subjectID);
+    }
 }
