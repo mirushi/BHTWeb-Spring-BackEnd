@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.springframework.core.log.LogMessage;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -57,10 +58,13 @@ public class UserWebsitePermissionEvaluator implements SimplePermissionEvaluator
     }
 
     private boolean checkUserWebsitePermission (Authentication authentication, UserWebsite targetDomainObject, String permission) {
-        UUID currentUserID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+        UUID currentUserID = SecurityUtils.getUserID(authentication);
 
         //Kiểm tra quyền update.
         if (UserWebsiteActionPermissionRequest.UPDATE_PERMISSION.equals(permission)) {
+            if (currentUserID == null) {
+                return false;
+            }
             if (currentUserID.equals(targetDomainObject.getId())) {
                 if (SecurityUtils.containsAuthority(authentication, UserWebsitePermissionConstant.USER_ALL_SELF_UPDATE)) {
                     return true;
