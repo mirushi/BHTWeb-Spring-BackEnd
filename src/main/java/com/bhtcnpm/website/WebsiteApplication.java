@@ -15,7 +15,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.config.BootstrapMode;
 import org.springframework.data.repository.init.Jackson2RepositoryPopulatorFactoryBean;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -74,7 +73,8 @@ public class WebsiteApplication {
                 new ClassPathResource("data/Exercise/exercise-subject.json"),
                 new ClassPathResource("data/Exercise/exercise-topic.json"),
                 new ClassPathResource("data/Exercise/exercise-category.json"),
-                new ClassPathResource("data/Exercise/exercise.json")
+                new ClassPathResource("data/Exercise/exercise.json"),
+                new ClassPathResource("data/Exercise/exercise-question-chuong01-nmlt.json")
         });
         factoryBean.setMapper(objectMapper);
 

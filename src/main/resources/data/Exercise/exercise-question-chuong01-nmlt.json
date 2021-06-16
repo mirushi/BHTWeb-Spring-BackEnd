@@ -1,0 +1,166 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 1,
+    "content": "Một chương trình máy tính là một dãy những chỉ thị nhắm tới việc thực hiện một nhiệm vụ đã được xác định trước. \n Định nghĩa này đúng hay sai ? ",
+    "rank": 1,
+    "explanation": "Đây là một định nghĩa đúng. Xem lại slide Nhập môn lập trình Chương 01 trang 8.",
+    "exercise": {
+      "id": 1
+    },
+    "answers": [
+      {"content": "Đúng", "isCorrect": true, "rank": 1, "question": {"id": 1} ,"version": 0},
+      {"content": "Sai", "isCorrect": false, "rank": 2, "question": {"id": 1} ,"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 2,
+    "content": "Ngôn ngữ hợp ngữ là ngôn ngữ lập trình cấp cao, nhận định này đúng hay sai ?",
+    "rank": 2,
+    "explanation": "Đây là một nhận định sai. Ngôn ngữ hợp ngữ là ngôn ngữ lập trình cấp thấp. \nXem lại slide Nhập môn lập trình Chương 01 trang 10.",
+    "exercise": {
+      "id": 1
+    },
+    "answers": [
+      {"content": "Đúng", "isCorrect": false, "rank": 1,"question": {"id": 2},"version": 0},
+      {"content": "Sai", "isCorrect": true, "rank": 2,"question": {"id": 2},"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 3,
+    "content": "Java là ngôn ngữ lập trình cấp thấp. Nhận định này đúng hay sai ?",
+    "rank": 3,
+    "explanation": "Đây là nhận định sai. Java là ngôn ngữ lập trình cấp cao vì nó hỗ trợ nhiều tính năng nâng cao như GC,... ",
+    "exercise": {
+      "id": 1
+    },
+    "answers": [
+      {"content": "Đúng", "isCorrect": false, "rank": 1,"question": {"id": 3},"version": 0},
+      {"content": "Sai", "isCorrect": true, "rank": 2,"question": {"id": 3},"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 4,
+    "content": "Điền vào chỗ trống: Thuật toán là tập hợp hữu hạn các _______ được định nghĩa rõ ràng nhằm giải quyết \n một bài toán cụ thể nào đó.",
+    "rank": 4,
+    "explanation": "Trang 15 Chương 01 bài giảng Nhập môn lập trình.",
+    "exercise": {
+      "id": 1
+    },
+    "answers": [
+      {"content": "mật mã", "isCorrect": false, "rank": 1,"question": {"id": 4},"version": 0},
+      {"content": "chỉ thị", "isCorrect": true, "rank": 2,"question": {"id": 4},"version": 0},
+      {"content": "nghệ thuật", "isCorrect": false, "rank": 3,"question": {"id": 4},"version": 0},
+      {"content": "mật khẩu", "isCorrect": false, "rank": 4,"question": {"id": 4},"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 5,
+    "content": "Điền vào chỗ trống: Hệ đếm là một tập các kí hiệu để biểu diễn  _______ và xác định giá trị của các biểu diễn số",
+    "rank": 5,
+    "explanation": "Trang 18 Chương 01 bài giảng NMLT.",
+    "exercise": {
+      "id": 1
+    },
+    "answers": [
+      {"content": "các số", "isCorrect": true, "rank": 1,"question": {"id": 5},"version": 0},
+      {"content": "các chữ", "isCorrect": false, "rank": 2,"question": {"id": 5},"version": 0},
+      {"content": "các từ", "isCorrect": false, "rank": 3,"question": {"id": 5},"version": 0},
+      {"content": "các danh từ", "isCorrect": false, "rank": 4,"question": {"id": 5},"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 6,
+    "content": "Tập kí hiệu của số nhị phân chứa bao nhiêu kí hiệu ?",
+    "rank": 6,
+    "explanation": "Tập kí hiệu của số nhị phân bao gồm hai kí hiệu: 0 và 1.",
+    "exercise": {
+      "id": 1
+    },
+    "answers": [
+      {"content": "0", "isCorrect": false, "rank": 1,"question": {"id": 6},"version": 0},
+      {"content": "1", "isCorrect": false, "rank": 2,"question": {"id": 6},"version": 0},
+      {"content": "2", "isCorrect": true, "rank": 3,"question": {"id": 6},"version": 0},
+      {"content": "3", "isCorrect": false, "rank": 4,"question": {"id": 6},"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 7,
+    "content": "Số thập phân sau tương ứng với số bao nhiêu trong hệ nhị phân ? \n 48",
+    "rank": 7,
+    "explanation": "Xem cách chuyển đổi hệ đếm các số từ trang 24 chương 01 của tài liệu NMLT.",
+    "exercise": {
+      "id": 1
+    },
+    "answers": [
+      {"content": "110000", "isCorrect": true, "rank": 1,"question": {"id": 7},"version": 0},
+      {"content": "110001", "isCorrect": false, "rank": 2,"question": {"id": 7},"version": 0},
+      {"content": "110010", "isCorrect": false, "rank": 3,"question": {"id": 7},"version": 0},
+      {"content": "110011", "isCorrect": false, "rank": 4,"question": {"id": 7},"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 8,
+    "content": "Số thập phân sau tương ứng với số bao nhiêu trong hệ nhị phân ? \n 62",
+    "rank": 8,
+    "explanation": "Xem cách chuyển đổi hệ đếm các số từ trang 24 chương 01 của tài liệu NMLT.",
+    "exercise": {
+      "id": 1
+    },
+    "answers": [
+      {"content": "111101", "isCorrect": false, "rank": 1,"question": {"id": 8},"version": 0},
+      {"content": "111111", "isCorrect": false, "rank": 2,"question": {"id": 8},"version": 0},
+      {"content": "111110", "isCorrect": true, "rank": 3,"question": {"id": 8},"version": 0},
+      {"content": "111100", "isCorrect": false, "rank": 4,"question": {"id": 8},"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 9,
+    "content": "Số thập lục phân sau tương ứng với số bao nhiêu trong hệ thập phân ? \n 4B",
+    "rank": 9,
+    "explanation": "Xem cách chuyển đổi hệ đếm các số từ trang 24 chương 01 của tài liệu NMLT.",
+    "exercise": {
+      "id": 1
+    },
+    "answers": [
+      {"content": "73", "isCorrect": false, "rank": 1,"question": {"id": 9},"version": 0},
+      {"content": "74", "isCorrect": false, "rank": 2,"question": {"id": 9},"version": 0},
+      {"content": "75", "isCorrect": true, "rank": 3,"question": {"id": 9},"version": 0},
+      {"content": "76", "isCorrect": false, "rank": 4,"question": {"id": 9},"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 10,
+    "content": "Số thập lục phân sau tương ứng với số bao nhiêu trong hệ nhị phân ? \n B2",
+    "rank": 10,
+    "explanation": "Xem cách chuyển đổi hệ đếm các số từ trang 24 chương 01 của tài liệu NMLT.",
+    "exercise": {
+      "id": 1
+    },
+    "answers": [
+      {"content": "10110001", "isCorrect": false, "rank": 1,"question": {"id": 10},"version": 0},
+      {"content": "10110010", "isCorrect": true, "rank": 2,"question": {"id": 10},"version": 0},
+      {"content": "10110011", "isCorrect": false, "rank": 3,"question": {"id": 10},"version": 0},
+      {"content": "10110100", "isCorrect": false, "rank": 4,"question": {"id": 10},"version": 0}
+    ],
+    "version": 0
+  }
+]

@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "exercise_question")
@@ -13,6 +15,18 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedEntityGraph(
+        name = "answers.all",
+        attributeNodes = {
+                @NamedAttributeNode(value = "answers")
+        }
+)
+@NamedEntityGraph(
+        name = "answers.correct",
+        attributeNodes = {
+                @NamedAttributeNode(value = "correctAnswers")
+        }
+)
 public class ExerciseQuestion {
     @Id
     @GeneratedValue(
@@ -36,6 +50,21 @@ public class ExerciseQuestion {
 
     @ManyToOne
     private Exercise exercise;
+
+    @OneToMany(
+            mappedBy = "question",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ExerciseAnswer> answers;
+
+    @OneToMany(
+            mappedBy = "question",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Where(clause = "is_correct = true")
+    private List<ExerciseAnswer> correctAnswers;
 
     @Version
     private short version;

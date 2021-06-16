@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ExerciseQuestionWithAnswers {
+public class ExerciseQuestionWithAnswersDTO {
     private Long id;
     private String content;
     private Integer rank;
