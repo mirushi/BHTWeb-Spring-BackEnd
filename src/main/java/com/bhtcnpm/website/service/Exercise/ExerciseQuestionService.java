@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface ExerciseQuestionService {
     List<ExerciseQuestionWithAnswersDTO> getExerciseQuestionWithAnswers (Long exerciseID);
-    List<ExerciseQuestionResultDTO> submitAttemptAndGetResult (List<ExerciseQuestionSubmitDTO> submitDTOs, Authentication authentication);
+    List<ExerciseQuestionResultDTO> submitAttemptAndGetResult (Long exerciseID , List<ExerciseQuestionSubmitDTO> submitDTOs, Authentication authentication);
 }

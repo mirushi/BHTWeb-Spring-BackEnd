@@ -31,9 +31,10 @@ public class ExerciseQuestionController {
 
     @PostMapping("/exercises/{exerciseID}/attempt")
     @ResponseBody
-    public ResponseEntity<List<ExerciseQuestionResultDTO>> submitAttempt (@RequestBody List<ExerciseQuestionSubmitDTO> submitDTO,
+    public ResponseEntity<List<ExerciseQuestionResultDTO>> submitAttempt (@PathVariable("exerciseID") Long exerciseID,
+                                                                          @RequestBody List<ExerciseQuestionSubmitDTO> submitDTO,
                                                                           Authentication authentication) {
-        List<ExerciseQuestionResultDTO> resultDTOs = exerciseQuestionService.submitAttemptAndGetResult(submitDTO, authentication);
+        List<ExerciseQuestionResultDTO> resultDTOs = exerciseQuestionService.submitAttemptAndGetResult(exerciseID, submitDTO, authentication);
 
         return new ResponseEntity<>(resultDTOs, HttpStatus.OK);
     }
