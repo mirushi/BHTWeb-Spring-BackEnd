@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.entity;
 
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.PostCategory;
 import com.fasterxml.jackson.annotation.*;
@@ -66,6 +67,13 @@ public class Tag {
     @JsonIgnore
     @IndexedEmbedded(includeDepth = 2)
     private Set<Post> posts;
+
+    @ManyToMany (mappedBy = "tags")
+    @EqualsAndHashCode.Exclude
+    //We don't need this to be serialized.
+    @ToString.Exclude
+    @JsonIgnore
+    private Set<Exercise> exercises;
 
     @Version
     private short version;

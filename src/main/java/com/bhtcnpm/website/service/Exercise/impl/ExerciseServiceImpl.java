@@ -1,9 +1,12 @@
 package com.bhtcnpm.website.service.Exercise.impl;
 
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseStatisticDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO;
 import com.bhtcnpm.website.model.dto.Exercise.mapper.ExerciseMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
+import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
 import com.bhtcnpm.website.security.predicate.Exercise.ExerciseOrderingGenerator;
 import com.bhtcnpm.website.security.predicate.Exercise.ExercisePredicateGenerator;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -62,5 +66,24 @@ public class ExerciseServiceImpl implements ExerciseService {
         }
 
         return exerciseSummaryWithTopicDTOList;
+    }
+
+    @Override
+    public ExerciseDetailsDTO getExerciseDetails(Long id) {
+        Optional<Exercise> object = exerciseRepository.findByIDWithTags(id);
+        if (object.isEmpty()) {
+            throw new IDNotFoundException();
+        }
+
+        Exercise entity = object.get();
+
+        return exerciseMapper.exerciseToExerciseDetailsDTO(entity);
+    }
+
+    @Override
+    public List<ExerciseStatisticDTO> getExerciseStatistics(List<Long> exerciseIDs) {
+        List<ExerciseStatisticDTO> exerciseStatisticDTOList = exerciseRepository.getExercisesStatisticDTOs(exerciseIDs);
+
+        return exerciseStatisticDTOList;
     }
 }

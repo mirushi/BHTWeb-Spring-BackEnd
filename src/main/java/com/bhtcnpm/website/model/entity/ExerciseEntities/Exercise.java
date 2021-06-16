@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -72,6 +73,13 @@ public class Exercise {
             orphanRemoval = true
     )
     private Set<ExerciseAttempt> exerciseAttempts;
+
+    @OneToMany(
+            mappedBy = "exercise",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ExerciseQuestion> exerciseQuestions;
 
     @Version
     private short version;

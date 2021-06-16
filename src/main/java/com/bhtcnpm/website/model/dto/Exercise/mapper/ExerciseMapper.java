@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.dto.Exercise.mapper;
 
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
@@ -18,6 +19,19 @@ public interface ExerciseMapper {
     @Mapping(target = "topicName", source = "topic.name")
     ExerciseSummaryWithTopicDTO exerciseToExerciseSummaryWithTopicDTO (Exercise exercise);
 
+    ExerciseSummaryDTO exerciseWithTopicToExerciseSummaryDTOList (ExerciseSummaryWithTopicDTO exerciseSummaryWithTopicDTO);
+
+    @Mapping(target = "authorID", source = "author.id")
+    @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
+    @Mapping(target = "authorDisplayName", source = "author.displayName")
+    @Mapping(target = "categoryID", source = "category.id")
+    @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "topicID", source = "topic.id")
+    @Mapping(target = "topicName", source = "topic.name")
+    @Mapping(target = "subjectID", source = "topic.subject.id")
+    @Mapping(target = "subjectName", source = "topic.subject.name")
+    ExerciseDetailsDTO exerciseToExerciseDetailsDTO (Exercise exercise);
+
     List<ExerciseSummaryWithTopicDTO> exerciseIterableToExerciseSummaryWithTopicDTOList (Iterable<Exercise> exerciseIterable);
 
     List<ExerciseSummaryWithTopicDTO> exerciseListToExerciseSummaryWithTopicDTOList (List<Exercise> exerciseList);
@@ -26,5 +40,4 @@ public interface ExerciseMapper {
 
     List<ExerciseSummaryDTO> exerciseListToExerciseSummaryDTOList (List<Exercise> exerciseList);
 
-    ExerciseSummaryDTO exerciseWithTopicToExerciseSummaryDTOList (ExerciseSummaryWithTopicDTO exerciseSummaryWithTopicDTO);
 }

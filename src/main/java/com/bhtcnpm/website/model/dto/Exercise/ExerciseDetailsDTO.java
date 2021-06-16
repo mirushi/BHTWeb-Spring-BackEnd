@@ -12,11 +12,12 @@ public class ExerciseDetailsDTO {
     private Long id;
     private String title;
     private String description;
-    private Integer totalQuestions;
     private Integer suggestedDuration;
     private Set<TagDTO> tags;
     private Long categoryID;
     private String categoryName;
+    private Long topicID;
+    private String topicName;
     private Long subjectID;
     private String subjectName;
     private UUID authorID;

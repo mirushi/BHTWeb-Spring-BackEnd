@@ -1,5 +1,7 @@
 package com.bhtcnpm.website.service.Exercise;
 
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseStatisticDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO;
 import com.querydsl.core.types.Predicate;
@@ -10,4 +12,6 @@ import java.util.List;
 public interface ExerciseService {
     List<ExerciseSummaryDTO> getExerciseList (Predicate predicate, Authentication authentication);
     List<ExerciseSummaryWithTopicDTO> getExerciseWithTopic (Predicate predicate, Authentication authentication);
+    ExerciseDetailsDTO getExerciseDetails (Long id);
+    List<ExerciseStatisticDTO> getExerciseStatistics (List<Long> exerciseIDs);
 }
