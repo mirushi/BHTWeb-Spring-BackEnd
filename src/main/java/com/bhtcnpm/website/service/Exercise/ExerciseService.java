@@ -1,9 +1,6 @@
 package com.bhtcnpm.website.service.Exercise;
 
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseStatisticDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO;
+import com.bhtcnpm.website.model.dto.Exercise.*;
 import com.querydsl.core.types.Predicate;
 import org.springframework.security.core.Authentication;
 
@@ -14,4 +11,5 @@ public interface ExerciseService {
     List<ExerciseSummaryWithTopicDTO> getExerciseWithTopic (Predicate predicate, Authentication authentication);
     ExerciseDetailsDTO getExerciseDetails (Long id);
     List<ExerciseStatisticDTO> getExerciseStatistics (List<Long> exerciseIDs);
+    List<ExerciseUserStatisticDTO> getExerciseUserStatistic (List<Long> exerciseIDs, Authentication authentication);
 }

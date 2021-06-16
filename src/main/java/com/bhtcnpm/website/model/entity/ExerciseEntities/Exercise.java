@@ -81,6 +81,13 @@ public class Exercise {
     )
     private List<ExerciseQuestion> exerciseQuestions;
 
+    @OneToMany(
+            mappedBy = "exerciseNoteId.exercise",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ExerciseNote> exerciseNotes;
+
     @Version
     private short version;
 

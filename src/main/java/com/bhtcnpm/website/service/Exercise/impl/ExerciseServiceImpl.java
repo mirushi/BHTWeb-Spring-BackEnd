@@ -1,9 +1,6 @@
 package com.bhtcnpm.website.service.Exercise.impl;
 
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseStatisticDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO;
+import com.bhtcnpm.website.model.dto.Exercise.*;
 import com.bhtcnpm.website.model.dto.Exercise.mapper.ExerciseMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
@@ -85,5 +82,19 @@ public class ExerciseServiceImpl implements ExerciseService {
         List<ExerciseStatisticDTO> exerciseStatisticDTOList = exerciseRepository.getExercisesStatisticDTOs(exerciseIDs);
 
         return exerciseStatisticDTOList;
+    }
+
+    @Override
+    public List<ExerciseUserStatisticDTO> getExerciseUserStatistic(List<Long> exerciseIDs, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+        List<ExerciseUserStatisticDTO> exerciseUserStatisticDTOs;
+
+        if (userID == null) {
+            exerciseUserStatisticDTOs = exerciseMapper.exerciseIDListToExerciseUserStatisticDTOList(exerciseIDs);
+        } else {
+            exerciseUserStatisticDTOs = exerciseRepository.getExerciseUserStatisticDTOs(exerciseIDs, userID);
+        }
+
+        return exerciseUserStatisticDTOs;
     }
 }

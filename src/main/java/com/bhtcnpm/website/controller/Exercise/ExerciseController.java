@@ -3,6 +3,7 @@ package com.bhtcnpm.website.controller.Exercise;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseStatisticDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseUserStatisticDTO;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.service.Exercise.ExerciseService;
 import com.querydsl.core.types.Predicate;
@@ -49,4 +50,12 @@ public class ExerciseController {
         return new ResponseEntity<>(exerciseStatisticDTOList, HttpStatus.OK);
     }
 
+    @GetMapping("/statistics/user")
+    @ResponseBody
+    public ResponseEntity<List<ExerciseUserStatisticDTO>> getExerciseUserStatistics (@RequestParam List<Long> exerciseIDs,
+                                                                               Authentication authentication) {
+        List<ExerciseUserStatisticDTO> exerciseUserStatisticDTO = exerciseService.getExerciseUserStatistic(exerciseIDs, authentication);
+
+        return new ResponseEntity<>(exerciseUserStatisticDTO, HttpStatus.OK);
+    }
 }

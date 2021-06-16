@@ -3,6 +3,7 @@ package com.bhtcnpm.website.model.dto.Exercise.mapper;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseUserStatisticDTO;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,6 +12,12 @@ import java.util.List;
 
 @Mapper
 public interface ExerciseMapper {
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "bestCorrectQuestions", ignore = true)
+    @Mapping(target = "notes", ignore = true)
+    ExerciseUserStatisticDTO exerciseIDToExerciseUserStatisticDTO (Long id);
+
     @Mapping(target = "attempted", constant = "false")
     ExerciseSummaryDTO exerciseToExerciseSummaryDTO (Exercise exercise);
 
@@ -39,5 +46,7 @@ public interface ExerciseMapper {
     List<ExerciseSummaryDTO> exerciseIterableToExerciseSummaryDTOList (Iterable<Exercise> exerciseIterable);
 
     List<ExerciseSummaryDTO> exerciseListToExerciseSummaryDTOList (List<Exercise> exerciseList);
+
+    List<ExerciseUserStatisticDTO> exerciseIDListToExerciseUserStatisticDTOList (List<Long> exerciseIDs);
 
 }

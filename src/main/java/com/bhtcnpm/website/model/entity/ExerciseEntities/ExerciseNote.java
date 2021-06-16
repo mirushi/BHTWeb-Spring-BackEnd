@@ -16,7 +16,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class ExerciseNote {
     @EmbeddedId
-    private ExerciseNoteId id;
+    private ExerciseNoteId exerciseNoteId;
 
     @Column(name = "notes")
     private String notes;
@@ -30,9 +30,9 @@ public class ExerciseNote {
         if (!(o instanceof ExerciseNote)) return false;
         ExerciseNote other = (ExerciseNote) o;
 
-        return Objects.equals(getId(), other.getId());
+        return Objects.equals(getExerciseNoteId(), other.getExerciseNoteId());
     }
 
     @Override
-    public int hashCode() {return Objects.hash(getId());}
+    public int hashCode() {return Objects.hash(getExerciseNoteId());}
 }

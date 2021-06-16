@@ -34,6 +34,10 @@ public class ExerciseTopicController {
         return new ResponseEntity<>(exerciseTopicDTOList, HttpStatus.OK);
     }
 
+    //This is a cheat for speed-development of front-end.
+    //This unusual API will increase coupling between backend and frontend.
+    //Move the merging result operation to front-end.
+    //TODO: Please refactor this when you have time.
     @GetMapping("/exercises/topicsWithExercises")
     @ResponseBody
     public ResponseEntity<List<ExerciseTopicWithExerciseListDTO>> getExerciseTopicsWithExerciseList (
