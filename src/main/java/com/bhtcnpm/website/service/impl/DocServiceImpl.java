@@ -4,6 +4,10 @@ import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
 import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
 import com.bhtcnpm.website.model.dto.Doc.*;
+import com.bhtcnpm.website.model.dto.Doc.mapper.DocDetailsMapper;
+import com.bhtcnpm.website.model.dto.Doc.mapper.DocDownloadInfoMapper;
+import com.bhtcnpm.website.model.dto.Doc.mapper.DocSuggestionMapper;
+import com.bhtcnpm.website.model.dto.Doc.mapper.DocSummaryMapper;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
@@ -56,6 +60,8 @@ public class DocServiceImpl implements DocService {
     private final DocSummaryMapper docSummaryMapper;
 
     private final DocRequestMapper docRequestMapper;
+
+    private final DocSuggestionMapper docSuggestionMapper;
 
     private final DocDownloadInfoMapper docDownloadInfoMapper;
 
@@ -213,6 +219,15 @@ public class DocServiceImpl implements DocService {
         List<Doc> docs = docRepository.getDocByIdNot(pageable, docID);
 
         return docDetailsMapper.docListToDocDetailsDTOList(docs);
+    }
+
+    @Override
+    public List<DocSuggestionDTO> getRelatedDocs(Long exerciseID, Integer page) {
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE_RELATED_DOC);
+
+        Page<Doc> docs = docRepository.findAll(pageable);
+
+        return docSuggestionMapper.docPageToDocSuggestionDTOList(docs);
     }
 
     @Override

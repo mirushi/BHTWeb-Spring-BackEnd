@@ -190,10 +190,20 @@ public class DocController {
 
     @GetMapping("{id}/related")
     @ResponseBody
+    @Deprecated
     public ResponseEntity<List<DocDetailsDTO>> getRelatedDocs (@PathVariable Long id) {
         List<DocDetailsDTO> docDetailsDTOs = docService.getRelatedDocs(id);
 
         return new ResponseEntity<>(docDetailsDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping("related")
+    @ResponseBody
+    public ResponseEntity<List<DocSuggestionDTO>> getRelatedDocs (@RequestParam(value = "exerciseID", required = false) Long exerciseID,
+                                                                  @RequestParam(value = "page", required = false) Integer page) {
+        List<DocSuggestionDTO> docSuggestionDTOs = docService.getRelatedDocs(exerciseID, page);
+
+        return new ResponseEntity<>(docSuggestionDTOs, HttpStatus.OK);
     }
 
     @GetMapping("statistics")

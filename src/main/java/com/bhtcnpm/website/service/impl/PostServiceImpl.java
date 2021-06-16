@@ -6,11 +6,13 @@ import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest;
 import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest;
 import com.bhtcnpm.website.model.dto.Post.*;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.*;
+import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
 import com.bhtcnpm.website.security.evaluator.Post.PostPermissionEvaluator;
 import com.bhtcnpm.website.security.predicate.Post.PostPredicateGenerator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
@@ -55,6 +57,8 @@ public class PostServiceImpl implements PostService {
     private final PostPermissionEvaluator postPermissionEvaluator;
 
     private final PostViewService postViewService;
+
+    private final ExerciseRepository exerciseRepository;
 
     private static final int PAGE_SIZE = 10;
 
@@ -385,6 +389,25 @@ public class PostServiceImpl implements PostService {
 
         return postRepository.searchRelatedPost(null, categoryID ,optEntity.get(), page ,PostBusinessConstant.RELATED_POST_MAX,
                 PostBusinessState.PUBLIC, authentication);
+    }
+
+    @Override
+    public List<PostSuggestionDTO> getRelatedPostByExercise(Long exerciseID, Integer page) throws IDNotFoundException, IOException {
+        if (page == null) {
+            page = 0;
+        }
+
+        Optional<Exercise> object = exerciseRepository.findById(exerciseID);
+        if (object.isEmpty()) {
+            throw new IDNotFoundException();
+        }
+
+        Exercise exercise = object.get();
+        final String title = exercise.getTitle();
+        final String description = exercise.getDescription();
+
+        return postRepository.searchRelatedPost(null, null, null, title, description, title.concat(description),
+                page, PostBusinessConstant.RELATED_POST_MAX, PostBusinessState.PUBLIC, null);
     }
 
     @Override

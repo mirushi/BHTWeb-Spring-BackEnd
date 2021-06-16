@@ -50,6 +50,8 @@ public interface DocService {
 
     List<DocDetailsDTO> getRelatedDocs (Long docID);
 
+    List<DocSuggestionDTO> getRelatedDocs (Long exerciseID, Integer page);
+
     List<DocSummaryDTO> getTrending ();
 
     public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, UUID userID);

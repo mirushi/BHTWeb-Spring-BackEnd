@@ -1,5 +1,7 @@
-package com.bhtcnpm.website.model.dto.Doc;
+package com.bhtcnpm.website.model.dto.Doc.mapper;
 
+import com.bhtcnpm.website.model.dto.Doc.DocSummaryDTO;
+import com.bhtcnpm.website.model.dto.Doc.DocSummaryWithStateDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

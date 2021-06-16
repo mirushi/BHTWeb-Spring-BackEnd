@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.controller;
 
-import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.model.binding.IgnorePostStateTypeBinding;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
@@ -26,10 +25,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -268,6 +265,8 @@ public class PostController {
 
     @GetMapping("relatedSameAuthor")
     @ResponseBody
+    @Deprecated
+    //TODO: Merge with related to become one API only.
     public ResponseEntity<List<PostSuggestionDTO>> relatedSameAuthor (
             @RequestParam("authorID") UUID authorID,
             @RequestParam("postID") @PostID Long postID,
@@ -278,11 +277,20 @@ public class PostController {
 
     @GetMapping("relatedSameCategory")
     @ResponseBody
+    @Deprecated
+    //TODO: Merge with related to become one API only.
     public ResponseEntity<List<PostSuggestionDTO>> relatedSameCategory (
             @RequestParam("categoryID") Long categoryID,
             @RequestParam("postID") @PostID Long postID,
             @RequestParam(value = "page", required = false) @Pagination Integer page, Authentication authentication) throws IDNotFoundException, IOException {
         return new ResponseEntity<>(postService.getRelatedPostSameCategory(categoryID, postID, page, authentication), HttpStatus.OK);
+    }
+
+    @GetMapping("related")
+    @ResponseBody
+    public ResponseEntity<List<PostSuggestionDTO>> related (@RequestParam(value = "exerciseID", required = false) Long exerciseID,
+                                                            @RequestParam(value = "page", required = false) Integer page) throws IOException {
+        return new ResponseEntity<>(postService.getRelatedPostByExercise(exerciseID, page), HttpStatus.OK);
     }
 
     @GetMapping("myPosts")

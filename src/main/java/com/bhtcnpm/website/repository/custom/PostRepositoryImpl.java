@@ -217,8 +217,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<PostSuggestionDTO> searchRelatedPost(UUID authorID, Long categoryID, Post entity, int page , int pageSize,
-                                                     PostBusinessState postBusinessState, Authentication authentication) throws IOException {
+    public List<PostSuggestionDTO> searchRelatedPost (UUID authorID, Long categoryID, Long currentPostID, String title, String summary, String contentPlainText, int page , int pageSize,
+                                                               PostBusinessState postBusinessState, Authentication authentication) throws IOException {
         //TODO: Until Hibernate Search re-implement support for moreLikeThis query, we'll use native Lucene query for relevance matching.
         MoreLikeThis mlt = new MoreLikeThis(luceneIndexReader);
         mlt.setFieldNames(new String[]{"title","summary", "contentPlainText"});
@@ -227,9 +227,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         mlt.setAnalyzer(LuceneIndexUtils.getStandardAnalyzer());
 
         Map<String, Collection<Object>> filteredDocument = new HashMap<>();
-        filteredDocument.put("title", Collections.singletonList(entity.getTitle()));
-        filteredDocument.put("summary", Collections.singletonList(entity.getSummary()));
-        filteredDocument.put("contentPlainText", Collections.singletonList(entity.getContentPlainText()));
+        filteredDocument.put("title", Collections.singletonList(title));
+        filteredDocument.put("summary", Collections.singletonList(summary));
+        filteredDocument.put("contentPlainText", Collections.singletonList(contentPlainText));
 
         Query query = mlt.like(filteredDocument);
 
@@ -241,29 +241,38 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         SearchResult<Post> searchResults = searchSession.search(Post.class)
                 .extension(LuceneExtension.get())
                 .where(f -> f.bool(b -> {
-                        b.must(f.fromLuceneQuery(query));
-                        b.must(postBusinessStatePredicate);
-                        b.must(authorizationPredicate);
-                        b.mustNot(f.match()
-                                .field("id")
-                                .matching(entity.getId()));
-                        if (authorID != null) {
-                            b.must(f.match()
-                                    .field("authorID")
-                                    .matching(em.getReference(UserWebsite.class, authorID)));
-                        }
-                        if (categoryID != null) {
-                            b.must(f.match()
-                                    .field("categoryID")
-                                    .matching(em.getReference(PostCategory.class, categoryID)));
-                        }
+                            b.must(f.fromLuceneQuery(query));
+                            b.must(postBusinessStatePredicate);
+                            b.must(authorizationPredicate);
+                            if (currentPostID != null) {
+                                b.mustNot(f.match()
+                                        .field("id")
+                                        .matching(currentPostID));
+                            }
+                            if (authorID != null) {
+                                b.must(f.match()
+                                        .field("authorID")
+                                        .matching(em.getReference(UserWebsite.class, authorID)));
+                            }
+                            if (categoryID != null) {
+                                b.must(f.match()
+                                        .field("categoryID")
+                                        .matching(em.getReference(PostCategory.class, categoryID)));
+                            }
 
-                    })
+                        })
                 ).fetch(page * pageSize, pageSize);
 
         List<Post> hits = searchResults.hits();
 
         return postSuggestionMapper.postListToPostSuggestionListDTO(hits);
+    }
+
+    @Override
+    public List<PostSuggestionDTO> searchRelatedPost(UUID authorID, Long categoryID, Post entity, int page , int pageSize,
+                                                     PostBusinessState postBusinessState, Authentication authentication) throws IOException {
+        return searchRelatedPost(authorID, categoryID, entity.getId() ,entity.getTitle(), entity.getSummary(), entity.getContentPlainText(),
+                page, pageSize, postBusinessState, authentication);
     }
 
     @Override

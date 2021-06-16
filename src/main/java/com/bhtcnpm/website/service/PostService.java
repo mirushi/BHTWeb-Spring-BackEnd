@@ -110,6 +110,8 @@ public interface PostService {
             "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest).READ_PERMISSION)")
     List<PostSuggestionDTO> getRelatedPostSameCategory (@PostCategoryID Long categoryID, @PostID Long postID, @Pagination Integer page, Authentication authentication) throws IDNotFoundException, IOException;
 
+    List<PostSuggestionDTO> getRelatedPostByExercise(Long exerciseID, Integer page) throws IDNotFoundException, IOException;
+
     @PreAuthorize(value = "isAuthenticated()")
     PostSummaryListDTO getPostSavedByUserOwn(Authentication authentication, Pageable pageable);
 

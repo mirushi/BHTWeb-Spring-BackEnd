@@ -26,6 +26,8 @@ public interface PostRepositoryCustom {
                                                    Authentication authentication);
     List<PostSuggestionDTO> searchRelatedPost(UUID authorID, Long categoryID, Post entity, int page , int pageSize,
                                               PostBusinessState postBusinessState, Authentication authentication) throws IOException;
+    List<PostSuggestionDTO> searchRelatedPost (UUID authorID, Long categoryID, Long currentPostID, String title, String summary, String contentPlainText, int page , int pageSize,
+                                                              PostBusinessState postBusinessState, Authentication authentication) throws IOException;
     PostSummaryWithStateListDTO searchBySearchTermWithState (Predicate predicate, Pageable pageable);
     PostSummaryWithStateAndFeedbackListDTO getPostSummaryStateFeedback (Predicate predicate, Pageable pageable);
     PostDetailsWithStateListDTO getPostDetailsListWithStateFilter(Predicate predicate, Pageable pageable, PostStateType postStateType);

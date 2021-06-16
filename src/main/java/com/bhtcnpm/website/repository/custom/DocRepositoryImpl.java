@@ -1,16 +1,13 @@
 package com.bhtcnpm.website.repository.custom;
 
 import com.bhtcnpm.website.constant.business.Doc.DocBusinessConstant;
-import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.model.dto.Doc.*;
+import com.bhtcnpm.website.model.dto.Doc.mapper.DocSummaryMapper;
 import com.bhtcnpm.website.model.entity.DocEntities.*;
-import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.search.lucene.LuceneIndexUtils;
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.EntityPath;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
