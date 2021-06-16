@@ -110,5 +110,145 @@
       "id": 7
     },
     "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubject",
+    "id": 9,
+    "name": "Cơ sở dữ liệu",
+    "description": "Môn học trình bày về sự cần thiết của cơ sở dữ liệu trong doanh nghiệp và trong các loại hình tổ chức khác. Cung cấp sự hiểu biết về nguyên lý của các hệ thống cơ sở dữ liệu, tập trung trên CSDL quan hệ (mô hình dữ liệu quan hệ, các ngôn ngữ truy vấn).\nSinh viên có khả năng sử dụng các kỹ thuật, công cụ để có thể thiết kế, thao tác với\nmột CSDL quan hệ thông qua hệ quản trị CSDL cụ thể (MS SQL Server), phục vụ cho nhiều môn học nâng cao về CSDL trong những học kỳ kế tiếp.",
+    "imageURL": "https://i.imgur.com/d9TZMYh.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 2
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubject",
+    "id": 10,
+    "name": "Cấu trúc dữ liệu và giải thuật",
+    "description": "Môn học giúp sinh viên hiểu tầm quan trọng của giải thuật và cách tổ chức dữ\nliệu, là hai thành tố quan trọng nhất cho một chương trình. Nắm bắt, áp dụng\nđược các giải thuật, cấu trúc dữ liệu thường được áp dụng trong việc giải quyết\nbài toán trong tin học. Giúp củng cố và phát triển kỹ năng lập trình vừa được học\ntrong môn học trước.",
+    "imageURL": "https://i.imgur.com/jwXORKp.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 5
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubject",
+    "id": 11,
+    "name": "Hệ điều hành",
+    "description": "Kích hoạt tiến trình và khóa ngữ cảnh tiến trình.Xử lý theo lô, hệ điều hành chia sẻ thời gian, nhiều chương trình, Quản lý tiến trình, quản lý bộ nhớ và đồng bộ hóa. Ngăn ngừa, tránh và loại bế tắc….",
+    "imageURL": "https://i.imgur.com/mgk5x07.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 3
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubject",
+    "id": 12,
+    "name": "Kiến trúc máy tính",
+    "description": "Môn học này trình bày kiến thức cơ bản về kiến trúc máy tính bao gồm: lịch sử hình thành máy tính và các công nghệ liên quan đến phát triển máy tính; các khái niệm chính trong kiến trúc máy tính như thành phần cấu tạo, quy tắc hoạt động, kiến trúc tập lệnh và hiệu suất của một máy tính. Môn học cũng cung cấp kiến thức liên quan đến lập trình hợp ngữ và các vấn đề liên quan tới CPU như thiết kế datapath cơ bản và cơ chế pipeline.",
+    "imageURL": "https://i.imgur.com/Bdb6czl.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 3
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubject",
+    "id": 13,
+    "name": "Lập trình trực quan",
+    "description": "Môn học này trình bày các khái niệm và phương pháp lập trình trực quan trên môi trường Windows, cách trình bày các cách thức, quy trình tạo một ứng dụng trên Windows, cách cách thức xử lý thông điệp, các giao diện điều khiển, cơ chế quản lý bộ nhớ, thư viện liên kết động, lập trình đa nhiệm…",
+    "imageURL": "https://i.imgur.com/ieSCgRJ.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 1
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubject",
+    "id": 14,
+    "name": "Nhập môn Mạng máy tính",
+    "description": "Cung cấp cho sinh viên những khái niệm cơ bản về mạng máy tính và truyền dữ liệu trên mạng; các dịch vụ mạng cơ bản, kỹ thuật mạng không dây.",
+    "imageURL": "https://i.imgur.com/0BFLISd.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 4
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubject",
+    "id": 15,
+    "name": "Nhập môn Công nghệ Phần mềm",
+    "description": "Môn học này nhằm cung cấp cho các sinh viên các kiến thức cơ sở liên quan đến các đối tượng chính yếu trong lĩnh vực công nghệ phần mềm (qui trình công nghệ, phương pháp kỹ thuật thực hiện, phương pháp tổ chức quản lý, công cụ và môi trường triển khai phần mềm, …). Giúp sinh viên hiểu và biết tiến hành xây dựng phần mềm một cách có hệ thống, có phương pháp. Trong quá trình học, sinh viên sẽ được giới thiệu nhiều phương pháp khác nhau để có được góc nhìn tổng quan về các phương pháp. Và để minh họa cụ thể hơn, phương pháp OMT (Object Modeling Technique) được chọn để trình bày (với một sự lược giản để thích hợp với tính chất nhập môn của môn học).",
+    "imageURL": "https://i.imgur.com/qf8udAd.png",
+    "subjectGroup": {
+      "id": 2
+    },
+    "subjectFaculty": {
+      "id": 1
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubject",
+    "id": 16,
+    "name": "Lập trình hướng đối tượng",
+    "description": "Môn học trang bị cho sinh viên kiến thức và kỹ năng về lập trình hướng đối tượng, các nguyên lý cơ bản của thiết kế hướng đối tượng, các vấn đề căn bản và một số vấn đề nâng cao trong việc cài đặt các lớp và phương thức. Các quan niệm nằm sau cây thừa kế, đa hình, các tính chất của đối tượng, thừa kế và phân lớp. Cách thức trao đổi và truyền thông giữa các đối tượng.",
+    "imageURL": "https://i.imgur.com/GK7RRVN.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 1
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubject",
+    "id": 17,
+    "name": "Pháp luật Đại cương",
+    "description": "Môn học nằm trong khối kiến thức đại cương trong chương trình đào tạo. Môn học hướng đến việc trang bị những kiến thức nền tảng về nhà nước và pháp luật cho người học. Qua đó, người học có những kiến thức cơ bản về nhà nước và pháp luật hướng đến việc hình thành kỹ năng sống và thái độ sống chuẩn mực theo hiến pháp và pháp luật.",
+    "imageURL": "https://i.imgur.com/qeNfDnX.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 8
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseSubject",
+    "id": 18,
+    "name": "Phương pháp Mô hình hoá",
+    "description": "Trình bày các kiến trúc, nền tảng về các phương pháp mô hình hóa thông tin, tri thức, biểu diễn vấn đề và lời giải, mô hình hóa hệ thống. Sinh viên tiếp cận với các các phương pháp mô hình hóa và biểu diễn vấn đề như mô hình hóa và biểu diễn dữ liệu, mô hình hóa và biểu diễn quan hệ, mô hình hóa và biểu diễn tiến trình, mô hình hóa và biểu diễn tri thức như phương pháp SDLC, JSD, SSM, OOA...Sinh viên làm quen với các công cụ đùn biểu diễn mô hình như công cụ CASE (upper và lower), các ngôn ngữ mô phỏng mô hình hóa như ngôn ngữ UML, VRML..nhằm hiện thực hóa một hệ thống. Học phần là sự kết hợp giữa các bài giảng, thuyết trình, bài tập nhỏ, tự nghiên cứu tài liệu và báo cáo đồ án kết thúc môn học. Học phần được chia làm 2 phần: phần 1 dẫn nhập và giới thiệu những khái niệm về các mô hình đặc trung hiện nay, phần 2 là giới thiệu về phương pháp luận dùng cho mô hình hóa, và phần 3 giới thiệu cụ thể về các mô hình biểu diễn thông tin, dữ liệu, thời gian thực.",
+    "imageURL": "https://i.imgur.com/apFv0sc.png",
+    "subjectGroup": {
+      "id": 2
+    },
+    "subjectFaculty": {
+      "id": 1
+    },
+    "version": 0
   }
 ]
