@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 import java.util.List;
@@ -34,6 +35,9 @@ public class ExerciseTopic {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "rank")
+    private Integer rank;
 
     @ManyToOne
     private ExerciseSubject subject;

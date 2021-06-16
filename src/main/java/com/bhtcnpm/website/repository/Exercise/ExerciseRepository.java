@@ -15,13 +15,15 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long>, Query
             "CASE WHEN COUNT(DISTINCT attempts.id) > 0 THEN TRUE ELSE FALSE END) " +
             "FROM Exercise exercise " +
             "LEFT JOIN exercise.exerciseAttempts attempts " +
-            "GROUP BY exercise")
+            "GROUP BY exercise " +
+            "ORDER BY exercise.rank ASC")
     List<ExerciseSummaryDTO> getExerciseSummaryWithUserAttempts (Predicate predicate);
 
     @Query("SELECT NEW com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO(exercise.id, exercise.title, exercise.description, exercise.topic.id, exercise.topic.name, " +
             "CASE WHEN COUNT(DISTINCT attempts.id) > 0 THEN TRUE ELSE FALSE END) " +
             "FROM Exercise exercise " +
             "LEFT JOIN exercise.exerciseAttempts attempts " +
-            "GROUP BY exercise")
+            "GROUP BY exercise " +
+            "ORDER BY exercise.rank ASC")
     List<ExerciseSummaryWithTopicDTO> getExerciseSummaryWithTopicAndUserAttempts (Predicate predicate);
 }

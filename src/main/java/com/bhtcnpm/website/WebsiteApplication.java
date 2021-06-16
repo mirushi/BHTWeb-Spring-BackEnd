@@ -71,7 +71,8 @@ public class WebsiteApplication {
                 new ClassPathResource("data/report-reason.json"),
                 new ClassPathResource("data/Exercise/exercise-subject-group.json"),
                 new ClassPathResource("data/Exercise/exercise-subject-faculty.json"),
-                new ClassPathResource("data/Exercise/exercise-subject.json")
+                new ClassPathResource("data/Exercise/exercise-subject.json"),
+                new ClassPathResource("data/Exercise/exercise-topic.json")
         });
         factoryBean.setMapper(objectMapper);
 

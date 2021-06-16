@@ -20,7 +20,11 @@ public interface ExerciseMapper {
 
     List<ExerciseSummaryWithTopicDTO> exerciseIterableToExerciseSummaryWithTopicDTOList (Iterable<Exercise> exerciseIterable);
 
+    List<ExerciseSummaryWithTopicDTO> exerciseListToExerciseSummaryWithTopicDTOList (List<Exercise> exerciseList);
+
     List<ExerciseSummaryDTO> exerciseIterableToExerciseSummaryDTOList (Iterable<Exercise> exerciseIterable);
+
+    List<ExerciseSummaryDTO> exerciseListToExerciseSummaryDTOList (List<Exercise> exerciseList);
 
     ExerciseSummaryDTO exerciseWithTopicToExerciseSummaryDTOList (ExerciseSummaryWithTopicDTO exerciseSummaryWithTopicDTO);
 }

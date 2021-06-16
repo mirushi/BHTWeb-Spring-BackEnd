@@ -46,7 +46,7 @@ public class ExerciseTopicServiceImpl implements ExerciseTopicService {
         //Đầu tiên là get ra hết tất cả những bài tập thuộc môn học này.
         List<ExerciseSummaryWithTopicDTO> exerciseSummaryWithTopicDTOList = exerciseService.getExerciseWithTopic(fetchBySubjectID, authentication);
         //Lấy ra hết những topic thuộc môn học này.
-        List<ExerciseTopic> exerciseTopicList = exerciseTopicRepository.findAllBySubjectId(subjectID);
+        List<ExerciseTopic> exerciseTopicList = exerciseTopicRepository.findAllBySubjectIdOrderByRankAsc(subjectID);
         //Ghép tất cả những bài tập vào từng môn học thích hợp.
         //B1: Đẩy tất cả những môn học vào hashtable tương ứng.
         Map<Long, List<ExerciseSummaryDTO>> exerciseOfTopic = new HashMap<>(exerciseTopicList.size());

@@ -1,3 +1,122 @@
 [
-  
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 1,
+    "name": "Tổng quan",
+    "rank": 1,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 2,
+    "name": "Thuật toán",
+    "rank": 2,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 3,
+    "name": "Kiểu dữ liệu cơ bản",
+    "rank": 3,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 4,
+    "name": "Cấu trúc điều khiển",
+    "rank": 4,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 5,
+    "name": "Các câu lệnh lặp",
+    "rank": 5,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 6,
+    "name": "Hàm",
+    "rank": 6,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 7,
+    "name": "Mảng một chiều",
+    "rank": 7,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 8,
+    "name": "Mảng hai chiều",
+    "rank": 8,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 9,
+    "name": "Con trỏ",
+    "rank": 9,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 10,
+    "name": "Con trỏ và mảng",
+    "rank": 10,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 11,
+    "name": "Cấp phát động",
+    "rank": 11,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 12,
+    "name": "Chuỗi ký tự",
+    "rank": 12,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 13,
+    "name": "Cấu trúc",
+    "rank": 13,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 14,
+    "name": "Tập tin",
+    "rank": 14,
+    "subject": {"id": 5},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 15,
+    "name": "Tổng hợp kiến thức",
+    "rank": 15,
+    "subject": {"id": 5},
+    "version": 0
+  }
 ]

@@ -44,6 +44,9 @@ public class Exercise {
     @Column(name = "publish_dtm", nullable = false, updatable = false)
     private LocalDateTime publishDtm;
 
+    @Column(name = "rank")
+    private Integer rank;
+
     @ManyToOne
     private UserWebsite author;
 

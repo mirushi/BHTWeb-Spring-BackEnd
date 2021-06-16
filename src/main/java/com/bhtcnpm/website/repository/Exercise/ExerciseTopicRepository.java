@@ -7,5 +7,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import java.util.List;
 
 public interface ExerciseTopicRepository extends JpaRepository<ExerciseTopic, Long>, QuerydslPredicateExecutor<ExerciseTopic> {
-    List<ExerciseTopic> findAllBySubjectId (Long subjectID);
+    List<ExerciseTopic> findAllBySubjectIdOrderByRankAsc (Long subjectID);
 }
