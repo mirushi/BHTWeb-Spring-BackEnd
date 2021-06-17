@@ -6,11 +6,11 @@ import lombok.Data;
 public class ExerciseUserStatisticDTO {
     private Long id;
     private Integer bestCorrectQuestions;
-    private String notes;
+    private String note;
 
-    public ExerciseUserStatisticDTO (Long id, Integer bestCorrectQuestions, String notes) {
+    public ExerciseUserStatisticDTO (Long id, Integer bestCorrectQuestions, String note) {
         this.id = id;
         this.bestCorrectQuestions = bestCorrectQuestions;
-        this.notes = notes;
+        this.note = note;
     }
 }

@@ -42,7 +42,7 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long>, Query
             "GROUP BY exercise ")
     List<ExerciseStatisticDTO> getExercisesStatisticDTOs (List<Long> exerciseIDs);
 
-    @Query("SELECT NEW com.bhtcnpm.website.model.dto.Exercise.ExerciseUserStatisticDTO(exercise.id, MAX(attempts.correctAnsweredQuestions), notes.notes)" +
+    @Query("SELECT NEW com.bhtcnpm.website.model.dto.Exercise.ExerciseUserStatisticDTO(exercise.id, MAX(attempts.correctAnsweredQuestions), notes.note)" +
             "FROM Exercise exercise " +
             "LEFT JOIN exercise.exerciseAttempts attempts " +
             "LEFT JOIN exercise.exerciseNotes notes " +

@@ -1,5 +1,5 @@
 package com.bhtcnpm.website.service.Exercise;
 
-public class ExerciseCategoryService {
+public interface ExerciseCategoryService {
 
 }

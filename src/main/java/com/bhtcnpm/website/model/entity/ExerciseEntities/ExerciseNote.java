@@ -19,7 +19,7 @@ public class ExerciseNote {
     private ExerciseNoteId exerciseNoteId;
 
     @Column(name = "notes")
-    private String notes;
+    private String note;
 
     @Version
     private short version;

@@ -15,7 +15,7 @@ public interface ExerciseMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "bestCorrectQuestions", ignore = true)
-    @Mapping(target = "notes", ignore = true)
+    @Mapping(target = "note", ignore = true)
     ExerciseUserStatisticDTO exerciseIDToExerciseUserStatisticDTO (Long id);
 
     @Mapping(target = "attempted", constant = "false")

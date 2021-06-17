@@ -44,18 +44,12 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
 
     @Override
     public List<ExerciseQuestionResultDTO> submitAttemptAndGetResult(Long exerciseID, List<ExerciseQuestionSubmitDTO> submitDTOs, Authentication authentication) {
-        long totalExerciseQuestion = exerciseQuestionRepository.countAllByExerciseId(exerciseID);
-
-        if (submitDTOs.size() != totalExerciseQuestion) {
-            throw new IllegalArgumentException("You must submit all question. If user don't have answer, please submit blank array.");
-        }
-
         Map<Long, ExerciseQuestionSubmitDTO> idExerciseQuestionSubmitMap = new HashMap<>(submitDTOs.size());
         for (ExerciseQuestionSubmitDTO submitDTO : submitDTOs) {
             idExerciseQuestionSubmitMap.put(submitDTO.getId(), submitDTO);
         }
 
-        List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository.findAllByIdIn(idExerciseQuestionSubmitMap.keySet());
+        List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository.findAllByExerciseId(exerciseID);
 
         List<ExerciseQuestionResultDTO> resultList = new ArrayList<>();
         int correctAnsweredQuestion = 0;
