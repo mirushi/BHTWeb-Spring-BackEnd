@@ -5,6 +5,8 @@ import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.querydsl.core.types.Predicate;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
@@ -14,7 +16,7 @@ import java.util.UUID;
 
 public interface DocService {
 
-    DocDetailsListDTO getAllDoc (Predicate predicate, @Min(0)Integer paginator);
+    DocDetailsListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication);
 
     DocSummaryListDTO getAllPendingApprovalDoc (
             String searchTerm,

@@ -21,6 +21,7 @@ import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.DocService;
 import com.bhtcnpm.website.service.GoogleDriveService;
+import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.bhtcnpm.website.util.EnumConverter;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -75,10 +77,10 @@ public class DocServiceImpl implements DocService {
 
     private final UserWebsiteRepository userWebsiteRepository;
 
-    public DocDetailsListDTO getAllDoc (Predicate predicate, @Min(0)Integer paginator) {
+    public DocDetailsListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication) {
 
         //Create a pagable.
-        Pageable pageable = PageRequest.of(paginator, PAGE_SIZE, Sort.by("publishDtm").descending());
+        pageable = PaginatorUtils.getPageableWithNewPageSizeAndMoreSort(pageable, PAGE_SIZE, Sort.by("publishDtm").descending());
 
         Page<Doc> queryResult = docRepository.findAll(predicate, pageable);
 

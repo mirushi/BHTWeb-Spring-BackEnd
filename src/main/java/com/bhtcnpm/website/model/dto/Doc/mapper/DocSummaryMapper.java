@@ -15,13 +15,11 @@ public interface DocSummaryMapper {
     DocSummaryMapper INSTANCE = Mappers.getMapper(DocSummaryMapper.class);
 
     @Mapping(target = "authorID", source = "author.id")
-    @Mapping(target = "authorName", source = "author.name")
+    @Mapping(target = "authorDisplayName", source = "author.displayName")
     @Mapping(target = "categoryID", source = "category.id")
-    @Mapping(target = "category", source = "category.name")
-    @Mapping(target = "subject", source = "subject.name")
+    @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "subjectID", source = "subject.id")
-    @Mapping(target = "downloadCount", source = "docFileUpload.downloadCount")
-    @Mapping(target = "viewCount", source = "viewCount")
+    @Mapping(target = "subjectName", source = "subject.name")
     DocSummaryDTO docToDocSummaryDTO (Doc doc);
 
     List<DocSummaryDTO> docListToDocSummaryDTOList (List<Doc> docList);

@@ -1,6 +1,13 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
 import com.bhtcnpm.website.model.dto.Tag.TagDTO;
+import com.bhtcnpm.website.model.validator.dto.Doc.*;
+import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryID;
+import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryName;
+import com.bhtcnpm.website.model.validator.dto.DocSubject.DocSubjectID;
+import com.bhtcnpm.website.model.validator.dto.DocSubject.DocSubjectName;
+import com.bhtcnpm.website.model.validator.dto.UserWebsite.UserWebsiteDisplayName;
+import com.bhtcnpm.website.model.validator.dto.UserWebsite.UserWebsiteName;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,33 +16,41 @@ import java.util.UUID;
 
 @Data
 public class DocDetailsDTO {
+    @DocID
     private Long id;
+
+    @DocTitle
+    private String title;
+
+    @DocDescription
+    private String description;
+
+    @DocImageURL
+    private String imageURL;
+
+    @DocPublishDtm
+    private LocalDateTime publishDtm;
 
     private UUID authorID;
 
+    @UserWebsiteName
     private String authorName;
 
-    private String category;
+    @UserWebsiteDisplayName
+    private String authorDisplayName;
 
+    @DocCategoryID
     private Long categoryID;
 
-    private String subject;
+    @DocCategoryName
+    private String categoryName;
 
+    @DocSubjectID
     private Long subjectID;
 
-    private String title;
+    @DocSubjectName
+    private String subjectName;
 
-    private String description;
-
-    private String imageURL;
-
+    @DocTag
     private Set<TagDTO> tags;
-
-    private LocalDateTime publishDtm;
-
-    private Long downloadCount;
-
-    private Long viewCount;
-
-    private Short version;
 }

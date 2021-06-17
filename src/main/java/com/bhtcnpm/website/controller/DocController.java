@@ -9,13 +9,17 @@ import com.bhtcnpm.website.service.DocService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Request;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -34,8 +38,9 @@ public class DocController {
     @ResponseBody
     public ResponseEntity<DocDetailsListDTO> getAllDocuments (
             @QuerydslPredicate(root = Doc.class) Predicate predicate,
-            @NotNull @Min(0) Integer paginator) {
-        DocDetailsListDTO result = docService.getAllDoc(predicate,paginator);
+            @PageableDefault @Nullable Pageable pageable,
+            Authentication authentication) {
+        DocDetailsListDTO result = docService.getAllDoc(predicate, pageable, authentication);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -268,7 +273,7 @@ public class DocController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-        @GetMapping("getManagementDoc")
+    @GetMapping("getManagementDoc")
     @ResponseBody
     public ResponseEntity<DocSummaryWithStateListDTO> getManagementDoc (
             @RequestParam(value = "searchTerm", required = false) String searchTerm,

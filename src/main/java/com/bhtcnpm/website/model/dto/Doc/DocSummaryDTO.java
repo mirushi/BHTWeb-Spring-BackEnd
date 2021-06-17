@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
 import com.bhtcnpm.website.model.dto.Tag.TagDTO;
+import com.bhtcnpm.website.model.validator.dto.Doc.DocID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,19 +12,20 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class DocSummaryDTO {
+    @DocID
     private Long id;
 
     private UUID authorID;
 
-    private String authorName;
+    private String authorDisplayName;
 
     private Long categoryID;
 
-    private String category;
+    private String categoryName;
 
     private Long subjectID;
 
-    private String subject;
+    private String subjectName;
 
     private String title;
 
@@ -32,10 +34,4 @@ public class DocSummaryDTO {
     private String imageURL;
 
     private LocalDateTime publishDtm;
-
-    private Long downloadCount;
-
-    private Long viewCount;
-
-    private Short version;
 }

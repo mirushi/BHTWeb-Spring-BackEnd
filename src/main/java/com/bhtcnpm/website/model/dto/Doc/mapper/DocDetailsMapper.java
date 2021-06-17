@@ -14,15 +14,14 @@ public interface DocDetailsMapper {
 
     DocDetailsMapper INSTANCE = Mappers.getMapper(DocDetailsMapper.class);
 
-    @Mapping(source = "author.id", target = "authorID")
-    @Mapping(source = "author.name", target = "authorName")
-    @Mapping(source = "category.name", target = "category")
-    @Mapping(source = "category.id", target = "categoryID")
-    @Mapping(source = "subject.name", target = "subject")
-    @Mapping(source = "subject.id", target = "subjectID")
-    @Mapping(source = "docFileUpload.downloadCount", target = "downloadCount")
-    @Mapping(source = "publishDtm", target = "publishDtm")
-    @Mapping(source = "viewCount", target = "viewCount")
+    @Mapping(target = "authorID", source = "author.id")
+    @Mapping(target = "authorName", source = "author.name")
+    @Mapping(target = "authorDisplayName", source = "author.displayName")
+    @Mapping(target = "categoryID", source = "category.id")
+    @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "subjectID", source = "subject.id")
+    @Mapping(target = "subjectName", source = "subject.name")
+    @Mapping(target = "publishDtm", source = "publishDtm")
     DocDetailsDTO docToDocDetailsDTO (Doc doc);
 
     List<DocDetailsDTO> docListToDocDetailsDTOList (List<Doc> docs);
