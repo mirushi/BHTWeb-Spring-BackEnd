@@ -37,7 +37,6 @@ public class PostCommentReport {
     @ManyToOne
     @JoinColumn(
             name = "post_comment_id",
-            unique = true,
             updatable = false
     )
     private PostComment postComment;

@@ -50,7 +50,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
 
         //Tìm xem nếu Report của Post này đã tồn tại thì không tạo mới report nữa.
         PostReport postReport = postReportRepository
-                .findByPost(postProxy);
+                .findByPostAndActionTakenIsNull(postProxy);
 
         //Post report chưa tồn tại trên hệ thống hoặc đã được xử lý 1 lần trước đó thì tạo mới.
         if (postReport == null || postReport.getActionTaken() != null) {
@@ -61,7 +61,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
         }
 
         //Cập nhật lại thời gian report mới nhất.
-        postReportRepository.save(postReport);
+        postReport = postReportRepository.save(postReport);
 
         UserWebsite reporter = userWebsiteRepository.getOne(userID);
 

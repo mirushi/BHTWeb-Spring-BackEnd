@@ -57,16 +57,18 @@ public class PostCommentReportServiceImpl implements PostCommentReportService {
 
         //Tìm xem nếu Report của Post này đã tồn tại thì không tạo mới report nữa.
         PostCommentReport postCommentReport = postCommentReportRepository
-                .findByPostComment(postCommentProxy);
+                .findByPostCommentAndActionTakenIsNull(postCommentProxy);
 
-        //Post report chưa tồn tại trên hệ thống thì tạo mới.
-        if (postCommentReport == null) {
+        //Post report chưa tồn tại trên hệ thống hoặc đã được xử lý 1 lần trước đó thì tạo mới.
+        if (postCommentReport == null || postCommentReport.getActionTaken() != null) {
             postCommentReport = PostCommentReport.builder()
                     .postComment(postCommentProxy)
                     .reportTime(LocalDateTime.now())
                     .build();
-            postCommentReportRepository.save(postCommentReport);
         }
+
+        //Cập nhật lại thời gian report mới nhất.
+        postCommentReport = postCommentReportRepository.save(postCommentReport);
 
         UserWebsite reporter = userWebsiteRepository.getOne(userID);
 
