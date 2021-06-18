@@ -13,6 +13,7 @@ public class DocBusinessConstant {
     public static final int DESCRIPTION_MAX = 255;
 
     public static final int TAG_MAX_PER_DOC = 5;
+    public static final int DOCFILE_MAX_PER_DOC = 5;
 
     //This constant is for maximum docs that will be sent to client when it asks for related docs.
     public static final int RELATED_DOC_MAX = 3;

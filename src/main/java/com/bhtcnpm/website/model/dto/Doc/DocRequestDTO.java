@@ -8,6 +8,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,11 +29,12 @@ public class DocRequestDTO {
     @DocImageURL
     private String imageURL;
 
-    private UUID fileCode;
+    @DocPublishDtm
+    private LocalDateTime publishDtm;
+
+    @DocFileCode
+    private List<UUID> fileCodes;
 
     @DocTag
     private Set<TagDTO> tags;
-
-    @DocPublishDtm
-    private LocalDateTime publishDtm;
 }

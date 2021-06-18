@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 public interface DocService {
 
+    @PreAuthorize(value = "permitAll()")
     DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication);
 
     DocSummaryListDTO getAllPendingApprovalDoc (
@@ -36,6 +38,9 @@ public interface DocService {
                                       ApiSortOrder sortByCreatedDtm,
                                       Long userID);
 
+    @PreAuthorize(value = "hasPermission(#docID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).UPDATE_PERMISSION)")
     DocDetailsDTO putDoc (Long docID, DocRequestDTO docRequestDTO, Authentication authentication);
 
     Boolean postApproval (Long docID, Long userID);

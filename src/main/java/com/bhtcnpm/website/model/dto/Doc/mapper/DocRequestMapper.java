@@ -1,10 +1,9 @@
-package com.bhtcnpm.website.model.dto.Doc;
+package com.bhtcnpm.website.model.dto.Doc.mapper;
 
+import com.bhtcnpm.website.model.dto.Doc.DocRequestDTO;
 import com.bhtcnpm.website.model.dto.Tag.TagMapper;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
-import com.bhtcnpm.website.model.entity.DocEntities.DocCategory;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
-import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.DocCategoryRepository;
 import com.bhtcnpm.website.repository.DocFileUploadRepository;
@@ -16,6 +15,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -34,11 +34,13 @@ public abstract class DocRequestMapper {
 
     protected TagMapper tagMapper;
 
+    protected DocFileUploadMapper docFileUploadMapper;
+
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "subjectID", source = "subject.id")
     public abstract DocRequestDTO docToDocRequestDTO (Doc doc);
 
-    public Doc updateDocFromDocRequestDTO (DocRequestDTO docRequestDTO, Doc entity ,DocFileUpload file, UUID userID) {
+    public Doc updateDocFromDocRequestDTO (DocRequestDTO docRequestDTO, Doc entity , List<UUID> docFileUploadIDList, UUID userID) {
         Doc newDoc = Objects.requireNonNullElseGet(entity, Doc::new);
 
         if (docRequestDTO == null) {
@@ -51,7 +53,7 @@ public abstract class DocRequestMapper {
             newDoc.setAuthor(userWebsiteRepository.getOne(userID));
         }
 
-        newDoc.setDocFileUpload(file);
+        newDoc.setDocFileUploads(docFileUploadMapper.docFileUploadIDListToDocFileUpload(docFileUploadIDList));
         newDoc.setLastUpdatedDtm(LocalDateTime.now());
         newDoc.setLastEditedUser(userWebsiteRepository.getOne(userID));
         newDoc.setCategory(docCategoryRepository.getOne(docRequestDTO.getCategoryID()));
@@ -89,6 +91,11 @@ public abstract class DocRequestMapper {
     @Autowired
     public void setDocFileUploadRepository (DocFileUploadRepository docFileUploadRepository) {
         this.docFileUploadRepository = docFileUploadRepository;
+    }
+
+    @Autowired
+    public void setDocFileUploadMapper (DocFileUploadMapper docFileUploadMapper) {
+        this.docFileUploadMapper = docFileUploadMapper;
     }
 
 //    @Mapping(target = "lastUpdatedDtm", expression = "java(java.time.LocalDateTime.now())")

@@ -24,6 +24,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "Doc")
@@ -94,8 +95,12 @@ public class Doc {
     )
     private String description;
 
-    @OneToOne
-    private DocFileUpload docFileUpload;
+    @OneToMany(
+            mappedBy = "doc",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<DocFileUpload> docFileUploads;
 
     @Column(nullable = false)
     private String imageURL;

@@ -5,10 +5,7 @@ import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
 import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.model.dto.Doc.*;
-import com.bhtcnpm.website.model.dto.Doc.mapper.DocDetailsMapper;
-import com.bhtcnpm.website.model.dto.Doc.mapper.DocDownloadInfoMapper;
-import com.bhtcnpm.website.model.dto.Doc.mapper.DocSuggestionMapper;
-import com.bhtcnpm.website.model.dto.Doc.mapper.DocSummaryMapper;
+import com.bhtcnpm.website.model.dto.Doc.mapper.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
@@ -40,7 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.transaction.annotation.Transactional;
-import javax.validation.constraints.Min;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -161,9 +158,7 @@ public class DocServiceImpl implements DocService {
             }
         }
 
-        DocFileUpload fileEntity = docFileUploadRepository.getOne(docRequestDTO.getFileCode());
-
-        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, oldDoc, fileEntity ,userID);
+        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, oldDoc, docRequestDTO.getFileCodes() ,userID);
 
         doc = docRepository.save(doc);
 
@@ -193,10 +188,10 @@ public class DocServiceImpl implements DocService {
     @Override
     public Boolean increaseDownloadCount(Long docID, Long userID) {
         //TODO: Please check condition before increase download count;
-        int rowChanged = docRepository.incrementDownloadCount(docID);
-        if (rowChanged == 1) {
-            return true;
-        }
+//        int rowChanged = docRepository.incrementDownloadCount(docID);
+//        if (rowChanged == 1) {
+//            return true;
+//        }
         return false;
     }
 
@@ -322,9 +317,17 @@ public class DocServiceImpl implements DocService {
     public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
-        DocFileUpload fileEntity = docFileUploadRepository.getOne(docRequestDTO.getFileCode());
+        List<DocFileUpload> fileUploadList = docFileUploadRepository.findAllById(docRequestDTO.getFileCodes());
+        for (DocFileUpload file : fileUploadList) {
+            if (!file.getUploader().getId().equals(userID)) {
+                throw new IllegalArgumentException("Some of the file's ownership is not yours.");
+            }
+        }
+        if (fileUploadList.size() != docRequestDTO.getFileCodes().size()){
+            throw new IllegalArgumentException("Some of the file(s) could not be found.");
+        }
 
-        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, null, fileEntity, userID);
+        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, null, docRequestDTO.getFileCodes(), userID);
 
         doc = docRepository.save(doc);
 
