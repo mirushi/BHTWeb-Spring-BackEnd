@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public interface DocService {
 
-    DocDetailsListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication);
+    DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication);
 
     DocSummaryListDTO getAllPendingApprovalDoc (
             String searchTerm,
@@ -36,7 +36,7 @@ public interface DocService {
                                       ApiSortOrder sortByCreatedDtm,
                                       Long userID);
 
-    DocDetailsDTO putDoc (Long docID, UUID lastEditedUserID, DocRequestDTO docRequestDTO);
+    DocDetailsDTO putDoc (Long docID, DocRequestDTO docRequestDTO, Authentication authentication);
 
     Boolean postApproval (Long docID, Long userID);
 
@@ -58,7 +58,7 @@ public interface DocService {
 
     public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, UUID userID);
 
-    DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, UUID userID);
+    DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, Authentication authentication);
 
     DocSummaryListDTO getDocBySearchTerm(
             String searchTerm,

@@ -3,6 +3,7 @@ package com.bhtcnpm.website.service.impl;
 import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
 import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
+import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.dto.Doc.mapper.DocDetailsMapper;
 import com.bhtcnpm.website.model.dto.Doc.mapper.DocDownloadInfoMapper;
@@ -19,11 +20,14 @@ import com.bhtcnpm.website.repository.DocCommentRepository;
 import com.bhtcnpm.website.repository.DocRepository;
 import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.predicate.Doc.DocPredicateGenerator;
+import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.DocService;
 import com.bhtcnpm.website.service.GoogleDriveService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.bhtcnpm.website.util.EnumConverter;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -77,19 +81,22 @@ public class DocServiceImpl implements DocService {
 
     private final UserWebsiteRepository userWebsiteRepository;
 
-    public DocDetailsListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication) {
+    public DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication) {
 
         //Create a pagable.
         pageable = PaginatorUtils.getPageableWithNewPageSizeAndMoreSort(pageable, PAGE_SIZE, Sort.by("publishDtm").descending());
 
-        Page<Doc> queryResult = docRepository.findAll(predicate, pageable);
+        BooleanExpression publicDocFilter = DocPredicateGenerator.getBooleanExpressionOnBusinessState(DocBusinessState.PUBLIC);
+        BooleanExpression authorizationFilter = DocPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
 
-        List<DocDetailsDTO> docDetailsDTOS = StreamSupport
+        Page<Doc> queryResult = docRepository.findAll(publicDocFilter.and(authorizationFilter).and(predicate), pageable);
+
+        List<DocSummaryDTO> docSummaryDTOs= StreamSupport
                 .stream(queryResult.spliterator(), false)
-                .map(docDetailsMapper::docToDocDetailsDTO)
+                .map(docSummaryMapper::docToDocSummaryDTO)
                 .collect(Collectors.toList());
 
-        return new DocDetailsListDTO(docDetailsDTOS, queryResult.getTotalPages(), queryResult.getTotalElements());
+        return new DocSummaryListDTO(docSummaryDTOs, queryResult.getTotalPages(), queryResult.getTotalElements());
     }
 
     @Override
@@ -142,7 +149,9 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocDetailsDTO putDoc(Long docID, UUID lastEditedUserID, DocRequestDTO docRequestDTO) {
+    public DocDetailsDTO putDoc(Long docID, DocRequestDTO docRequestDTO, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
         Doc oldDoc = null;
 
         if (docID != null) {
@@ -152,7 +161,9 @@ public class DocServiceImpl implements DocService {
             }
         }
 
-        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(lastEditedUserID, docRequestDTO, oldDoc);
+        DocFileUpload fileEntity = docFileUploadRepository.getOne(docRequestDTO.getFileCode());
+
+        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, oldDoc, fileEntity ,userID);
 
         doc = docRepository.save(doc);
 
@@ -308,9 +319,12 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, UUID userID) {
+    public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
-        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(userID, docRequestDTO, null);
+        DocFileUpload fileEntity = docFileUploadRepository.getOne(docRequestDTO.getFileCode());
+
+        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, null, fileEntity, userID);
 
         doc = docRepository.save(doc);
 
@@ -373,7 +387,7 @@ public class DocServiceImpl implements DocService {
 
         return DocUploadDTO.builder()
                 .fileName(fileUpload.getFileName())
-                .code(fileUpload.getCode())
+                .code(fileUpload.getId())
                 .fileSize(multipartFile.getSize())
                 .build();
     }
@@ -382,9 +396,13 @@ public class DocServiceImpl implements DocService {
     public DocDownloadInfoDTO getDocDownloadInfo(String fileCode) {
         UUID uuid = UUID.fromString(fileCode);
 
-        DocFileUpload file = docFileUploadRepository.findByCode(UUID.fromString(fileCode));
+        Optional<DocFileUpload> fileObject = docFileUploadRepository.findById(UUID.fromString(fileCode));
 
-        return docDownloadInfoMapper.docFileUploadToDocDownloadInfoDTO(file);
+        if (fileObject.isEmpty()) {
+            throw new IllegalArgumentException("Filecode not found.");
+        }
+
+        return docDownloadInfoMapper.docFileUploadToDocDownloadInfoDTO(fileObject.get());
     }
 
     @Override

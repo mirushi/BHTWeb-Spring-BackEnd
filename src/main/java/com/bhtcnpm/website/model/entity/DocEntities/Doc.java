@@ -1,5 +1,7 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
+import com.bhtcnpm.website.constant.domain.Doc.DocApprovalState;
+import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.model.entity.*;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.search.bridge.*;
@@ -15,6 +17,7 @@ import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 import org.jsoup.nodes.Document;
 
+import javax.naming.OperationNotSupportedException;
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -104,7 +107,6 @@ public class Doc {
     private LocalDateTime publishDtm;
 
     @Column(nullable = false, updatable = false)
-    @CreationTimestamp
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -129,9 +131,6 @@ public class Doc {
             sortable = Sortable.YES
     )
     private String title;
-
-    @Column(nullable = false)
-    private Long viewCount;
 
     @Enumerated
     @Column(columnDefinition = "smallint")
@@ -164,6 +163,35 @@ public class Doc {
 
     @Version
     private short version;
+
+    @Transient
+    public DocBusinessState getDocBusinessState () {
+        //Refer to BHTCNPM confluence. Entity state page.
+        if (DocStateType.APPROVED.equals(this.getDocState())
+                && deletedDate == null
+                && publishDtm.isBefore(LocalDateTime.now())) {
+            return DocBusinessState.PUBLIC;
+        }
+        if (!DocStateType.APPROVED.equals(this.getDocState()) && deletedDate == null
+                || deletedDate == null && publishDtm.isAfter(LocalDateTime.now())) {
+            return DocBusinessState.UNLISTED;
+        }
+        if (deletedDate != null) {
+            return DocBusinessState.DELETED;
+        }
+        throw new UnsupportedOperationException("Cannot determine doc business state.");
+    }
+
+    @Transient
+    public DocApprovalState getDocApprovalState() {
+        if (DocStateType.APPROVED.equals(docState)) {
+            return DocApprovalState.APPROVED;
+        }
+        if (DocStateType.REJECTED.equals(docState)) {
+            return DocApprovalState.REJECTED;
+        }
+        return DocApprovalState.PENDING;
+    }
 
     @Override
     public boolean equals (Object o) {

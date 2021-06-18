@@ -21,25 +21,15 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DocFileUpload {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "doc_file_upload_sequence"
-    )
-    @SequenceGenerator(
-            name = "doc_file_upload_sequence",
-            sequenceName = "doc_file_upload_sequence"
-    )
-    private Long id;
-
     @Column(columnDefinition = "BINARY(16)",
             nullable = false,
             unique = true)
-    private UUID code;
+    private UUID id;
 
     @Column(nullable = false)
     private String fileName;
 
-    //Stored as KB.
+    //Stored as Byte.
     @Column(nullable = false)
     private Long fileSize;
 
@@ -55,11 +45,4 @@ public class DocFileUpload {
     @ManyToOne
     @JoinColumn(nullable = false)
     private UserWebsite uploader;
-
-    @PrePersist
-    public void initializeUUID () {
-        if (code == null) {
-            code = UUID.randomUUID();
-        }
-    }
 }

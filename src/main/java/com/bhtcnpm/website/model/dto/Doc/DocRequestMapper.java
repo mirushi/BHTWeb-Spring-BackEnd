@@ -38,7 +38,7 @@ public abstract class DocRequestMapper {
     @Mapping(target = "subjectID", source = "subject.id")
     public abstract DocRequestDTO docToDocRequestDTO (Doc doc);
 
-    public Doc updateDocFromDocRequestDTO (UUID lastEditedUserID, DocRequestDTO docRequestDTO, Doc entity) {
+    public Doc updateDocFromDocRequestDTO (DocRequestDTO docRequestDTO, Doc entity ,DocFileUpload file, UUID userID) {
         Doc newDoc = Objects.requireNonNullElseGet(entity, Doc::new);
 
         if (docRequestDTO == null) {
@@ -47,15 +47,13 @@ public abstract class DocRequestMapper {
 
         if (entity == null) {
             newDoc.setCreatedDtm(LocalDateTime.now());
-            newDoc.setViewCount(0L);
             newDoc.setDocState(DocStateType.PENDING_APPROVAL);
-            newDoc.setAuthor(userWebsiteRepository.getOne(lastEditedUserID));
+            newDoc.setAuthor(userWebsiteRepository.getOne(userID));
         }
 
-        DocFileUpload file = docFileUploadRepository.findByCode(UUID.fromString(docRequestDTO.getFileCode()));
         newDoc.setDocFileUpload(file);
         newDoc.setLastUpdatedDtm(LocalDateTime.now());
-        newDoc.setLastEditedUser(userWebsiteRepository.getOne(lastEditedUserID));
+        newDoc.setLastEditedUser(userWebsiteRepository.getOne(userID));
         newDoc.setCategory(docCategoryRepository.getOne(docRequestDTO.getCategoryID()));
         newDoc.setSubject(docSubjectRepository.getOne(docRequestDTO.getSubjectID()));
         newDoc.setTitle(docRequestDTO.getTitle());
@@ -63,7 +61,7 @@ public abstract class DocRequestMapper {
         newDoc.setImageURL(docRequestDTO.getImageURL());
         newDoc.setTags(tagMapper.tagDTOListToTagList(docRequestDTO.getTags()));
         newDoc.setPublishDtm(docRequestDTO.getPublishDtm());
-        newDoc.setVersion(docRequestDTO.getVersion());
+        newDoc.setVersion((short)0);
 
         return newDoc;
     }

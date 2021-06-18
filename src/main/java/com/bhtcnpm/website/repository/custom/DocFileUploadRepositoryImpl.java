@@ -23,20 +23,4 @@ public class DocFileUploadRepositoryImpl implements DocFileUploadRepositoryCusto
         this.em = em;
         queryFactory = new JPAQueryFactory(em);
     }
-
-    @Override
-    public DocFileUpload findByCode(UUID uuid) {
-        //Get the file.
-        DocFileUpload entity = queryFactory
-                .select(qDocFileUpload)
-                .from(qDocFileUpload)
-                .where(qDocFileUpload.code.eq(uuid))
-                .fetchOne();
-        //Update the download count.
-        queryFactory.update(qDocFileUpload)
-                .set(qDocFileUpload.downloadCount, qDocFileUpload.downloadCount.add(1L))
-                .execute();
-
-        return entity;
-    }
 }

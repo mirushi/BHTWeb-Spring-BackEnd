@@ -140,7 +140,7 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
             return this.checkPostHighlightStickToTop(authentication, authenticatedUserID, targetDomainObject);
         }
 
-        throw new IllegalArgumentException(String.format("Post permission %s is not supported. Denying access to postID = %s", permission));
+        throw new IllegalArgumentException(String.format("Post permission %s is not supported. Denying access to postID = %s", permission, targetDomainObject.getId()));
     }
 
     private boolean checkPostHighlightStickToTop (Authentication authentication, UUID authenticatedUserID, Post post) {
@@ -382,7 +382,7 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
             if (targetDomainObject.getAuthor().getId().equals(authenticatedUserID)) {
                 return true;
             }
-            //Người có quyền xem bài viết PRIVATE có thể xem được bài viết này.
+            //Người có quyền xem bài viết UNLISTED có thể xem được bài viết này.
             if (SecurityUtils.containsAuthority(authentication, com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_UNLISTED_ALL_READ)) {
                 return true;
             }

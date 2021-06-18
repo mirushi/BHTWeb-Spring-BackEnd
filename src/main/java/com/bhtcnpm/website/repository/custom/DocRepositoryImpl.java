@@ -64,7 +64,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     @Override
     public List<DocSummaryDTO> getTrendingDoc(Pageable pageable) {
          JPAQuery query = new JPAQuery<Doc>(em)
-                 .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.name, qDoc.category.id, qDoc.category.name, qDoc.subject.id, qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.docFileUpload.downloadCount, qDoc.viewCount, qDoc.version))
+                 .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.displayName, qDoc.category.id, qDoc.category.name, qDoc.subject.id, qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm))
                  .from(qDoc)
                  .join(qUserDocReaction).on(qUserDocReaction.userDocReactionId.doc.id.eq(qDoc.id))
                  .orderBy(qDoc.docFileUpload.downloadCount.desc())

@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface DocFileUploadRepository extends JpaRepository<DocFileUpload, Long>, DocFileUploadRepositoryCustom {
+public interface DocFileUploadRepository extends JpaRepository<DocFileUpload, UUID>, DocFileUploadRepositoryCustom {
 }

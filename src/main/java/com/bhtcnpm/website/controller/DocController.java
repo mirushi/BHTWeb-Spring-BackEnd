@@ -36,11 +36,11 @@ public class DocController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<DocDetailsListDTO> getAllDocuments (
+    public ResponseEntity<DocSummaryListDTO> getAllDocuments (
             @QuerydslPredicate(root = Doc.class) Predicate predicate,
             @PageableDefault @Nullable Pageable pageable,
             Authentication authentication) {
-        DocDetailsListDTO result = docService.getAllDoc(predicate, pageable, authentication);
+        DocSummaryListDTO result = docService.getAllDoc(predicate, pageable, authentication);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -99,11 +99,9 @@ public class DocController {
     @ResponseBody
     public ResponseEntity<DocDetailsDTO> putDocument (
             @PathVariable Long id,
-            @RequestBody DocRequestDTO docRequestDTO) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        DocDetailsDTO docDetailsDTO = docService.putDoc(id, userID, docRequestDTO);
+            @RequestBody DocRequestDTO docRequestDTO,
+            Authentication authentication) {
+        DocDetailsDTO docDetailsDTO = docService.putDoc(id, docRequestDTO, authentication);
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
 
@@ -224,11 +222,9 @@ public class DocController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<DocDetailsDTO> postDoc (@RequestBody DocRequestDTO docRequestDTO) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        DocDetailsDTO docDetailsDTO = docService.createDoc(docRequestDTO, userID);
+    public ResponseEntity<DocDetailsDTO> postDoc (@RequestBody DocRequestDTO docRequestDTO,
+                                                  Authentication authentication) {
+        DocDetailsDTO docDetailsDTO = docService.createDoc(docRequestDTO, authentication);
 
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
