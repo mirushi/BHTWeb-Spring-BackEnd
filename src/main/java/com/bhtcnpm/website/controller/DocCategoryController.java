@@ -1,7 +1,7 @@
 package com.bhtcnpm.website.controller;
 
 import com.bhtcnpm.website.model.dto.DocCategory.DocCategoryDTO;
-import com.bhtcnpm.website.service.DocCategoryService;
+import com.bhtcnpm.website.service.Doc.DocCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

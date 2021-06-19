@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.service.impl;
+package com.bhtcnpm.website.service.Doc.impl;
 
 import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
@@ -19,7 +19,8 @@ import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.predicate.Doc.DocPredicateGenerator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
-import com.bhtcnpm.website.service.DocService;
+import com.bhtcnpm.website.service.Doc.DocFileUploadService;
+import com.bhtcnpm.website.service.Doc.DocService;
 import com.bhtcnpm.website.service.GoogleDriveService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.bhtcnpm.website.util.EnumConverter;
@@ -77,6 +78,8 @@ public class DocServiceImpl implements DocService {
     private final UserDocReactionRepository userDocReactionRepository;
 
     private final UserWebsiteRepository userWebsiteRepository;
+
+    private final DocFileUploadService docFileUploadService;
 
     public DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication) {
 
@@ -158,7 +161,9 @@ public class DocServiceImpl implements DocService {
             }
         }
 
-        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, oldDoc, docRequestDTO.getFileCodes() ,userID);
+        List<DocFileUpload> docFileUploadList = docFileUploadService.getFileUploadOwnerOnly(docRequestDTO.getFileCodes(), authentication);
+
+        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, oldDoc, docFileUploadList ,userID);
 
         doc = docRepository.save(doc);
 
@@ -239,12 +244,6 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocDetailsDTO createDocument(DocRequestDTO docRequestDTO) {
-//        docRequestMapper.updateDocFromDocRequestDTO()
-        return null;
-    }
-
-    @Override
     public List<DocSummaryDTO> getTrending() {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE_TRENDING_DOC);
 
@@ -317,17 +316,9 @@ public class DocServiceImpl implements DocService {
     public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
-        List<DocFileUpload> fileUploadList = docFileUploadRepository.findAllById(docRequestDTO.getFileCodes());
-        for (DocFileUpload file : fileUploadList) {
-            if (!file.getUploader().getId().equals(userID)) {
-                throw new IllegalArgumentException("Some of the file's ownership is not yours.");
-            }
-        }
-        if (fileUploadList.size() != docRequestDTO.getFileCodes().size()){
-            throw new IllegalArgumentException("Some of the file(s) could not be found.");
-        }
+        List<DocFileUpload> fileUploadList = docFileUploadService.getFileUploadOwnerOnly(docRequestDTO.getFileCodes(), authentication);
 
-        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, null, docRequestDTO.getFileCodes(), userID);
+        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, null, fileUploadList, userID);
 
         doc = docRepository.save(doc);
 

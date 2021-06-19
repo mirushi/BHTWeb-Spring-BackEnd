@@ -14,10 +14,15 @@ public abstract class DocFileUploadMapper {
     protected DocFileUploadRepository docFileUploadRepository;
 
     public DocFileUpload docFileUploadIDToDocFileUpload (UUID id) {
+        if (id == null) {
+            return null;
+        }
         return docFileUploadRepository.getOne(id);
     }
 
-    public abstract List<DocFileUpload> docFileUploadIDListToDocFileUpload (List<UUID> idList);
+    public List<DocFileUpload> docFileUploadIDListToDocFileUpload (List<UUID> idList) {
+        return docFileUploadRepository.findAllById(idList);
+    }
 
     @Autowired
     public void setDocFileUploadRepository (DocFileUploadRepository docFileUploadRepository) {

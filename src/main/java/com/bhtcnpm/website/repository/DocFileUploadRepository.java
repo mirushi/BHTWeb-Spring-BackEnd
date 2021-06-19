@@ -6,8 +6,10 @@ import com.bhtcnpm.website.repository.custom.DocFileUploadRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface DocFileUploadRepository extends JpaRepository<DocFileUpload, UUID>, DocFileUploadRepositoryCustom {
+    List<DocFileUpload> findAllByIdInAndUploaderId (List<UUID> docFileUploadIDs, UUID uploaderID);
 }

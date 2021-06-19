@@ -208,4 +208,12 @@ public class Doc {
 
     @Override
     public int hashCode() {return getClass().hashCode();}
+
+    public void setDocFileUploads(List<DocFileUpload> docFileUploads) {
+        this.docFileUploads.clear();
+        for (DocFileUpload file : docFileUploads) {
+            file.setDoc(this);
+        }
+        this.docFileUploads.addAll(docFileUploads);
+    }
 }

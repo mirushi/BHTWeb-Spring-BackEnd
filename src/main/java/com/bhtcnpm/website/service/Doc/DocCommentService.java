@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.service;
+package com.bhtcnpm.website.service.Doc;
 
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentDTO;
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentListDTO;

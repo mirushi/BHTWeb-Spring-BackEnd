@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.service.impl;
+package com.bhtcnpm.website.service.Doc.impl;
 
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentDTO;
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentListDTO;
@@ -6,7 +6,7 @@ import com.bhtcnpm.website.model.dto.DocComment.DocCommentMapper;
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentRequestDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.DocComment;
 import com.bhtcnpm.website.repository.DocCommentRepository;
-import com.bhtcnpm.website.service.DocCommentService;
+import com.bhtcnpm.website.service.Doc.DocCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

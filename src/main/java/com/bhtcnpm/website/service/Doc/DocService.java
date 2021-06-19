@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.service;
+package com.bhtcnpm.website.service.Doc;
 
 import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
@@ -53,16 +53,15 @@ public interface DocService {
 
     Boolean undoReject(Long docID, Long userID);
 
-    DocDetailsDTO createDocument (DocRequestDTO docRequestDTO);
-
     List<DocDetailsDTO> getRelatedDocs (Long docID);
 
     List<DocSuggestionDTO> getRelatedDocs (Long exerciseID, Integer page);
 
     List<DocSummaryDTO> getTrending ();
 
-    public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, UUID userID);
+    List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, UUID userID);
 
+    @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.DocPermissionConstant).DOC_PENDING_SELF_CREATE)")
     DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, Authentication authentication);
 
     DocSummaryListDTO getDocBySearchTerm(

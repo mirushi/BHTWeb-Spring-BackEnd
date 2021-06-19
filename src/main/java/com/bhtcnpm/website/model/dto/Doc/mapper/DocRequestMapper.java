@@ -40,7 +40,7 @@ public abstract class DocRequestMapper {
     @Mapping(target = "subjectID", source = "subject.id")
     public abstract DocRequestDTO docToDocRequestDTO (Doc doc);
 
-    public Doc updateDocFromDocRequestDTO (DocRequestDTO docRequestDTO, Doc entity , List<UUID> docFileUploadIDList, UUID userID) {
+    public Doc updateDocFromDocRequestDTO (DocRequestDTO docRequestDTO, Doc entity , List<DocFileUpload> docFileUploadList, UUID userID) {
         Doc newDoc = Objects.requireNonNullElseGet(entity, Doc::new);
 
         if (docRequestDTO == null) {
@@ -51,9 +51,9 @@ public abstract class DocRequestMapper {
             newDoc.setCreatedDtm(LocalDateTime.now());
             newDoc.setDocState(DocStateType.PENDING_APPROVAL);
             newDoc.setAuthor(userWebsiteRepository.getOne(userID));
+            newDoc.setVersion((short)0);
         }
-
-        newDoc.setDocFileUploads(docFileUploadMapper.docFileUploadIDListToDocFileUpload(docFileUploadIDList));
+        newDoc.setDocFileUploads(docFileUploadList);
         newDoc.setLastUpdatedDtm(LocalDateTime.now());
         newDoc.setLastEditedUser(userWebsiteRepository.getOne(userID));
         newDoc.setCategory(docCategoryRepository.getOne(docRequestDTO.getCategoryID()));
@@ -63,7 +63,6 @@ public abstract class DocRequestMapper {
         newDoc.setImageURL(docRequestDTO.getImageURL());
         newDoc.setTags(tagMapper.tagDTOListToTagList(docRequestDTO.getTags()));
         newDoc.setPublishDtm(docRequestDTO.getPublishDtm());
-        newDoc.setVersion((short)0);
 
         return newDoc;
     }

@@ -3,7 +3,7 @@ package com.bhtcnpm.website.controller;
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentDTO;
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentListDTO;
 import com.bhtcnpm.website.model.dto.DocComment.DocCommentRequestDTO;
-import com.bhtcnpm.website.service.DocCommentService;
+import com.bhtcnpm.website.service.Doc.DocCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
