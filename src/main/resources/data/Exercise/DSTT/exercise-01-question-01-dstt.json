@@ -1,0 +1,49 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 11,
+    "content": "Số phức có phần thực bằng 0, phần ảo khác không là số gì ?",
+    "rank": 1,
+    "explanation": "Xem khái niệm số phức trong tài liệu.",
+    "exercise": {
+      "id": 3
+    },
+    "answers": [
+      {"content": "Số thực", "isCorrect": false, "rank": 1, "question": {"id": 11} ,"version": 0},
+      {"content": "Số thuần ảo", "isCorrect": true, "rank": 2, "question": {"id": 11} ,"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 12,
+    "content": "Số phức có phần thực khác 0, phần ảo bằng 0 là số gì ?",
+    "rank": 2,
+    "explanation": "Xem khái niệm số phức trong tài liệu.",
+    "exercise": {
+      "id": 3
+    },
+    "answers": [
+      {"content": "Số thực", "isCorrect": true, "rank": 1, "question": {"id": 12} ,"version": 0},
+      {"content": "Số thuần ảo", "isCorrect": false, "rank": 2, "question": {"id": 12} ,"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 13,
+    "content": "Số phức liên hợp của số phức z = x - iy là số nào sau đây ?",
+    "rank": 3,
+    "explanation": "Xem khái niệm số phức trong tài liệu.",
+    "exercise": {
+      "id": 3
+    },
+    "answers": [
+      {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = y + xi\\)</span></p>", "isCorrect": false, "rank": 1, "question": {"id": 13} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = iy\\)</span></p>", "isCorrect": false, "rank": 2, "question": {"id": 13} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = x\\)</span></p>", "isCorrect": false, "rank": 3, "question": {"id": 13} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = x + iy\\)</span></p>", "isCorrect": true, "rank": 4, "question": {"id": 13} ,"version": 0}
+    ],
+    "version": 0
+  }
+]

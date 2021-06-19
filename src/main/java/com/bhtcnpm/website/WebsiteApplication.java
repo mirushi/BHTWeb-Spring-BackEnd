@@ -71,10 +71,17 @@ public class WebsiteApplication {
                 new ClassPathResource("data/Exercise/exercise-subject-group.json"),
                 new ClassPathResource("data/Exercise/exercise-subject-faculty.json"),
                 new ClassPathResource("data/Exercise/exercise-subject.json"),
-                new ClassPathResource("data/Exercise/exercise-topic.json"),
                 new ClassPathResource("data/Exercise/exercise-category.json"),
-                new ClassPathResource("data/Exercise/exercise.json"),
-                new ClassPathResource("data/Exercise/exercise-question-chuong01-nmlt.json")
+                new ClassPathResource("data/Exercise/NMLT/exercise-topic-nmlt.json"),
+                new ClassPathResource("data/Exercise/NMLT/exercise-01-nmlt.json"),
+                new ClassPathResource("data/Exercise/NMLT/exercise-01-question-01-nmlt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-topic-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-01-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-01-question-01-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-02-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-03-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-04-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-05-dstt.json")
         });
         factoryBean.setMapper(objectMapper);
 

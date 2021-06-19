@@ -1,0 +1,209 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 17,
+    "title": "Một số không gian véctơ thường gặp",
+    "description": "Bài tập về một số không gian véctơ thường gặp.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 1,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 19
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 18,
+    "title": "Các tính chất của không gian véctơ.",
+    "description": "Bài tập về tính chất không gian véctơ.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 2,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 19
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 19,
+    "title": "Không gian con",
+    "description": "Bài tập về không gian con.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 3,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 19
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 20,
+    "title": "Sự độc lập tuyến tính và phụ thuộc tuyến tính của hệ véctơ",
+    "description": "Bài tập về Sự độc lập tuyến tính và phụ thuộc tuyến tính của hệ véctơ.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 4,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 19
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 21,
+    "title": "Hạng của hệ véctơ",
+    "description": "Bài tập về Hạng của hệ véctơ.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 5,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 19
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 22,
+    "title": "Cơ sở",
+    "description": "Bài tập về Cơ sở, bao gồm: Hệ được sắp các vécto, tính chất của cơ sở, số chiều.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 6,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 19
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 23,
+    "title": "Toạ độ",
+    "description": "Bài tập về Toạ độ, bao gồm: Toạ độ, ma trận chuyển cơ sở, các tính chất của ma trận chuyển cơ sở.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 7,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 19
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 24,
+    "title": "Không gian Euclide",
+    "description": "Bài tập về Không gian Euclide, bao gồm: Tích vô hướng, Độ dài vecto, sự trực giao.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 8,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 19
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 25,
+    "title": "Cơ sở trực chuẩn",
+    "description": "Bài tập về Cơ sở trực chuẩn.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 9,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 19
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  }
+]
