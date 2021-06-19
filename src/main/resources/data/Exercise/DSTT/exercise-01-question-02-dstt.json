@@ -1,0 +1,17 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 16,
+    "content": "Dạng hình học của số phức z = x + iy là điểm nào sau đây ?",
+    "rank": 1,
+    "explanation": "Xem dạng hình học của số phức trong tài liệu.",
+    "exercise": {
+      "id": 3
+    },
+    "answers": [
+      {"content": "Số thực", "isCorrect": false, "rank": 1, "question": {"id": 11} ,"version": 0},
+      {"content": "Số thuần ảo", "isCorrect": true, "rank": 2, "question": {"id": 11} ,"version": 0}
+    ],
+    "version": 0
+  }
+]
