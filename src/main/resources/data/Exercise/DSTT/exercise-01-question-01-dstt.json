@@ -45,5 +45,40 @@
       {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = x + iy\\)</span></p>", "isCorrect": true, "rank": 4, "question": {"id": 13} ,"version": 0}
     ],
     "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 14,
+    "content": "Hai số phức được gọi là bằng nhau khi nào ?",
+    "rank": 4,
+    "explanation": "Xem khái niệm số phức trong tài liệu.",
+    "exercise": {
+      "id": 3
+    },
+    "answers": [
+      {"content": "Khi cả phần thực và phần ảo lần lượt bằng nhau", "isCorrect": true, "rank": 1, "question": {"id": 14} ,"version": 0},
+      {"content": "Chỉ cần phần thực bằng nhau", "isCorrect": false, "rank": 2, "question": {"id": 14} ,"version": 0},
+      {"content": "Chỉ cần phần ảo bằng nhau", "isCorrect": false, "rank": 3, "question": {"id": 14} ,"version": 0},
+      {"content": "Không có đáp án nào đúng", "isCorrect": false, "rank": 4, "question": {"id": 14} ,"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 15,
+    "content": "Tìm x,y sao cho 2 số phức bằng nhau: <p><span class=\"math-tex\">\\(z_{1} = x + iy; z_{2} = -y + 2 + i(x-1)\\)</span></p>\n",
+    "rank": 5,
+    "explanation": "Xem khái niệm số phức trong tài liệu.",
+    "exercise": {
+      "id": 3
+    },
+    "answers": [
+      {"content": "<p><span class=\"math-tex\">\\(x = \\frac{4}{3}; y = \\frac{2}{3}\\)</span></p>\n", "isCorrect": false, "rank": 1, "question": {"id": 15} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(x = \\frac{3}{2}; y = \\frac{1}{2}\\)</span></p>\n", "isCorrect": true, "rank": 2, "question": {"id": 15} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(x = 2; y = 0\\)</span></p>\n", "isCorrect": false, "rank": 3, "question": {"id": 15} ,"version": 0},
+      {"content": "Không có đáp án nào đúng", "isCorrect": false, "rank": 4, "question": {"id": 15} ,"version": 0}
+    ],
+    "version": 0
   }
+
 ]
