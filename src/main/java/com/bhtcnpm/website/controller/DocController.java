@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.model.validator.dto.Doc.DocID;
+import com.bhtcnpm.website.service.Doc.DocDownloadService;
 import com.bhtcnpm.website.service.Doc.DocService;
 import com.bhtcnpm.website.service.Doc.DocViewService;
 import com.bhtcnpm.website.util.HttpIPUtils;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
@@ -35,6 +37,7 @@ public class DocController {
 
     private final DocService docService;
     private final DocViewService docViewService;
+    private final DocDownloadService docDownloadService;
 
     @GetMapping
     @ResponseBody
@@ -263,8 +266,19 @@ public class DocController {
 
     @GetMapping("downloadURL")
     @ResponseBody
-    public ResponseEntity<DocDownloadInfoDTO> getDownloadURL (@RequestParam("code") UUID fileID) {
+    public ResponseEntity<DocDownloadInfoDTO> getDownloadURL (@RequestParam("id") UUID fileID,
+                                                              HttpServletRequest servletRequest,
+                                                              Authentication authentication) {
         DocDownloadInfoDTO dto = docService.getDocDownloadInfo(fileID);
+
+        if (dto == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        String ipAddress = HttpIPUtils.getClientIPAddress(servletRequest);
+
+        docDownloadService.addDocDownload(fileID, authentication, ipAddress);
+
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

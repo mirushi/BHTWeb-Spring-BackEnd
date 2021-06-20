@@ -14,21 +14,21 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Immutable
-public class DocView {
+public class DocDownload {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "doc_view_sequence"
+            generator = "doc_download_sequence"
     )
     @SequenceGenerator(
-            name = "doc_view_sequence",
-            sequenceName = "doc_view_sequence"
+            name = "doc_download_sequence",
+            sequenceName = "doc_download_sequence"
     )
     private Long id;
 
     @ManyToOne
     @JoinColumn(nullable = false, updatable = false)
-    private Doc doc;
+    private DocFileUpload docFileUpload;
 
     @ManyToOne
     @JoinColumn(updatable = false)
@@ -44,8 +44,8 @@ public class DocView {
     @Override
     public boolean equals (Object o) {
         if (this == o) return true;
-        if (!(o instanceof DocView)) return false;
-        DocView other = (DocView) o;
+        if (!(o instanceof DocDownload)) return false;
+        DocDownload other = (DocDownload) o;
 
         return id != null && id.equals(other.getId());
     }

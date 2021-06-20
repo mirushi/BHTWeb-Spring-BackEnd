@@ -5,10 +5,10 @@ import org.springframework.security.core.Authentication;
 
 import java.util.UUID;
 
-public interface DocViewService {
+public interface DocDownloadService {
     @PreAuthorize(value = "permitAll()")
-    boolean addDocView (Long docID, UUID userID, String ipAddress);
+    boolean addDocDownload (UUID docFileUploadID, UUID userID, String ipAddress);
 
     @PreAuthorize(value = "permitAll()")
-    boolean addDocView (Long docID, Authentication authentication, String ipAddress);
+    boolean addDocDownload (UUID docFileUploadID, Authentication authentication, String ipAddress);
 }

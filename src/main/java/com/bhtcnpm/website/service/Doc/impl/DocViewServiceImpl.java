@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.service.Doc.impl;
 
+import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocView;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.repository.Doc.DocRepository;
@@ -30,12 +31,18 @@ public class DocViewServiceImpl implements DocViewService {
             return false;
         }
 
-        DocView docView = new DocView();
-        docView.setDoc(docRepository.getOne(docID));
+        Doc doc = docRepository.getOne(docID);
+
+        UserWebsite user = null;
         if (userID != null) {
-            docView.setUser(uwRepository.getOne(userID));
+            user = uwRepository.getOne(userID);
         }
-        docView.setIpAddress(ipAddress);
+
+        DocView docView = DocView.builder()
+                .doc(doc)
+                .user(user)
+                .ipAddress(ipAddress)
+                .build();
 
         docViewRepository.save(docView);
 
