@@ -5,12 +5,10 @@ import com.bhtcnpm.website.model.validator.dto.Doc.*;
 import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryID;
 import com.bhtcnpm.website.model.validator.dto.DocSubject.DocSubjectID;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 public class DocRequestDTO {
@@ -32,8 +30,8 @@ public class DocRequestDTO {
     @DocPublishDtm
     private LocalDateTime publishDtm;
 
-    @DocFileCode
-    private List<UUID> fileCodes;
+    @DocFileUploadRequestDTOList
+    private List<DocFileUploadRequestDTO> docFileUploadRequestDTOs;
 
     @DocTag
     private Set<TagDTO> tags;

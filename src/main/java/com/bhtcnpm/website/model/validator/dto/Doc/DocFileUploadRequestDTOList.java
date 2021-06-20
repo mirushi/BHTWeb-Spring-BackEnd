@@ -12,8 +12,8 @@ import java.lang.annotation.*;
 @Documented
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DocFileCode {
-    String message() default "Doc file code is not valid.";
+public @interface DocFileUploadRequestDTOList {
+    String message() default "Doc file upload request list is not valid.";
 
     Class<?>[] groups() default {};
 

@@ -28,6 +28,12 @@ public class DocFileUpload {
     @Builder.Default
     private UUID id = UUID.randomUUID();
 
+    @Column(nullable = false, updatable = false)
+    private String remoteID;
+
+    @Column(nullable = false)
+    private Integer rank;
+
     @Column(nullable = false)
     private String fileName;
 
@@ -65,5 +71,4 @@ public class DocFileUpload {
     public int hashCode() {
         return Objects.hash(getId());
     }
-
 }

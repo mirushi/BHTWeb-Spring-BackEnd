@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
 import com.bhtcnpm.website.model.dto.Tag.TagDTO;
+import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.validator.dto.Doc.*;
 import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryID;
 import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryName;
@@ -11,6 +12,7 @@ import com.bhtcnpm.website.model.validator.dto.UserWebsite.UserWebsiteName;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -50,6 +52,8 @@ public class DocDetailsDTO {
 
     @DocSubjectName
     private String subjectName;
+
+    private List<DocFileUploadDTO> docFileUploads;
 
     @DocTag
     private Set<TagDTO> tags;

@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.Doc.custom.DocRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -40,9 +41,6 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
 
     Page<Doc> findByAuthorId (Pageable pageable, Long authorID);
 
-    @Query("SELECT d " +
-            "FROM Doc d " +
-            "LEFT JOIN FETCH d.tags tags " +
-            "WHERE d.id = :id")
-    Optional<Doc> findByIDWithTags (Long id);
+    @EntityGraph(value = "tagsAndDocFileUploads.all")
+    Optional<Doc> getAllFilterWithTagsAndDocFileUploadsById(Long id);
 }

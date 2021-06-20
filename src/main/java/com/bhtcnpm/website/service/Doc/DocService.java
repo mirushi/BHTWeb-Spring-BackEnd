@@ -10,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -91,7 +90,7 @@ public interface DocService {
     DocDetailsDTO getDocDetails (Long id);
 
     @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.DocPermissionConstant).DOC_PENDING_SELF_UPLOAD)")
-    DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Authentication authentication) throws IOException, FileExtensionNotAllowedException;
+    DocFileUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Authentication authentication) throws IOException, FileExtensionNotAllowedException;
 
     DocDownloadInfoDTO getDocDownloadInfo (UUID fileID);
 

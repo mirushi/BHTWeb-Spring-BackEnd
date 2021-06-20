@@ -22,6 +22,7 @@ public interface DocDetailsMapper {
     @Mapping(target = "subjectID", source = "subject.id")
     @Mapping(target = "subjectName", source = "subject.name")
     @Mapping(target = "publishDtm", source = "publishDtm")
+    @Mapping(target = "docFileUploads", source = "docFileUploads")
     DocDetailsDTO docToDocDetailsDTO (Doc doc);
 
     List<DocDetailsDTO> docListToDocDetailsDTOList (List<Doc> docs);

@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Nullable;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
@@ -257,9 +256,9 @@ public class DocController {
 
     @PostMapping("upload")
     @ResponseBody
-    public ResponseEntity<DocUploadDTO> uploadDoc (@RequestParam("file")MultipartFile file,
-                                                   Authentication authentication) throws IOException, FileExtensionNotAllowedException {
-        DocUploadDTO dto = docService.uploadFileToGDrive(file, authentication);
+    public ResponseEntity<DocFileUploadDTO> uploadDoc (@RequestParam("file")MultipartFile file,
+                                                       Authentication authentication) throws IOException, FileExtensionNotAllowedException {
+        DocFileUploadDTO dto = docService.uploadFileToGDrive(file, authentication);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }

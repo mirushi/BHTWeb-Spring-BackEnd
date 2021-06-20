@@ -4,8 +4,8 @@ import com.bhtcnpm.website.constant.domain.Doc.DocApprovalState;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.model.entity.*;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
+import com.bhtcnpm.website.repository.Doc.comparator.DocFileUploadComparatorRankBased;
 import com.bhtcnpm.website.search.bridge.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -15,18 +15,14 @@ import org.hibernate.annotations.*;
 import org.hibernate.search.engine.backend.types.*;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
-import org.jsoup.nodes.Document;
 
-import javax.naming.OperationNotSupportedException;
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity(name = "Doc")
 @Indexed
@@ -42,9 +38,10 @@ import java.util.Set;
                 "AND d.deletedDate IS NULL")
 @Where(clause = "DELETED_DATE is NULL")
 @NamedEntityGraph(
-        name = "tags.all",
+        name = "tagsAndDocFileUploads.all",
         attributeNodes = {
-                @NamedAttributeNode(value = "tags")
+                @NamedAttributeNode(value = "tags"),
+                @NamedAttributeNode(value = "docFileUploads")
         }
 )
 public class Doc {
@@ -107,7 +104,8 @@ public class Doc {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<DocFileUpload> docFileUploads;
+    @SortComparator(value = DocFileUploadComparatorRankBased.class)
+    private SortedSet<DocFileUpload> docFileUploads;
 
     @Column(nullable = false)
     private String imageURL;
@@ -220,7 +218,7 @@ public class Doc {
         if (this.docFileUploads != null) {
             this.docFileUploads.clear();
         } else {
-            this.docFileUploads = new ArrayList<>();
+            this.docFileUploads = new TreeSet<>(new DocFileUploadComparatorRankBased());
         }
         for (DocFileUpload file : docFileUploads) {
             file.setDoc(this);

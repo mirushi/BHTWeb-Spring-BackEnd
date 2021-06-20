@@ -69,6 +69,8 @@ public class DocServiceImpl implements DocService {
 
     private final DocDownloadInfoMapper docDownloadInfoMapper;
 
+    private final DocFileUploadMapper docFileUploadMapper;
+
     private final DocRepository docRepository;
 
     private final DocFileUploadRepository docFileUploadRepository;
@@ -161,9 +163,13 @@ public class DocServiceImpl implements DocService {
             }
         }
 
-        List<DocFileUpload> docFileUploadList = docFileUploadService.getFileUploadOwnerOnly(docRequestDTO.getFileCodes(), authentication);
+        List<DocFileUpload> fileUploadList = docFileUploadService.getFileUploadOwnerOnly(
+                docRequestDTO.getDocFileUploadRequestDTOs().stream().map(DocFileUploadRequestDTO::getId).collect(Collectors.toList()),
+                authentication
+        );
+        fileUploadList = docFileUploadMapper.updateDocFileUpload(fileUploadList, docRequestDTO.getDocFileUploadRequestDTOs());
 
-        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, oldDoc, docFileUploadList ,userID);
+        Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, oldDoc, fileUploadList ,userID);
 
         doc = docRepository.save(doc);
 
@@ -315,7 +321,11 @@ public class DocServiceImpl implements DocService {
     public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
-        List<DocFileUpload> fileUploadList = docFileUploadService.getFileUploadOwnerOnly(docRequestDTO.getFileCodes(), authentication);
+        List<DocFileUpload> fileUploadList = docFileUploadService.getFileUploadOwnerOnly(
+                docRequestDTO.getDocFileUploadRequestDTOs().stream().map(DocFileUploadRequestDTO::getId).collect(Collectors.toList()),
+                authentication
+        );
+        fileUploadList = docFileUploadMapper.updateDocFileUpload(fileUploadList, docRequestDTO.getDocFileUploadRequestDTOs());
 
         Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, null, fileUploadList, userID);
 
@@ -350,7 +360,7 @@ public class DocServiceImpl implements DocService {
 
     @Override
     public DocDetailsDTO getDocDetails(Long id) {
-        Optional<Doc> doc = docRepository.findByIDWithTags(id);
+        Optional<Doc> doc = docRepository.getAllFilterWithTagsAndDocFileUploadsById(id);
 
         if (doc.isEmpty()) {
             return null;
@@ -360,7 +370,7 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Authentication authentication) throws IOException, FileExtensionNotAllowedException {
+    public DocFileUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Authentication authentication) throws IOException, FileExtensionNotAllowedException {
         //TODO: Limit how much user can upload (aka rate limiting).
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
@@ -392,7 +402,7 @@ public class DocServiceImpl implements DocService {
 
         fileUpload = docFileUploadRepository.save(fileUpload);
 
-        return DocUploadDTO.builder()
+        return DocFileUploadDTO.builder()
                 .fileName(fileUpload.getFileName())
                 .id(fileUpload.getId())
                 .fileSize(multipartFile.getSize())
