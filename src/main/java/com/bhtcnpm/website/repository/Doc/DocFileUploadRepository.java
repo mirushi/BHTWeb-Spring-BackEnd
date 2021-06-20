@@ -1,8 +1,7 @@
-package com.bhtcnpm.website.repository;
+package com.bhtcnpm.website.repository.Doc;
 
-import com.bhtcnpm.website.model.dto.Doc.DocDownloadInfoDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
-import com.bhtcnpm.website.repository.custom.DocFileUploadRepositoryCustom;
+import com.bhtcnpm.website.repository.Doc.custom.DocFileUploadRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -3,7 +3,7 @@ package com.bhtcnpm.website.service.Doc.impl;
 import com.bhtcnpm.website.model.dto.DocSubject.DocSubjectDTO;
 import com.bhtcnpm.website.model.dto.DocSubject.DocSubjectMapper;
 import com.bhtcnpm.website.model.entity.DocEntities.DocSubject;
-import com.bhtcnpm.website.repository.DocSubjectRepository;
+import com.bhtcnpm.website.repository.Doc.DocSubjectRepository;
 import com.bhtcnpm.website.service.Doc.DocSubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

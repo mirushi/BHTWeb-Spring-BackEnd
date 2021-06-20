@@ -1,7 +1,7 @@
 package com.bhtcnpm.website.service.Doc.impl;
 
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
-import com.bhtcnpm.website.repository.DocFileUploadRepository;
+import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Doc.DocFileUploadService;
 import lombok.RequiredArgsConstructor;

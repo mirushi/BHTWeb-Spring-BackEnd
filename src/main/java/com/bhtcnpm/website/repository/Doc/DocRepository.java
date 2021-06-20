@@ -1,11 +1,9 @@
-package com.bhtcnpm.website.repository;
+package com.bhtcnpm.website.repository.Doc;
 
 import com.bhtcnpm.website.model.dto.Doc.DocQuickSearchResult;
-import com.bhtcnpm.website.model.dto.Doc.DocReactionStatisticDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
-import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
-import com.bhtcnpm.website.repository.custom.DocRepositoryCustom;
+import com.bhtcnpm.website.repository.Doc.custom.DocRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +13,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 @Repository
 public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredicateExecutor<Doc>,DocRepositoryCustom {
@@ -41,4 +39,10 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
     Page<Doc> findByDocState (Pageable pageable, DocStateType docStateType);
 
     Page<Doc> findByAuthorId (Pageable pageable, Long authorID);
+
+    @Query("SELECT d " +
+            "FROM Doc d " +
+            "LEFT JOIN FETCH d.tags tags " +
+            "WHERE d.id = :id")
+    Optional<Doc> findByIDWithTags (Long id);
 }

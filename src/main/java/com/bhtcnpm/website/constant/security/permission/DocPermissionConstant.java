@@ -32,4 +32,7 @@ public class DocPermissionConstant {
 
     //Approve permissions.
     public static final String DOC_PENDING_ALL_APPROVE = "ROLE_DOC_PENDING_ALL_APPROVE";
+
+    //Upload permissions.
+    public static final String DOC_PENDING_SELF_UPLOAD = "ROLE_DOC_PENDING_SELF_UPLOAD";
 }

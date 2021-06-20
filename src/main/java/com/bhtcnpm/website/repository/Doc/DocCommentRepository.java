@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.repository;
+package com.bhtcnpm.website.repository.Doc;
 
 import com.bhtcnpm.website.model.dto.Doc.DocCommentStatisticDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.DocComment;

@@ -24,6 +24,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -34,12 +35,18 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE doc SET DELETED_DATE = "+ "20210302" +" WHERE id = ? AND VERSION = ?")
+@SQLDelete(sql = "UPDATE doc SET DELETED_DATE = "+ "CURRENT_TIMESTAMP()" +" WHERE id = ? AND VERSION = ?")
 @Loader(namedQuery = "findDocById")
 @NamedQuery(name = "findDocById",
         query = "SELECT d FROM Doc d WHERE d.id = ?1 " +
                 "AND d.deletedDate IS NULL")
 @Where(clause = "DELETED_DATE is NULL")
+@NamedEntityGraph(
+        name = "tags.all",
+        attributeNodes = {
+                @NamedAttributeNode(value = "tags")
+        }
+)
 public class Doc {
 
     @Id
@@ -210,7 +217,11 @@ public class Doc {
     public int hashCode() {return getClass().hashCode();}
 
     public void setDocFileUploads(List<DocFileUpload> docFileUploads) {
-        this.docFileUploads.clear();
+        if (this.docFileUploads != null) {
+            this.docFileUploads.clear();
+        } else {
+            this.docFileUploads = new ArrayList<>();
+        }
         for (DocFileUpload file : docFileUploads) {
             file.setDoc(this);
         }

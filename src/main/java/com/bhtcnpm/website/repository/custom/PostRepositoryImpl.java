@@ -399,7 +399,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     @Override
     public void removeIndexPost(Long postID) {
         Post post = em.getReference(Post.class, postID);
-        indexPost(post);
+        removeIndexPost(post);
     }
 
     @Override

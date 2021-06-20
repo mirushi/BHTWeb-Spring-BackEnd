@@ -5,7 +5,10 @@ import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
+import com.bhtcnpm.website.model.validator.dto.Doc.DocID;
 import com.bhtcnpm.website.service.Doc.DocService;
+import com.bhtcnpm.website.service.Doc.DocViewService;
+import com.bhtcnpm.website.util.HttpIPUtils;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +34,7 @@ import java.util.UUID;
 public class DocController {
 
     private final DocService docService;
+    private final DocViewService docViewService;
 
     @GetMapping
     @ResponseBody
@@ -40,6 +45,26 @@ public class DocController {
         DocSummaryListDTO result = docService.getAllDoc(predicate, pageable, authentication);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<DocDetailsDTO> getDocumentDetails (
+        @PathVariable @DocID Long id,
+        HttpServletRequest servletRequest,
+        Authentication authentication
+    ) {
+        DocDetailsDTO docDetailsDTO = docService.getDocDetails(id);
+
+        if (docDetailsDTO == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        String ipAddress = HttpIPUtils.getClientIPAddress(servletRequest);
+
+        docViewService.addDocView(id, authentication, ipAddress);
+
+        return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
 
     @GetMapping("pendingDocuments")
@@ -119,11 +144,9 @@ public class DocController {
 
     @PostMapping("{id}/approval")
     @ResponseBody
-    public ResponseEntity postDocApproval (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
-        Boolean result = docService.postApproval(id, userID);
+    public ResponseEntity postDocApproval (@PathVariable Long id,
+                                           Authentication authentication) {
+        Boolean result = docService.postApproval(id, authentication);
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
         }
@@ -143,28 +166,11 @@ public class DocController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("{id}/downloadCount")
-    @ResponseBody
-    public ResponseEntity increaseDownloadCount (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
-        Boolean result = docService.increaseDownloadCount(id, userID);
-
-        if (result) {
-            return new ResponseEntity(HttpStatus.OK);
-        }
-
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
-    }
-
     @PostMapping("{id}/rejection")
     @ResponseBody
-    public ResponseEntity rejectDoc (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
-        Boolean result = docService.postReject(id, userID);
+    public ResponseEntity rejectDoc (@PathVariable Long id,
+                                     Authentication authentication) {
+        Boolean result = docService.docReject(id, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -175,11 +181,9 @@ public class DocController {
 
     @DeleteMapping("{id}/rejection")
     @ResponseBody
-    public ResponseEntity undoRejectDoc (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
-        Boolean result = docService.undoReject(id, userID);
+    public ResponseEntity undoRejectDoc (@PathVariable Long id,
+                                         Authentication authentication) {
+        Boolean result = docService.undoReject(id, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -250,19 +254,17 @@ public class DocController {
 
     @PostMapping("upload")
     @ResponseBody
-    public ResponseEntity<DocUploadDTO> uploadDoc (@RequestParam("file")MultipartFile file) throws IOException, FileExtensionNotAllowedException {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        DocUploadDTO dto = docService.uploadFileToGDrive(file, userID);
+    public ResponseEntity<DocUploadDTO> uploadDoc (@RequestParam("file")MultipartFile file,
+                                                   Authentication authentication) throws IOException, FileExtensionNotAllowedException {
+        DocUploadDTO dto = docService.uploadFileToGDrive(file, authentication);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("downloadURL")
     @ResponseBody
-    public ResponseEntity<DocDownloadInfoDTO> getDownloadURL (@RequestParam("code") String fileCode) {
-        DocDownloadInfoDTO dto = docService.getDocDownloadInfo(fileCode);
+    public ResponseEntity<DocDownloadInfoDTO> getDownloadURL (@RequestParam("code") UUID fileID) {
+        DocDownloadInfoDTO dto = docService.getDocDownloadInfo(fileID);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

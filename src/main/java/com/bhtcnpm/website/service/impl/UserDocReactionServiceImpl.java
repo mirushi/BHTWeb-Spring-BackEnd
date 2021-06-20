@@ -8,7 +8,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReactionId;
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.repository.DocRepository;
+import com.bhtcnpm.website.repository.Doc.DocRepository;
 import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.service.UserDocReactionService;

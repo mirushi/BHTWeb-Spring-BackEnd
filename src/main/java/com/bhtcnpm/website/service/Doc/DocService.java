@@ -43,15 +43,27 @@ public interface DocService {
             "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).UPDATE_PERMISSION)")
     DocDetailsDTO putDoc (Long docID, DocRequestDTO docRequestDTO, Authentication authentication);
 
-    Boolean postApproval (Long docID, Long userID);
+    @PreAuthorize(value = "hasPermission(#docID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).APPROVE_PERMISSION)")
+    Boolean postApproval (Long docID, Authentication authentication);
 
+    @PreAuthorize(value = "hasPermission(#docID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).APPROVE_PERMISSION)")
     Boolean deleteApproval (Long docID);
 
     Boolean increaseDownloadCount (Long docID, Long userID);
 
-    Boolean postReject(Long docID, Long userID);
+    @PreAuthorize(value = "hasPermission(#docID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).APPROVE_PERMISSION)")
+    Boolean docReject(Long docID, Authentication authentication);
 
-    Boolean undoReject(Long docID, Long userID);
+    @PreAuthorize(value = "hasPermission(#docID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).APPROVE_PERMISSION)")
+    Boolean undoReject(Long docID, Authentication authentication);
 
     List<DocDetailsDTO> getRelatedDocs (Long docID);
 
@@ -73,9 +85,15 @@ public interface DocService {
             ApiSortOrder sortByPublishDtm
     );
 
-    DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, UUID userID) throws IOException, FileExtensionNotAllowedException;
+    @PreAuthorize(value = "hasPermission(#id, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).READ_PERMISSION)")
+    DocDetailsDTO getDocDetails (Long id);
 
-    DocDownloadInfoDTO getDocDownloadInfo (String fileCode);
+    @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.DocPermissionConstant).DOC_PENDING_SELF_UPLOAD)")
+    DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Authentication authentication) throws IOException, FileExtensionNotAllowedException;
+
+    DocDownloadInfoDTO getDocDownloadInfo (UUID fileID);
 
     DocSummaryWithStateListDTO getManagementDoc(
             String searchTerm,

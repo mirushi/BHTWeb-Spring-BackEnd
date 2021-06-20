@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.repository.custom;
+package com.bhtcnpm.website.repository.Doc.custom;
 
 import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.DocReactionStatisticDTO;
@@ -7,6 +7,7 @@ import com.bhtcnpm.website.model.dto.Doc.DocSummaryListDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocSummaryWithStateListDTO;
 import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
 import com.bhtcnpm.website.model.dto.Post.PostSummaryWithStateListDTO;
+import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.querydsl.core.types.Predicate;
@@ -41,4 +42,8 @@ public interface DocRepositoryCustom {
                                                           SortOrder sortByPublishDtm,
                                                           SortOrder sortByCreatedDtm);
 
+    void indexDoc (Long docID);
+    void indexDoc (Doc doc);
+    void removeIndexDoc (Long docID);
+    void removeIndexDoc (Doc doc);
 }

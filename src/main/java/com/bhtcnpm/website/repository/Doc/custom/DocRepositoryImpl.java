@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.repository.custom;
+package com.bhtcnpm.website.repository.Doc.custom;
 
 import com.bhtcnpm.website.constant.business.Doc.DocBusinessConstant;
 import com.bhtcnpm.website.model.dto.Doc.*;
@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.dto.Doc.mapper.DocSummaryMapper;
 import com.bhtcnpm.website.model.entity.DocEntities.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
+import com.bhtcnpm.website.repository.Doc.custom.DocRepositoryCustom;
 import com.bhtcnpm.website.search.lucene.LuceneIndexUtils;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Projections;
@@ -19,11 +20,13 @@ import org.hibernate.search.engine.search.sort.dsl.SearchSortFactory;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
+import org.hibernate.search.mapper.orm.work.SearchIndexingPlan;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.IOException;
@@ -157,6 +160,34 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
         return finalResult;
     }
 
+    @Override
+    public void indexDoc(Long docID) {
+        Doc doc = em.getReference(Doc.class, docID);
+        indexDoc(doc);
+    }
+
+    @Override
+    public void indexDoc(Doc doc) {
+        SearchIndexingPlan indexingPlan = searchSession.indexingPlan();
+        indexingPlan.addOrUpdate(doc);
+        em.flush();
+        indexingPlan.execute();
+    }
+
+    @Override
+    public void removeIndexDoc(Long docID) {
+        Doc doc = em.getReference(Doc.class, docID);
+        removeIndexDoc(doc);
+    }
+
+    @Override
+    public void removeIndexDoc(Doc doc) {
+        SearchIndexingPlan indexingPlan = searchSession.indexingPlan();
+        indexingPlan.delete(doc);
+        em.flush();
+        indexingPlan.execute();
+    }
+
     private SearchResult<Doc> getDocSearchResult (String searchTerm,
                                                   Long categoryID,
                                                   Long subjectID,
@@ -214,4 +245,8 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
         return searchResult;
     }
 
+    @PreDestroy
+    public void cleanUp () throws IOException {
+        luceneIndexReader.close();
+    }
 }

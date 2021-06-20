@@ -6,13 +6,11 @@ import com.bhtcnpm.website.constant.security.evaluator.GenericOwnership;
 import com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest;
 import com.bhtcnpm.website.constant.security.permission.DocPermissionConstant;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
-import com.bhtcnpm.website.repository.DocRepository;
+import com.bhtcnpm.website.repository.Doc.DocRepository;
 import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.nodes.Document;
-import org.springframework.core.log.LogMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -61,7 +59,7 @@ public class DocPermissionEvaluator implements SimplePermissionEvaluator {
         DocBusinessState state = targetDomainObject.getDocBusinessState();
         DocApprovalState approvalState = targetDomainObject.getDocApprovalState();
 
-        UUID authenticatedUserID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+        UUID authenticatedUserID = SecurityUtils.getUserID(authentication);
 
         if (state == null) {
             this.log.warn("Doc business state cannot be determined. Denying access to object %s");
@@ -78,7 +76,31 @@ public class DocPermissionEvaluator implements SimplePermissionEvaluator {
             return this.checkDocUpdatePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
+        //Kiểm tra quyền Approve.
+        if (DocActionPermissionRequest.APPROVE_PERMISSION.equals(permission)) {
+            return this.checkDocApprovePermission(authentication, authenticatedUserID, approvalState);
+        }
+
         throw new IllegalArgumentException(String.format("Doc permission %s is not supported. Denying access to docID = %s", permission, targetDomainObject.getId()));
+    }
+
+    private boolean checkDocApprovePermission (Authentication authentication, UUID authenticatedUserID, DocApprovalState approvalState) {
+        //Bắt buộc phải có tài khoản mới được approve.
+        log.info("Checking doc approve permission.");
+        if (authenticatedUserID == null) {
+            log.warn("User ID not found in authentication object. Denying access.");
+            return false;
+        }
+
+        //Xét state duyệt của Doc.
+        //Nếu Doc đang pending thì xét xem User có quyền để thực hiện Approve/Reject hay không.
+        if (DocApprovalState.PENDING.equals(approvalState)) {
+            if (SecurityUtils.containsAuthority(authentication, DocPermissionConstant.DOC_PENDING_ALL_APPROVE)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean checkDocUpdatePermission (Authentication authentication, UUID authenticatedUserID, DocBusinessState state, Doc targetDomainObject) {

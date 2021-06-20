@@ -1,13 +1,12 @@
-package com.bhtcnpm.website.repository.custom;
+package com.bhtcnpm.website.repository.Doc.custom;
 
-import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.DocEntities.QDocFileUpload;
+import com.bhtcnpm.website.repository.Doc.custom.DocFileUploadRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.UUID;
 
 @Component
 public class DocFileUploadRepositoryImpl implements DocFileUploadRepositoryCustom {

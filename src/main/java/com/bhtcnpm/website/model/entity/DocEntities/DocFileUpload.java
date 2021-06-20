@@ -4,10 +4,12 @@ import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.UUIDSerializer;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,7 +25,8 @@ public class DocFileUpload {
     @Column(columnDefinition = "BINARY(16)",
             nullable = false,
             unique = true)
-    private UUID id;
+    @Builder.Default
+    private UUID id = UUID.randomUUID();
 
     @Column(nullable = false)
     private String fileName;
@@ -36,10 +39,11 @@ public class DocFileUpload {
     private String downloadURL;
 
     @Column(nullable = false)
-    private Long downloadCount;
-
-    @Column(nullable = false)
     private String thumbnailURL;
+
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdDtm;
 
     @ManyToOne
     @JoinColumn(nullable = false)

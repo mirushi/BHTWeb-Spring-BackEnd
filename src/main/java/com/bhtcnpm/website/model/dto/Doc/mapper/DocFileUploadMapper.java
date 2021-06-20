@@ -1,7 +1,7 @@
 package com.bhtcnpm.website.model.dto.Doc.mapper;
 
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
-import com.bhtcnpm.website.repository.DocFileUploadRepository;
+import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 

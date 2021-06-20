@@ -1,14 +1,11 @@
-package com.bhtcnpm.website.model.entity.PostEntities;
+package com.bhtcnpm.website.model.entity.DocEntities;
 
-import com.bhtcnpm.website.model.entity.DocEntities.Doc;
-import com.bhtcnpm.website.model.entity.DocEntities.DocView;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,21 +15,21 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostView {
+public class DocView {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "post_view_sequence"
+            generator = "doc_view_sequence"
     )
     @SequenceGenerator(
-            name = "post_view_sequence",
-            sequenceName = "post_view_sequence"
+            name = "doc_view_sequence",
+            sequenceName = "doc_view_sequence"
     )
     private Long id;
 
     @JoinColumn(nullable = false, updatable = false)
     @ManyToOne
-    private Post post;
+    private Doc doc;
 
     @JoinColumn(updatable = false)
     @ManyToOne
@@ -48,8 +45,8 @@ public class PostView {
     @Override
     public boolean equals (Object o) {
         if (this == o) return true;
-        if (!(o instanceof PostView)) return false;
-        PostView other = (PostView) o;
+        if (!(o instanceof DocView)) return false;
+        DocView other = (DocView) o;
 
         return id != null && id.equals(other.getId());
     }

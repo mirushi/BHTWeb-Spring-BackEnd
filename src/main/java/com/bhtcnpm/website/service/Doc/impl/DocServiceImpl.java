@@ -9,12 +9,12 @@ import com.bhtcnpm.website.model.dto.Doc.mapper.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
-import com.bhtcnpm.website.repository.DocFileUploadRepository;
+import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
-import com.bhtcnpm.website.repository.DocCommentRepository;
-import com.bhtcnpm.website.repository.DocRepository;
+import com.bhtcnpm.website.repository.Doc.DocCommentRepository;
+import com.bhtcnpm.website.repository.Doc.DocRepository;
 import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.predicate.Doc.DocPredicateGenerator;
@@ -171,20 +171,21 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    @Transactional
-    public Boolean postApproval(Long docID, Long userID) {
+    public Boolean postApproval(Long docID, Authentication authentication) {
+        //TODO: When approve, also move file(s) to approved folder in Google Drive.
         int rowChanged = docRepository.setDocState(docID, DocStateType.APPROVED);
         if (rowChanged == 1) {
+            docRepository.indexDoc(docID);
             return true;
         }
         return false;
     }
 
     @Override
-    @Transactional
     public Boolean deleteApproval (Long docID) {
         int rowChanged = docRepository.setDocState(docID, DocStateType.PENDING_APPROVAL);
         if (rowChanged == 1) {
+            docRepository.indexDoc(docID);
             return true;
         }
         return false;
@@ -201,11 +202,10 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public Boolean postReject(Long docID, Long userID) {
-        //TODO: Please check condition before allowing doc approval;
-
+    public Boolean docReject(Long docID, Authentication authentication) {
         int rowChanged = docRepository.setDocState(docID, DocStateType.REJECTED);
         if (rowChanged == 1) {
+            docRepository.indexDoc(docID);
             return true;
         }
 
@@ -213,11 +213,10 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public Boolean undoReject(Long docID, Long userID) {
-        //TODO: Please check condition before allowing doc approval;
+    public Boolean undoReject(Long docID, Authentication authentication) {
         int rowChanged = docRepository.setDocState(docID, DocStateType.PENDING_APPROVAL);
-
         if (rowChanged == 1) {
+            docRepository.indexDoc(docID);
             return true;
         }
 
@@ -350,7 +349,21 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, UUID userID) throws IOException, FileExtensionNotAllowedException {
+    public DocDetailsDTO getDocDetails(Long id) {
+        Optional<Doc> doc = docRepository.findByIDWithTags(id);
+
+        if (doc.isEmpty()) {
+            return null;
+        }
+
+        return docDetailsMapper.docToDocDetailsDTO(doc.get());
+    }
+
+    @Override
+    public DocUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Authentication authentication) throws IOException, FileExtensionNotAllowedException {
+        //TODO: Limit how much user can upload (aka rate limiting).
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
         byte[] fileContent = multipartFile.getBytes();
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 
@@ -381,19 +394,18 @@ public class DocServiceImpl implements DocService {
 
         return DocUploadDTO.builder()
                 .fileName(fileUpload.getFileName())
-                .code(fileUpload.getId())
+                .id(fileUpload.getId())
                 .fileSize(multipartFile.getSize())
                 .build();
     }
 
     @Override
-    public DocDownloadInfoDTO getDocDownloadInfo(String fileCode) {
-        UUID uuid = UUID.fromString(fileCode);
-
-        Optional<DocFileUpload> fileObject = docFileUploadRepository.findById(UUID.fromString(fileCode));
+    public DocDownloadInfoDTO getDocDownloadInfo(UUID fileID) {
+        //TODO: Add download increment info.
+        Optional<DocFileUpload> fileObject = docFileUploadRepository.findById(fileID);
 
         if (fileObject.isEmpty()) {
-            throw new IllegalArgumentException("Filecode not found.");
+            throw new IllegalArgumentException("File not found.");
         }
 
         return docDownloadInfoMapper.docFileUploadToDocDownloadInfoDTO(fileObject.get());
