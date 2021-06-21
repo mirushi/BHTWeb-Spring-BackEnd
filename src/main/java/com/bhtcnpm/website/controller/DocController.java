@@ -138,10 +138,11 @@ public class DocController {
 //        DocDetailsDTO docDetailsDTO = docService.
 //    }
 
-    @GetMapping("trending")
+    @GetMapping("hot")
     @ResponseBody
-    public ResponseEntity<List<DocSummaryDTO>> getTrendingDocs () {
-        return new ResponseEntity<>(docService.getTrending(), HttpStatus.OK);
+    public ResponseEntity<List<DocSummaryDTO>> getHotDocs (Pageable pageable,
+                                                                Authentication authentication) {
+        return new ResponseEntity<>(docService.getHotDocs(pageable, authentication), HttpStatus.OK);
     }
 
     @PostMapping("{id}/approval")

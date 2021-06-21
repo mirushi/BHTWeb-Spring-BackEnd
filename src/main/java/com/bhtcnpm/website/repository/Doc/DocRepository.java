@@ -1,9 +1,13 @@
 package com.bhtcnpm.website.repository.Doc;
 
+import com.bhtcnpm.website.constant.domain.Doc.DocReactionTypeConstant;
+import com.bhtcnpm.website.constant.domain.Doc.DocStateTypeConstant;
 import com.bhtcnpm.website.model.dto.Doc.DocQuickSearchResult;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.Doc.custom.DocRepositoryCustom;
+import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -48,7 +52,8 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
             value = "SELECT DOC.* " +
             "FROM DOC " +
             "LEFT JOIN USER_DOC_REACTION AS REACTION ON DOC.ID = REACTION.DOC_ID " +
+            "WHERE REACTION.DOC_REACTION_TYPE = "+ DocStateTypeConstant.APPROVED_ORDINAL +" AND DELETED_DATE IS NULL AND DOC.PUBLISH_DTM <= CURRENT_TIMESTAMP " +
             "GROUP BY DOC.ID " +
-            "ORDER BY ROUND(((CASE WHEN COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = 0 THEN REACTION.USER_ID ELSE NULL END)) - COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = 1 THEN REACTION.USER_ID ELSE null END)) > 0 THEN 1 WHEN COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = 0 THEN REACTION.USER_ID ELSE NULL END)) - COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = 1 THEN REACTION.USER_ID ELSE null END)) < 0 THEN -1 ELSE 0 END) * (LOG(GREATEST(ABS(COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = 0 THEN REACTION.USER_ID ELSE NULL END)) - COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = 1 THEN REACTION.USER_ID ELSE null END))), 1))) + ((EXTRACT(EPOCH FROM DOC.PUBLISH_DTM) - 1446422400)/45000)), 7) DESC")
-    List<Doc> getHotDocs();
+            "ORDER BY ROUND(((CASE WHEN COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.LIKE_ORDINAL +" THEN REACTION.USER_ID ELSE NULL END)) - COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.DISLIKE_ORDINAL +" THEN REACTION.USER_ID ELSE null END)) > 0 THEN 1 WHEN COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.LIKE_ORDINAL +" THEN REACTION.USER_ID ELSE NULL END)) - COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.DISLIKE_ORDINAL +" THEN REACTION.USER_ID ELSE null END)) < 0 THEN -1 ELSE 0 END) * (LOG(GREATEST(ABS(COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.LIKE_ORDINAL +" THEN REACTION.USER_ID ELSE NULL END)) - COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.DISLIKE_ORDINAL +" THEN REACTION.USER_ID ELSE null END))), 1))) + ((EXTRACT(EPOCH FROM DOC.PUBLISH_DTM) - 1446422400)/45000)), 7) DESC")
+    List<Doc> getHotDocsPublicOnly(Pageable pageable);
 }

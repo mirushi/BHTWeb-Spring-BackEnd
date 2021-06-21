@@ -68,7 +68,8 @@ public interface DocService {
 
     List<DocSuggestionDTO> getRelatedDocs (Long exerciseID, Integer page);
 
-    List<DocSummaryDTO> getTrending ();
+    @PreAuthorize(value = "permitAll()")
+    List<DocSummaryDTO> getHotDocs(Pageable pageable, Authentication authentication);
 
     List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, UUID userID);
 

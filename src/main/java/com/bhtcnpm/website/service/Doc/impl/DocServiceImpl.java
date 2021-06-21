@@ -55,6 +55,8 @@ public class DocServiceImpl implements DocService {
 
     private static final int PAGE_SIZE_TRENDING_DOC = 16;
 
+    private static final int PAGE_SIZE_HOT_DOC = 16;
+
     private static final int FILE_NAME_RANDOM_LENGTH = 10;
 
     private static final String DRIVE_UPLOAD_DEFAULT_FOLDER_ID = "1mg_iZfewkU93WhcFfKYf38irvW1Gr-wn";
@@ -249,10 +251,10 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public List<DocSummaryDTO> getTrending() {
-        Pageable pageable = PageRequest.of(0, PAGE_SIZE_TRENDING_DOC);
+    public List<DocSummaryDTO> getHotDocs(Pageable pageable, Authentication authentication) {
+        pageable = PaginatorUtils.getPageableWithNewPageSize(pageable, PAGE_SIZE_HOT_DOC);
 
-        return docSummaryMapper.docListToDocSummaryDTOList(docRepository.getHotDocs());
+        return docSummaryMapper.docListToDocSummaryDTOList(docRepository.getHotDocsPublicOnly(pageable));
     }
 
     @Override

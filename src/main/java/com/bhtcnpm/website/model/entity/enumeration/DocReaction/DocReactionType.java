@@ -1,8 +1,19 @@
 package com.bhtcnpm.website.model.entity.enumeration.DocReaction;
 
+import com.bhtcnpm.website.constant.domain.Doc.DocReactionTypeConstant;
+
 public enum DocReactionType {
-    LIKE((short)0),
-    DISLIKE((short)1),
-    NONE((short)2);
-    DocReactionType(short enumOrdinal){}
+    LIKE(DocReactionTypeConstant.LIKE_ORDINAL),
+    DISLIKE(DocReactionTypeConstant.DISLIKE_ORDINAL),
+    NONE(DocReactionTypeConstant.NONE_ORDINAL);
+
+    private final short numVal;
+
+    DocReactionType(short enumOrdinal){
+        this.numVal = enumOrdinal;
+    }
+
+    public short getNumVal() {
+        return numVal;
+    }
 }
