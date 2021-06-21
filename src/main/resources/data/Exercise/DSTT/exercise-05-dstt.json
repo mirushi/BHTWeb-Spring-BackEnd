@@ -1,9 +1,9 @@
 [
   {
     "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
-    "id": 1,
-    "title": "Bài tập ôn tập Tổng quan lập trình",
-    "description": "Bài tập tổng ôn lại những kiến thức bạn đã học được để củng cố, hiểu được những khuyết điểm của bản thân trong việc tiếp thu kiến thức.",
+    "id": 26,
+    "title": "Chéo hoá ma trận",
+    "description": "Bài tập về chéo hoá ma trận, bao gồm: Trị riêng và vecto riêng, tìm vecto riêng, chéo hoá ma trận, thuật toán chéo hoá, chéo hoá trực giao ma trận đối xứng thực.",
     "suggestedDuration": 1800,
     "submitDtm": "2021-06-16T23:37:29Z",
     "publishDtm": "2021-06-16T23:37:29Z",
@@ -12,22 +12,21 @@
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "topic": {
-      "id": 1
+      "id": 20
     },
     "category": {
       "id": 1
     },
     "tags": [
-      {"id": 457},
-      {"id": 460}
+      {"id": 453}
     ],
     "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
-    "id": 2,
-    "title": "Bài tập ôn tập Tổng quan lập trình (tt).",
-    "description": "Bài tập tổng ôn lại những kiến thức bạn đã học được để củng cố, hiểu được những khuyết điểm của bản thân trong việc tiếp thu kiến thức.",
+    "id": 27,
+    "title": "Dạng toàn phương",
+    "description": "Bài tập về dạng toàn phương, bao gồm: Hạng của dạng toàn phương, dạng toàn phương chính tắc, đưa dạng toàn phương về dạng chính tắc, phân loại dạng toàn phương, tiêu chuẩn Sylvester.",
     "suggestedDuration": 1800,
     "submitDtm": "2021-06-16T23:37:29Z",
     "publishDtm": "2021-06-16T23:37:29Z",
@@ -36,14 +35,13 @@
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "topic": {
-      "id": 1
+      "id": 20
     },
     "category": {
       "id": 1
     },
     "tags": [
-      {"id": 457},
-      {"id": 460}
+      {"id": 453}
     ],
     "version": 0
   }

@@ -1,0 +1,94 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 3,
+    "title": "Khái niệm",
+    "description": "Khái niệm về số phức.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 1,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 16
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 4,
+    "title": "Các dạng biểu diễn của số phức.",
+    "description": "Bài tập về các dạng biểu diễn của số phức. \nBao gồm: Các dạng hình học, modun, argument, dạng mũ.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 2,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 16
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 5,
+    "title": "Phép toán trên tập số phức.",
+    "description": "Bao gồm phép cộng, phép trừ, phép nhân, phép chia, luỹ thừa, khai căn bậc n (nguyên dương).",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 3,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 16
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 6,
+    "title": "Giải phương trình bậc 2 trong tập số phức",
+    "description": "Bài tập về giải phương trình bậc 2 trong tập số phức.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 4,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 16
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  }
+]

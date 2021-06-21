@@ -1,0 +1,186 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 7,
+    "title": "Khái niệm về ma trận",
+    "description": "Bài tập về một số khái niệm trong ma trận.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 1,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 16
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 8,
+    "title": "Các dạng ma trận",
+    "description": "Bài tập về các dạng ma trận, bao gồm Ma trận không, Ma trận tam giác, Ma trận chéo, Ma trận đơn vị, Ma trận đối xứng.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 2,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 17
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 9,
+    "title": "Phép toán ma trận",
+    "description": "Bài tập về các phép toán trong ma trận, bao gồm: Hai ma trận bằng nhau, phép chuyển vị ma trận, phép cộng ma trận, phép nhân ma trận với một số, phép trừ ma trận, phép nhân ma trận với ma trận.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 3,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 17
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 10,
+    "title": "Phép biến đổi sơ cấp theo hàng của ma trận",
+    "description": "Bài tập về các phép biến đổi sơ cấp theo hàng của ma trận.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 4,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 17
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 11,
+    "title": "Ma trận rút gọn bậc thang",
+    "description": "Bài tập về các Ma trận rút gọn bậc thang.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 5,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 17
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 12,
+    "title": "Định thức",
+    "description": "Bài tập về định thức, bao gồm: Định lý laplace khai triển định thức, các tính chất cơ bản của định thức, các phương pháp tính định thức.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 6,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 17
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 13,
+    "title": "Hạng của ma trận",
+    "description": "Bài tập về hạng của ma trận, bao gồm: Định thức con, hạng của ma trận và tính hạng của ma trận.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 7,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 17
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 14,
+    "title": "Ma trận nghịch đảo",
+    "description": "Bài tập về ma trận nghịch đảo, bao gồm: Điều kiện tồn tại ma trận nghịch đảo và cách tìm.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 8,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 17
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  }
+]

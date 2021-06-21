@@ -1,0 +1,50 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 16,
+    "name": "Số phức",
+    "rank": 1,
+    "subject": {"id": 2},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 17,
+    "name": "Ma trận - Định thức",
+    "rank": 2,
+    "subject": {"id": 2},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 18,
+    "name": "Hệ phương trình tuyến tính",
+    "rank": 3,
+    "subject": {"id": 2},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 19,
+    "name": "Không gian véctơ",
+    "rank": 4,
+    "subject": {"id": 2},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 20,
+    "name": "Chéo hoá ma trận và Dạng toàn phương",
+    "rank": 5,
+    "subject": {"id": 2},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic",
+    "id": 21,
+    "name": "Đề thi mẫu",
+    "rank": 6,
+    "subject": {"id": 2},
+    "version": 0
+  }
+]
