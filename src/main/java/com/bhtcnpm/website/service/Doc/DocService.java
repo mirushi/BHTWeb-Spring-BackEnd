@@ -8,6 +8,7 @@ import com.bhtcnpm.website.model.validator.dto.Doc.DocID;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -85,6 +86,9 @@ public interface DocService {
     @PreAuthorize(value = "permitAll()")
     List<DocSummaryDTO> getHotDocs(Pageable pageable, Authentication authentication);
 
+    @PreFilter(filterTarget = "docIDs", value = "hasPermission(filterObject, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).READ_PERMISSION)")
     List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, Authentication authentication);
 
     @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.DocPermissionConstant).DOC_PENDING_SELF_CREATE)")

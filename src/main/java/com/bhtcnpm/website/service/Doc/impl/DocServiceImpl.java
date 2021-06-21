@@ -308,65 +308,7 @@ public class DocServiceImpl implements DocService {
     @Override
     public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, Authentication authentication) {
         UUID userID = SecurityUtils.getUserID(authentication);
-        //TODO: Handle cases when userID is Null (aka user is guest).
-
         List<DocStatisticDTO> docStatisticDTOList = docRepository.getDocStatisticDTOs(docIDs, userID);
-
-//        List<DocReactionStatisticDTO> docReactionStatisticDTOs = userDocReactionRepository.getDocReactionStatisticsDTO(docIDs);
-//
-//        List<DocUserOwnReactionStatisticDTO> docUserOwnReactionStatisticDTOs = userDocReactionRepository.getDocUserOwnReactionStatisticDTO(docIDs, userID);
-//
-//        List<DocCommentStatisticDTO> docCommentStatisticDTOs = docCommentRepository.getDocCommentStatistic(docIDs);
-//
-//        //Tạo ra một HashMap để search nhanh ra các Statistic ứng với từng docID.
-//        Map<Long, DocReactionStatisticDTO> docReactionStatisticDTOMap = new HashMap<>();
-//        Map<Long, DocUserOwnReactionStatisticDTO> docUserOwnReactionStatisticDTOMap = new HashMap<>();
-//        Map<Long, DocCommentStatisticDTO> docCommentStatisticDTOMap = new HashMap<>();
-//
-//        for (DocReactionStatisticDTO dto : docReactionStatisticDTOs) {
-//            docReactionStatisticDTOMap.put(dto.getDocID(), dto);
-//        }
-//        for (DocUserOwnReactionStatisticDTO dto : docUserOwnReactionStatisticDTOs) {
-//            docUserOwnReactionStatisticDTOMap.put(dto.getDocID(), dto);
-//        }
-//        for (DocCommentStatisticDTO dto : docCommentStatisticDTOs) {
-//            docCommentStatisticDTOMap.put(dto.getDocID(), dto);
-//        }
-//
-//        int totalIDs = docIDs.size();
-//
-//        List<DocStatisticDTO> resultList = new ArrayList<>(totalIDs);
-//
-//        for (int i = 0;i < totalIDs; ++i) {
-//            Long docID = docIDs.get(i);
-//
-//            DocReactionStatisticDTO docReactionStatisticDTO = docReactionStatisticDTOMap.get(docID);
-//            if (docReactionStatisticDTO == null) {
-//                docReactionStatisticDTO = DocReactionStatisticDTO.builder()
-//                        .docID(docID)
-//                        .dislikeCount(0L)
-//                        .likeCount(0L)
-//                        .build();
-//            }
-//            DocUserOwnReactionStatisticDTO docUserOwnReactionStatisticDTO = docUserOwnReactionStatisticDTOMap.get(docID);
-//            if (docUserOwnReactionStatisticDTO == null) {
-//                docUserOwnReactionStatisticDTO = DocUserOwnReactionStatisticDTO.builder()
-//                        .docID(docID)
-//                        .docReactionType(DocReactionType.NONE)
-//                        .build();
-//            }
-//            DocCommentStatisticDTO docCommentStatisticDTO = docCommentStatisticDTOMap.get(docID);
-//            if (docCommentStatisticDTO == null) {
-//                docCommentStatisticDTO = DocCommentStatisticDTO.builder()
-//                        .docID(docID)
-//                        .commentCount(0L)
-//                        .build();
-//            }
-//
-//            resultList.add(new DocStatisticDTO(docID,
-//                    docReactionStatisticDTO.getLikeCount(), docReactionStatisticDTO.getDislikeCount(),
-//                    docUserOwnReactionStatisticDTO.getDocReactionType(), docCommentStatisticDTO.getCommentCount()));
-//        }
 
         return docStatisticDTOList;
     }
