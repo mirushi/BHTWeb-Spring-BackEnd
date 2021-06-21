@@ -4,6 +4,7 @@ import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
+import com.bhtcnpm.website.model.validator.dto.Doc.DocID;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -64,6 +65,19 @@ public interface DocService {
             "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).APPROVE_PERMISSION)")
     Boolean undoReject(Long docID, Authentication authentication);
 
+    @PreAuthorize(value = "hasPermission(#docID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).SAVE_PERMISSION)")
+    Boolean createSavedStatus (@DocID Long docID, Authentication authentication);
+
+    @PreAuthorize(value = "hasPermission(#docID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).SAVE_PERMISSION)")
+    Boolean deleteSavedStatus (Long docID, Authentication authentication);
+
+    @PreAuthorize(value = "isAuthenticated()")
+    DocSummaryListDTO getDocSavedByUserOwn (Predicate predicate, Authentication authentication, Pageable pageable);
+
     List<DocDetailsDTO> getRelatedDocs (Long docID);
 
     List<DocSuggestionDTO> getRelatedDocs (Long exerciseID, Integer page);
@@ -71,7 +85,7 @@ public interface DocService {
     @PreAuthorize(value = "permitAll()")
     List<DocSummaryDTO> getHotDocs(Pageable pageable, Authentication authentication);
 
-    List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, UUID userID);
+    List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, Authentication authentication);
 
     @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.DocPermissionConstant).DOC_PENDING_SELF_CREATE)")
     DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, Authentication authentication);

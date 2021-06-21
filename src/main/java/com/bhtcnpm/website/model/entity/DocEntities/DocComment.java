@@ -1,14 +1,17 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity(name = "DocComment")
 @Table(name = "doc_comment")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DocComment {
 
     @Id
@@ -41,4 +44,18 @@ public class DocComment {
             orphanRemoval = true
     )
     private List<DocComment> childComments;
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DocComment)) return false;
+        DocComment other = (DocComment) o;
+        return id != null && id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 }

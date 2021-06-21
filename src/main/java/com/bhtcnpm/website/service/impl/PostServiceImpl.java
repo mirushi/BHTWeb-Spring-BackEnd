@@ -267,11 +267,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Boolean deleteSavedStatus(Long postID, Authentication authentication) {
-        UUID userID = SecurityUtils.getUserID(authentication);
-
-        if (userID == null) {
-            throw new IllegalArgumentException("Cannot extract userID from authentication.");
-        }
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
         UserPostSaveId id = new UserPostSaveId();
         id.setPost(postRepository.getOne(postID));

@@ -10,7 +10,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.UserDocReactionId;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.repository.Doc.DocRepository;
-import com.bhtcnpm.website.repository.UserDocReactionRepository;
+import com.bhtcnpm.website.repository.Doc.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.UserDocReactionService;

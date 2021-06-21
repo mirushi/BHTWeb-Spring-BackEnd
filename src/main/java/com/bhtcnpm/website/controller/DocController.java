@@ -195,6 +195,44 @@ public class DocController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping(value = "/{id}/savedStatus")
+    @ResponseBody
+    public ResponseEntity postSavedStatus (@PathVariable @DocID Long id,
+                                           Authentication authentication) {
+        Boolean result = docService.createSavedStatus(id, authentication);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping(value = "/{id}/savedStatus")
+    @ResponseBody
+    public ResponseEntity deleteSavedStatus (@PathVariable @DocID Long id,
+                                             Authentication authentication) {
+        Boolean result = docService.deleteSavedStatus(id, authentication);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping(value = "/savedDocs")
+    @ResponseBody
+    public ResponseEntity<DocSummaryListDTO> getDocSavedByUserOwn (
+            @QuerydslPredicate(root = Doc.class) Predicate predicate,
+            @PageableDefault @Nullable Pageable pageable,
+            Authentication authentication
+    ) {
+        DocSummaryListDTO docSavedByUser = docService.getDocSavedByUserOwn(predicate, authentication, pageable);
+
+        return new ResponseEntity<>(docSavedByUser, HttpStatus.OK);
+    }
+
     @GetMapping("{id}/related")
     @ResponseBody
     @Deprecated
@@ -215,11 +253,9 @@ public class DocController {
 
     @GetMapping("statistics")
     @ResponseBody
-    public ResponseEntity<List<DocStatisticDTO>> getDocStatistic (@RequestParam List<Long> docIDs) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        List<DocStatisticDTO> docStatisticDTOs = docService.getDocStatistics(docIDs, userID);
+    public ResponseEntity<List<DocStatisticDTO>> getDocStatistic (@RequestParam List<Long> docIDs,
+                                                                      Authentication authentication) {
+        List<DocStatisticDTO> docStatisticDTOs = docService.getDocStatistics(docIDs, authentication);
 
         return new ResponseEntity<>(docStatisticDTOs, HttpStatus.OK);
     }

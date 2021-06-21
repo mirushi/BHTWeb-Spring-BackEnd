@@ -8,16 +8,15 @@ import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.dto.Doc.mapper.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
-import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
-import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
+import com.bhtcnpm.website.model.entity.DocEntities.UserDocSave;
+import com.bhtcnpm.website.model.entity.DocEntities.UserDocSaveId;
+import com.bhtcnpm.website.repository.Doc.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
-import com.bhtcnpm.website.repository.Doc.DocCommentRepository;
-import com.bhtcnpm.website.repository.Doc.DocRepository;
-import com.bhtcnpm.website.repository.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.predicate.Doc.DocPredicateGenerator;
+import com.bhtcnpm.website.security.predicate.Doc.UserDocSavePredicateGenerator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Doc.DocFileUploadService;
 import com.bhtcnpm.website.service.Doc.DocService;
@@ -80,6 +79,8 @@ public class DocServiceImpl implements DocService {
     private final DocCommentRepository docCommentRepository;
 
     private final UserDocReactionRepository userDocReactionRepository;
+
+    private final UserDocSaveRepository userDocSaveRepository;
 
     private final UserWebsiteRepository userWebsiteRepository;
 
@@ -232,6 +233,53 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
+    public Boolean createSavedStatus(Long docID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+        if (userID == null) {
+            throw new IllegalArgumentException("UserID not found. Cannot perform save.");
+        }
+
+        UserDocSaveId id = new UserDocSaveId();
+        id.setDoc(docRepository.getOne(docID));
+        id.setUser(userWebsiteRepository.getOne(userID));
+        UserDocSave userDocSave = new UserDocSave();
+        userDocSave.setUserDocSaveId(id);
+
+        userDocSaveRepository.save(userDocSave);
+
+        return true;
+    }
+
+    @Override
+    public Boolean deleteSavedStatus(Long docID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        UserDocSaveId id = new UserDocSaveId();
+        id.setDoc(docRepository.getOne(docID));
+        id.setUser(userWebsiteRepository.getOne(userID));
+
+        userDocSaveRepository.deleteById(id);
+
+        return true;
+    }
+
+    @Override
+    public DocSummaryListDTO getDocSavedByUserOwn(Predicate predicate, Authentication authentication, Pageable pageable) {
+        BooleanExpression authorizationFilter = DocPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
+        BooleanExpression docPublicBusinessStateFilter = DocPredicateGenerator.getBooleanExpressionOnBusinessState(DocBusinessState.PUBLIC);
+        BooleanExpression userOwnFilter = UserDocSavePredicateGenerator.getBooleanExpressionUserOwn(authentication);
+
+        Predicate finalPredicate = authorizationFilter.and(docPublicBusinessStateFilter).and(userOwnFilter).and(predicate);
+
+        //Reset PAGE_SIZE to predefined value.
+        pageable = PaginatorUtils.getPageableWithNewPageSize(pageable, PAGE_SIZE);
+
+        Page<UserDocSave> userDocSaves = userDocSaveRepository.findAll(finalPredicate, pageable);
+
+        return docSummaryMapper.userDocSavePageToDocSummaryListDTO(userDocSaves);
+    }
+
+    @Override
     public List<DocDetailsDTO> getRelatedDocs(Long docID) {
         //TODO: Please implement a real getRelatedDocs function.
         Pageable pageable = PageRequest.of(0, PAGE_SIZE_RELATED_DOC);
@@ -258,65 +306,69 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, UUID userID) {
+    public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserID(authentication);
+        //TODO: Handle cases when userID is Null (aka user is guest).
 
-        List<DocReactionStatisticDTO> docReactionStatisticDTOs = userDocReactionRepository.getDocReactionStatisticsDTO(docIDs);
+        List<DocStatisticDTO> docStatisticDTOList = docRepository.getDocStatisticDTOs(docIDs, userID);
 
-        List<DocUserOwnReactionStatisticDTO> docUserOwnReactionStatisticDTOs = userDocReactionRepository.getDocUserOwnReactionStatisticDTO(docIDs, userID);
+//        List<DocReactionStatisticDTO> docReactionStatisticDTOs = userDocReactionRepository.getDocReactionStatisticsDTO(docIDs);
+//
+//        List<DocUserOwnReactionStatisticDTO> docUserOwnReactionStatisticDTOs = userDocReactionRepository.getDocUserOwnReactionStatisticDTO(docIDs, userID);
+//
+//        List<DocCommentStatisticDTO> docCommentStatisticDTOs = docCommentRepository.getDocCommentStatistic(docIDs);
+//
+//        //Tạo ra một HashMap để search nhanh ra các Statistic ứng với từng docID.
+//        Map<Long, DocReactionStatisticDTO> docReactionStatisticDTOMap = new HashMap<>();
+//        Map<Long, DocUserOwnReactionStatisticDTO> docUserOwnReactionStatisticDTOMap = new HashMap<>();
+//        Map<Long, DocCommentStatisticDTO> docCommentStatisticDTOMap = new HashMap<>();
+//
+//        for (DocReactionStatisticDTO dto : docReactionStatisticDTOs) {
+//            docReactionStatisticDTOMap.put(dto.getDocID(), dto);
+//        }
+//        for (DocUserOwnReactionStatisticDTO dto : docUserOwnReactionStatisticDTOs) {
+//            docUserOwnReactionStatisticDTOMap.put(dto.getDocID(), dto);
+//        }
+//        for (DocCommentStatisticDTO dto : docCommentStatisticDTOs) {
+//            docCommentStatisticDTOMap.put(dto.getDocID(), dto);
+//        }
+//
+//        int totalIDs = docIDs.size();
+//
+//        List<DocStatisticDTO> resultList = new ArrayList<>(totalIDs);
+//
+//        for (int i = 0;i < totalIDs; ++i) {
+//            Long docID = docIDs.get(i);
+//
+//            DocReactionStatisticDTO docReactionStatisticDTO = docReactionStatisticDTOMap.get(docID);
+//            if (docReactionStatisticDTO == null) {
+//                docReactionStatisticDTO = DocReactionStatisticDTO.builder()
+//                        .docID(docID)
+//                        .dislikeCount(0L)
+//                        .likeCount(0L)
+//                        .build();
+//            }
+//            DocUserOwnReactionStatisticDTO docUserOwnReactionStatisticDTO = docUserOwnReactionStatisticDTOMap.get(docID);
+//            if (docUserOwnReactionStatisticDTO == null) {
+//                docUserOwnReactionStatisticDTO = DocUserOwnReactionStatisticDTO.builder()
+//                        .docID(docID)
+//                        .docReactionType(DocReactionType.NONE)
+//                        .build();
+//            }
+//            DocCommentStatisticDTO docCommentStatisticDTO = docCommentStatisticDTOMap.get(docID);
+//            if (docCommentStatisticDTO == null) {
+//                docCommentStatisticDTO = DocCommentStatisticDTO.builder()
+//                        .docID(docID)
+//                        .commentCount(0L)
+//                        .build();
+//            }
+//
+//            resultList.add(new DocStatisticDTO(docID,
+//                    docReactionStatisticDTO.getLikeCount(), docReactionStatisticDTO.getDislikeCount(),
+//                    docUserOwnReactionStatisticDTO.getDocReactionType(), docCommentStatisticDTO.getCommentCount()));
+//        }
 
-        List<DocCommentStatisticDTO> docCommentStatisticDTOs = docCommentRepository.getDocCommentStatistic(docIDs);
-
-        //Tạo ra một HashMap để search nhanh ra các Statistic ứng với từng docID.
-        Map<Long, DocReactionStatisticDTO> docReactionStatisticDTOMap = new HashMap<>();
-        Map<Long, DocUserOwnReactionStatisticDTO> docUserOwnReactionStatisticDTOMap = new HashMap<>();
-        Map<Long, DocCommentStatisticDTO> docCommentStatisticDTOMap = new HashMap<>();
-
-        for (DocReactionStatisticDTO dto : docReactionStatisticDTOs) {
-            docReactionStatisticDTOMap.put(dto.getDocID(), dto);
-        }
-        for (DocUserOwnReactionStatisticDTO dto : docUserOwnReactionStatisticDTOs) {
-            docUserOwnReactionStatisticDTOMap.put(dto.getDocID(), dto);
-        }
-        for (DocCommentStatisticDTO dto : docCommentStatisticDTOs) {
-            docCommentStatisticDTOMap.put(dto.getDocID(), dto);
-        }
-
-        int totalIDs = docIDs.size();
-
-        List<DocStatisticDTO> resultList = new ArrayList<>(totalIDs);
-
-        for (int i = 0;i < totalIDs; ++i) {
-            Long docID = docIDs.get(i);
-
-            DocReactionStatisticDTO docReactionStatisticDTO = docReactionStatisticDTOMap.get(docID);
-            if (docReactionStatisticDTO == null) {
-                docReactionStatisticDTO = DocReactionStatisticDTO.builder()
-                        .docID(docID)
-                        .dislikeCount(0L)
-                        .likeCount(0L)
-                        .build();
-            }
-            DocUserOwnReactionStatisticDTO docUserOwnReactionStatisticDTO = docUserOwnReactionStatisticDTOMap.get(docID);
-            if (docUserOwnReactionStatisticDTO == null) {
-                docUserOwnReactionStatisticDTO = DocUserOwnReactionStatisticDTO.builder()
-                        .docID(docID)
-                        .docReactionType(DocReactionType.NONE)
-                        .build();
-            }
-            DocCommentStatisticDTO docCommentStatisticDTO = docCommentStatisticDTOMap.get(docID);
-            if (docCommentStatisticDTO == null) {
-                docCommentStatisticDTO = DocCommentStatisticDTO.builder()
-                        .docID(docID)
-                        .commentCount(0L)
-                        .build();
-            }
-
-            resultList.add(new DocStatisticDTO(docID,
-                    docReactionStatisticDTO.getLikeCount(), docReactionStatisticDTO.getDislikeCount(),
-                    docUserOwnReactionStatisticDTO.getDocReactionType(), docCommentStatisticDTO.getCommentCount()));
-        }
-
-        return resultList;
+        return docStatisticDTOList;
     }
 
     @Override

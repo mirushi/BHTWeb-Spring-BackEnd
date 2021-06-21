@@ -147,6 +147,10 @@ public class Doc {
     @GenericField(projectable = Projectable.YES, searchable = Searchable.YES)
     private DocStateType docState;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime deletedDate;
+
     @ManyToMany
     @JoinTable(
             name = "doc_doc_tag",
@@ -166,10 +170,6 @@ public class Doc {
             orphanRemoval = true
     )
     private Set<UserDocReaction> userDocReactions;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime deletedDate;
 
     @Version
     private short version;
