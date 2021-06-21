@@ -4,6 +4,7 @@ import com.bhtcnpm.website.model.dto.Doc.DocReactionStatisticDTO;
 import com.bhtcnpm.website.model.dto.Doc.DocUserOwnReactionStatisticDTO;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionStatsDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
+import com.bhtcnpm.website.model.entity.DocEntities.UserDocReactionId;
 import com.bhtcnpm.website.repository.custom.UserDocReactionRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,8 +15,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface UserDocReactionRepository extends JpaRepository<UserDocReaction, Long>, QuerydslPredicateExecutor<UserDocReaction>, UserDocReactionRepositoryCustom {
-    List<UserDocReaction> getUserDocReactionsByUserDocReactionId_UserIdAndUserDocReactionId_DocId_IdIn (Long userId, List<Long> docIds);
+public interface UserDocReactionRepository extends JpaRepository<UserDocReaction, UserDocReactionId>, QuerydslPredicateExecutor<UserDocReaction>, UserDocReactionRepositoryCustom {
+    List<UserDocReaction> getUserDocReactionsByUserDocReactionId_UserIdAndUserDocReactionId_DocId_IdIn (UUID userId, List<Long> docIds);
 
     @Query("SELECT new com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionStatsDTO(udr.userDocReactionId.doc.id, udr.docReactionType, COUNT(udr.userDocReactionId.user.id)) " +
             "FROM UserDocReaction udr WHERE udr.userDocReactionId.doc.id IN :docIds GROUP BY udr.userDocReactionId.doc.id, udr.docReactionType")

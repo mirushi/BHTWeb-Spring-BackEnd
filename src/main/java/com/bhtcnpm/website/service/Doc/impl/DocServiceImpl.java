@@ -252,7 +252,7 @@ public class DocServiceImpl implements DocService {
     public List<DocSummaryDTO> getTrending() {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE_TRENDING_DOC);
 
-        return docRepository.getTrendingDoc(pageable);
+        return docSummaryMapper.docListToDocSummaryDTOList(docRepository.getHotDocs());
     }
 
     @Override
