@@ -69,26 +69,14 @@ public class DocController {
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
 
-    @GetMapping("pendingDocuments")
+    @GetMapping("pendingApproval")
     @ResponseBody
-    public ResponseEntity<DocSummaryListDTO> getPendingApprovalDocuments (
-            @RequestParam(value = "searchTerm", required = false) String searchTerm,
-            @RequestParam(value = "docState", required = false) DocStateType docState,
-            @RequestParam(value = "subjectID", required = false) Long subjectID,
-            @RequestParam(value = "categoryID", required = false) Long categoryID,
-            @RequestParam(value = "authorID", required = false) UUID authorID,
-            @RequestParam(value = "page") Integer page,
-            @RequestParam(value = "sortByCreatedTime", required = false) ApiSortOrder sortByCreatedTime,
+    public ResponseEntity<DocDetailsWithStateListDTO> getPendingApprovalDocuments (
+            @QuerydslPredicate(root = Doc.class) Predicate predicate,
+            @PageableDefault @Nullable Pageable pageable,
             Authentication authentication) {
-        DocSummaryListDTO result = docService.getAllPendingApprovalDoc(
-                searchTerm,
-                subjectID,
-                categoryID,
-                authorID,
-                page,
-                sortByCreatedTime,
-                authentication
-        );
+
+        DocDetailsWithStateListDTO result = docService.getAllPendingApprovalDoc(predicate, pageable, authentication);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

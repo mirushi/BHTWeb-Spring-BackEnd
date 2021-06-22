@@ -24,4 +24,5 @@ public class DocPredicate {
     public static BooleanExpression docUnlistedBusinessState() {
         return notDeleted().and(notApproved().or(docPublishDtmNotReached()));
     }
+    public static BooleanExpression docStateType (DocStateType docStateType) {return qDoc.docState.eq(docStateType);}
 }

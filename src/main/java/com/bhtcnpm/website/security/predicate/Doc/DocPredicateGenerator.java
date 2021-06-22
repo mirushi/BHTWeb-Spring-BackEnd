@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.security.predicate.Doc;
 
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
+import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -44,5 +45,8 @@ public class DocPredicateGenerator {
         }
 
         return result;
+    }
+    public static BooleanExpression getBooleanExpressionOnDocStateType (DocStateType docStateType) {
+        return DocPredicate.docStateType(docStateType);
     }
 }

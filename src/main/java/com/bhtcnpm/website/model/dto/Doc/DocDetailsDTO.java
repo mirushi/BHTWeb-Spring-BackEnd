@@ -53,7 +53,7 @@ public class DocDetailsDTO {
     @DocSubjectName
     private String subjectName;
 
-    private List<DocFileUploadDTO> docFileUploads;
+    private List<DocFileUploadDTO> docFileUploadDTOs;
 
     @DocTag
     private Set<TagDTO> tags;

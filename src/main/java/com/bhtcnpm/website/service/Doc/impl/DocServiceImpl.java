@@ -122,31 +122,19 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocSummaryListDTO getAllPendingApprovalDoc(
-            String searchTerm,
-            Long subjectID,
-            Long categoryID,
-            UUID authorID,
-            Integer page,
-            ApiSortOrder sortByCreatedDtm,
+    public DocDetailsWithStateListDTO getAllPendingApprovalDoc(
+            Predicate predicate,
+            Pageable pageable,
             Authentication authentication
     ) {
         //Create a pagable.
-        DocSummaryListDTO dtoList = docRepository.getDocSummaryList(
-                searchTerm,
-                null,
-                categoryID,
-                subjectID,
-                authorID,
-                DocStateType.PENDING_APPROVAL,
-                page,
-                PAGE_SIZE,
-                null,
-                EnumConverter.apiSortOrderToHSearchSortOrder(sortByCreatedDtm),
-                authentication
-        );
+        BooleanExpression authorizationFilter = DocPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
+        BooleanExpression docBusinessState = DocPredicateGenerator.getBooleanExpressionNotDeleted();
+        BooleanExpression docState = DocPredicateGenerator.getBooleanExpressionOnDocStateType(DocStateType.PENDING_APPROVAL);
 
-        return dtoList;
+        Page<Doc> docPage = docRepository.findAll(authorizationFilter.and(docBusinessState).and(docState).and(predicate), pageable);
+
+        return docDetailsMapper.docPageToDocDetailsWithStateListDTO(docPage);
     }
 
     @Override

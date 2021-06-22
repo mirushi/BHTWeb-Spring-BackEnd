@@ -48,7 +48,7 @@ public abstract class DocRequestMapper {
         }
 
         if (entity == null) {
-            newDoc.setCreatedDtm(LocalDateTime.now());
+            newDoc.setSubmitDtm(LocalDateTime.now());
             newDoc.setDocState(DocStateType.PENDING_APPROVAL);
             newDoc.setAuthor(userWebsiteRepository.getOne(userID));
             newDoc.setVersion((short)0);

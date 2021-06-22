@@ -120,7 +120,7 @@ public class Doc {
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime createdDtm;
+    private LocalDateTime submitDtm;
 
     @Column(nullable = false)
     @UpdateTimestamp

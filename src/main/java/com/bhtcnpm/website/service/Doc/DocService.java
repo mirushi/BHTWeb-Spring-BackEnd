@@ -21,16 +21,16 @@ public interface DocService {
     @PreAuthorize(value = "permitAll()")
     DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication);
 
-    DocSummaryListDTO getAllPendingApprovalDoc (
-            String searchTerm,
-            Long subjectID,
-            Long categoryID,
-            UUID authorID,
-            Integer page,
-            ApiSortOrder sortByCreatedDtm,
+    @PreAuthorize(value = "hasPermission(#docID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).APPROVE_PERMISSION)")
+    DocDetailsWithStateListDTO getAllPendingApprovalDoc (
+            Predicate predicate,
+            Pageable pageable,
             Authentication authentication
     );
 
+    @PreAuthorize(value = "isAuthenticated()")
     DocSummaryWithStateListDTO getMyDocuments (String searchTerm,
                                                Long categoryID,
                                                Long subjectID,
@@ -80,6 +80,7 @@ public interface DocService {
     @PreAuthorize(value = "isAuthenticated()")
     DocSummaryListDTO getDocSavedByUserOwn (Predicate predicate, Authentication authentication, Pageable pageable);
 
+    @PreAuthorize(value = "permitAll()")
     List<DocSuggestionDTO> getRelatedDocs (Long postID, Long docID, Long exerciseID,
                                            UUID authorID, Long categoryID, Long subjectID,
                                            Integer page, Authentication authentication) throws IOException;
@@ -117,6 +118,7 @@ public interface DocService {
 
     DocDownloadInfoDTO getDocDownloadInfo (UUID fileID);
 
+    @PreAuthorize(value = "isAuthenticated()")
     DocSummaryWithStateListDTO getManagementDoc(
             String searchTerm,
             Long categoryID,
