@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity.PostCommentEntities;
 
+import com.bhtcnpm.website.constant.domain.PostComment.PostCommentBusinessState;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -50,11 +51,11 @@ public class PostComment {
             nullable = false,
             updatable = false)
     @CreationTimestamp
-    private LocalDateTime submitDtm;
+    private LocalDateTime submitDtm = LocalDateTime.now();
 
     @Column(name = "last_edited_dtm",nullable = false)
     @UpdateTimestamp
-    private LocalDateTime lastEditedDtm;
+    private LocalDateTime lastEditedDtm = LocalDateTime.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
@@ -82,6 +83,17 @@ public class PostComment {
 
     @Version
     private short version;
+
+    @Transient
+    public PostCommentBusinessState getPostCommentBusinessState() {
+        if (deletedDate == null) {
+            return PostCommentBusinessState.PUBLIC;
+        }
+        if (deletedDate != null) {
+            return PostCommentBusinessState.DELETE;
+        }
+        return null;
+    }
 
     @Override
     public boolean equals (Object o) {

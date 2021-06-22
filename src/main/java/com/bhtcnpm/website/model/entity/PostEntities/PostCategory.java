@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
+import com.bhtcnpm.website.constant.domain.PostComment.PostCategoryDomainConstant;
 import com.bhtcnpm.website.model.dto.Post.PostMapper;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -33,7 +34,7 @@ public class PostCategory {
     private Long id;
 
     @NaturalId(mutable = true)
-    @Column(nullable = false)
+    @Column(nullable = false, length = PostCategoryDomainConstant.NAME_LENGTH)
     private String name;
 
     @Version

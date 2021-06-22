@@ -8,15 +8,19 @@ import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReactionId;
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.repository.DocRepository;
-import com.bhtcnpm.website.repository.UserDocReactionRepository;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
+import com.bhtcnpm.website.repository.Doc.DocRepository;
+import com.bhtcnpm.website.repository.Doc.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.UserDocReactionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,7 +43,9 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
     }
 
     @Override
-    public List<UserDocReactionUserOwnDTO> getUserReactionForDocs(Long userID, List<Long> docIds) {
+    public List<UserDocReactionUserOwnDTO> getUserReactionForDocs(List<Long> docIds, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
         return reactionRepository.getUserDocReactionsByUserDocReactionId_UserIdAndUserDocReactionId_DocId_IdIn(userID, docIds)
                 .stream()
                 .map(userDocReactionMapper::userDocReactionToUserDocReactionUserOwnDTO)
@@ -47,19 +53,37 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
     }
 
     @Override
-    public UserDocReactionDTO putUserReactionForDoc(UUID userID, UserDocReactionUserOwnDTO userDocReactionUserOwnDTO) {
+    public UserDocReactionDTO putUserReactionForDoc(Long docID, UserDocReactionUserOwnDTO userDocReactionUserOwnDTO, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
         UserDocReactionId userDocReactionId = new UserDocReactionId();
 
         UserWebsite user = userWebsiteRepository.getOne(userID);
-        Doc doc = docRepository.getOne(userDocReactionUserOwnDTO.getDocID());
+        Doc doc = docRepository.getOne(docID);
 
         userDocReactionId.setUser(user);
         userDocReactionId.setDoc(doc);
 
-        UserDocReaction userDocReaction = new UserDocReaction();
-        userDocReaction.setUserDocReactionId(userDocReactionId);
-        userDocReaction.setDocReactionType(userDocReactionUserOwnDTO.getDocReactionType());
+        //Tìm xem user hiện tại đã thực hiện reaction lên Doc chưa.
+        //Nếu user đã react rồi thì cập nhật reaction cũ bằng reaction mới.
+        Optional<UserDocReaction> userDocReactionObject = reactionRepository.findById(userDocReactionId);
+        UserDocReaction userDocReaction;
 
+        //Xoá reaction của User ra khỏi hệ thống nếu như User chọn là none.
+        if (DocReactionType.NONE.equals(userDocReactionUserOwnDTO.getDocReactionType())) {
+            if (userDocReactionObject.isPresent()) {
+                reactionRepository.delete(userDocReactionObject.get());
+                return null;
+            }
+        }
+
+        if (userDocReactionObject.isPresent()) {
+            userDocReaction = userDocReactionObject.get();
+        } else {
+            userDocReaction = new UserDocReaction();
+            userDocReaction.setUserDocReactionId(userDocReactionId);
+        }
+        userDocReaction.setDocReactionType(userDocReactionUserOwnDTO.getDocReactionType());
         userDocReaction = reactionRepository.save(userDocReaction);
 
         return userDocReactionMapper.userDocReactionToUserDocReactionDTO(userDocReaction);

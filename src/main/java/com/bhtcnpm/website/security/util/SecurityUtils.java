@@ -1,11 +1,14 @@
 package com.bhtcnpm.website.security.util;
 
 import com.bhtcnpm.website.constant.security.SecurityConstant;
+import com.bhtcnpm.website.model.dto.UserWebsite.SimpleKeycloakAccountWithEntity;
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.UserWebsiteEntities.RefreshToken;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +22,24 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class SecurityUtils {
+
+    public static UserWebsite getUserWebsiteEntityFromAuthenticationToken (Authentication authentication) {
+        if (!(authentication.getDetails() instanceof SimpleKeycloakAccountWithEntity)) {
+            throw new IllegalArgumentException("Unsupported authentication token.");
+        }
+
+        SimpleKeycloakAccountWithEntity kcAccount = (SimpleKeycloakAccountWithEntity) authentication.getDetails();
+
+        return kcAccount.getEntity();
+    }
+
+    public static UUID getUserIDOnNullThrowException(Authentication authentication) {
+        UUID userID = getUserID(authentication);
+        if (userID == null) {
+            throw new AccessDeniedException("Cannot extract user ID from authentication.");
+        }
+        return userID;
+    }
 
     public static UUID getUserID (Authentication authentication) {
         if (authentication == null) {
@@ -38,13 +59,7 @@ public class SecurityUtils {
     }
 
     public static boolean containsAuthority (Authentication authentication, String authority) {
-        if (authority == null) {
-            return false;
-        }
-        if (authentication == null) {
-            return false;
-        }
-        if (authentication.getAuthorities() == null) {
+        if (authority == null || authentication == null || authentication.getAuthorities() == null) {
             return false;
         }
 
@@ -67,5 +82,12 @@ public class SecurityUtils {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList())
         );
+    }
+
+    public static boolean isAnonymousUser (Authentication authentication) {
+        if (authentication == null || authentication != null && "anonymousUser".equals(authentication.toString())) {
+            return true;
+        }
+        return false;
     }
 }

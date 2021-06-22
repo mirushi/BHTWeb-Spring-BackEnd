@@ -5,12 +5,21 @@ import com.bhtcnpm.website.model.dto.PostCommentReport.PostCommentReportRequestD
 import com.bhtcnpm.website.model.dto.PostCommentReport.PostCommentReportResolveRequestDTO;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 
 import javax.validation.Valid;
 import java.util.UUID;
 
 public interface PostCommentReportService {
-    boolean createNewReport (UUID userID, Long commentID, @Valid PostCommentReportRequestDTO dto);
-    boolean resolveReport (UUID userID, Long reportID, @Valid PostCommentReportResolveRequestDTO dto) throws IDNotFoundException;
+    @PreAuthorize(value = "hasPermission(#commentID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POSTCOMMENT_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentActionPermissionRequest).REPORT_PERMISSION)")
+    boolean createNewReport (Long commentID, @Valid PostCommentReportRequestDTO dto, Authentication authentication);
+
+    @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.PostCommentReportPermissionConstant).POSTCOMMENTREPORT_ALL_ALL_RESOLVE)")
+    boolean resolveReport (Long reportID, @Valid PostCommentReportResolveRequestDTO dto, Authentication authentication) throws IDNotFoundException;
+
+    @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.PostCommentReportPermissionConstant).POSTCOMMENTREPORT_ALL_ALL_RESOLVE)")
     PostCommentReportListDTO getUserReports(Pageable pageable, Boolean isResolved);
 }

@@ -2,7 +2,7 @@ package com.bhtcnpm.website.model.entity.PostCommentEntities;
 
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostCommentReportAction.PostCommentReportActionType;
-import com.bhtcnpm.website.model.validator.PostCommentReport.ValidPCREntity;
+import com.bhtcnpm.website.model.validator.entity.PostCommentReport.ValidPCREntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -37,7 +37,6 @@ public class PostCommentReport {
     @ManyToOne
     @JoinColumn(
             name = "post_comment_id",
-            unique = true,
             updatable = false
     )
     private PostComment postComment;

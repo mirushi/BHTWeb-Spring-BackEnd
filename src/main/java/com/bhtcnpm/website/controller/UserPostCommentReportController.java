@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,22 +27,20 @@ public class UserPostCommentReportController {
 
     @PostMapping("/posts/comments/{id}/report")
     @ResponseBody
-    public ResponseEntity reportPost (@PathVariable("id") Long commentID, @RequestBody PostCommentReportRequestDTO dto) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        postCommentReportService.createNewReport(userID, commentID, dto);
+    public ResponseEntity reportPost (@PathVariable("id") Long commentID,
+                                      @RequestBody PostCommentReportRequestDTO dto,
+                                      Authentication authentication) {
+        postCommentReportService.createNewReport(commentID, dto, authentication);
 
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/posts/comments/resolveReport/{id}")
     @ResponseBody
-    public ResponseEntity resolveReport (@PathVariable("id") Long reportID, @RequestBody PostCommentReportResolveRequestDTO dto) throws IDNotFoundException {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        postCommentReportService.resolveReport(userID, reportID, dto);
+    public ResponseEntity resolveReport (@PathVariable("id") Long reportID,
+                                         @RequestBody PostCommentReportResolveRequestDTO dto,
+                                         Authentication authentication) throws IDNotFoundException {
+        postCommentReportService.resolveReport(reportID, dto, authentication);
 
         return new ResponseEntity(HttpStatus.OK);
     }

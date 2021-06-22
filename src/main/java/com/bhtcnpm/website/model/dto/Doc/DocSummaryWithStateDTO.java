@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class DocSummaryWithStateDTO {
+    //TODO: Unpack this.
     DocSummaryDTO docSummary;
     DocStateType docState;
 }

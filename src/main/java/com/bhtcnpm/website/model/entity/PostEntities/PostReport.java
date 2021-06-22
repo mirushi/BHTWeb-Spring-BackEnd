@@ -1,19 +1,18 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
+import com.bhtcnpm.website.constant.domain.PostReport.PostReportDomainConstant;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
-import com.bhtcnpm.website.model.validator.UserPostReport.ValidUPREntity;
+import com.bhtcnpm.website.model.validator.entity.UserPostReport.ValidUPREntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "post_report")
@@ -42,7 +41,6 @@ public class PostReport {
 
     @ManyToOne
     @JoinColumn(name = "post_id",
-            unique = true,
             updatable = false)
     private Post post;
 
@@ -54,6 +52,7 @@ public class PostReport {
     private List<UserPostReport> userPostReports;
 
     @Column(name = "report_time")
+    @UpdateTimestamp
     private LocalDateTime reportTime;
 
     @Column(name = "resolved_time")
@@ -63,7 +62,7 @@ public class PostReport {
     @ManyToOne
     private UserWebsite resolvedBy;
 
-    @Column(name = "resolved_note")
+    @Column(name = "resolved_note", length = PostReportDomainConstant.RESOLVED_NOTE_LENGTH)
     private String resolvedNote;
 
     @Enumerated

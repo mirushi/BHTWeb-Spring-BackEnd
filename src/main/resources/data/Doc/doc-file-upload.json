@@ -1,65 +1,83 @@
 [
   {
     "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
-    "id": 1,
-    "code": "1b8940a4-f606-4233-991e-2d90b2ded8d7",
+    "id": "1b8940a4-f606-4233-991e-2d90b2ded8d7",
+    "remoteID": "18_TTBQAbVy3K9FE8Ksbc6KpoUiZ6eajj",
+    "rank": 1,
     "fileName": "TongHopToan.docx",
     "fileSize": "100",
     "downloadURL": "https://drive.google.com/file/d/18_TTBQAbVy3K9FE8Ksbc6KpoUiZ6eajj/view?usp=sharing",
-    "downloadCount": 100,
     "thumbnailURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=18_TTBQAbVy3K9FE8Ksbc6KpoUiZ6eajj",
     "uploader": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    }
+    },
+    "doc": {"id": 1}
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
-    "id": 2,
-    "code": "4a995252-bd29-4397-b205-da4cde59c134",
+    "id": "4a995252-bd29-4397-b205-da4cde59c134",
+    "remoteID": "1hdLXQnJTDstcT4139Ae4ZIjueiZwKXJN",
+    "rank": 1,
     "fileName": "Thay_Linh_BaiGiang.pdf",
     "fileSize": "1927248",
     "downloadURL": "https://drive.google.com/file/d/1hdLXQnJTDstcT4139Ae4ZIjueiZwKXJN/view?usp=sharing",
-    "downloadCount": 10,
     "thumbnailURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1hdLXQnJTDstcT4139Ae4ZIjueiZwKXJN",
     "uploader": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    }
+    },
+    "doc": {"id": 2}
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
-    "id": 3,
-    "code": "bfdc16d2-db28-40f8-a779-d90d7ffebaad",
+    "id": "bfdc16d2-db28-40f8-a779-d90d7ffebaad",
+    "remoteID": "1cIaSIZm-yuaoIqw-21FO8ATGMe7Hd31z",
+    "rank": 1,
     "fileName": "Bang PPXS ABC.pdf",
     "fileSize": "100545",
     "downloadURL": "https://drive.google.com/file/d/1cIaSIZm-yuaoIqw-21FO8ATGMe7Hd31z/view?usp=sharing",
-    "downloadCount": 98,
     "thumbnailURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1cIaSIZm-yuaoIqw-21FO8ATGMe7Hd31z",
     "uploader": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    }
+    },
+    "doc": {"id": 3}
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
-    "id": 4,
-    "code": "786d43ca-0e39-48d8-9ccf-54051be1947c",
+    "id": "786d43ca-0e39-48d8-9ccf-54051be1947c",
+    "remoteID": "11I7hqRxRaN8w1NJP-k2aWn_lcamd7vSW",
+    "rank": 1,
     "fileName": "9 đề ôn tập (1).doc",
     "fileSize": "232448",
     "downloadURL": "https://drive.google.com/file/d/11I7hqRxRaN8w1NJP-k2aWn_lcamd7vSW/view?usp=sharing",
-    "downloadCount": 98,
     "thumbnailURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=11I7hqRxRaN8w1NJP-k2aWn_lcamd7vSW",
     "uploader": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    }
+    },
+    "doc": {"id": 4}
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
-    "id": 5,
-    "code": "6479bae2-99d4-420f-99e2-3ce9126028ac",
+    "id": "6479bae2-99d4-420f-99e2-3ce9126028ac",
+    "remoteID": "1S_CWlLpRvT9R9OCLfsvShD6koY0clwH_",
+    "rank": 1,
     "fileName": "TaiLieuTichPhanSuyRong.pdf",
     "fileSize": "2184778",
     "downloadURL": "https://drive.google.com/file/d/1S_CWlLpRvT9R9OCLfsvShD6koY0clwH_/view?usp=sharing",
-    "downloadCount": 98,
     "thumbnailURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1S_CWlLpRvT9R9OCLfsvShD6koY0clwH_",
+    "uploader": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "doc": {"id": 5}
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
+    "id": "b100cb5a-38ea-400b-b275-41cdcb19540d",
+    "remoteID": "1CneokQA2r2hUmS50AF-o6jiGD7ac1Tw-",
+    "rank": 1,
+    "fileName": "IoC and DI.pdf",
+    "fileSize": "673792",
+    "downloadURL": "https://drive.google.com/file/d/1CneokQA2r2hUmS50AF-o6jiGD7ac1Tw-/view?usp=sharing",
+    "thumbnailURL": "",
     "uploader": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     }

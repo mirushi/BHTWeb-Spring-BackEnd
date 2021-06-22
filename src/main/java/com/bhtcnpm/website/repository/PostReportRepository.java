@@ -22,4 +22,6 @@ public interface PostReportRepository extends JpaRepository<PostReport, Long>, U
     Page<PostReport> findAllByResolvedTimeIsNull (Pageable pageable);
 
     PostReport findByPost (Post post);
+
+    PostReport findByPostAndActionTakenIsNull (Post post);
 }

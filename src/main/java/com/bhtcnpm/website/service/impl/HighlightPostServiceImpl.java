@@ -7,8 +7,10 @@ import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.repository.HighlightPostRepository;
 import com.bhtcnpm.website.repository.PostRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.HighlightPostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,9 +43,11 @@ public class HighlightPostServiceImpl implements HighlightPostService {
     }
 
     @Override
-    public void createHighlightPost(HighlightPostRequestDTO dto, UUID userID) {
+    public void createHighlightPost(Long postID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
         UserWebsite user = userWebsiteRepository.getOne(userID);
-        Post post = postRepository.getOne(dto.getId());
+        Post post = postRepository.getOne(postID);
 
         highlightPostRepository.createHighlightPost(post, user);
     }
@@ -53,8 +57,8 @@ public class HighlightPostServiceImpl implements HighlightPostService {
     }
 
     @Override
-    public void stickToTop(Long id) {
-        highlightPostRepository.stickToTop(id);
+    public void stickToTop(Long postID) {
+        highlightPostRepository.stickToTop(postID);
     }
 
 

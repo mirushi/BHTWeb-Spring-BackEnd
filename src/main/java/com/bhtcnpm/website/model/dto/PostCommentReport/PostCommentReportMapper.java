@@ -1,7 +1,7 @@
 package com.bhtcnpm.website.model.dto.PostCommentReport;
 
 import com.bhtcnpm.website.model.dto.ReportReason.ReportReasonMapper;
-import com.bhtcnpm.website.model.dto.UserWebsite.UserSummaryMapper;
+import com.bhtcnpm.website.model.dto.UserWebsite.UserMapper;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.PostCommentReport;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         imports = Collectors.class,
-        uses = {UserSummaryMapper.class, ReportReasonMapper.class}
+        uses = {UserMapper.class, ReportReasonMapper.class}
 )
 public interface PostCommentReportMapper {
     @Mapping(target = "id", source = "id")

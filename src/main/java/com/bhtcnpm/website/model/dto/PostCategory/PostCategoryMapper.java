@@ -16,14 +16,14 @@ public abstract class PostCategoryMapper {
 
     public abstract List<PostCategoryDTO> postCategoryListToPostCategoryDTOList (List<PostCategory> postCategories);
 
-    public PostCategory postCategoryDTOToPostCategory (PostCategoryDTO postCategoryDTO, PostCategory entity) {
+    public PostCategory postCategoryDTOToPostCategory (PostCategoryRequestDTO postCategoryRequestDTO, PostCategory entity) {
         PostCategory category = Objects.requireNonNullElseGet(entity, PostCategory::new);
 
-        if (postCategoryDTO == null) {
+        if (postCategoryRequestDTO == null) {
             return entity;
         }
 
-        category.setName(postCategoryDTO.getName());
+        category.setName(postCategoryRequestDTO.getName());
 
         return category;
     }

@@ -1,0 +1,48 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 15,
+    "title": "Phương pháp giải hệ phương trình tuyến tính",
+    "description": "Bài tập về giải hệ phương trình tuyến tính. Áp dụng các phương pháp như Phương pháp Gauss Jordan, Phương pháp Cramer,...",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 1,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 18
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 16,
+    "title": "Hệ phương trình tuyến tính thuần nhất",
+    "description": "Bài tập về hệ phương trình tuyến tính thuần nhất.",
+    "suggestedDuration": 1800,
+    "submitDtm": "2021-06-16T23:37:29Z",
+    "publishDtm": "2021-06-16T23:37:29Z",
+    "rank": 2,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 18
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 453}
+    ],
+    "version": 0
+  }
+]

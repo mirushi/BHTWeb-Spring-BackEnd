@@ -36,7 +36,7 @@ public class HighlightPost {
 
     private Integer rank;
 
-    @NotNull
+    @Column(nullable = false, updatable = false)
     @CreationTimestamp
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

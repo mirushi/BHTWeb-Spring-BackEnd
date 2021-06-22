@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
+import com.bhtcnpm.website.constant.domain.PostReport.PostReportDomainConstant;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,5 +29,6 @@ public class UserPostReport {
     @Fetch(FetchMode.JOIN)
     private List<PostReportReason> reasons;
 
+    @Column(length = PostReportDomainConstant.REPORT_FEEDBACK_LENGTH)
     private String feedback;
 }

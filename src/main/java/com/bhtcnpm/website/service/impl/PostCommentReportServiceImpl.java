@@ -10,14 +10,17 @@ import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostCommentReportAction.PostCommentReportActionType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.*;
+import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.PostCommentReportService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Security;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,23 +48,27 @@ public class PostCommentReportServiceImpl implements PostCommentReportService {
     private final PostCommentReportMapper postCommentReportMapper;
 
     @Override
-    public boolean createNewReport(UUID userID, Long commentID, PostCommentReportRequestDTO dto) {
+    public boolean createNewReport(Long commentID, PostCommentReportRequestDTO dto, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
         PostComment postCommentProxy = postCommentRepository.getOne(commentID);
 
         String feedback = dto.getFeedback();
 
         //Tìm xem nếu Report của Post này đã tồn tại thì không tạo mới report nữa.
         PostCommentReport postCommentReport = postCommentReportRepository
-                .findByPostComment(postCommentProxy);
+                .findByPostCommentAndActionTakenIsNull(postCommentProxy);
 
-        //Post report chưa tồn tại trên hệ thống thì tạo mới.
-        if (postCommentReport == null) {
+        //Post report chưa tồn tại trên hệ thống hoặc đã được xử lý 1 lần trước đó thì tạo mới.
+        if (postCommentReport == null || postCommentReport.getActionTaken() != null) {
             postCommentReport = PostCommentReport.builder()
                     .postComment(postCommentProxy)
                     .reportTime(LocalDateTime.now())
                     .build();
-            postCommentReportRepository.save(postCommentReport);
         }
+
+        //Cập nhật lại thời gian report mới nhất.
+        postCommentReport = postCommentReportRepository.save(postCommentReport);
 
         UserWebsite reporter = userWebsiteRepository.getOne(userID);
 
@@ -120,7 +127,9 @@ public class PostCommentReportServiceImpl implements PostCommentReportService {
     }
 
     @Override
-    public boolean resolveReport(UUID userID, Long reportID, PostCommentReportResolveRequestDTO dto) throws IDNotFoundException {
+    public boolean resolveReport(Long reportID, PostCommentReportResolveRequestDTO dto, Authentication authentication) throws IDNotFoundException {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
         Optional<PostCommentReport> report = postCommentReportRepository.findById(reportID);
         UserWebsite resolver = userWebsiteRepository.getOne(userID);
         PostCommentReportActionType actionType = dto.getPostCommentReportActionType();

@@ -7,8 +7,8 @@ import com.bhtcnpm.website.repository.ReportReasonRepository;
 import com.bhtcnpm.website.service.ReportReasonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service

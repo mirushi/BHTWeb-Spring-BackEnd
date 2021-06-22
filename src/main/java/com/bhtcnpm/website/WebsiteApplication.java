@@ -15,7 +15,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.config.BootstrapMode;
 import org.springframework.data.repository.init.Jackson2RepositoryPopulatorFactoryBean;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -58,17 +57,31 @@ public class WebsiteApplication {
         factoryBean.setResources(new Resource[]{
                 new ClassPathResource("data/UserWebsite/user-website-role.json"),
                 new ClassPathResource("data/UserWebsite/user-website.json"),
+                new ClassPathResource("data/tag-data.json"),
                 new ClassPathResource("data/Post/post-category.json"),
                 new ClassPathResource("data/Post/post.json"),
                 new ClassPathResource("data/Post/highlight-post.json"),
                 new ClassPathResource("data/Post/post-comment.json"),
                 new ClassPathResource("data/Doc/doc-subject.json"),
                 new ClassPathResource("data/Doc/doc-category.json"),
-                new ClassPathResource("data/Doc/doc-file-upload.json"),
                 new ClassPathResource("data/Doc/doc.json"),
+                new ClassPathResource("data/Doc/doc-file-upload.json"),
                 new ClassPathResource("data/Doc/user-doc-reaction.json"),
-                new ClassPathResource("data/report-reason.json")
-//                new ClassPathResource("data/tag-data.json")
+                new ClassPathResource("data/report-reason.json"),
+                new ClassPathResource("data/Exercise/exercise-subject-group.json"),
+                new ClassPathResource("data/Exercise/exercise-subject-faculty.json"),
+                new ClassPathResource("data/Exercise/exercise-subject.json"),
+                new ClassPathResource("data/Exercise/exercise-category.json"),
+                new ClassPathResource("data/Exercise/NMLT/exercise-topic-nmlt.json"),
+                new ClassPathResource("data/Exercise/NMLT/exercise-01-nmlt.json"),
+                new ClassPathResource("data/Exercise/NMLT/exercise-01-question-01-nmlt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-topic-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-01-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-01-question-01-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-02-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-03-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-04-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-05-dstt.json")
         });
         factoryBean.setMapper(objectMapper);
 

@@ -1,0 +1,20 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseCategory",
+    "id": 1,
+    "name": "Bài tập",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseCategory",
+    "id": 2,
+    "name": "Đề thi thử",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseCategory",
+    "id": 3,
+    "name": "Đề thi",
+    "version": 0
+  }
+]

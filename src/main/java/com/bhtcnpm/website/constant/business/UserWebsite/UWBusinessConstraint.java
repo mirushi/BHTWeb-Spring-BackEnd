@@ -11,4 +11,6 @@ public class UWBusinessConstraint {
     public static final int MAX_EMAIL_LENGTH = 255;
     public static final int MIN_PASSWORD_LENGTH = 8;
     public static final int MAX_PASSWORD_LENGTH = 2048;
+    public static final int MIN_ABOUT_ME = 5;
+    public static final int MAX_ABOUT_ME = 1000;
 }

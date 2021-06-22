@@ -1,30 +1,38 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
 import com.bhtcnpm.website.model.dto.Tag.TagDTO;
+import com.bhtcnpm.website.model.validator.dto.Doc.*;
+import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryID;
+import com.bhtcnpm.website.model.validator.dto.DocSubject.DocSubjectID;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
 public class DocRequestDTO {
+    @DocCategoryID
     private Long categoryID;
 
+    @DocSubjectID
     private Long subjectID;
 
+    @DocTitle
     private String title;
 
+    @DocDescription
     private String description;
 
+    @DocImageURL
     private String imageURL;
 
-    private String fileCode;
-
-    private Set<TagDTO> tags;
-
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DocPublishDtm
     private LocalDateTime publishDtm;
 
-    private short version;
+    @DocFileUploadRequestDTOList
+    private List<DocFileUploadRequestDTO> docFileUploadRequestDTOs;
+
+    @DocTag
+    private Set<TagDTO> tags;
 }

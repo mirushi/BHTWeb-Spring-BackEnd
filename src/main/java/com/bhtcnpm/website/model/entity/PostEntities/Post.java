@@ -1,6 +1,8 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
+import com.bhtcnpm.website.constant.domain.Post.PostApprovalState;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
+import com.bhtcnpm.website.constant.domain.Post.PostDomainConstant;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
@@ -13,14 +15,16 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
-import org.hibernate.annotations.Loader;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 import org.hibernate.search.engine.backend.types.*;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -48,7 +52,7 @@ public class Post {
     @GenericField(name = "id", searchable = Searchable.YES, projectable = Projectable.YES)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = PostDomainConstant.TITLE_LENGTH)
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,
@@ -58,7 +62,7 @@ public class Post {
             sortable = Sortable.YES)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = PostDomainConstant.SUMMARY_LENGTH)
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,
@@ -66,7 +70,11 @@ public class Post {
             searchable = Searchable.YES)
     private String summary;
 
+    @Column(length = PostDomainConstant.IMAGEURL_LENGTH)
     private String imageURL;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime submitDtm;
 
     @Column(nullable = false)
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
@@ -80,6 +88,7 @@ public class Post {
     @Column
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @UpdateTimestamp
     private LocalDateTime lastUpdatedDtm;
 
     @Column(nullable = false)
@@ -90,7 +99,7 @@ public class Post {
     private String content;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, length = PostDomainConstant.CONTENT_PLAIN_TEXT_LENGTH)
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,
@@ -143,7 +152,18 @@ public class Post {
     @JsonIgnore
     private Set<UserPostSave> userPostSaves;
 
-    @ManyToMany(cascade = {
+    @OneToOne(
+            mappedBy = "highlightPostId.post",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
+    private HighlightPost highlightPost;
+
+    @ManyToMany(
+            cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
@@ -157,12 +177,15 @@ public class Post {
             valueBridge = @ValueBridgeRef(type = TagValueBridge.class))
     @IndexedEmbedded(name = "tags_eb")
     @ToString.Exclude
-    @JsonIgnore
     private Set<Tag> tags;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @GenericField(searchable = Searchable.YES)
     private LocalDateTime deletedDate;
+
+    @ManyToOne
+    private UserWebsite deletedBy;
 
     @Version
     private short version;
@@ -189,6 +212,17 @@ public class Post {
             return PostBusinessState.DELETED;
         }
         return null;
+    }
+
+    @Transient
+    public PostApprovalState getPostApprovalState() {
+        if (PostStateType.APPROVED.equals(postState)) {
+            return PostApprovalState.APPROVED;
+        }
+        if (PostStateType.REJECTED.equals(postState)) {
+            return PostApprovalState.REJECTED;
+        }
+        return PostApprovalState.PENDING;
     }
 
     @Override

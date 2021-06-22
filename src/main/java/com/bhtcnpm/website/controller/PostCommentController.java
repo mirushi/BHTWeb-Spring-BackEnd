@@ -1,16 +1,21 @@
 package com.bhtcnpm.website.controller;
 
 import com.bhtcnpm.website.model.dto.PostComment.*;
+import com.bhtcnpm.website.model.validator.dto.Post.PostID;
+import com.bhtcnpm.website.model.validator.dto.PostComment.PostCommentID;
+import com.bhtcnpm.website.model.validator.dto.PostComment.PostCommentStatisticRequestSize;
 import com.bhtcnpm.website.service.PostCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,7 +32,7 @@ public class PostCommentController {
     @GetMapping("/posts/{postID}/comments")
     @ResponseBody
     public ResponseEntity<PostCommentListDTO> getPostComment (
-            @PathVariable Long postID,
+            @PathVariable @PostID Long postID,
             @PageableDefault @Nullable Pageable pageable
     ) {
         PostCommentListDTO postCommentDTOs = postCommentService.getPostCommentsByPostID(postID, pageable);
@@ -36,7 +41,7 @@ public class PostCommentController {
 
     @GetMapping(value = "/posts/comments/{commentID}/children")
     @ResponseBody
-    public ResponseEntity<List<PostCommentChildDTO>> getChildComments (@PathVariable Long commentID,
+    public ResponseEntity<List<PostCommentChildDTO>> getChildComments (@PathVariable @PostCommentID Long commentID,
                                                                        @PageableDefault @Nullable Pageable pageable) {
         List<PostCommentChildDTO> postCommentDTOs = postCommentService.getChildComments(commentID, pageable);
 
@@ -45,40 +50,37 @@ public class PostCommentController {
 
     @PostMapping(value = "/posts/{postID}/comments")
     @ResponseBody
-    public ResponseEntity<PostCommentDTO> postComments(@PathVariable Long postID, @RequestBody PostCommentRequestDTO postCommentRequestDTO) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        PostCommentDTO dto = postCommentService.postPostComment(postCommentRequestDTO, postID, userID);
+    public ResponseEntity<PostCommentDTO> postComments(@PathVariable @PostID Long postID,
+                                                       @RequestBody @Valid PostCommentRequestDTO postCommentRequestDTO,
+                                                       Authentication authentication) {
+        PostCommentDTO dto = postCommentService.postPostComment(postCommentRequestDTO, postID, authentication);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PostMapping(value = "/posts/comments/{parentCommentID}")
     @ResponseBody
-    public ResponseEntity<PostCommentChildDTO> postChildComment (@PathVariable Long parentCommentID, @RequestBody PostCommentRequestDTO postCommentRequestDTO) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        PostCommentChildDTO dto = postCommentService.postChildComment(postCommentRequestDTO, parentCommentID, userID);
+    public ResponseEntity<PostCommentChildDTO> postChildComment (@PathVariable @PostCommentID Long parentCommentID,
+                                                                 @RequestBody @Valid PostCommentRequestDTO postCommentRequestDTO,
+                                                                 Authentication authentication) {
+        PostCommentChildDTO dto = postCommentService.postChildComment(postCommentRequestDTO, parentCommentID, authentication);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PutMapping(value = "/posts/comments/{commentID}")
     @ResponseBody
-    public ResponseEntity<PostCommentDTO> putComment (@PathVariable Long commentID, @RequestBody PostCommentRequestDTO postCommentRequestDTO) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        PostCommentDTO postCommentDTO = postCommentService.putPostComment(postCommentRequestDTO, commentID, userID);
+    public ResponseEntity<PostCommentDTO> putComment (@PathVariable @PostCommentID Long commentID,
+                                                      @RequestBody @Valid PostCommentRequestDTO postCommentRequestDTO,
+                                                      Authentication authentication) {
+        PostCommentDTO postCommentDTO = postCommentService.putPostComment(postCommentRequestDTO, commentID, authentication);
 
         return new ResponseEntity<>(postCommentDTO, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/posts/comments/{commentID}")
     @ResponseBody
-    public ResponseEntity deleteComment (@PathVariable Long commentID) {
+    public ResponseEntity deleteComment (@PathVariable @PostCommentID Long commentID) {
         boolean result = postCommentService.deletePostComment(commentID);
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -89,11 +91,8 @@ public class PostCommentController {
 
     @PostMapping(value = "/posts/comments/{commentID}/likeStatus")
     @ResponseBody
-    public ResponseEntity postLikeStatus (@PathVariable Long commentID) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        boolean result = postCommentService.createUserPostCommentLike(commentID, userID);
+    public ResponseEntity postLikeStatus (@PathVariable @PostCommentID Long commentID, Authentication authentication) {
+        boolean result = postCommentService.createUserPostCommentLike(commentID, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -104,11 +103,8 @@ public class PostCommentController {
 
     @DeleteMapping(value = "/posts/comments/{commentID}/likeStatus")
     @ResponseBody
-    public ResponseEntity deleteLikeStatus (@PathVariable Long commentID) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        boolean result = postCommentService.deleteUserPostCommentLike(commentID, userID);
+    public ResponseEntity deleteLikeStatus (@PathVariable @PostCommentID Long commentID, Authentication authentication) {
+        boolean result = postCommentService.deleteUserPostCommentLike(commentID, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -120,13 +116,23 @@ public class PostCommentController {
     @GetMapping(value = "/posts/comments/statistics")
     @ResponseBody
     public ResponseEntity<List<PostCommentStatisticDTO>> getPostCommentStatistics (
-            @RequestParam List<Long> commentIDs
+            @RequestParam @PostCommentStatisticRequestSize List<@PostCommentID Long> commentIDs,
+            Authentication authentication
     ) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-        List<PostCommentStatisticDTO> postCommentStatisticDTOs = postCommentService.getCommentStatistics(commentIDs, userID);
+        List<PostCommentStatisticDTO> postCommentStatisticDTOs = postCommentService.getCommentStatistics(commentIDs, authentication);
 
         return new ResponseEntity<>(postCommentStatisticDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/posts/comments/actionAvailable")
+    @ResponseBody
+    public ResponseEntity<List<PostCommentAvailableActionDTO>> getPostCommentActionAvailable (
+            @RequestParam List<Long> postCommentIDs,
+            Authentication authentication
+    ) {
+        List<PostCommentAvailableActionDTO> availableActionDTOList = postCommentService.getAvailablePostCommentAction(postCommentIDs, authentication);
+
+        return new ResponseEntity<>(availableActionDTOList, HttpStatus.OK);
     }
 
 }

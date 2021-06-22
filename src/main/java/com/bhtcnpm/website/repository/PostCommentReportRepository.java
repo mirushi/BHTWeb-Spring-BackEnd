@@ -20,4 +20,6 @@ public interface PostCommentReportRepository extends JpaRepository<PostCommentRe
     Page<PostCommentReport> findAllByResolvedTimeIsNull(Pageable pageable);
 
     PostCommentReport findByPostComment (PostComment postComment);
+
+    PostCommentReport findByPostCommentAndActionTakenIsNull (PostComment postComment);
 }

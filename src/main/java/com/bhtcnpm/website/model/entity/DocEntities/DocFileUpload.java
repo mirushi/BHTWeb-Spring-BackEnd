@@ -3,43 +3,41 @@ package com.bhtcnpm.website.model.entity.DocEntities;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.UUIDSerializer;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity(name = "DocFileUpload")
 @Table(name = "doc_file_upload")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DocFileUpload {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "doc_file_upload_sequence"
-    )
-    @SequenceGenerator(
-            name = "doc_file_upload_sequence",
-            sequenceName = "doc_file_upload_sequence"
-    )
-    private Long id;
-
     @Column(columnDefinition = "BINARY(16)",
             nullable = false,
             unique = true)
-    private UUID code;
+    @Builder.Default
+    private UUID id = UUID.randomUUID();
+
+    @Column(nullable = false, updatable = false)
+    private String remoteID;
+
+    @Column(nullable = false)
+    private Integer rank;
 
     @Column(nullable = false)
     private String fileName;
 
-    //Stored as KB.
+    //Stored as Byte.
     @Column(nullable = false)
     private Long fileSize;
 
@@ -47,19 +45,30 @@ public class DocFileUpload {
     private String downloadURL;
 
     @Column(nullable = false)
-    private Long downloadCount;
-
-    @Column(nullable = false)
     private String thumbnailURL;
+
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdDtm;
 
     @ManyToOne
     @JoinColumn(nullable = false)
     private UserWebsite uploader;
 
-    @PrePersist
-    public void initializeUUID () {
-        if (code == null) {
-            code = UUID.randomUUID();
-        }
+    @ManyToOne
+    @JoinColumn
+    private Doc doc;
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DocFileUpload)) return false;
+        DocFileUpload other = (DocFileUpload) o;
+        return Objects.equals(getId(), other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

@@ -40,6 +40,9 @@ import java.util.stream.Collectors;
 public class UserWebsite {
     //New account will automatically be created if not found in db.
     @Id
+    @Column(columnDefinition = "BINARY(16)",
+            nullable = false,
+            unique = true)
     @GenericField(
             name = "id",
             searchable = Searchable.YES,
@@ -68,6 +71,9 @@ public class UserWebsite {
 
     @Column(nullable = false)
     private String avatarURL;
+
+    @Column(nullable = false)
+    private String aboutMe;
 
     @ManyToMany (
             cascade = { CascadeType.PERSIST },

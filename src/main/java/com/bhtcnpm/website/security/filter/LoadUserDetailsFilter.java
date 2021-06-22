@@ -78,6 +78,7 @@ public class LoadUserDetailsFilter extends GenericFilterBean {
                     .displayName(ctx.getToken().getName())
                     .reputationScore(UWBusinessConstant.DEFAULT_REPUTATION_SCORE)
                     .avatarURL(UWBusinessConstant.DEFAULT_AVATAR_URL)
+                    .aboutMe(UWBusinessConstant.DEFAULT_ABOUT_ME)
                     .version((short)0)
                     .build();
             userWebsiteRepository.save(newUser);

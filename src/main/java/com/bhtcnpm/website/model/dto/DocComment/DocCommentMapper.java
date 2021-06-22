@@ -1,8 +1,8 @@
 package com.bhtcnpm.website.model.dto.DocComment;
 
 import com.bhtcnpm.website.model.entity.DocEntities.DocComment;
-import com.bhtcnpm.website.repository.DocCommentRepository;
-import com.bhtcnpm.website.repository.DocRepository;
+import com.bhtcnpm.website.repository.Doc.DocCommentRepository;
+import com.bhtcnpm.website.repository.Doc.DocRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Mapper
+@Mapper(uses = {TagMapper.class})
 public abstract class PostMapper {
 
     public static final PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
@@ -33,17 +33,18 @@ public abstract class PostMapper {
     protected TagMapper tagMapper;
 
     @Mapping(target = "authorID", source = "post.author.id")
-    @Mapping(target = "authorName", source = "post.author.name", qualifiedBy = {})
+    @Mapping(target = "authorDisplayName", source = "post.author.displayName", qualifiedBy = {})
     @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     public abstract PostSummaryDTO postToPostSummaryDTO (Post post);
 
     @Mapping(target = "authorID", source = "post.author.id")
-    @Mapping(target = "authorName", source = "post.author.name", qualifiedBy = {})
+    @Mapping(target = "authorDisplayName", source = "post.author.displayName", qualifiedBy = {})
     @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "submitDtm", source = "submitDtm")
     public abstract PostSummaryWithStateDTO postToPostSummaryWithStateDTO (Post post);
 
     public abstract List<PostSummaryWithStateDTO> postListToPostSummaryWithStateDTOList (List<Post> postList);
@@ -56,7 +57,16 @@ public abstract class PostMapper {
     @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "tags", source = "tags")
     public abstract PostDetailsDTO postToPostDetailsDTO (Post post);
+
+    public PostSummaryListDTO postSummaryDTOListToPostSummaryListDTO (List<PostSummaryDTO> postSummaryDTOList, Integer totalPages, Long totalElements) {
+        return new PostSummaryListDTO(postSummaryDTOList, totalPages, totalElements);
+    }
+
+    public PostSummaryListDTO postListToPostSummaryListDTO (List<Post> postList, Integer totalPages, Long totalElements) {
+        return new PostSummaryListDTO(postListToPostSummaryDTOs(postList), totalPages, totalElements);
+    }
 
     public PostSummaryListDTO postPageToPostSummaryListDTO (Page<Post> postPage) {
         return new PostSummaryListDTO(postListToPostSummaryDTOs(postPage.getContent()), postPage.getTotalPages(), postPage.getTotalElements());
@@ -94,7 +104,21 @@ public abstract class PostMapper {
         //Calculate reading time.
         post.setReadingTime(calculateReadTime(postRequestDTO.getContent()));
 
-        post.setPublishDtm(LocalDateTime.now());
+        if (post.getSubmitDtm() == null) {
+            post.setSubmitDtm(LocalDateTime.now());
+        }
+
+        //TH cho cập nhật publishDtm: Khi entity chưa có publishDtm.
+        //TH không cho cập nhật publishDtm: Khi entity đã có publishDtm.
+        //TODO: Tạm thời không cho cập nhật thời gian publishDtm của post. Chỉ cho cập nhật trong TH chưa có publishDtm.
+        if (post.getPublishDtm() == null) {
+            if (postRequestDTO.getPublishDtm() == null || postRequestDTO.getPublishDtm().isBefore(LocalDateTime.now())) {
+                post.setPublishDtm(LocalDateTime.now());
+            } else {
+                post.setPublishDtm(postRequestDTO.getPublishDtm());
+            }
+        }
+
         post.setTags(tagMapper.tagDTOListToTagList(postRequestDTO.getTags()));
         post.setTitle(postRequestDTO.getTitle());
         post.setSummary(postRequestDTO.getSummary());

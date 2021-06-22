@@ -9,7 +9,8 @@ public class UserDetailsDTO {
     private UUID id;
     private String name;
     private String displayName;
-    private String email;
     private Long reputationScore;
     private String avatarURL;
+    private String email;
+    private String aboutMe;
 }

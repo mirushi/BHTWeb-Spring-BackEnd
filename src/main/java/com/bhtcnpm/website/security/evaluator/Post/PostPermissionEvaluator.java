@@ -1,9 +1,16 @@
 package com.bhtcnpm.website.security.evaluator.Post;
 
+import com.bhtcnpm.website.constant.business.Post.HighlightPostBusinessConstant;
+import com.bhtcnpm.website.constant.domain.Post.PostApprovalState;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.GenericOwnership;
-import com.bhtcnpm.website.constant.security.evaluator.GenericPermissionConstant;
+import com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest;
+import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest;
+import com.bhtcnpm.website.constant.security.permission.HighlightPostPermissionConstant;
 import com.bhtcnpm.website.constant.security.permission.PostPermissionConstant;
+import com.bhtcnpm.website.constant.security.permission.PostReportPermissionConstant;
+import com.bhtcnpm.website.model.entity.PostEntities.HighlightPost;
+import com.bhtcnpm.website.repository.HighlightPostRepository;
 import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.repository.PostRepository;
@@ -29,6 +36,8 @@ import java.util.UUID;
 public class PostPermissionEvaluator implements SimplePermissionEvaluator {
 
     private final PostRepository postRepository;
+
+    private final HighlightPostRepository highlightPostRepository;
 
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -66,6 +75,8 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
     private boolean checkPostPermission(Authentication authentication, Post targetDomainObject, String permission) {
         //Kiểm tra xem Post hiện tại đang có state như thế nào.
         PostBusinessState state = targetDomainObject.getPostBusinessState();
+        PostApprovalState approvalState = targetDomainObject.getPostApprovalState();
+
         UUID authenticatedUserID = SecurityUtils.getUserID(authentication);
 
         //State is null, the permission cannot be determined.
@@ -75,21 +86,209 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
         }
 
         //Kiểm tra quyền Read.
-        if (GenericPermissionConstant.READ_PERMISSION.equals(permission)) {
+        if (PostActionPermissionRequest.READ_PERMISSION.equals(permission)) {
             return this.checkPostReadPermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
         //Kiểm tra quyền Edit.
-        if (GenericPermissionConstant.UPDATE_PERMISSION.equals(permission)) {
+        if (PostActionPermissionRequest.UPDATE_PERMISSION.equals(permission)) {
             return this.checkPostUpdatePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
         //Kiểm tra quyền Delete.
-        if (GenericPermissionConstant.DELETE_PERMISSION.equals(permission)) {
+        if (PostActionPermissionRequest.DELETE_PERMISSION.equals(permission)) {
             return this.checkPostDeletePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
-        this.logger.warn(LogMessage.format("Post permission %s is not supported. Denying access to postID = %s", permission ,targetDomainObject.getId().toString()));
+        //Kiểm tra quyền Save.
+        if (PostActionPermissionRequest.SAVE_PERMISSION.equals(permission)) {
+            return this.checkPostSavePermission(authentication, authenticatedUserID, state, targetDomainObject);
+        }
+
+        //Kiểm tra quyền Like.
+        if (PostActionPermissionRequest.LIKE_PERMISSION.equals(permission)) {
+            return this.checkPostLikePermission(authentication, authenticatedUserID, state);
+        }
+
+        //Kiểm tra quyền Approve/Reject của user.
+        if (PostActionPermissionRequest.APPROVE_PERMISSION.equals(permission)) {
+            return this.checkPostApprovePermission(authentication, authenticatedUserID, approvalState);
+        }
+
+        //Kiểm tra quyền report của user.
+        if (PostActionPermissionRequest.REPORT_PERMISSION.equals(permission)) {
+            return this.checkPostReportPermission(authentication, authenticatedUserID, state);
+        }
+
+        //Kiểm tra quyền bình luận vào bài post của user.
+        if (PostActionPermissionRequest.COMMENT_PERMISSION.equals(permission)) {
+            return this.checkPostCommentPermission(authentication, authenticatedUserID, state);
+        }
+
+        //Kiểm tra quyền tạo Highlight post của user.
+        if (HighlightPostPermissionRequest.HIGHLIGHT_POST_CREATE.equals(permission)) {
+            return this.checkPostHighlightPermission(authentication, authenticatedUserID, state, targetDomainObject);
+        }
+
+        //Kiểm tra quyền xoá một highlight post của user.
+        if (HighlightPostPermissionRequest.HIGHLIGHT_POST_DELETE.equals(permission)) {
+            return this.checkPostHighlightDeletePermission(authentication, authenticatedUserID, targetDomainObject);
+        }
+
+        //Kiểm tra quyền stickToTop của một highlight post của user.
+        if (HighlightPostPermissionRequest.HIGHLIGHT_POST_STICKTOTOP.equals(permission)) {
+            return this.checkPostHighlightStickToTop(authentication, authenticatedUserID, targetDomainObject);
+        }
+
+        throw new IllegalArgumentException(String.format("Post permission %s is not supported. Denying access to postID = %s", permission, targetDomainObject.getId()));
+    }
+
+    private boolean checkPostHighlightStickToTop (Authentication authentication, UUID authenticatedUserID, Post post) {
+        //Bắt buộc phải có tài khoản mới được xoá highlight post.
+        logger.info("Checking post highlight delete permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        if (SecurityUtils.containsAuthority(authentication, HighlightPostPermissionConstant.HIGHLIGHTPOST_PUBLIC_ALL_MANAGE)) {
+            Optional<HighlightPost> object = highlightPostRepository.findByHighlightPostIdPost(post);
+            if (object.isPresent()) {
+                HighlightPost highlightPost = object.get();
+                if (highlightPost.getRank() != HighlightPostBusinessConstant.RANK_MIN) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkPostHighlightDeletePermission(Authentication authentication, UUID authenticatedUserID, Post post) {
+        //Bắt buộc phải có tài khoản mới được xoá highlight post.
+        logger.info("Checking post highlight delete permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        if (SecurityUtils.containsAuthority(authentication, HighlightPostPermissionConstant.HIGHLIGHTPOST_PUBLIC_ALL_MANAGE)) {
+            Optional<HighlightPost> object = highlightPostRepository.findByHighlightPostIdPost(post);
+            if (object.isPresent()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkPostCommentPermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state) {
+        //Bắt buộc phải có tài khoản mới được highlight post.
+        logger.info("Checking post comment permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        //Xét state của Post.
+        if (PostBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, PostReportPermissionConstant.POSTREPORT_PUBLIC_ALL_CREATE)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkPostReportPermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state) {
+        //Bắt buộc phải có tài khoản mới được highlight post.
+        logger.info("Checking post save permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        if (PostBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, PostReportPermissionConstant.POSTREPORT_PUBLIC_ALL_CREATE)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkPostHighlightPermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state, Post post) {
+        //Bắt buộc phải có tài khoản mới được highlight post.
+        logger.info("Checking post save permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        if (PostBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, HighlightPostPermissionConstant.HIGHLIGHTPOST_PUBLIC_ALL_MANAGE)) {
+                Optional<HighlightPost> highlightPost = highlightPostRepository.findByHighlightPostIdPost(post);
+                if (highlightPost.isEmpty()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkPostApprovePermission (Authentication authentication, UUID authenticatedUserID, PostApprovalState approvalState) {
+        //Bắt buộc phải có tài khoản mới được approve.
+        logger.info("Checking post save permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        //Xét state duyệt của Post.
+        //Nếu post đang pending thì xét xem user có quyền để thực hiện approve/reject hay không.
+        if (PostApprovalState.PENDING.equals(approvalState)) {
+            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_PENDING_ALL_APPROVE)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkPostLikePermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state) {
+        //Bắt buộc phải có tài khoản mới được like.
+        logger.info("Checking post save permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        //Xét state của Post.
+        if (PostBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_PUBLIC_ALL_LIKE)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkPostSavePermission (Authentication authentication, UUID authenticatedUserID, PostBusinessState state, Post targetDomainObject) {
+        //Bắt buộc phải có tài khoản mới được save.
+        logger.info("Checking post save permission.");
+        if (authenticatedUserID == null) {
+            logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
+            return false;
+        }
+
+        //Xét state của Post.
+        if (PostBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_PUBLIC_ALL_SAVE)) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -108,24 +307,24 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
                 return true;
             }
             else if (SecurityUtils.containsAuthority(authentication,
-                    PostPermissionConstant.POST_PUBLIC_ALL_DELETE)) {
+                    com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_PUBLIC_ALL_DELETE)) {
                 return true;
             }
             return false;
         }
         else if (PostBusinessState.UNLISTED.equals(state)) {
             if (isOwnerAndContainsAuthority(authentication, targetDomainObject,
-                    PostPermissionConstant.POST_UNLISTED_SELF_DELETE)) {
+                    com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_UNLISTED_SELF_DELETE)) {
                 return true;
             }
             else if (SecurityUtils.containsAuthority(authentication,
-                    PostPermissionConstant.POST_UNLISTED_ALL_DELETE)) {
+                    com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_UNLISTED_ALL_DELETE)) {
                 return true;
             }
             return false;
         }
         else if (PostBusinessState.DELETED.equals(state)) {
-            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_DELETED_ALL_DELETE)) {
+            if (SecurityUtils.containsAuthority(authentication, com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_DELETED_ALL_DELETE)) {
                 return true;
             }
             return false;
@@ -143,25 +342,25 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
         }
         //Xét state của Post.
         if (PostBusinessState.PUBLIC.equals(state)) {
-            if (isOwnerAndContainsAuthority(authentication, targetDomainObject, PostPermissionConstant.POST_PUBLIC_SELF_UPDATE)) {
+            if (isOwnerAndContainsAuthority(authentication, targetDomainObject, com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_PUBLIC_SELF_UPDATE)) {
                 return true;
             }
-            else if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_PUBLIC_ALL_UPDATE)) {
+            else if (SecurityUtils.containsAuthority(authentication, com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_PUBLIC_ALL_UPDATE)) {
                 return true;
             }
             return false;
         }
         else if (PostBusinessState.UNLISTED.equals(state)){
-            if (isOwnerAndContainsAuthority(authentication, targetDomainObject ,PostPermissionConstant.POST_UNLISTED_SELF_UPDATE)) {
+            if (isOwnerAndContainsAuthority(authentication, targetDomainObject , com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_UNLISTED_SELF_UPDATE)) {
                 return true;
             }
-            else if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_UNLISTED_ALL_UPDATE)) {
+            else if (SecurityUtils.containsAuthority(authentication, com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_UNLISTED_ALL_UPDATE)) {
                 return true;
             }
             return false;
         }
         else if (PostBusinessState.DELETED.equals(state)) {
-            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_DELETED_ALL_UPDATE)) {
+            if (SecurityUtils.containsAuthority(authentication, com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_DELETED_ALL_UPDATE)) {
                 return true;
             }
             return false;
@@ -183,14 +382,14 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
             if (targetDomainObject.getAuthor().getId().equals(authenticatedUserID)) {
                 return true;
             }
-            //Người có quyền xem bài viết PRIVATE có thể xem được bài viết này.
-            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_UNLISTED_ALL_READ)) {
+            //Người có quyền xem bài viết UNLISTED có thể xem được bài viết này.
+            if (SecurityUtils.containsAuthority(authentication, com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_UNLISTED_ALL_READ)) {
                 return true;
             }
             return false;
         }
         else if (PostBusinessState.DELETED.equals(state)) {
-            if (SecurityUtils.containsAuthority(authentication, PostPermissionConstant.POST_DELETED_ALL_READ)) {
+            if (SecurityUtils.containsAuthority(authentication, com.bhtcnpm.website.constant.security.permission.PostPermissionConstant.POST_DELETED_ALL_READ)) {
                 return true;
             }
             return false;

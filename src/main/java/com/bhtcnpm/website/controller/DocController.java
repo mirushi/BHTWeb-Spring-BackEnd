@@ -5,19 +5,25 @@ import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
-import com.bhtcnpm.website.service.DocService;
+import com.bhtcnpm.website.model.validator.dto.Doc.DocID;
+import com.bhtcnpm.website.service.Doc.DocDownloadService;
+import com.bhtcnpm.website.service.Doc.DocService;
+import com.bhtcnpm.website.service.Doc.DocViewService;
+import com.bhtcnpm.website.util.HttpIPUtils;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -29,35 +35,48 @@ import java.util.UUID;
 public class DocController {
 
     private final DocService docService;
+    private final DocViewService docViewService;
+    private final DocDownloadService docDownloadService;
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<DocDetailsListDTO> getAllDocuments (
+    public ResponseEntity<DocSummaryListDTO> getAllDocuments (
             @QuerydslPredicate(root = Doc.class) Predicate predicate,
-            @NotNull @Min(0) Integer paginator) {
-        DocDetailsListDTO result = docService.getAllDoc(predicate,paginator);
+            @PageableDefault @Nullable Pageable pageable,
+            Authentication authentication) {
+        DocSummaryListDTO result = docService.getAllDoc(predicate, pageable, authentication);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("pendingDocuments")
+    @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<DocSummaryListDTO> getPendingApprovalDocuments (
-            @RequestParam(value = "searchTerm", required = false) String searchTerm,
-            @RequestParam(value = "docState", required = false) DocStateType docState,
-            @RequestParam(value = "subjectID", required = false) Long subjectID,
-            @RequestParam(value = "categoryID", required = false) Long categoryID,
-            @RequestParam(value = "authorID", required = false) Long authorID,
-            @RequestParam(value = "page") Integer page,
-            @RequestParam(value = "sortByCreatedTime", required = false) ApiSortOrder sortByCreatedTime) {
-        DocSummaryListDTO result = docService.getAllPendingApprovalDoc(
-                searchTerm,
-                subjectID,
-                categoryID,
-                authorID,
-                page,
-                sortByCreatedTime
-        );
+    public ResponseEntity<DocDetailsDTO> getDocumentDetails (
+        @PathVariable @DocID Long id,
+        HttpServletRequest servletRequest,
+        Authentication authentication
+    ) {
+        DocDetailsDTO docDetailsDTO = docService.getDocDetails(id);
+
+        if (docDetailsDTO == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        String ipAddress = HttpIPUtils.getClientIPAddress(servletRequest);
+
+        docViewService.addDocView(id, authentication, ipAddress);
+
+        return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("pendingApproval")
+    @ResponseBody
+    public ResponseEntity<DocDetailsWithStateListDTO> getPendingApprovalDocuments (
+            @QuerydslPredicate(root = Doc.class) Predicate predicate,
+            @PageableDefault @Nullable Pageable pageable,
+            Authentication authentication) {
+
+        DocDetailsWithStateListDTO result = docService.getAllPendingApprovalDoc(predicate, pageable, authentication);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -71,11 +90,9 @@ public class DocController {
             @RequestParam(value = "docState", required = false) DocStateType docState,
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
-            @RequestParam(value = "sortByCreatedDtm", required = false) ApiSortOrder sortByCreatedDtm
+            @RequestParam(value = "sortByCreatedDtm", required = false) ApiSortOrder sortByCreatedDtm,
+            Authentication authentication
     ) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
         DocSummaryWithStateListDTO result = docService.getMyDocuments(
                 searchTerm,
                 categoryID,
@@ -84,7 +101,7 @@ public class DocController {
                 page,
                 sortByPublishDtm,
                 sortByCreatedDtm,
-                userID
+                authentication
         );
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -94,11 +111,9 @@ public class DocController {
     @ResponseBody
     public ResponseEntity<DocDetailsDTO> putDocument (
             @PathVariable Long id,
-            @RequestBody DocRequestDTO docRequestDTO) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        DocDetailsDTO docDetailsDTO = docService.putDoc(id, userID, docRequestDTO);
+            @RequestBody DocRequestDTO docRequestDTO,
+            Authentication authentication) {
+        DocDetailsDTO docDetailsDTO = docService.putDoc(id, docRequestDTO, authentication);
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
 
@@ -111,19 +126,18 @@ public class DocController {
 //        DocDetailsDTO docDetailsDTO = docService.
 //    }
 
-    @GetMapping("trending")
+    @GetMapping("hot")
     @ResponseBody
-    public ResponseEntity<List<DocSummaryDTO>> getTrendingDocs () {
-        return new ResponseEntity<>(docService.getTrending(), HttpStatus.OK);
+    public ResponseEntity<List<DocSummaryDTO>> getHotDocs (Pageable pageable,
+                                                                Authentication authentication) {
+        return new ResponseEntity<>(docService.getHotDocs(pageable, authentication), HttpStatus.OK);
     }
 
     @PostMapping("{id}/approval")
     @ResponseBody
-    public ResponseEntity postDocApproval (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
-        Boolean result = docService.postApproval(id, userID);
+    public ResponseEntity postDocApproval (@PathVariable Long id,
+                                           Authentication authentication) {
+        Boolean result = docService.postApproval(id, authentication);
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
         }
@@ -143,28 +157,11 @@ public class DocController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("{id}/downloadCount")
-    @ResponseBody
-    public ResponseEntity increaseDownloadCount (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
-        Boolean result = docService.increaseDownloadCount(id, userID);
-
-        if (result) {
-            return new ResponseEntity(HttpStatus.OK);
-        }
-
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
-    }
-
     @PostMapping("{id}/rejection")
     @ResponseBody
-    public ResponseEntity rejectDoc (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
-        Boolean result = docService.postReject(id, userID);
+    public ResponseEntity rejectDoc (@PathVariable Long id,
+                                     Authentication authentication) {
+        Boolean result = docService.docReject(id, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -175,11 +172,9 @@ public class DocController {
 
     @DeleteMapping("{id}/rejection")
     @ResponseBody
-    public ResponseEntity undoRejectDoc (@PathVariable Long id) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
-        Boolean result = docService.undoReject(id, userID);
+    public ResponseEntity undoRejectDoc (@PathVariable Long id,
+                                         Authentication authentication) {
+        Boolean result = docService.undoReject(id, authentication);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);
@@ -188,32 +183,74 @@ public class DocController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("{id}/related")
+    @PostMapping(value = "/{id}/savedStatus")
     @ResponseBody
-    public ResponseEntity<List<DocDetailsDTO>> getRelatedDocs (@PathVariable Long id) {
-        List<DocDetailsDTO> docDetailsDTOs = docService.getRelatedDocs(id);
+    public ResponseEntity postSavedStatus (@PathVariable @DocID Long id,
+                                           Authentication authentication) {
+        Boolean result = docService.createSavedStatus(id, authentication);
 
-        return new ResponseEntity<>(docDetailsDTOs, HttpStatus.OK);
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping(value = "/{id}/savedStatus")
+    @ResponseBody
+    public ResponseEntity deleteSavedStatus (@PathVariable @DocID Long id,
+                                             Authentication authentication) {
+        Boolean result = docService.deleteSavedStatus(id, authentication);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping(value = "/savedDocs")
+    @ResponseBody
+    public ResponseEntity<DocSummaryListDTO> getDocSavedByUserOwn (
+            @QuerydslPredicate(root = Doc.class) Predicate predicate,
+            @PageableDefault @Nullable Pageable pageable,
+            Authentication authentication
+    ) {
+        DocSummaryListDTO docSavedByUser = docService.getDocSavedByUserOwn(predicate, authentication, pageable);
+
+        return new ResponseEntity<>(docSavedByUser, HttpStatus.OK);
+    }
+
+    @GetMapping("related")
+    @ResponseBody
+    public ResponseEntity<List<DocSuggestionDTO>> getRelatedDocs (@RequestParam(value = "postID", required = false) Long postID,
+                                                                  @RequestParam(value = "docID", required = false) Long docID,
+                                                                  @RequestParam(value = "exerciseID", required = false) Long exerciseID,
+                                                                  @RequestParam(value = "authorID", required = false) UUID authorID,
+                                                                  @RequestParam(value = "categoryID", required = false) Long categoryID,
+                                                                  @RequestParam(value = "subjectID", required = false) Long subjectID,
+                                                                  @RequestParam(value = "page", required = false) Integer page,
+                                                                  Authentication authentication) throws IOException {
+        List<DocSuggestionDTO> docSuggestionDTOs = docService
+                .getRelatedDocs(postID, docID, exerciseID, authorID, categoryID, subjectID, page, authentication);
+
+        return new ResponseEntity<>(docSuggestionDTOs, HttpStatus.OK);
     }
 
     @GetMapping("statistics")
     @ResponseBody
-    public ResponseEntity<List<DocStatisticDTO>> getDocStatistic (@RequestParam List<Long> docIDs) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        List<DocStatisticDTO> docStatisticDTOs = docService.getDocStatistics(docIDs, userID);
+    public ResponseEntity<List<DocStatisticDTO>> getDocStatistic (@RequestParam List<Long> docIDs,
+                                                                      Authentication authentication) {
+        List<DocStatisticDTO> docStatisticDTOs = docService.getDocStatistics(docIDs, authentication);
 
         return new ResponseEntity<>(docStatisticDTOs, HttpStatus.OK);
     }
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<DocDetailsDTO> postDoc (@RequestBody DocRequestDTO docRequestDTO) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        DocDetailsDTO docDetailsDTO = docService.createDoc(docRequestDTO, userID);
+    public ResponseEntity<DocDetailsDTO> postDoc (@RequestBody DocRequestDTO docRequestDTO,
+                                                  Authentication authentication) {
+        DocDetailsDTO docDetailsDTO = docService.createDoc(docRequestDTO, authentication);
 
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
@@ -224,17 +261,21 @@ public class DocController {
             @RequestParam(value = "searchTerm", required = false) String searchTerm,
             @RequestParam(value = "categoryID", required = false) Long categoryID,
             @RequestParam(value = "subjectID", required = false) Long subjectID,
-            @RequestParam(value = "authorID", required = false) Long authorID,
+            @RequestParam(value = "authorID", required = false) UUID authorID,
+            @RequestParam(value = "tags", required = false) Long tagID,
             @RequestParam(value = "page") Integer page,
-            @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm) {
+            @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
+            Authentication authentication) {
 
         DocSummaryListDTO dtoList = docService.getDocBySearchTerm(
                 searchTerm,
                 categoryID,
                 subjectID,
                 authorID,
+                tagID,
                 page,
-                sortByPublishDtm
+                sortByPublishDtm,
+                authentication
         );
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
@@ -242,33 +283,43 @@ public class DocController {
 
     @PostMapping("upload")
     @ResponseBody
-    public ResponseEntity<DocUploadDTO> uploadDoc (@RequestParam("file")MultipartFile file) throws IOException, FileExtensionNotAllowedException {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        UUID userID = DemoUserIDConstant.userID;
-
-        DocUploadDTO dto = docService.uploadFileToGDrive(file, userID);
+    public ResponseEntity<DocFileUploadDTO> uploadDoc (@RequestParam("file")MultipartFile file,
+                                                       Authentication authentication) throws IOException, FileExtensionNotAllowedException {
+        DocFileUploadDTO dto = docService.uploadFileToGDrive(file, authentication);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("downloadURL")
     @ResponseBody
-    public ResponseEntity<DocDownloadInfoDTO> getDownloadURL (@RequestParam("code") String fileCode) {
-        DocDownloadInfoDTO dto = docService.getDocDownloadInfo(fileCode);
+    public ResponseEntity<DocDownloadInfoDTO> getDownloadURL (@RequestParam("id") UUID fileID,
+                                                              HttpServletRequest servletRequest,
+                                                              Authentication authentication) {
+        DocDownloadInfoDTO dto = docService.getDocDownloadInfo(fileID);
+
+        if (dto == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        String ipAddress = HttpIPUtils.getClientIPAddress(servletRequest);
+
+        docDownloadService.addDocDownload(fileID, authentication, ipAddress);
+
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-        @GetMapping("getManagementDoc")
+    @GetMapping("getManagementDoc")
     @ResponseBody
     public ResponseEntity<DocSummaryWithStateListDTO> getManagementDoc (
             @RequestParam(value = "searchTerm", required = false) String searchTerm,
             @RequestParam(value = "subjectID", required = false) Long subjectID,
             @RequestParam(value = "categoryID", required = false) Long categoryID,
-            @RequestParam(value = "authorID", required = false) Long authorID,
+            @RequestParam(value = "authorID", required = false) UUID authorID,
             @RequestParam(value = "docState", required = false) DocStateType docState,
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
-            @RequestParam(value = "sortByCreatedDtm", required = false) ApiSortOrder sortByCreatedDtm
+            @RequestParam(value = "sortByCreatedDtm", required = false) ApiSortOrder sortByCreatedDtm,
+            Authentication authentication
     ) {
         DocSummaryWithStateListDTO dtoList = docService.getManagementDoc(
                 searchTerm,
@@ -278,7 +329,8 @@ public class DocController {
                 docState,
                 page,
                 sortByPublishDtm,
-                sortByCreatedDtm
+                sortByCreatedDtm,
+                authentication
         );
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);

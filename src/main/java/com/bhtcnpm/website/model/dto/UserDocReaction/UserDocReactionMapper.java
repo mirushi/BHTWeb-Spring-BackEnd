@@ -18,7 +18,6 @@ public interface UserDocReactionMapper {
     @Mapping(source = "userDocReactionId.doc.id", target = "docID")
     UserDocReactionDTO userDocReactionToUserDocReactionDTO (UserDocReaction userDocReaction);
 
-    @Mapping(source = "userDocReactionId.doc.id", target = "docID")
     UserDocReactionUserOwnDTO userDocReactionToUserDocReactionUserOwnDTO (UserDocReaction userDocReaction);
 
 }

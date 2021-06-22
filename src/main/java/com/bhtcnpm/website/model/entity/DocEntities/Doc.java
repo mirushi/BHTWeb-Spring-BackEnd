@@ -1,9 +1,11 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
+import com.bhtcnpm.website.constant.domain.Doc.DocApprovalState;
+import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.model.entity.*;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
+import com.bhtcnpm.website.repository.Doc.comparator.DocFileUploadComparatorRankBased;
 import com.bhtcnpm.website.search.bridge.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -13,7 +15,6 @@ import org.hibernate.annotations.*;
 import org.hibernate.search.engine.backend.types.*;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
-import org.jsoup.nodes.Document;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
@@ -21,7 +22,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.*;
 
 @Entity(name = "Doc")
 @Indexed
@@ -30,12 +31,19 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE doc SET DELETED_DATE = "+ "20210302" +" WHERE id = ? AND VERSION = ?")
+@SQLDelete(sql = "UPDATE doc SET DELETED_DATE = "+ "CURRENT_TIMESTAMP()" +" WHERE id = ? AND VERSION = ?")
 @Loader(namedQuery = "findDocById")
 @NamedQuery(name = "findDocById",
         query = "SELECT d FROM Doc d WHERE d.id = ?1 " +
                 "AND d.deletedDate IS NULL")
 @Where(clause = "DELETED_DATE is NULL")
+@NamedEntityGraph(
+        name = "tagsAndDocFileUploads.all",
+        attributeNodes = {
+                @NamedAttributeNode(value = "tags"),
+                @NamedAttributeNode(value = "docFileUploads")
+        }
+)
 public class Doc {
 
     @Id
@@ -91,8 +99,13 @@ public class Doc {
     )
     private String description;
 
-    @OneToOne
-    private DocFileUpload docFileUpload;
+    @OneToMany(
+            mappedBy = "doc",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @SortComparator(value = DocFileUploadComparatorRankBased.class)
+    private SortedSet<DocFileUpload> docFileUploads;
 
     @Column(nullable = false)
     private String imageURL;
@@ -104,11 +117,10 @@ public class Doc {
     private LocalDateTime publishDtm;
 
     @Column(nullable = false, updatable = false)
-    @CreationTimestamp
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime createdDtm;
+    private LocalDateTime submitDtm;
 
     @Column(nullable = false)
     @UpdateTimestamp
@@ -130,13 +142,15 @@ public class Doc {
     )
     private String title;
 
-    @Column(nullable = false)
-    private Long viewCount;
-
     @Enumerated
     @Column(columnDefinition = "smallint")
     @GenericField(projectable = Projectable.YES, searchable = Searchable.YES)
     private DocStateType docState;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @GenericField(searchable = Searchable.YES)
+    private LocalDateTime deletedDate;
 
     @ManyToMany
     @JoinTable(
@@ -158,12 +172,37 @@ public class Doc {
     )
     private Set<UserDocReaction> userDocReactions;
 
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime deletedDate;
-
     @Version
     private short version;
+
+    @Transient
+    public DocBusinessState getDocBusinessState () {
+        //Refer to BHTCNPM confluence. Entity state page.
+        if (DocStateType.APPROVED.equals(this.getDocState())
+                && deletedDate == null
+                && publishDtm.isBefore(LocalDateTime.now())) {
+            return DocBusinessState.PUBLIC;
+        }
+        if (!DocStateType.APPROVED.equals(this.getDocState()) && deletedDate == null
+                || deletedDate == null && publishDtm.isAfter(LocalDateTime.now())) {
+            return DocBusinessState.UNLISTED;
+        }
+        if (deletedDate != null) {
+            return DocBusinessState.DELETED;
+        }
+        throw new UnsupportedOperationException("Cannot determine doc business state.");
+    }
+
+    @Transient
+    public DocApprovalState getDocApprovalState() {
+        if (DocStateType.APPROVED.equals(docState)) {
+            return DocApprovalState.APPROVED;
+        }
+        if (DocStateType.REJECTED.equals(docState)) {
+            return DocApprovalState.REJECTED;
+        }
+        return DocApprovalState.PENDING;
+    }
 
     @Override
     public boolean equals (Object o) {
@@ -175,4 +214,16 @@ public class Doc {
 
     @Override
     public int hashCode() {return getClass().hashCode();}
+
+    public void setDocFileUploads(List<DocFileUpload> docFileUploads) {
+        if (this.docFileUploads != null) {
+            this.docFileUploads.clear();
+        } else {
+            this.docFileUploads = new TreeSet<>(new DocFileUploadComparatorRankBased());
+        }
+        for (DocFileUpload file : docFileUploads) {
+            file.setDoc(this);
+        }
+        this.docFileUploads.addAll(docFileUploads);
+    }
 }

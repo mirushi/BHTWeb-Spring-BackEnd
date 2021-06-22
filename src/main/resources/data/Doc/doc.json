@@ -13,12 +13,9 @@
       "id": 1
     },
     "description": "Tổng hợp đầy đủ các dạng bài tập từ dễ đến khó của môn Giải tích 1.",
-    "docFileUpload": {
-      "id": 1
-    },
     "imageURL": "https://media.store123doc.com/images/document/12/gu/sp/small_spy1344916794.png",
     "publishDtm": "2020-01-14T23:37:29Z",
-    "createdDtm": "2020-01-14T23:37:29Z",
+    "submitDtm": "2020-01-14T23:37:29Z",
     "lastUpdatedDtm": "2020-01-14T23:37:29Z",
     "title": "Tổng hợp bài tập Giải tích 1",
     "viewCount": "1000",
@@ -48,12 +45,9 @@
       "id": 5
     },
     "description": "Slide bài giảng XSTK của thầy Hà Mạnh Linh - UIT",
-    "docFileUpload": {
-      "id": 2
-    },
     "imageURL": "https://i.imgur.com/nFdlytE.png",
     "publishDtm": "2020-12-27T23:37:29Z",
-    "createdDtm": "2020-12-27T23:37:29Z",
+    "submitDtm": "2020-12-27T23:37:29Z",
     "lastUpdatedDtm": "2020-12-27T23:37:29Z",
     "title": "Slide bài giảng XSTK thầy Hà Mạnh Linh",
     "viewCount": "1000",
@@ -83,12 +77,9 @@
       "id": 5
     },
     "description": "Bảng phân phối XSTK - Phân phối chuẩn, Laplace, Student",
-    "docFileUpload": {
-      "id": 3
-    },
     "imageURL": "https://i.imgur.com/nFdlytE.png",
     "publishDtm": "2020-12-27T23:37:29Z",
-    "createdDtm": "2020-12-27T23:37:29Z",
+    "submitDtm": "2020-12-27T23:37:29Z",
     "lastUpdatedDtm": "2020-12-27T23:37:29Z",
     "title": "Bảng phân phối XSTK",
     "viewCount": "998",
@@ -99,7 +90,10 @@
       },
       {
         "id": 51
-      }
+      },
+      {"id": 455},
+      {"id": 454},
+      {"id": 456}
     ],
     "userDocReactions": [],
     "version": 0
@@ -118,12 +112,9 @@
       "id": 6
     },
     "description": "9 đề ôn tập Giải tích cuối kì - Thầy Hà Mạnh Linh",
-    "docFileUpload": {
-      "id": 4
-    },
     "imageURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=11I7hqRxRaN8w1NJP-k2aWn_lcamd7vSW",
     "publishDtm": "2019-01-23T23:37:29Z",
-    "createdDtm": "2019-01-23T23:37:29Z",
+    "submitDtm": "2019-01-23T23:37:29Z",
     "lastUpdatedDtm": "2019-01-23T23:37:29Z",
     "title": "9 đề ôn thi Giải tích cuối HK",
     "viewCount": "998",
@@ -153,12 +144,9 @@
       "id": 6
     },
     "description": "Bài tập Tích phân suy rộng",
-    "docFileUpload": {
-      "id": 5
-    },
     "imageURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1S_CWlLpRvT9R9OCLfsvShD6koY0clwH_",
     "publishDtm": "2019-01-23T23:37:29Z",
-    "createdDtm": "2019-01-23T23:37:29Z",
+    "submitDtm": "2019-01-23T23:37:29Z",
     "lastUpdatedDtm": "2019-01-23T23:37:29Z",
     "title": "Bài tập Tích phân suy rộng, bao gồm lời giải chi tiết cho từng bài.",
     "viewCount": "998",
