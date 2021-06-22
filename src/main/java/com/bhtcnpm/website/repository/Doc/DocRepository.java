@@ -8,6 +8,8 @@ import com.bhtcnpm.website.model.dto.Doc.DocStatisticDTOImpl;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.Doc.custom.DocRepositoryCustom;
+import com.querydsl.core.types.Predicate;
+import org.jsoup.nodes.Document;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -57,8 +59,6 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
 //    @Modifying
 //    @Query("UPDATE Doc d SET d.docFileUpload.downloadCount = d.docFileUpload.downloadCount + 1 WHERE d.id = :docID")
 //    int incrementDownloadCount(Long docID);
-
-    List<Doc> getDocByIdNot (Pageable pageable, Long docID);
 
     Page<Doc> findByDocState (Pageable pageable, DocStateType docStateType);
 

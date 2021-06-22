@@ -13,6 +13,8 @@ public interface DocSuggestionMapper {
 
     DocSuggestionDTO docToDocSuggestion (Doc doc);
 
+    List<DocSuggestionDTO> docListToDocSuggestionListDTO (List<Doc> docList);
+
     default List<DocSuggestionDTO> docPageToDocSuggestionDTOList (Page<Doc> docs) {
         return docs.get().map(this::docToDocSuggestion).collect(Collectors.toList());
     }

@@ -4,23 +4,31 @@ import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
 import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
+import com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.dto.Doc.mapper.*;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
+import com.bhtcnpm.website.model.dto.Post.PostDetailsDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocSave;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocSaveId;
+import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.repository.Doc.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
+import com.bhtcnpm.website.repository.TagRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
+import com.bhtcnpm.website.security.evaluator.Doc.DocPermissionEvaluator;
 import com.bhtcnpm.website.security.predicate.Doc.DocPredicateGenerator;
 import com.bhtcnpm.website.security.predicate.Doc.UserDocSavePredicateGenerator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Doc.DocFileUploadService;
 import com.bhtcnpm.website.service.Doc.DocService;
+import com.bhtcnpm.website.service.Exercise.ExerciseService;
 import com.bhtcnpm.website.service.GoogleDriveService;
+import com.bhtcnpm.website.service.PostService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.bhtcnpm.website.util.EnumConverter;
 import com.querydsl.core.types.Predicate;
@@ -32,6 +40,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,6 +85,8 @@ public class DocServiceImpl implements DocService {
 
     private final DocFileUploadRepository docFileUploadRepository;
 
+    private final TagRepository tagRepository;
+
     private final DocCommentRepository docCommentRepository;
 
     private final UserDocReactionRepository userDocReactionRepository;
@@ -85,6 +96,12 @@ public class DocServiceImpl implements DocService {
     private final UserWebsiteRepository userWebsiteRepository;
 
     private final DocFileUploadService docFileUploadService;
+
+    private final DocPermissionEvaluator docPermissionEvaluator;
+
+    private final PostService postService;
+
+    private final ExerciseService exerciseService;
 
     public DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication) {
 
@@ -109,13 +126,15 @@ public class DocServiceImpl implements DocService {
             String searchTerm,
             Long subjectID,
             Long categoryID,
-            Long authorID,
+            UUID authorID,
             Integer page,
-            ApiSortOrder sortByCreatedDtm
+            ApiSortOrder sortByCreatedDtm,
+            Authentication authentication
     ) {
         //Create a pagable.
         DocSummaryListDTO dtoList = docRepository.getDocSummaryList(
                 searchTerm,
+                null,
                 categoryID,
                 subjectID,
                 authorID,
@@ -123,7 +142,8 @@ public class DocServiceImpl implements DocService {
                 page,
                 PAGE_SIZE,
                 null,
-                EnumConverter.apiSortOrderToHSearchSortOrder(sortByCreatedDtm)
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByCreatedDtm),
+                authentication
         );
 
         return dtoList;
@@ -137,9 +157,12 @@ public class DocServiceImpl implements DocService {
                                             Integer page,
                                             ApiSortOrder sortByPublishDtm,
                                             ApiSortOrder sortByCreatedDtm,
-                                            Long userID) {
-        DocSummaryWithStateListDTO dtoList = docRepository.getDocSummaryWithStateList(
+                                            Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        DocSummaryWithStateListDTO dtoList = docRepository.getMyDocSummaryWithStateList(
                 searchTerm,
+                null,
                 categoryID,
                 subjectID,
                 userID,
@@ -265,8 +288,8 @@ public class DocServiceImpl implements DocService {
 
     @Override
     public DocSummaryListDTO getDocSavedByUserOwn(Predicate predicate, Authentication authentication, Pageable pageable) {
-        BooleanExpression authorizationFilter = DocPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
-        BooleanExpression docPublicBusinessStateFilter = DocPredicateGenerator.getBooleanExpressionOnBusinessState(DocBusinessState.PUBLIC);
+        BooleanExpression authorizationFilter = UserDocSavePredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
+        BooleanExpression docPublicBusinessStateFilter = UserDocSavePredicateGenerator.getBooleanExpressionOnDocBusinessState(DocBusinessState.PUBLIC);
         BooleanExpression userOwnFilter = UserDocSavePredicateGenerator.getBooleanExpressionUserOwn(authentication);
 
         Predicate finalPredicate = authorizationFilter.and(docPublicBusinessStateFilter).and(userOwnFilter).and(predicate);
@@ -280,22 +303,43 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public List<DocDetailsDTO> getRelatedDocs(Long docID) {
-        //TODO: Please implement a real getRelatedDocs function.
-        Pageable pageable = PageRequest.of(0, PAGE_SIZE_RELATED_DOC);
+    public List<DocSuggestionDTO> getRelatedDocs(Long postID, Long docID, Long exerciseID,
+                                                 UUID authorID, Long categoryID, Long subjectID,
+                                                 Integer page, Authentication authentication) throws IOException {
+        if (page == null) {
+            page = 0;
+        }
+        assertExactlyOneParamIsNotNull(postID, docID, exerciseID);
 
-        List<Doc> docs = docRepository.getDocByIdNot(pageable, docID);
+        Long currentDocID = null;
+        String title = null;
+        String description = null;
 
-        return docDetailsMapper.docListToDocDetailsDTOList(docs);
-    }
+        if (postID != null) {
+            PostDetailsDTO postDetailsDTO = postService.getPostDetails(postID);
+            title = postDetailsDTO.getTitle();
+            description = postDetailsDTO.getSummary();
+        } else if (docID != null) {
+            if (!docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.READ_PERMISSION)) {
+                throw new AccessDeniedException("You do not have permission to access this DocID.");
+            }
+            Optional<Doc> doc = docRepository.findById(docID);
+            if (doc.isEmpty()) {
+                throw new IllegalArgumentException("DocID not found.");
+            }
+            currentDocID = docID;
+            title = doc.get().getTitle();
+            description = doc.get().getDescription();
+        } else if (exerciseID != null) {
+            ExerciseDetailsDTO exerciseDetailsDTO = exerciseService.getExerciseDetails(exerciseID);
+            title = exerciseDetailsDTO.getTitle();
+            description = exerciseDetailsDTO.getDescription();
+        }
 
-    @Override
-    public List<DocSuggestionDTO> getRelatedDocs(Long exerciseID, Integer page) {
-        Pageable pageable = PageRequest.of(0, PAGE_SIZE_RELATED_DOC);
+        List<DocSuggestionDTO> searchRelatedDocs = docRepository.searchRelatedDocs(authorID, categoryID, subjectID, currentDocID,
+                title, description, page, PAGE_SIZE_RELATED_DOC, DocBusinessState.PUBLIC, authentication);
 
-        Page<Doc> docs = docRepository.findAll(pageable);
-
-        return docSuggestionMapper.docPageToDocSuggestionDTOList(docs);
+        return searchRelatedDocs;
     }
 
     @Override
@@ -335,13 +379,25 @@ public class DocServiceImpl implements DocService {
             String searchTerm,
             Long categoryID,
             Long subjectID,
-            Long authorID,
+            UUID authorID,
+            Long tagID,
             Integer page,
-            ApiSortOrder sortByPublishDtm
+            ApiSortOrder sortByPublishDtm,
+            Authentication authentication
     ) {
         //TODO: DocState depends on ACL.
+
+        String tagContent = null;
+        if (tagID != null){
+            Optional<Tag> object = tagRepository.findById(tagID);
+            if (object.isPresent()) {
+                tagContent = object.get().getContent();
+            }
+        }
+
         DocSummaryListDTO queryResult = docRepository.getDocSummaryList(
                 searchTerm,
+                tagContent,
                 categoryID,
                 subjectID,
                 authorID,
@@ -349,7 +405,8 @@ public class DocServiceImpl implements DocService {
                 page,
                 PAGE_SIZE,
                 EnumConverter.apiSortOrderToHSearchSortOrder(sortByPublishDtm),
-                null);
+                null,
+                authentication);
 
         return queryResult;
     }
@@ -422,14 +479,16 @@ public class DocServiceImpl implements DocService {
             String searchTerm,
             Long categoryID,
             Long subjectID,
-            Long authorID,
+            UUID authorID,
             DocStateType docState,
             Integer page,
             ApiSortOrder sortByPublishDtm,
-            ApiSortOrder sortByCreatedDtm
+            ApiSortOrder sortByCreatedDtm,
+            Authentication authentication
     ) {
         DocSummaryWithStateListDTO dtoList = docRepository.getDocSummaryWithStateList(
                 searchTerm,
+                null,
                 categoryID,
                 subjectID,
                 authorID,
@@ -437,9 +496,28 @@ public class DocServiceImpl implements DocService {
                 page,
                 PAGE_SIZE,
                 EnumConverter.apiSortOrderToHSearchSortOrder(sortByPublishDtm),
-                EnumConverter.apiSortOrderToHSearchSortOrder(sortByCreatedDtm)
+                EnumConverter.apiSortOrderToHSearchSortOrder(sortByCreatedDtm),
+                authentication
         );
         return dtoList;
+    }
+
+    private void assertExactlyOneParamIsNotNull(Object... params) {
+        final String multipleParamViolation = "Only one param is allowed at a time.";
+        final String noParamViolation = "Exactly one param must not be null.";
+
+        boolean isNotNullParamExist = false;
+        for (int i=0; i<params.length; ++i) {
+            Object currentParam = params[i];
+            if (currentParam != null && isNotNullParamExist) {
+                throw new IllegalArgumentException(multipleParamViolation);
+            } else if (currentParam != null) {
+                isNotNullParamExist = true;
+            }
+        }
+        if (!isNotNullParamExist) {
+            throw new IllegalArgumentException(noParamViolation);
+        }
     }
 
 }

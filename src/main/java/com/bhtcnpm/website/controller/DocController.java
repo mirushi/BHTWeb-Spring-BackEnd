@@ -76,16 +76,18 @@ public class DocController {
             @RequestParam(value = "docState", required = false) DocStateType docState,
             @RequestParam(value = "subjectID", required = false) Long subjectID,
             @RequestParam(value = "categoryID", required = false) Long categoryID,
-            @RequestParam(value = "authorID", required = false) Long authorID,
+            @RequestParam(value = "authorID", required = false) UUID authorID,
             @RequestParam(value = "page") Integer page,
-            @RequestParam(value = "sortByCreatedTime", required = false) ApiSortOrder sortByCreatedTime) {
+            @RequestParam(value = "sortByCreatedTime", required = false) ApiSortOrder sortByCreatedTime,
+            Authentication authentication) {
         DocSummaryListDTO result = docService.getAllPendingApprovalDoc(
                 searchTerm,
                 subjectID,
                 categoryID,
                 authorID,
                 page,
-                sortByCreatedTime
+                sortByCreatedTime,
+                authentication
         );
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -100,11 +102,9 @@ public class DocController {
             @RequestParam(value = "docState", required = false) DocStateType docState,
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
-            @RequestParam(value = "sortByCreatedDtm", required = false) ApiSortOrder sortByCreatedDtm
+            @RequestParam(value = "sortByCreatedDtm", required = false) ApiSortOrder sortByCreatedDtm,
+            Authentication authentication
     ) {
-        //TODO: We'll use a hard-coded userID for now. We'll get userID from user login token later.
-        Long userID = 1L;
-
         DocSummaryWithStateListDTO result = docService.getMyDocuments(
                 searchTerm,
                 categoryID,
@@ -113,7 +113,7 @@ public class DocController {
                 page,
                 sortByPublishDtm,
                 sortByCreatedDtm,
-                userID
+                authentication
         );
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -233,20 +233,18 @@ public class DocController {
         return new ResponseEntity<>(docSavedByUser, HttpStatus.OK);
     }
 
-    @GetMapping("{id}/related")
-    @ResponseBody
-    @Deprecated
-    public ResponseEntity<List<DocDetailsDTO>> getRelatedDocs (@PathVariable Long id) {
-        List<DocDetailsDTO> docDetailsDTOs = docService.getRelatedDocs(id);
-
-        return new ResponseEntity<>(docDetailsDTOs, HttpStatus.OK);
-    }
-
     @GetMapping("related")
     @ResponseBody
-    public ResponseEntity<List<DocSuggestionDTO>> getRelatedDocs (@RequestParam(value = "exerciseID", required = false) Long exerciseID,
-                                                                  @RequestParam(value = "page", required = false) Integer page) {
-        List<DocSuggestionDTO> docSuggestionDTOs = docService.getRelatedDocs(exerciseID, page);
+    public ResponseEntity<List<DocSuggestionDTO>> getRelatedDocs (@RequestParam(value = "postID", required = false) Long postID,
+                                                                  @RequestParam(value = "docID", required = false) Long docID,
+                                                                  @RequestParam(value = "exerciseID", required = false) Long exerciseID,
+                                                                  @RequestParam(value = "authorID", required = false) UUID authorID,
+                                                                  @RequestParam(value = "categoryID", required = false) Long categoryID,
+                                                                  @RequestParam(value = "subjectID", required = false) Long subjectID,
+                                                                  @RequestParam(value = "page", required = false) Integer page,
+                                                                  Authentication authentication) throws IOException {
+        List<DocSuggestionDTO> docSuggestionDTOs = docService
+                .getRelatedDocs(postID, docID, exerciseID, authorID, categoryID, subjectID, page, authentication);
 
         return new ResponseEntity<>(docSuggestionDTOs, HttpStatus.OK);
     }
@@ -275,17 +273,21 @@ public class DocController {
             @RequestParam(value = "searchTerm", required = false) String searchTerm,
             @RequestParam(value = "categoryID", required = false) Long categoryID,
             @RequestParam(value = "subjectID", required = false) Long subjectID,
-            @RequestParam(value = "authorID", required = false) Long authorID,
+            @RequestParam(value = "authorID", required = false) UUID authorID,
+            @RequestParam(value = "tags", required = false) Long tagID,
             @RequestParam(value = "page") Integer page,
-            @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm) {
+            @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
+            Authentication authentication) {
 
         DocSummaryListDTO dtoList = docService.getDocBySearchTerm(
                 searchTerm,
                 categoryID,
                 subjectID,
                 authorID,
+                tagID,
                 page,
-                sortByPublishDtm
+                sortByPublishDtm,
+                authentication
         );
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
@@ -324,11 +326,12 @@ public class DocController {
             @RequestParam(value = "searchTerm", required = false) String searchTerm,
             @RequestParam(value = "subjectID", required = false) Long subjectID,
             @RequestParam(value = "categoryID", required = false) Long categoryID,
-            @RequestParam(value = "authorID", required = false) Long authorID,
+            @RequestParam(value = "authorID", required = false) UUID authorID,
             @RequestParam(value = "docState", required = false) DocStateType docState,
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
-            @RequestParam(value = "sortByCreatedDtm", required = false) ApiSortOrder sortByCreatedDtm
+            @RequestParam(value = "sortByCreatedDtm", required = false) ApiSortOrder sortByCreatedDtm,
+            Authentication authentication
     ) {
         DocSummaryWithStateListDTO dtoList = docService.getManagementDoc(
                 searchTerm,
@@ -338,7 +341,8 @@ public class DocController {
                 docState,
                 page,
                 sortByPublishDtm,
-                sortByCreatedDtm
+                sortByCreatedDtm,
+                authentication
         );
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);

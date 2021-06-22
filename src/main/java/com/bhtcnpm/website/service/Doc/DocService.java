@@ -25,19 +25,20 @@ public interface DocService {
             String searchTerm,
             Long subjectID,
             Long categoryID,
-            Long authorID,
+            UUID authorID,
             Integer page,
-            ApiSortOrder sortByCreatedDtm
+            ApiSortOrder sortByCreatedDtm,
+            Authentication authentication
     );
 
     DocSummaryWithStateListDTO getMyDocuments (String searchTerm,
-                                      Long categoryID,
-                                      Long subjectID,
-                                      DocStateType docState,
-                                      Integer page,
-                                      ApiSortOrder sortByPublishDtm,
-                                      ApiSortOrder sortByCreatedDtm,
-                                      Long userID);
+                                               Long categoryID,
+                                               Long subjectID,
+                                               DocStateType docState,
+                                               Integer page,
+                                               ApiSortOrder sortByPublishDtm,
+                                               ApiSortOrder sortByCreatedDtm,
+                                               Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#docID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
@@ -79,9 +80,9 @@ public interface DocService {
     @PreAuthorize(value = "isAuthenticated()")
     DocSummaryListDTO getDocSavedByUserOwn (Predicate predicate, Authentication authentication, Pageable pageable);
 
-    List<DocDetailsDTO> getRelatedDocs (Long docID);
-
-    List<DocSuggestionDTO> getRelatedDocs (Long exerciseID, Integer page);
+    List<DocSuggestionDTO> getRelatedDocs (Long postID, Long docID, Long exerciseID,
+                                           UUID authorID, Long categoryID, Long subjectID,
+                                           Integer page, Authentication authentication) throws IOException;
 
     @PreAuthorize(value = "permitAll()")
     List<DocSummaryDTO> getHotDocs(Pageable pageable, Authentication authentication);
@@ -94,13 +95,16 @@ public interface DocService {
     @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.DocPermissionConstant).DOC_PENDING_SELF_CREATE)")
     DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, Authentication authentication);
 
+    @PreAuthorize(value = "permitAll()")
     DocSummaryListDTO getDocBySearchTerm(
             String searchTerm,
             Long categoryID,
             Long subjectID,
-            Long authorID,
+            UUID authorID,
+            Long tagID,
             Integer page,
-            ApiSortOrder sortByPublishDtm
+            ApiSortOrder sortByPublishDtm,
+            Authentication authentication
     );
 
     @PreAuthorize(value = "hasPermission(#id, " +
@@ -117,10 +121,11 @@ public interface DocService {
             String searchTerm,
             Long categoryID,
             Long subjectID,
-            Long authorID,
+            UUID authorID,
             DocStateType docState,
             Integer page,
             ApiSortOrder sortByPublishDtm,
-            ApiSortOrder sortByCreatedDtm
+            ApiSortOrder sortByCreatedDtm,
+            Authentication authentication
     );
 }

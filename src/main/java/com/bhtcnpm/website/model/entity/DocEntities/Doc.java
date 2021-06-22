@@ -149,6 +149,7 @@ public class Doc {
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @GenericField(searchable = Searchable.YES)
     private LocalDateTime deletedDate;
 
     @ManyToMany
