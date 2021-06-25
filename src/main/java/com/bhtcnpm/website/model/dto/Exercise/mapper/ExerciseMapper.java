@@ -19,14 +19,18 @@ public interface ExerciseMapper {
     ExerciseUserStatisticDTO exerciseIDToExerciseUserStatisticDTO (Long id);
 
     @Mapping(target = "attempted", constant = "false")
+    @Mapping(target = "maxCorrectAnsweredQuestions", ignore = true)
+    @Mapping(target = "totalQuestions", ignore = true)
     ExerciseSummaryDTO exerciseToExerciseSummaryDTO (Exercise exercise);
 
     @Mapping(target = "attempted", constant = "false")
+    @Mapping(target = "maxCorrectAnsweredQuestions", ignore = true)
+    @Mapping(target = "totalQuestions", ignore = true)
     @Mapping(target = "topicID", source = "topic.id")
     @Mapping(target = "topicName", source = "topic.name")
     ExerciseSummaryWithTopicDTO exerciseToExerciseSummaryWithTopicDTO (Exercise exercise);
 
-    ExerciseSummaryDTO exerciseWithTopicToExerciseSummaryDTOList (ExerciseSummaryWithTopicDTO exerciseSummaryWithTopicDTO);
+    ExerciseSummaryDTO exerciseWithTopicToExerciseSummaryDTO(ExerciseSummaryWithTopicDTO exerciseSummaryWithTopicDTO);
 
     @Mapping(target = "authorID", source = "author.id")
     @Mapping(target = "authorAvatarURL", source = "author.avatarURL")

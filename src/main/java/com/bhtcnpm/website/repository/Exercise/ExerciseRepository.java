@@ -13,17 +13,24 @@ import java.util.UUID;
 
 public interface ExerciseRepository extends JpaRepository<Exercise, Long>, QuerydslPredicateExecutor<Exercise> {
     @Query("SELECT NEW com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO(exercise.id, exercise.title, exercise.description, " +
-            "CASE WHEN COUNT(DISTINCT attempts.id) > 0 THEN TRUE ELSE FALSE END) " +
+            "CASE WHEN COUNT(DISTINCT attempts.id) > 0 THEN TRUE ELSE FALSE END," +
+            "MAX(attempts.correctAnsweredQuestions)," +
+            "COUNT(DISTINCT questions.id)) " +
             "FROM Exercise exercise " +
             "LEFT JOIN exercise.exerciseAttempts attempts " +
+            "LEFT JOIN exercise.exerciseQuestions questions " +
             "GROUP BY exercise " +
             "ORDER BY exercise.rank ASC")
     List<ExerciseSummaryDTO> getExerciseSummaryWithUserAttempts (Predicate predicate);
 
-    @Query("SELECT NEW com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO(exercise.id, exercise.title, exercise.description, exercise.topic.id, exercise.topic.name, " +
-            "CASE WHEN COUNT(DISTINCT attempts.id) > 0 THEN TRUE ELSE FALSE END) " +
+    @Query("SELECT NEW com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO(exercise.id, exercise.title, exercise.description, " +
+            "CASE WHEN COUNT(DISTINCT attempts.id) > 0 THEN TRUE ELSE FALSE END, " +
+            "MAX(attempts.correctAnsweredQuestions), " +
+            "COUNT(DISTINCT questions.id), " +
+            "exercise.topic.id, exercise.topic.name) " +
             "FROM Exercise exercise " +
             "LEFT JOIN exercise.exerciseAttempts attempts " +
+            "LEFT JOIN exercise.exerciseQuestions questions " +
             "GROUP BY exercise " +
             "ORDER BY exercise.rank ASC")
     List<ExerciseSummaryWithTopicDTO> getExerciseSummaryWithTopicAndUserAttempts (Predicate predicate);

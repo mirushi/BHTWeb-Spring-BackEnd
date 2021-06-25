@@ -59,7 +59,7 @@ public class ExerciseTopicServiceImpl implements ExerciseTopicService {
                 exerciseSummaryDTOList = new ArrayList<>();
             }
 
-            ExerciseSummaryDTO exerciseSummaryDTO = exerciseMapper.exerciseWithTopicToExerciseSummaryDTOList(exercise);
+            ExerciseSummaryDTO exerciseSummaryDTO = exerciseMapper.exerciseWithTopicToExerciseSummaryDTO(exercise);
             exerciseSummaryDTOList.add(exerciseSummaryDTO);
 
             exerciseOfTopic.put(topicID, exerciseSummaryDTOList);
