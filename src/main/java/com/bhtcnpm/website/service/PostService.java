@@ -119,4 +119,6 @@ public interface PostService {
     PostSummaryWithStateListDTO getManagementPost (String searchTerm, PostStateType postStateType, @Pagination Integer page, String sortByPublishDtm, @PostCategoryID Long postCategoryID, Authentication authentication);
 
     List<PostAvailableActionDTO> getAvailablePostAction (@PostActionRequestSize List<@PostID Long> postIDs, Authentication authentication);
+
+    void calculateAllPageViewAvg();
 }

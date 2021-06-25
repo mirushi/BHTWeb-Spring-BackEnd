@@ -488,4 +488,9 @@ public class PostServiceImpl implements PostService {
         return postAvailableActionDTOList;
     }
 
+    @Override
+    public void calculateAllPageViewAvg() {
+
+    }
+
 }

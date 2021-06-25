@@ -20,7 +20,7 @@ public interface PostCommentService {
 
     @PreAuthorize(value = "hasPermission(#parentCommentID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POSTCOMMENT_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentActionPermissionRequest).READ_PERMISSION)")
+                "T(com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentActionPermissionRequest).READ_PERMISSION)")
     List<PostCommentChildDTO> getChildComments (@PostCommentID Long parentCommentID, Pageable pageable);
 
     @PreAuthorize(value = "hasPermission(#postID, " +
@@ -56,5 +56,6 @@ public interface PostCommentService {
     @PreAuthorize(value = "permitAll()")
     List<PostCommentStatisticDTO> getCommentStatistics (@PostCommentStatisticRequestSize List<@PostCommentID Long> commentIDs, Authentication authentication);
 
+    @PreAuthorize(value = "permitAll()")
     List<PostCommentAvailableActionDTO> getAvailablePostCommentAction (List<Long> postCommentIDs, Authentication authentication);
 }

@@ -36,7 +36,7 @@ public class PostCommentPermissionEvaluator implements SimplePermissionEvaluator
             return false;
         }
 
-        return checkPostPermission(authentication, (PostComment) targetDomainObject, permission);
+        return checkPostCommentPermission(authentication, (PostComment) targetDomainObject, permission);
     }
 
     @Override
@@ -56,10 +56,10 @@ public class PostCommentPermissionEvaluator implements SimplePermissionEvaluator
 
         PostComment entity = object.get();
 
-        return checkPostPermission(authentication, entity, permission);
+        return checkPostCommentPermission(authentication, entity, permission);
     }
 
-    private boolean checkPostPermission (Authentication authentication, PostComment targetDomainObject, String permission) {
+    private boolean checkPostCommentPermission(Authentication authentication, PostComment targetDomainObject, String permission) {
         //Kiểm tra xem PostComment hiện tại đang có state như thế nào.
         PostCommentBusinessState state = targetDomainObject.getPostCommentBusinessState();
 
@@ -73,38 +73,38 @@ public class PostCommentPermissionEvaluator implements SimplePermissionEvaluator
 
         //Kiểm tra quyền Edit.
         if (PostCommentActionPermissionRequest.UPDATE_PERMISSION.equals(permission)) {
-            return checkPostUpdatePermission(authentication, authenticatedUserID, state, targetDomainObject);
+            return checkPostCommentUpdatePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
         //Kiểm tra quyền Delete.
         if (PostCommentActionPermissionRequest.DELETE_PERMISSION.equals(permission)) {
-            return checkPostDeletePermission(authentication, authenticatedUserID, state, targetDomainObject);
+            return checkPostCommentDeletePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
         //Kiểm tra quyền Reply.
         if (PostCommentActionPermissionRequest.REPLY_PERMISSION.equals(permission)) {
-            return checkPostReplyPermission(authentication, authenticatedUserID, state, targetDomainObject);
+            return checkPostCommentReplyPermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
         //Kiểm tra quyền Like.
         if (PostCommentActionPermissionRequest.LIKE_PERMISSION.equals(permission)) {
-            return checkLikePermission(authentication, authenticatedUserID, state, targetDomainObject);
+            return checkPostCommentLikePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
         //Kiểm tra quyền Read.
         if (PostCommentActionPermissionRequest.READ_PERMISSION.equals(permission)) {
-            return checkReadPermission(state);
+            return checkPostCommentReadPermission(state);
         }
 
         //Kiểm tra quyền Report.
         if (PostCommentActionPermissionRequest.REPORT_PERMISSION.equals(permission)) {
-            return checkReportPermission(authentication, authenticatedUserID, state);
+            return checkPostCommentReportPermission(authentication, authenticatedUserID, state);
         }
 
         throw new IllegalArgumentException("Post comment request permission is not supported.");
     }
 
-    private boolean checkReportPermission (Authentication authentication, UUID authenticatedUserID, PostCommentBusinessState state) {
+    private boolean checkPostCommentReportPermission(Authentication authentication, UUID authenticatedUserID, PostCommentBusinessState state) {
         //Bắt buộc phải có tài khoản mới được reply.
         if (authenticatedUserID == null) {
             logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
@@ -121,10 +121,11 @@ public class PostCommentPermissionEvaluator implements SimplePermissionEvaluator
         return false;
     }
 
-    private boolean checkReadPermission (PostCommentBusinessState state) {
+    private boolean checkPostCommentReadPermission(PostCommentBusinessState state) {
         if (PostCommentBusinessState.PUBLIC.equals(state)) {
             return true;
         }
+
         if (PostCommentBusinessState.DELETE.equals(state)) {
             return false;
         }
@@ -132,11 +133,11 @@ public class PostCommentPermissionEvaluator implements SimplePermissionEvaluator
         return false;
     }
 
-    private boolean checkLikePermission (Authentication authentication,
-                                              UUID authenticatedUserID,
-                                              PostCommentBusinessState state,
-                                              PostComment targetDomainObject) {
-        //Bắt buộc phải có tài khoản mới được reply.
+    private boolean checkPostCommentLikePermission(Authentication authentication,
+                                                   UUID authenticatedUserID,
+                                                   PostCommentBusinessState state,
+                                                   PostComment targetDomainObject) {
+        //Bắt buộc phải có tài khoản mới được like.
         if (authenticatedUserID == null) {
             logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
             return false;
@@ -156,10 +157,10 @@ public class PostCommentPermissionEvaluator implements SimplePermissionEvaluator
         return false;
     }
 
-    private boolean checkPostReplyPermission (Authentication authentication,
-                                              UUID authenticatedUserID,
-                                              PostCommentBusinessState state,
-                                              PostComment targetDomainObject) {
+    private boolean checkPostCommentReplyPermission(Authentication authentication,
+                                                    UUID authenticatedUserID,
+                                                    PostCommentBusinessState state,
+                                                    PostComment targetDomainObject) {
         //Bắt buộc phải có tài khoản mới được reply.
         if (authenticatedUserID == null) {
             logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
@@ -180,10 +181,10 @@ public class PostCommentPermissionEvaluator implements SimplePermissionEvaluator
         return false;
     }
 
-    private boolean checkPostDeletePermission (Authentication authentication,
-                                               UUID authenticatedUserID,
-                                               PostCommentBusinessState state,
-                                               PostComment targetDomainObject) {
+    private boolean checkPostCommentDeletePermission(Authentication authentication,
+                                                     UUID authenticatedUserID,
+                                                     PostCommentBusinessState state,
+                                                     PostComment targetDomainObject) {
         //Bắt buộc phải có tài khoản mới được delete.
         if (authenticatedUserID == null) {
             logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
@@ -205,10 +206,10 @@ public class PostCommentPermissionEvaluator implements SimplePermissionEvaluator
         return false;
     }
 
-    private boolean checkPostUpdatePermission (Authentication authentication,
-                                             UUID authenticatedUserID,
-                                             PostCommentBusinessState state,
-                                             PostComment targetDomainObject) {
+    private boolean checkPostCommentUpdatePermission(Authentication authentication,
+                                                     UUID authenticatedUserID,
+                                                     PostCommentBusinessState state,
+                                                     PostComment targetDomainObject) {
         //Bắt buộc phải có tài khoản mới được edit.
         if (authenticatedUserID == null) {
             logger.warn(LogMessage.format("User ID not found in authentication object. Denying access."));
