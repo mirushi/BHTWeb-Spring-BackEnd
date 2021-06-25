@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.service;
 
-import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
@@ -9,7 +8,6 @@ import com.bhtcnpm.website.model.validator.dto.Post.PostActionRequestSize;
 import com.bhtcnpm.website.model.validator.dto.Post.PostID;
 import com.bhtcnpm.website.model.validator.dto.PostCategory.PostCategoryID;
 import com.querydsl.core.types.Predicate;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
@@ -119,6 +117,8 @@ public interface PostService {
     PostSummaryWithStateListDTO getManagementPost (String searchTerm, PostStateType postStateType, @Pagination Integer page, String sortByPublishDtm, @PostCategoryID Long postCategoryID, Authentication authentication);
 
     List<PostAvailableActionDTO> getAvailablePostAction (@PostActionRequestSize List<@PostID Long> postIDs, Authentication authentication);
+
+    List<PostSummaryDTO> getTrendingPost();
 
     void calculateAllPageViewAvg();
 }

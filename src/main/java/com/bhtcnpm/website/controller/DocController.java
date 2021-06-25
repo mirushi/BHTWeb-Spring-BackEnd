@@ -1,6 +1,6 @@
 package com.bhtcnpm.website.controller;
 
-import com.bhtcnpm.website.constant.ApiSortOrder;
+import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;

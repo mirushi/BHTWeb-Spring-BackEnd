@@ -1,6 +1,6 @@
 package com.bhtcnpm.website.service.Doc;
 
-import com.bhtcnpm.website.constant.ApiSortOrder;
+import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;

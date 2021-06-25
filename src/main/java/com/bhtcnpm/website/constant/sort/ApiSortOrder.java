@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.constant;
+package com.bhtcnpm.website.constant.sort;
 
 public enum ApiSortOrder {
     ASC,

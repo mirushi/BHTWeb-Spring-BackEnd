@@ -63,6 +63,14 @@ public class PostController {
         return new ResponseEntity<>(availableActionDTOList, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/trending")
+    @ResponseBody
+    public ResponseEntity<List<PostSummaryDTO>> getTrendingPost () {
+        List<PostSummaryDTO> trendingPostSummaryList = postService.getTrendingPost();
+
+        return new ResponseEntity<>(trendingPostSummaryList, HttpStatus.OK);
+    }
+
     @GetMapping
     @ResponseBody
     public ResponseEntity<PostSummaryListDTO> getPostSummary (@QuerydslPredicate(root = Post.class) Predicate predicate,

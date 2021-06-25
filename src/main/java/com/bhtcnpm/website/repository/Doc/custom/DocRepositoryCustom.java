@@ -1,14 +1,9 @@
 package com.bhtcnpm.website.repository.Doc.custom;
 
-import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.model.dto.Doc.*;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryWithStateListDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
-import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
-import com.querydsl.core.types.Predicate;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;

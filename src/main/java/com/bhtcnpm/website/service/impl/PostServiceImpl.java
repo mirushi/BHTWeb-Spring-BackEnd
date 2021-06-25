@@ -66,6 +66,8 @@ public class PostServiceImpl implements PostService {
 
     private static final int PAGE_SIZE_NEWEST = 16;
 
+    private static final int PAGE_SIZE_TRENDING_HOME = 3;
+
     @Override
     public List<PostStatisticDTO> getPostStatistic(List<Long> postIDs, Authentication authentication) {
         UUID userID = SecurityUtils.getUserID(authentication);
@@ -486,6 +488,15 @@ public class PostServiceImpl implements PostService {
             postAvailableActionDTOList.add(postAvailableActionDTO);
         }
         return postAvailableActionDTOList;
+    }
+
+    @Override
+    public List<PostSummaryDTO> getTrendingPost() {
+        //TODO: Implement real trending function.
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE_TRENDING_HOME);
+        Predicate publicPost = PostPredicateGenerator.getBooleanExpressionOnBusinessState(PostBusinessState.PUBLIC);
+        Page<Post> trendingPost = postRepository.findAll(publicPost, pageable);
+        return postMapper.postListToPostSummaryDTOs(trendingPost.getContent());
     }
 
     @Override
