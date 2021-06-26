@@ -70,7 +70,7 @@ public class ExerciseReportServiceImpl implements ExerciseReportService {
         UserWebsite reporter = userWebsiteRepository.getOne(userID);
 
         //Lấy ra tất cả những lý do mà người dùng đã chọn.
-        List<Long> reasons = dto.getReasonIDs();
+        List<Long> reasons = dto.getReasonIds();
 
         //Thêm user vào danh sách những người đã report exercise.
         //Kiểm tra xem user đã từng report exercise này chưa.
@@ -91,7 +91,7 @@ public class ExerciseReportServiceImpl implements ExerciseReportService {
 
         //Sau đó gán lý do report cho report của user.
         List<ReportReason> reportReasons = dto
-                .getReasonIDs().stream()
+                .getReasonIds().stream()
                 .map(reportReasonRepository::getOne)
                 .collect(Collectors.toList());
 

@@ -6,6 +6,6 @@ import java.util.List;
 
 @Value
 public class UserExerciseReportRequestDTO {
-    List<Long> reasonIDs;
+    List<Long> reasonIds;
     String feedback;
 }
