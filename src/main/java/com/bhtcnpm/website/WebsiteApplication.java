@@ -80,7 +80,8 @@ public class WebsiteApplication {
                 new ClassPathResource("data/Exercise/DSTT/exercise-02-dstt.json"),
                 new ClassPathResource("data/Exercise/DSTT/exercise-03-dstt.json"),
                 new ClassPathResource("data/Exercise/DSTT/exercise-04-dstt.json"),
-                new ClassPathResource("data/Exercise/DSTT/exercise-05-dstt.json")
+                new ClassPathResource("data/Exercise/DSTT/exercise-05-dstt.json"),
+                new ClassPathResource("data/Exercise/exercise-report.json")
         });
         factoryBean.setMapper(objectMapper);
 

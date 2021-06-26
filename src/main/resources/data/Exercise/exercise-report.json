@@ -1,0 +1,138 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseReport",
+    "id": 1,
+    "exercise": {
+      "id": 1
+    },
+    "userExerciseReports": [
+      {
+        "userExerciseReportId": {
+          "user": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+          "exerciseReport": {"id": 1}
+        },
+        "reasons": [
+          {
+            "exerciseReportReasonId": {
+              "userExerciseReport": {
+                "userExerciseReportId": {
+                  "user": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+                  "exerciseReport": {"id": 1}
+                }
+              },
+              "reportReason": {"id": 1}
+            }
+          }
+        ],
+        "feedback": "Câu hỏi này không đúng, cần xem lại."
+      }
+    ],
+    "reportTime": "2021-06-16T23:37:29Z",
+    "resolvedTime": null,
+    "resolvedBy": null,
+    "resolvedNote": null,
+    "actionTaken": null
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseReport",
+    "id": 2,
+    "exercise": {
+      "id": 1
+    },
+    "userExerciseReports": [
+      {
+        "userExerciseReportId": {
+          "user": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+          "exerciseReport": {"id": 2}
+        },
+        "reasons": [
+          {
+            "exerciseReportReasonId": {
+              "userExerciseReport": {
+                "userExerciseReportId": {
+                  "user": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+                  "exerciseReport": {"id": 2}
+                }
+              },
+              "reportReason": {"id": 1}
+            }
+          }
+        ],
+        "feedback": "Câu hỏi này không đúng, cần xem lại."
+      }
+    ],
+    "reportTime": "2021-06-20T23:37:29Z",
+    "resolvedTime": "2021-06-20T23:37:29Z",
+    "resolvedBy": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+    "resolvedNote": "Đã sửa lại. Sai lý thuyết cơ bản.",
+    "actionTaken": "FIXED"
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseReport",
+    "id": 3,
+    "exercise": {
+      "id": 1
+    },
+    "userExerciseReports": [
+      {
+        "userExerciseReportId": {
+          "user": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+          "exerciseReport": {"id": 3}
+        },
+        "reasons": [
+          {
+            "exerciseReportReasonId": {
+              "userExerciseReport": {
+                "userExerciseReportId": {
+                  "user": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+                  "exerciseReport": {"id": 3}
+                }
+              },
+              "reportReason": {"id": 1}
+            }
+          }
+        ],
+        "feedback": "Câu hỏi này không đúng, cần xem lại."
+      }
+    ],
+    "reportTime": "2021-06-21T23:37:29Z",
+    "resolvedTime": "2021-06-21T23:37:29Z",
+    "resolvedBy": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+    "resolvedNote": "Đang tham khảo lý thuyết về cơ số.",
+    "actionTaken": "IN_PROGRESS"
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseReport",
+    "id": 4,
+    "exercise": {
+      "id": 1
+    },
+    "userExerciseReports": [
+      {
+        "userExerciseReportId": {
+          "user": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+          "exerciseReport": {"id": 4}
+        },
+        "reasons": [
+          {
+            "exerciseReportReasonId": {
+              "userExerciseReport": {
+                "userExerciseReportId": {
+                  "user": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+                  "exerciseReport": {"id": 4}
+                }
+              },
+              "reportReason": {"id": 1}
+            }
+          }
+        ],
+        "feedback": "Câu hỏi này không đúng, cần xem lại."
+      }
+    ],
+    "reportTime": "2021-06-22T23:37:29Z",
+    "resolvedTime": "2021-06-22T23:37:29Z",
+    "resolvedBy": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+    "resolvedNote": "Bài tập không có gì sai.",
+    "actionTaken": "REJECTED"
+  }
+]
