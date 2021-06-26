@@ -1,0 +1,16 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.SubjectGroup",
+    "id": 1,
+    "name": "Đại cương",
+    "description": "Các môn học cơ bản về công nghệ thông tin. Thông thường các bạn sẽ được học trong năm 1, năm 2.",
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.SubjectGroup",
+    "id": 2,
+    "name": "Cơ sở nhóm ngành",
+    "description": "Các môn học chuyên sâu hướng về chuyên ngành mà bạn đang theo học. Thông thường bạn sẽ bắt đầu học từ năm 3, năm 4.",
+    "version": 0
+  }
+]

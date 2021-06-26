@@ -3,6 +3,7 @@ package com.bhtcnpm.website.model.entity.DocEntities;
 import com.bhtcnpm.website.constant.domain.Doc.DocApprovalState;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.model.entity.*;
+import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.Doc.comparator.DocFileUploadComparatorRankBased;
 import com.bhtcnpm.website.search.bridge.*;
@@ -45,7 +46,6 @@ import java.util.*;
         }
 )
 public class Doc {
-
     @Id
     @GeneratedValue (
             strategy = GenerationType.SEQUENCE,
@@ -84,11 +84,11 @@ public class Doc {
     @ManyToOne
     @JoinColumn(nullable = false)
     @GenericField(
-            valueBridge = @ValueBridgeRef(type = DocSubjectIDValueBridge.class),
+            valueBridge = @ValueBridgeRef(type = SubjectIDValueBridge.class),
             searchable = Searchable.YES,
             name = "subjectID"
     )
-    private DocSubject subject;
+    private Subject subject;
 
     @Column(nullable = false)
     @FullTextField(analyzer = "default",

@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity.ExerciseEntities;
 
+import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,7 +41,7 @@ public class ExerciseTopic {
     private Integer rank;
 
     @ManyToOne
-    private ExerciseSubject subject;
+    private Subject subject;
 
     @OneToMany (
             mappedBy = "topic",

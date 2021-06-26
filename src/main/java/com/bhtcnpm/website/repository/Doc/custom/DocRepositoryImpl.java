@@ -6,9 +6,9 @@ import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.dto.Doc.mapper.DocSuggestionMapper;
 import com.bhtcnpm.website.model.dto.Doc.mapper.DocSummaryMapper;
 import com.bhtcnpm.website.model.entity.DocEntities.*;
+import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
-import com.bhtcnpm.website.repository.Doc.custom.DocRepositoryCustom;
 import com.bhtcnpm.website.search.lucene.LuceneIndexUtils;
 import com.bhtcnpm.website.security.predicate.Doc.DocHibernateSearchPredicateGenerator;
 import com.querydsl.core.types.EntityPath;
@@ -78,14 +78,14 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
 
     @Override
     public List<DocSummaryDTO> getTrendingDoc(Pageable pageable) {
-         JPAQuery query = new JPAQuery<Doc>(em)
+         JPAQuery<DocSummaryDTO> query = new JPAQuery<Doc>(em)
                  .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.displayName, qDoc.category.id, qDoc.category.name, qDoc.subject.id, qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm))
                  .from(qDoc)
                  .join(qUserDocReaction).on(qUserDocReaction.userDocReactionId.doc.id.eq(qDoc.id))
 //                 .orderBy(qDoc.docFileUpload.downloadCount.desc())
                  .groupBy(qDoc);
 
-         JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
+         JPQLQuery<DocSummaryDTO> finalQuery = querydsl.applyPagination(pageable, query);
 
          return finalQuery.fetch();
     }
@@ -347,7 +347,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                     if (subjectID != null) {
                         b.filter(f.match()
                                 .field("subjectID")
-                                .matching(em.getReference(DocSubject.class, subjectID))
+                                .matching(em.getReference(Subject.class, subjectID))
                         );
                     }
                     if (authorID != null) {

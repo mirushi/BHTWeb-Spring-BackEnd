@@ -1,12 +1,11 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
 import com.bhtcnpm.website.model.dto.Tag.TagDTO;
-import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.validator.dto.Doc.*;
 import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryID;
 import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryName;
-import com.bhtcnpm.website.model.validator.dto.DocSubject.DocSubjectID;
-import com.bhtcnpm.website.model.validator.dto.DocSubject.DocSubjectName;
+import com.bhtcnpm.website.model.validator.dto.Subject.SubjectID;
+import com.bhtcnpm.website.model.validator.dto.Subject.SubjectName;
 import com.bhtcnpm.website.model.validator.dto.UserWebsite.UserWebsiteDisplayName;
 import com.bhtcnpm.website.model.validator.dto.UserWebsite.UserWebsiteName;
 import lombok.Data;
@@ -47,10 +46,10 @@ public class DocDetailsDTO {
     @DocCategoryName
     private String categoryName;
 
-    @DocSubjectID
+    @SubjectID
     private Long subjectID;
 
-    @DocSubjectName
+    @SubjectName
     private String subjectName;
 
     private List<DocFileUploadDTO> docFileUploadDTOs;
