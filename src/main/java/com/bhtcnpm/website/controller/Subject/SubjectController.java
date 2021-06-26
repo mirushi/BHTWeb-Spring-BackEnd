@@ -70,7 +70,7 @@ public class SubjectController {
     //Move the merging result operation to front-end.
     //This also makes the API became circular depending.
     //TODO: Please refactor this when you have time.
-    @GetMapping("/subjects/withExerciseTopicAndExerciseList/fromExercise/{id}")
+    @GetMapping("/withExerciseTopicAndExerciseList/fromExercise/{id}")
     @ResponseBody
     public ResponseEntity<SubjectSummaryWithTopicAndExercisesDTO> getExerciseSubjectSummaryWithTopicAndExercise (@PathVariable("id") Long exerciseID) {
         SubjectSummaryWithTopicAndExercisesDTO subjectSummaryWithTopicAndExercisesDTO = subjectService.getSubjectWithTopicAndExercises(exerciseID);

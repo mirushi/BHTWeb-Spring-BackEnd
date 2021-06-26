@@ -1,9 +1,8 @@
-package com.bhtcnpm.website.model.entity.PostEntities;
+package com.bhtcnpm.website.model.entity.ExerciseEntities;
 
-import com.bhtcnpm.website.constant.domain.PostReport.PostReportDomainConstant;
+import com.bhtcnpm.website.constant.domain.ExerciseReport.ExerciseReportDomainConstant;
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
-import com.bhtcnpm.website.model.validator.entity.UserPostReport.ValidUPREntity;
+import com.bhtcnpm.website.model.entity.enumeration.ExerciseReportAction.ExerciseReportActionType;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,42 +12,40 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "post_report")
+@Table(name = "exercise_report")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ValidUPREntity
 @NamedEntityGraph(
-        name = "postReport.all",
+        name = "exerciseReport.all",
         attributeNodes = {
-                @NamedAttributeNode(value = "userPostReports")
+                @NamedAttributeNode(value = "userExerciseReports")
         }
 )
-public class PostReport {
+public class ExerciseReport {
     @Id
     @GeneratedValue (
             strategy = GenerationType.SEQUENCE,
-            generator = "post_report_sequence"
+            generator = "exercise_report_sequence"
     )
     @SequenceGenerator(
-            name = "post_report_sequence",
-            sequenceName = "post_report_sequence"
+            name = "exercise_report_sequence",
+            sequenceName = "exercise_report_sequence"
     )
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "post_id",
-            updatable = false)
-    private Post post;
+    @JoinColumn(name = "exercise_id", updatable = false)
+    private Exercise exercise;
 
-    @OneToMany (
-            mappedBy = "userPostReportId.postReport",
+    @OneToMany(
+            mappedBy = "userExerciseReportId.exerciseReport",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<UserPostReport> userPostReports;
+    private List<UserExerciseReport> userExerciseReports;
 
     @Column(name = "report_time")
     @UpdateTimestamp
@@ -61,18 +58,18 @@ public class PostReport {
     @ManyToOne
     private UserWebsite resolvedBy;
 
-    @Column(name = "resolved_note", length = PostReportDomainConstant.RESOLVED_NOTE_LENGTH)
+    @Column(name = "resolved_note", length = ExerciseReportDomainConstant.RESOLVED_NOTE_LENGTH)
     private String resolvedNote;
 
     @Enumerated
     @Column(columnDefinition = "smallint")
-    private PostReportActionType actionTaken;
+    private ExerciseReportActionType actionTaken;
 
     @Override
     public boolean equals (Object o) {
         if (this == o) return true;
-        if (!(o instanceof PostReport)) return false;
-        PostReport that = (PostReport) o;
+        if (!(o instanceof ExerciseReport)) return false;
+        ExerciseReport that = (ExerciseReport) o;
         return Objects.equals(getId(), that.getId());
     }
 

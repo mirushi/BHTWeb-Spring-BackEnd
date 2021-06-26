@@ -1,10 +1,10 @@
-package com.bhtcnpm.website.model.entity.PostEntities;
+package com.bhtcnpm.website.model.entity.ExerciseEntities;
 
-import com.bhtcnpm.website.model.entity.ReportReason.ReportReasonFeedbackId;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
@@ -13,29 +13,26 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPostReportId implements Serializable {
+public class UserExerciseReportId implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserWebsite user;
 
     @ManyToOne
-    @JoinColumn(name = "post_report_id")
-    private PostReport postReport;
+    @JoinColumn(name = "exercise_report_id")
+    private ExerciseReport exerciseReport;
 
     @Override
     public boolean equals (Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserPostReportId)) return false;
-        UserPostReportId that = (UserPostReportId) o;
+        if (!(o instanceof UserExerciseReportId)) return false;
+        UserExerciseReportId that = (UserExerciseReportId) o;
         return Objects.equals(getUser(), that.getUser())
-                && Objects.equals(getPostReport(), that.getPostReport());
+                && Objects.equals(getExerciseReport(), that.getExerciseReport());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getUser(), getPostReport());
-    }
 }
