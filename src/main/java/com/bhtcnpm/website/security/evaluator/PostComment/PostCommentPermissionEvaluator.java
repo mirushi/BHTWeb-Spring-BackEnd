@@ -6,7 +6,7 @@ import com.bhtcnpm.website.constant.security.evaluator.permission.PostCommentAct
 import com.bhtcnpm.website.constant.security.permission.PostCommentPermissionConstant;
 import com.bhtcnpm.website.constant.security.permission.PostCommentReportPermissionConstant;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment;
-import com.bhtcnpm.website.repository.PostCommentRepository;
+import com.bhtcnpm.website.repository.Post.PostCommentRepository;
 import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;

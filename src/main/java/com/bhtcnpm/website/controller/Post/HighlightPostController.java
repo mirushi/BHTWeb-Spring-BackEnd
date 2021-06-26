@@ -2,9 +2,8 @@ package com.bhtcnpm.website.controller.Post;
 
 import com.bhtcnpm.website.model.dto.Post.HighlightPostDTO;
 import com.bhtcnpm.website.model.dto.Post.HighlightPostRequestDTO;
-import com.bhtcnpm.website.model.dto.Post.HighlightPostUpdateListDTO;
 import com.bhtcnpm.website.model.validator.dto.Post.PostID;
-import com.bhtcnpm.website.service.HighlightPostService;
+import com.bhtcnpm.website.service.Post.HighlightPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/posts/highlightPosts")

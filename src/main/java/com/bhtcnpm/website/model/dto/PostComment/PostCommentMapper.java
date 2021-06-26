@@ -1,8 +1,8 @@
 package com.bhtcnpm.website.model.dto.PostComment;
 
 import com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment;
-import com.bhtcnpm.website.repository.PostCommentRepository;
-import com.bhtcnpm.website.repository.PostRepository;
+import com.bhtcnpm.website.repository.Post.PostCommentRepository;
+import com.bhtcnpm.website.repository.Post.PostRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

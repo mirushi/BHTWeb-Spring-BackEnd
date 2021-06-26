@@ -4,7 +4,7 @@ import com.bhtcnpm.website.model.entity.PostEntities.HighlightPost;
 import com.bhtcnpm.website.model.entity.PostEntities.HighlightPostId;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.repository.PostRepository;
+import com.bhtcnpm.website.repository.Post.PostRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

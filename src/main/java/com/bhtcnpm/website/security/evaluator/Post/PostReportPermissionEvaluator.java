@@ -1,7 +1,7 @@
 package com.bhtcnpm.website.security.evaluator.Post;
 
 import com.bhtcnpm.website.model.entity.PostEntities.PostReport;
-import com.bhtcnpm.website.repository.PostReportRepository;
+import com.bhtcnpm.website.repository.Post.PostReportRepository;
 import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;

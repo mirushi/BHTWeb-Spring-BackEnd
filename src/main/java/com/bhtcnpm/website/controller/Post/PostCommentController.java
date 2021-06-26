@@ -4,7 +4,7 @@ import com.bhtcnpm.website.model.dto.PostComment.*;
 import com.bhtcnpm.website.model.validator.dto.Post.PostID;
 import com.bhtcnpm.website.model.validator.dto.PostComment.PostCommentID;
 import com.bhtcnpm.website.model.validator.dto.PostComment.PostCommentStatisticRequestSize;
-import com.bhtcnpm.website.service.PostCommentService;
+import com.bhtcnpm.website.service.Post.PostCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -16,11 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @Validated

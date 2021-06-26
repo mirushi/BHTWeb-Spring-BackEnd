@@ -35,4 +35,7 @@ public class UserExerciseReportId implements Serializable {
                 && Objects.equals(getExerciseReport(), that.getExerciseReport());
     }
 
+    @Override
+    public int hashCode() { return Objects.hash(getUser(), getExerciseReport()); }
+
 }

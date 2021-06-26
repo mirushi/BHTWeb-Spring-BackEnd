@@ -4,9 +4,8 @@ import com.bhtcnpm.website.model.dto.PostCommentReport.PostCommentReportListDTO;
 import com.bhtcnpm.website.model.dto.PostCommentReport.PostCommentReportRequestDTO;
 import com.bhtcnpm.website.model.dto.PostCommentReport.PostCommentReportResolveRequestDTO;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
-import com.bhtcnpm.website.service.PostCommentReportService;
+import com.bhtcnpm.website.service.Post.PostCommentReportService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
-import java.util.UUID;
 
 @RestController
 @Validated

@@ -1,14 +1,12 @@
 package com.bhtcnpm.website.security.evaluator.Post;
 
-import com.bhtcnpm.website.constant.domain.PostComment.PostCommentBusinessState;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.PostCommentReport;
-import com.bhtcnpm.website.repository.PostCommentReportRepository;
+import com.bhtcnpm.website.repository.Post.PostCommentReportRepository;
 import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.log.LogMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;

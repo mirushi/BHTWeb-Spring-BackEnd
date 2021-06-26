@@ -28,7 +28,7 @@ import com.bhtcnpm.website.service.Doc.DocFileUploadService;
 import com.bhtcnpm.website.service.Doc.DocService;
 import com.bhtcnpm.website.service.Exercise.ExerciseService;
 import com.bhtcnpm.website.service.GoogleDriveService;
-import com.bhtcnpm.website.service.PostService;
+import com.bhtcnpm.website.service.Post.PostService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.bhtcnpm.website.util.EnumConverter;
 import com.querydsl.core.types.Predicate;

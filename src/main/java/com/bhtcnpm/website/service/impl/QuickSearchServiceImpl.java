@@ -6,7 +6,7 @@ import com.bhtcnpm.website.model.dto.QuickSearch.QuickSearchResultDTO;
 import com.bhtcnpm.website.model.dto.QuickSearch.QuickSearchResultMapper;
 import com.bhtcnpm.website.model.dto.Tag.TagQuickSearchResult;
 import com.bhtcnpm.website.repository.Doc.DocRepository;
-import com.bhtcnpm.website.repository.PostRepository;
+import com.bhtcnpm.website.repository.Post.PostRepository;
 import com.bhtcnpm.website.repository.TagRepository;
 import com.bhtcnpm.website.service.QuickSearchService;
 import lombok.RequiredArgsConstructor;

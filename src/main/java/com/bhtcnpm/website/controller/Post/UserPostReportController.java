@@ -6,7 +6,7 @@ import com.bhtcnpm.website.model.dto.UserPostReport.UserPostReportResolveRequest
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.model.validator.dto.Post.PostID;
 import com.bhtcnpm.website.model.validator.dto.PostReport.PostReportID;
-import com.bhtcnpm.website.service.UserPostReportService;
+import com.bhtcnpm.website.service.Post.UserPostReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 @RestController
 @Validated
