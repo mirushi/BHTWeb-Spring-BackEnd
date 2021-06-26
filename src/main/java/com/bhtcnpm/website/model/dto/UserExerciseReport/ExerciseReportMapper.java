@@ -29,8 +29,7 @@ public interface ExerciseReportMapper {
     @Mapping(target = "subjectID", source = "exercise.topic.subject.id")
     @Mapping(target = "subjectName", source = "exercise.topic.subject.name")
     @Mapping(target = "author", source = "exercise.author")
-    @Mapping(target = "reporters",
-            source = "exerciseReport.userExerciseReports.")
+    @Mapping(target = "reporters", source = "exerciseReport.userExerciseReports")
     @Mapping(target = "reportReasons", source = "exerciseReport.userExerciseReports")
     @Mapping(target = "feedbacks", expression = "java(" +
             "exerciseReport.getUserExerciseReports()" +

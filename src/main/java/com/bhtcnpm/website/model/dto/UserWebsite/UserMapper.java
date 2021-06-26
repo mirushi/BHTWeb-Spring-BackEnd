@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.dto.UserWebsite;
 
+import com.bhtcnpm.website.model.entity.ExerciseEntities.UserExerciseReport;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.UserPostCommentReport;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostReport;
 import com.bhtcnpm.website.model.entity.UserWebsite;
@@ -30,6 +31,16 @@ public interface UserMapper {
         List<UserSummaryDTO> userSummaryDTOs = userWebsiteListToUserSummaryDTOList(
                 userPostCommentReportList.stream()
                 .map(obj -> obj.getUserPostCommentReportId().getUser())
+                .collect(Collectors.toList())
+        );
+
+        return userSummaryDTOs;
+    }
+
+    default List<UserSummaryDTO> userExerciseReportListToUserSummaryDTOList (List<UserExerciseReport> userExerciseReportList) {
+        List<UserSummaryDTO> userSummaryDTOs = userWebsiteListToUserSummaryDTOList(
+                userExerciseReportList.stream()
+                .map(obj -> obj.getUserExerciseReportId().getUser())
                 .collect(Collectors.toList())
         );
 
