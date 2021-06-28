@@ -23,7 +23,7 @@ public interface ExerciseCommentRepository extends JpaRepository<ExerciseComment
 
     List<ExerciseComment> getExerciseCommentByParentCommentId (Long parentCommentId, Pageable pageable);
 
-    @Query("SELECT NEW com.bhtcnpm.website.model.dto.ExerciseComment.ExerciseCommentStatisticDTO(ec.id, COUNT(DISTINCT uLiked.userExerciseCommentLikeId), " +
+    @Query("SELECT NEW com.bhtcnpm.website.model.dto.ExerciseComment.ExerciseCommentStatisticDTO(ec.id, COUNT(DISTINCT uLiked.userExerciseCommentLikeId.user.id), " +
             "CASE WHEN EXISTS (SELECT 1 FROM ec.userExerciseCommentLikes uLikedSub WHERE uLikedSub.userExerciseCommentLikeId.user.id = :userID) THEN TRUE ELSE FALSE END) " +
             "FROM ExerciseComment ec " +
             "LEFT JOIN ec.userExerciseCommentLikes uLiked " +

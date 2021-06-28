@@ -26,7 +26,6 @@ public class ExerciseCommentPermissionEvaluator implements SimplePermissionEvalu
     private final ExerciseCommentRepository exerciseCommentRepository;
     private final Log logger = LogFactory.getLog(getClass());
 
-
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, String permission) {
         if (!(targetDomainObject instanceof ExerciseComment)) {
