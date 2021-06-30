@@ -1,8 +1,10 @@
-package com.bhtcnpm.website.model.entity.PostCommentEntities;
+package com.bhtcnpm.website.model.entity.ExerciseEntities.report;
 
+import com.bhtcnpm.website.model.entity.DocCommentEntities.DocComment;
+import com.bhtcnpm.website.model.entity.DocCommentEntities.report.UserDocCommentReport;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseComment;
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.model.entity.enumeration.PostCommentReportAction.PostCommentReportActionType;
-import com.bhtcnpm.website.model.validator.entity.PostCommentReport.ValidPCREntity;
+import com.bhtcnpm.website.model.entity.enumeration.ExerciseCommentReport.ExerciseCommentReportActionType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,38 +18,31 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ValidPCREntity
-@NamedEntityGraph(
-        name = "postCommentReport.all",
-        attributeNodes = {
-                @NamedAttributeNode(value = "userPostCommentReports")
-        }
-)
-public class PostCommentReport {
+public class ExerciseCommentReport {
     @Id
-    @GeneratedValue (
+    @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "post_comment_report_sequence"
+            generator = "exercise_comment_report_sequence"
     )
     @SequenceGenerator(
-            name = "post_comment_report_sequence",
-            sequenceName = "post_comment_report_sequence"
+            name = "exercise_comment_report_sequence",
+            sequenceName = "exercise_comment_report_sequence"
     )
     private Long id;
 
     @ManyToOne
     @JoinColumn(
-            name = "post_comment_id",
+            name = "exercise_comment_id",
             updatable = false
     )
-    private PostComment postComment;
+    private ExerciseComment exerciseComment;
 
     @OneToMany(
-            mappedBy = "userPostCommentReportId.postCommentReport",
+            mappedBy = "userExerciseCommentReportId.exerciseCommentReport",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<UserPostCommentReport> userPostCommentReports;
+    private List<UserExerciseCommentReport> userExerciseCommentReports;
 
     @Column(name = "report_time")
     private LocalDateTime reportTime;
@@ -64,13 +59,13 @@ public class PostCommentReport {
 
     @Enumerated
     @Column(columnDefinition = "smallint")
-    private PostCommentReportActionType actionTaken;
+    private ExerciseCommentReportActionType actionTaken;
 
     @Override
     public boolean equals (Object o) {
         if (this == o) return true;
-        if (!(o instanceof PostCommentReport)) return false;
-        PostCommentReport that = (PostCommentReport) o;
+        if (!(o instanceof ExerciseCommentReport)) return false;
+        ExerciseCommentReport that = (ExerciseCommentReport) o;
         return Objects.equals(getId(), that.getId());
     }
 

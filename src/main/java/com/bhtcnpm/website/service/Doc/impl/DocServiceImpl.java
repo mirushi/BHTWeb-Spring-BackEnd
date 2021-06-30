@@ -86,8 +86,6 @@ public class DocServiceImpl implements DocService {
 
     private final TagRepository tagRepository;
 
-    private final DocCommentRepository docCommentRepository;
-
     private final UserDocReactionRepository userDocReactionRepository;
 
     private final UserDocSaveRepository userDocSaveRepository;

@@ -1,8 +1,8 @@
-package com.bhtcnpm.website.model.entity.PostCommentEntities;
+package com.bhtcnpm.website.model.entity.DocCommentEntities.report;
 
+import com.bhtcnpm.website.model.entity.DocCommentEntities.DocComment;
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.model.entity.enumeration.PostCommentReportAction.PostCommentReportActionType;
-import com.bhtcnpm.website.model.validator.entity.PostCommentReport.ValidPCREntity;
+import com.bhtcnpm.website.model.entity.enumeration.DocCommentReport.DocCommentReportActionType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,38 +16,31 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ValidPCREntity
-@NamedEntityGraph(
-        name = "postCommentReport.all",
-        attributeNodes = {
-                @NamedAttributeNode(value = "userPostCommentReports")
-        }
-)
-public class PostCommentReport {
+public class DocCommentReport {
     @Id
-    @GeneratedValue (
+    @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "post_comment_report_sequence"
+            generator = "doc_comment_report_sequence"
     )
     @SequenceGenerator(
-            name = "post_comment_report_sequence",
-            sequenceName = "post_comment_report_sequence"
+            name = "doc_comment_report_sequence",
+            sequenceName = "doc_comment_report_sequence"
     )
     private Long id;
 
     @ManyToOne
     @JoinColumn(
-            name = "post_comment_id",
+            name = "doc_comment_id",
             updatable = false
     )
-    private PostComment postComment;
+    private DocComment docComment;
 
     @OneToMany(
-            mappedBy = "userPostCommentReportId.postCommentReport",
+            mappedBy = "userDocCommentReportId.docCommentReport",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<UserPostCommentReport> userPostCommentReports;
+    private List<UserDocCommentReport> userDocCommentReports;
 
     @Column(name = "report_time")
     private LocalDateTime reportTime;
@@ -64,13 +57,13 @@ public class PostCommentReport {
 
     @Enumerated
     @Column(columnDefinition = "smallint")
-    private PostCommentReportActionType actionTaken;
+    private DocCommentReportActionType actionTaken;
 
     @Override
     public boolean equals (Object o) {
         if (this == o) return true;
-        if (!(o instanceof PostCommentReport)) return false;
-        PostCommentReport that = (PostCommentReport) o;
+        if (!(o instanceof DocCommentReport)) return false;
+        DocCommentReport that = (DocCommentReport) o;
         return Objects.equals(getId(), that.getId());
     }
 
