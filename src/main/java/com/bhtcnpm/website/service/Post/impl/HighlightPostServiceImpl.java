@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.service.Post.impl;
 
-import com.bhtcnpm.website.model.dto.Post.*;
+import com.bhtcnpm.website.model.dto.Post.HighlightPostDTO;
+import com.bhtcnpm.website.model.dto.Post.HighlightPostMapper;
 import com.bhtcnpm.website.model.entity.PostEntities.HighlightPost;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.UserWebsite;

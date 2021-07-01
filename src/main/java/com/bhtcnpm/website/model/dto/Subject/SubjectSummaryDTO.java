@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.model.dto.Subject;
 
-import lombok.Data;
 import lombok.Value;
 
 @Value

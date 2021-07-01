@@ -1,7 +1,10 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Immutable;
 

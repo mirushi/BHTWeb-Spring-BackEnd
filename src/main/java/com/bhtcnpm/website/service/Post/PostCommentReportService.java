@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 public interface PostCommentReportService {
     @PreAuthorize(value = "hasPermission(#commentID, " +

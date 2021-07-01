@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import java.io.Serializable;
 import java.util.Objects;

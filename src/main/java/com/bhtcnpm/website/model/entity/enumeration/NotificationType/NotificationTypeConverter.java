@@ -1,7 +1,5 @@
 package com.bhtcnpm.website.model.entity.enumeration.NotificationType;
 
-import com.bhtcnpm.website.model.entity.enumeration.ActivityType.ActivityType;
-
 import javax.persistence.AttributeConverter;
 
 public class NotificationTypeConverter implements AttributeConverter<NotificationType, Short> {

@@ -5,14 +5,12 @@ import com.bhtcnpm.website.model.dto.Doc.DocFileUploadRequestDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Mapper
 public abstract class DocFileUploadMapper {

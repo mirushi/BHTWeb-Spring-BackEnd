@@ -1,7 +1,9 @@
 package com.bhtcnpm.website.model.dto.Post;
 
-import com.bhtcnpm.website.model.validator.dto.Post.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

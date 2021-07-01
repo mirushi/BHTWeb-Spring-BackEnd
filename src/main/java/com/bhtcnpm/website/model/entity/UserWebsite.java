@@ -1,7 +1,6 @@
 package com.bhtcnpm.website.model.entity;
 
 import com.bhtcnpm.website.constant.domain.UserWebsite.UWDomainConstant;
-import com.bhtcnpm.website.constant.domain.UserWebsiteRole.UWRRequiredRole;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
@@ -16,10 +15,6 @@ import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
-import org.springframework.security.core.CredentialsContainer;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -28,7 +23,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user_website")
@@ -74,19 +68,6 @@ public class UserWebsite {
 
     @Column(nullable = false)
     private String aboutMe;
-
-    @ManyToMany (
-            cascade = { CascadeType.PERSIST },
-            fetch = FetchType.EAGER
-    )
-    @JoinTable (
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Set<UserWebsiteRole> roles;
 
     @OneToMany (
             mappedBy = "author",
@@ -148,11 +129,11 @@ public class UserWebsite {
     @JsonIgnore
     private Set<UserPostSave> userPostSaves;
 
-    @ManyToMany(mappedBy = "usersSaved")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    private Set<Course> savedCourses;
+//    @ManyToMany(mappedBy = "usersSaved")
+//    @EqualsAndHashCode.Exclude
+//    @ToString.Exclude
+//    @JsonIgnore
+//    private Set<Course> savedCourses;
 
     @Version
     private short version;

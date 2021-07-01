@@ -1,22 +1,15 @@
 package com.bhtcnpm.website.security.util;
 
-import com.bhtcnpm.website.constant.security.SecurityConstant;
 import com.bhtcnpm.website.model.dto.UserWebsite.SimpleKeycloakAccountWithEntity;
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.model.entity.UserWebsiteEntities.RefreshToken;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.security.Principal;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 

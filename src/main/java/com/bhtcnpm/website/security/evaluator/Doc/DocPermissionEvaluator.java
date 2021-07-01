@@ -11,7 +11,6 @@ import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.log.LogMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 

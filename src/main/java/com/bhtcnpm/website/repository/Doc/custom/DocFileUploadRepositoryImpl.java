@@ -1,7 +1,6 @@
 package com.bhtcnpm.website.repository.Doc.custom;
 
 import com.bhtcnpm.website.model.entity.DocEntities.QDocFileUpload;
-import com.bhtcnpm.website.repository.Doc.custom.DocFileUploadRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Component;
 

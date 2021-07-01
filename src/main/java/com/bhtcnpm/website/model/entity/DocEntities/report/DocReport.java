@@ -1,7 +1,5 @@
 package com.bhtcnpm.website.model.entity.DocEntities.report;
 
-import com.bhtcnpm.website.model.entity.DocCommentEntities.DocComment;
-import com.bhtcnpm.website.model.entity.DocCommentEntities.report.UserDocCommentReport;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocReport.DocReportActionType;

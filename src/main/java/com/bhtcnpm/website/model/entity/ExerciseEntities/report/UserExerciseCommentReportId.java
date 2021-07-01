@@ -1,7 +1,10 @@
 package com.bhtcnpm.website.model.entity.ExerciseEntities.report;
 
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;

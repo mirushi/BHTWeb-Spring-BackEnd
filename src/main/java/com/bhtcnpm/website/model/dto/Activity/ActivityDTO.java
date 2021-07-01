@@ -4,7 +4,6 @@ import com.bhtcnpm.website.model.entity.enumeration.ActivityType.ActivityType;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 import java.util.UUID;

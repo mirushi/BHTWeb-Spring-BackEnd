@@ -1,8 +1,8 @@
 package com.bhtcnpm.website.model.dto.Post;
 
+import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

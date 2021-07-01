@@ -1,15 +1,19 @@
 package com.bhtcnpm.website.service.Post.impl;
 
-import com.bhtcnpm.website.model.dto.UserPostReport.*;
+import com.bhtcnpm.website.model.dto.UserPostReport.PostReportMapper;
+import com.bhtcnpm.website.model.dto.UserPostReport.UserPostReportListDTO;
+import com.bhtcnpm.website.model.dto.UserPostReport.UserPostReportRequestDTO;
+import com.bhtcnpm.website.model.dto.UserPostReport.UserPostReportResolveRequestDTO;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.ReportReason.ReportReason;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
-import com.bhtcnpm.website.repository.*;
 import com.bhtcnpm.website.repository.Post.PostReportRepository;
 import com.bhtcnpm.website.repository.Post.PostRepository;
 import com.bhtcnpm.website.repository.Post.UserPostReportRepository;
+import com.bhtcnpm.website.repository.ReportReasonRepository;
+import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Post.UserPostReportService;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +22,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional

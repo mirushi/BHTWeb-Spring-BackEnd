@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 public interface PostCommentService {
     @PreAuthorize(value = "hasPermission(#postID, " +

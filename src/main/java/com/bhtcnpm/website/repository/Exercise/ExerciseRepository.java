@@ -1,6 +1,9 @@
 package com.bhtcnpm.website.repository.Exercise;
 
-import com.bhtcnpm.website.model.dto.Exercise.*;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseStatisticDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseUserStatisticDTO;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.jpa.repository.JpaRepository;

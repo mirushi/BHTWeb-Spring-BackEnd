@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.model.entity.ExerciseEntities.report;
 
-import com.bhtcnpm.website.model.entity.DocCommentEntities.report.UserDocCommentReport;
 import com.bhtcnpm.website.model.entity.ReportReason.ReportReason;
 import lombok.*;
 

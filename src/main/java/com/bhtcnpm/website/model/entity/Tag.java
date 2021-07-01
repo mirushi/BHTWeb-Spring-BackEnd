@@ -3,11 +3,8 @@ package com.bhtcnpm.website.model.entity;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
-import com.bhtcnpm.website.model.entity.PostEntities.PostCategory;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import lombok.extern.jackson.Jacksonized;
-import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.search.engine.backend.types.Aggregable;
 import org.hibernate.search.engine.backend.types.Norms;
@@ -19,7 +16,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmb
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity

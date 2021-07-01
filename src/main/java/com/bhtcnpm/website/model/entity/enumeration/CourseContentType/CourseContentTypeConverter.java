@@ -1,7 +1,5 @@
 package com.bhtcnpm.website.model.entity.enumeration.CourseContentType;
 
-import com.bhtcnpm.website.model.entity.enumeration.ActivityType.ActivityType;
-
 import javax.persistence.AttributeConverter;
 
 public class CourseContentTypeConverter implements AttributeConverter<CourseContentType, Short> {

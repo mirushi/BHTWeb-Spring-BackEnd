@@ -7,8 +7,6 @@ import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
 import com.bhtcnpm.website.service.Subject.SubjectService;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.keycloak.authorization.client.util.Http;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

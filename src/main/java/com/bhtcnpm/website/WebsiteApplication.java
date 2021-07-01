@@ -55,7 +55,6 @@ public class WebsiteApplication {
         InjectableValues injects = new InjectableValues.Std().addValue(EntityManager.class, entityManager);
         objectMapper.setInjectableValues(injects);
         factoryBean.setResources(new Resource[]{
-                new ClassPathResource("data/UserWebsite/user-website-role.json"),
                 new ClassPathResource("data/UserWebsite/user-website.json"),
                 new ClassPathResource("data/Subject/subject-faculty.json"),
                 new ClassPathResource("data/Subject/subject-group.json"),

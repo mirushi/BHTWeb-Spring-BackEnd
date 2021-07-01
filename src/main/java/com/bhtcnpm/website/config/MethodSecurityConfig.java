@@ -2,7 +2,6 @@ package com.bhtcnpm.website.config;
 
 import com.bhtcnpm.website.security.evaluator.EntityPermissionEvaluator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;

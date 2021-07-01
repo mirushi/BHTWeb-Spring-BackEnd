@@ -1,7 +1,6 @@
 package com.bhtcnpm.website.security.evaluator;
 
 import com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant;
-import com.bhtcnpm.website.constant.security.permission.ExerciseCommentPermissionConstant;
 import com.bhtcnpm.website.security.evaluator.Doc.DocPermissionEvaluator;
 import com.bhtcnpm.website.security.evaluator.ExerciseComment.ExerciseCommentPermissionEvaluator;
 import com.bhtcnpm.website.security.evaluator.Post.PostPermissionEvaluator;

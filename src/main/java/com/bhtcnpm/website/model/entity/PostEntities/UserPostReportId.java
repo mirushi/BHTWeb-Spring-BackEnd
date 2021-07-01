@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
-import com.bhtcnpm.website.model.entity.ReportReason.ReportReasonFeedbackId;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.AllArgsConstructor;
 import lombok.Data;

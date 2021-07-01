@@ -1,10 +1,8 @@
 package com.bhtcnpm.website.model.dto.UserExerciseReport;
 
 import com.bhtcnpm.website.model.dto.ReportReason.ReportReasonDTO;
-import com.bhtcnpm.website.model.dto.Tag.TagDTO;
 import com.bhtcnpm.website.model.dto.UserWebsite.UserSummaryDTO;
 import com.bhtcnpm.website.model.entity.enumeration.ExerciseReportAction.ExerciseReportActionType;
-import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 

@@ -1,10 +1,10 @@
 package com.bhtcnpm.website.service.Doc.impl;
 
-import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
 import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest;
+import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.dto.Doc.mapper.*;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
@@ -14,10 +14,13 @@ import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocSave;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocSaveId;
 import com.bhtcnpm.website.model.entity.Tag;
-import com.bhtcnpm.website.repository.Doc.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
+import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
+import com.bhtcnpm.website.repository.Doc.DocRepository;
+import com.bhtcnpm.website.repository.Doc.UserDocReactionRepository;
+import com.bhtcnpm.website.repository.Doc.UserDocSaveRepository;
 import com.bhtcnpm.website.repository.TagRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.evaluator.Doc.DocPermissionEvaluator;
@@ -42,12 +45,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 

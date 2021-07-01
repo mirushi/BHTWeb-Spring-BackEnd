@@ -4,7 +4,6 @@ import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseStatisticDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseUserStatisticDTO;
-import com.bhtcnpm.website.model.dto.Subject.SubjectSummaryWithTopicAndExercisesDTO;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.service.Exercise.ExerciseService;
 import com.querydsl.core.types.Predicate;

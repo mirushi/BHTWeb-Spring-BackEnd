@@ -1,7 +1,5 @@
 package com.bhtcnpm.website.model.entity.ExerciseEntities.report;
 
-import com.bhtcnpm.website.model.entity.DocCommentEntities.report.DocCommentReportReason;
-import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseReportReason;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;

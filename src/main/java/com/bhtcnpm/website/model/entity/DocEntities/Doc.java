@@ -2,11 +2,15 @@ package com.bhtcnpm.website.model.entity.DocEntities;
 
 import com.bhtcnpm.website.constant.domain.Doc.DocApprovalState;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
-import com.bhtcnpm.website.model.entity.*;
 import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
+import com.bhtcnpm.website.model.entity.Tag;
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.Doc.comparator.DocFileUploadComparatorRankBased;
-import com.bhtcnpm.website.search.bridge.*;
+import com.bhtcnpm.website.search.bridge.DocCategoryIDValueBridge;
+import com.bhtcnpm.website.search.bridge.SubjectIDValueBridge;
+import com.bhtcnpm.website.search.bridge.TagValueBridge;
+import com.bhtcnpm.website.search.bridge.UserWebsiteIDValueBridge;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -17,13 +21,16 @@ import org.hibernate.search.engine.backend.types.*;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
-import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @Entity(name = "Doc")
 @Indexed

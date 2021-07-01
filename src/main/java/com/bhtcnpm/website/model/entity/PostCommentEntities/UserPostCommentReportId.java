@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.model.entity.PostCommentEntities;
 
-import com.bhtcnpm.website.model.entity.PostEntities.UserPostReportId;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

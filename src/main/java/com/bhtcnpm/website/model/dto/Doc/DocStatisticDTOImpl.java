@@ -1,10 +1,7 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class DocStatisticDTOImpl {

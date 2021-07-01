@@ -1,7 +1,6 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
 import com.bhtcnpm.website.model.dto.Tag.TagDTO;
-import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import lombok.Data;
 

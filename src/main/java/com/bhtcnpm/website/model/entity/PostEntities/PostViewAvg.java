@@ -9,7 +9,6 @@ import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 
 @Entity
 @Getter

@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.model.dto.UserExerciseReport;
 
-import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseReport;
 import lombok.Builder;
 import lombok.Value;
 

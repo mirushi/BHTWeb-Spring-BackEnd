@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.service.Exercise.impl;
 
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuestionDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuestionResultDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuestionSubmitDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuestionWithAnswersDTO;
@@ -8,7 +7,6 @@ import com.bhtcnpm.website.model.dto.Exercise.mapper.ExerciseQuestionMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseAnswer;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseAttempt;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion;
-import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.repository.Exercise.ExerciseAttemptRepository;
 import com.bhtcnpm.website.repository.Exercise.ExerciseQuestionRepository;
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;

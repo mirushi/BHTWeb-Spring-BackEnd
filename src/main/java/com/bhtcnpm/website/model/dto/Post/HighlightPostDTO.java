@@ -1,12 +1,9 @@
 package com.bhtcnpm.website.model.dto.Post;
 
-import com.bhtcnpm.website.constant.business.Post.HighlightPostBusinessConstant;
-import lombok.*;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

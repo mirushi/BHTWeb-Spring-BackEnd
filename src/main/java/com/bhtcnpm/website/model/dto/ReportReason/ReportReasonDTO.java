@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.model.dto.ReportReason;
 
-import com.bhtcnpm.website.model.entity.DocEntities.UserDocReactionId;
 import lombok.Data;
 
 import java.util.Objects;

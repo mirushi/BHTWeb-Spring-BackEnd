@@ -2,7 +2,6 @@ package com.bhtcnpm.website.model.dto.Subject;
 
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseTopicWithExerciseListDTO;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Value;
 
 import java.util.List;

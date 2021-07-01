@@ -11,7 +11,6 @@ import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -19,7 +18,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;

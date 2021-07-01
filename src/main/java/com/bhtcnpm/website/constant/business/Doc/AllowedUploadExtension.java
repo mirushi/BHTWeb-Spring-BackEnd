@@ -2,7 +2,8 @@ package com.bhtcnpm.website.constant.business.Doc;
 
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AllowedUploadExtension {
     //Please only specify allowed extension list for doc upload here.

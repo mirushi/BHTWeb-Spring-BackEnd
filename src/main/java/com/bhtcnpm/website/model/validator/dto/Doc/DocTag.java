@@ -1,8 +1,6 @@
 package com.bhtcnpm.website.model.validator.dto.Doc;
 
 import com.bhtcnpm.website.constant.business.Doc.DocBusinessConstant;
-import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
-import com.bhtcnpm.website.constant.message.Post.PostValidationErrorMessage;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.controller.Exercise;
 
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuestionDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuestionResultDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuestionSubmitDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuestionWithAnswersDTO;

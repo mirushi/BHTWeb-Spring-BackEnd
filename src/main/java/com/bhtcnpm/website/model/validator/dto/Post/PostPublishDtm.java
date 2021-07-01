@@ -2,8 +2,6 @@ package com.bhtcnpm.website.model.validator.dto.Post;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
 import java.lang.annotation.*;
 
 @Constraint(validatedBy = {})

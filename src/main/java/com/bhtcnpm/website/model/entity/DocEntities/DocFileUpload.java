@@ -1,12 +1,8 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.UUIDSerializer;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -10,8 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.UUID;
 
 @Validated
 public interface UserPostReportService {

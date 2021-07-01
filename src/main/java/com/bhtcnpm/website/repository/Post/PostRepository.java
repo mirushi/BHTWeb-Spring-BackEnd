@@ -2,14 +2,15 @@ package com.bhtcnpm.website.repository.Post;
 
 import com.bhtcnpm.website.model.dto.Post.PostStatisticDTO;
 import com.bhtcnpm.website.model.dto.Post.PostSummaryDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.repository.custom.PostRepositoryCustom;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;

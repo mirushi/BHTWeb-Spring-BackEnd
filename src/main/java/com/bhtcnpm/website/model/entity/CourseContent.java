@@ -1,45 +1,41 @@
 package com.bhtcnpm.website.model.entity;
 
 import com.bhtcnpm.website.model.entity.enumeration.CourseContentType.CourseContentType;
-import com.bhtcnpm.website.model.entity.enumeration.CourseContentType.CourseContentTypeConverter;
-import lombok.Data;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "course_content")
-@Data
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@Entity
+//@Table(name = "course_content")
+//@Data
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class CourseContent {
 
-    @Id
-    @GeneratedValue (
-            strategy = GenerationType.SEQUENCE,
-            generator = "course_content_sequence"
-    )
-    @SequenceGenerator(
-            name = "course_category_sequence",
-            sequenceName = "course_content_sequence"
-    )
+//    @Id
+//    @GeneratedValue (
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "course_content_sequence"
+//    )
+//    @SequenceGenerator(
+//            name = "course_category_sequence",
+//            sequenceName = "course_content_sequence"
+//    )
     protected Long id;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     protected String name;
 
-    @Enumerated
-    @Column(columnDefinition = "smallint")
+//    @Enumerated
+//    @Column(columnDefinition = "smallint")
     protected CourseContentType type;
 
-    @Lob
-    @Column(nullable = false)
+//    @Lob
+//    @Column(nullable = false)
     protected String content;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     protected Long position;
 
-    @ManyToOne
+//    @ManyToOne
     protected CoursePart coursePart;
 
-    @Version
+//    @Version
     protected short version;
 }
