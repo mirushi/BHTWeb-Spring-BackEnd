@@ -23,6 +23,8 @@ public class DocSummaryDTO {
     @UserWebsiteDisplayName
     private String authorDisplayName;
 
+    private String authorAvatarURL;
+
     @DocCategoryID
     private Long categoryID;
 
