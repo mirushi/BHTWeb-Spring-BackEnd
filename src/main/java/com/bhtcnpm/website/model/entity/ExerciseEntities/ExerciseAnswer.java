@@ -25,13 +25,14 @@ public class ExerciseAnswer {
     )
     private Long id;
 
-    @Column(name = "content")
+    @Lob
+    @Column(name = "content", columnDefinition = "text",nullable = false)
     private String content;
 
-    @Column(name = "is_correct")
+    @Column(name = "is_correct", nullable = false)
     private Boolean isCorrect;
 
-    @Column(name = "rank")
+    @Column(name = "rank", nullable = false)
     private Integer rank;
 
     @ManyToOne

@@ -40,7 +40,6 @@ public class DocDetailsDTO {
     @UserWebsiteDisplayName
     private String authorDisplayName;
 
-
     private String authorAvatarURL;
 
     @DocCategoryID

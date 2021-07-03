@@ -439,7 +439,7 @@ public class DocServiceImpl implements DocService {
             .fileSize(multipartFile.getSize())
             .downloadURL(uploadedFile.getWebViewLink())
             .thumbnailURL(String.format(DocFileUploadConstant.DRIVE_THUMBNAIL_URL, uploadedFile.getId()))
-            .uploader(author)
+            .uploader(author).remoteID(uploadedFile.getId()).rank(-1).doc(null)
             .build();
 
         fileUpload = docFileUploadRepository.save(fileUpload);

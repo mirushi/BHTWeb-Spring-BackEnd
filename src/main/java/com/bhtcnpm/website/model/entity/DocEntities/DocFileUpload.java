@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
+import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DocFileUpload {
     @Id
-    @Column(columnDefinition = "BINARY(16)",
+    @Column(columnDefinition = "uuid",
             nullable = false,
             unique = true)
     @Builder.Default
@@ -37,15 +38,16 @@ public class DocFileUpload {
     @Column(nullable = false)
     private Long fileSize;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = GenericBusinessConstant.URL_MAX_LENGTH)
     private String downloadURL;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = GenericBusinessConstant.URL_MAX_LENGTH)
     private String thumbnailURL;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createdDtm;
+    @Builder.Default
+    private LocalDateTime createdDtm = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(nullable = false)

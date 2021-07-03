@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity;
 
+import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.constant.domain.UserWebsite.UWDomainConstant;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
@@ -34,7 +35,7 @@ import java.util.UUID;
 public class UserWebsite {
     //New account will automatically be created if not found in db.
     @Id
-    @Column(columnDefinition = "BINARY(16)",
+    @Column(columnDefinition = "uuid",
             nullable = false,
             unique = true)
     @GenericField(
@@ -63,7 +64,7 @@ public class UserWebsite {
     @Column(nullable = false)
     private Long reputationScore;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = GenericBusinessConstant.URL_MAX_LENGTH)
     private String avatarURL;
 
     @Column(nullable = false)
