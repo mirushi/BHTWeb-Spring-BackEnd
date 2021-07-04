@@ -97,17 +97,18 @@ public class PostServiceImpl implements PostService {
 
         PostSummaryListDTO finalResult;
 
+        Page<Post> postResult;
+
         if (mostLiked) {
-            Page<PostSummaryDTO> postSummaryDTOPage = postRepository.getPostOrderByLikeCountDESC(finalPredicate, pageable);
-            finalResult = postMapper.postSummaryPageToPostSummaryListDTO(postSummaryDTOPage);
+            postResult = postRepository.getPostOrderByLikeCountDESC(finalPredicate, pageable);
         }
         else if (mostViewed) {
-            Page<PostSummaryDTO> postSummaryDTOPage = postRepository.getPostOrderByViewCountDESC(finalPredicate, pageable);
-            finalResult = postMapper.postSummaryPageToPostSummaryListDTO(postSummaryDTOPage);
+            postResult = postRepository.getPostOrderByViewCountDESC(finalPredicate, pageable);
         } else {
-            Page<Post> postResult = postRepository.findAll(finalPredicate, pageable);
-            finalResult = postMapper.postPageToPostSummaryListDTO(postResult);
+            postResult = postRepository.findAll(finalPredicate, pageable);
         }
+
+        finalResult = postMapper.postPageToPostSummaryListDTO(postResult);
 
         return finalResult;
     }

@@ -29,6 +29,8 @@ import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.scope.SearchScope;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.hibernate.search.mapper.orm.work.SearchIndexingPlan;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
@@ -373,6 +375,40 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         JPQLQuery<Post> finalQuery = querydsl.applyPagination(pageable, query);
 
         return finalQuery.fetch();
+    }
+
+    @Override
+    public Page<Post> getPostOrderByViewCountDESC(Predicate predicate, Pageable pageable) {
+        JPAQuery<Post> query = new JPAQuery<>(em)
+                .select(qPost)
+                .from(qPost)
+                .leftJoin(qPostView).on(qPost.id.eq(qPostView.post.id))
+                .where(predicate)
+                .groupBy(qPost.id)
+                .orderBy(qPostView.id.countDistinct().desc());
+
+        Long totalElements = query.fetchCount();
+
+        JPQLQuery<Post> finalQuery = querydsl.applyPagination(pageable, query);
+
+        return new PageImpl<>(finalQuery.fetch(), pageable, totalElements);
+    }
+
+    @Override
+    public Page<Post> getPostOrderByLikeCountDESC(Predicate predicate, Pageable pageable) {
+        JPAQuery<Post> query = new JPAQuery<>(em)
+                .select(qPost)
+                .from(qPost)
+                .leftJoin(qUserPostLike).on(qUserPostLike.userPostLikeId.post.id.eq(qPost.id))
+                .where(predicate)
+                .groupBy(qPost.id)
+                .orderBy(qUserPostLike.userPostLikeId.user.id.countDistinct().desc());
+
+        Long totalElements = query.fetchCount();
+
+        JPQLQuery<Post> finalQuery = querydsl.applyPagination(pageable, query);
+
+        return new PageImpl<>(finalQuery.fetch(), pageable, totalElements);
     }
 
     private SearchScope<Post> getSearchScope () {return searchSession.scope(Post.class);}
