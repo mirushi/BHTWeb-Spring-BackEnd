@@ -5,6 +5,7 @@ import com.bhtcnpm.website.model.dto.Doc.DocFileUploadRequestDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public abstract class DocFileUploadMapper {
         return docFileUploadList;
     }
 
+    @Mapping(target = "hostType", source = "hostType")
     public abstract DocFileUploadDTO docFileUploadToDocFileUploadDTO (DocFileUpload docFileUpload);
 
     public abstract List<DocFileUploadDTO> docFileUploadListToDocFileUploadDTOList (List<DocFileUpload> docFileUploadList);

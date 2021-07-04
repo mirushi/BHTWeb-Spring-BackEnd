@@ -39,12 +39,12 @@ import java.util.TreeSet;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE doc SET DELETED_DATE = "+ "CURRENT_TIMESTAMP()" +" WHERE id = ? AND VERSION = ?")
+@SQLDelete(sql = "UPDATE doc SET DELETED_DTM = "+ "CURRENT_TIMESTAMP()" +" WHERE id = ? AND VERSION = ?")
 @Loader(namedQuery = "findDocById")
 @NamedQuery(name = "findDocById",
         query = "SELECT d FROM Doc d WHERE d.id = ?1 " +
                 "AND d.deletedDtm IS NULL")
-@Where(clause = "DELETED_DATE is NULL")
+@Where(clause = "DELETED_DTM is NULL")
 @NamedEntityGraph(
         name = "tagsAndDocFileUploads.all",
         attributeNodes = {
@@ -157,6 +157,7 @@ public class Doc {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @GenericField(searchable = Searchable.YES)
+    @Column(name = "deleted_dtm")
     private LocalDateTime deletedDtm;
 
     @ManyToMany

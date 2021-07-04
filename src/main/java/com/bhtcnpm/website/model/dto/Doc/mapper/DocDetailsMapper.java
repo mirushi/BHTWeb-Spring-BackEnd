@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Mapper(uses = {TagMapper.class})
+@Mapper(uses = {TagMapper.class, DocFileUploadMapper.class})
 public abstract class DocDetailsMapper {
 
     public static DocDetailsMapper INSTANCE = Mappers.getMapper(DocDetailsMapper.class);

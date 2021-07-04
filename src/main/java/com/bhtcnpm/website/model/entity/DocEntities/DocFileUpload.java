@@ -1,7 +1,9 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
+import com.bhtcnpm.website.constant.business.DocFileUpload.DocFileUploadPreviewURLConstant;
 import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.DocFileUpload.DocFileUploadHostType;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -41,6 +43,10 @@ public class DocFileUpload {
     @Column(nullable = false, length = GenericBusinessConstant.URL_MAX_LENGTH)
     private String downloadURL;
 
+    @Enumerated
+    @Column(name = "host_type", nullable = false)
+    private DocFileUploadHostType hostType;
+
     @Column(nullable = false, length = GenericBusinessConstant.URL_MAX_LENGTH)
     private String thumbnailURL;
 
@@ -52,7 +58,7 @@ public class DocFileUpload {
     @ManyToOne
     @JoinColumn(nullable = false)
     private UserWebsite uploader;
-
+    
     @ManyToOne
     @JoinColumn
     private Doc doc;
@@ -69,4 +75,15 @@ public class DocFileUpload {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+    @Transient
+    public String getPreviewURL () {
+        String previewURLModel = "";
+        if (DocFileUploadHostType.G_DRIVE.equals(getHostType())) {
+            previewURLModel = DocFileUploadPreviewURLConstant.G_DRIVE;
+        }
+
+        return String.format(previewURLModel, getRemoteID());
+    }
 }
+
