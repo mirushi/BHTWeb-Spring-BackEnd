@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryID;
 import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryName;
 import com.bhtcnpm.website.model.validator.dto.Subject.SubjectID;
 import com.bhtcnpm.website.model.validator.dto.Subject.SubjectName;
+import com.bhtcnpm.website.model.validator.dto.UserWebsite.UserWebsiteAvatarURL;
 import com.bhtcnpm.website.model.validator.dto.UserWebsite.UserWebsiteDisplayName;
 import com.bhtcnpm.website.model.validator.dto.UserWebsite.UserWebsiteName;
 import lombok.Data;
@@ -40,6 +41,7 @@ public class DocDetailsDTO {
     @UserWebsiteDisplayName
     private String authorDisplayName;
 
+    @UserWebsiteAvatarURL
     private String authorAvatarURL;
 
     @DocCategoryID
