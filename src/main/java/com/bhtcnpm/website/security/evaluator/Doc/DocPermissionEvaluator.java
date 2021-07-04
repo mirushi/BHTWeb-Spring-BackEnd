@@ -11,6 +11,7 @@ import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.log.LogMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -86,7 +87,48 @@ public class DocPermissionEvaluator implements SimplePermissionEvaluator {
             return this.checkDocSavePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
+        //Kiểm tra quyền Delete.
+        if (DocActionPermissionRequest.DELETE_PERMISSION.equals(permission)) {
+            return this.checkDocDeletePermission(authentication, authenticatedUserID, state, targetDomainObject);
+        }
+
         throw new IllegalArgumentException(String.format("Doc permission %s is not supported. Denying access to docID = %s", permission, targetDomainObject.getId()));
+    }
+
+    private boolean checkDocDeletePermission (Authentication authentication, UUID authenticatedUserID, DocBusinessState state, Doc targetDomainObject) {
+        //Bắt buộc phải có tài khoản mới được deleted.
+        log.info("Checking doc delete permission.");
+        if (authenticatedUserID == null) {
+            log.warn("User ID not found in authentication object. Denying access.");
+            return false;
+        }
+
+        //Xét state của Doc.
+        if (DocBusinessState.PUBLIC.equals(state)) {
+            if (isOwnerAndContainsAuthority(authentication, targetDomainObject, DocPermissionConstant.DOC_PUBLIC_SELF_DELETE)) {
+                return true;
+            } else if (SecurityUtils.containsAuthority(authentication, DocPermissionConstant.DOC_PUBLIC_ALL_DELETE)) {
+                return true;
+            }
+            return false;
+        }
+        else if (DocBusinessState.UNLISTED.equals(state)) {
+            if (isOwnerAndContainsAuthority(authentication, targetDomainObject, DocPermissionConstant.DOC_UNLISTED_SELF_DELETE)) {
+                return true;
+            }
+            else if (SecurityUtils.containsAuthority(authentication, DocPermissionConstant.DOC_UNLISTED_ALL_DELETE)) {
+                return true;
+            }
+            return false;
+        }
+        else if (DocBusinessState.DELETED.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, DocPermissionConstant.DOC_DELETED_ALL_DELETE)) {
+                return true;
+            }
+            return false;
+        }
+
+        return false;
     }
 
     private boolean checkDocSavePermission (Authentication authentication, UUID authenticatedUserID, DocBusinessState state, Doc targetDomainObject) {

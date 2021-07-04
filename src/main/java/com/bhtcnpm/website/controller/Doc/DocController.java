@@ -18,6 +18,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -115,6 +116,19 @@ public class DocController {
             Authentication authentication) {
         DocDetailsDTO docDetailsDTO = docService.putDoc(id, docRequestDTO, authentication);
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseBody
+    public ResponseEntity deleteDoc (@PathVariable @DocID Long id,
+                                     Authentication authentication) {
+        Boolean result = docService.deleteDoc(id, authentication);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
 //    @PostMapping

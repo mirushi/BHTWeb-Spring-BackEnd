@@ -10,35 +10,35 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericFie
 
 import javax.persistence.*;
 
-@Entity
+//@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostViewAvg {
-    @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "post_view_avg_sequence"
-    )
-    @SequenceGenerator(
-            name = "post_view_avg_sequence",
-            sequenceName = "post_view_avg_sequence"
-    )
-    @GenericField(name = "id", searchable = Searchable.YES, projectable = Projectable.YES)
+//    @Id
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "post_view_avg_sequence"
+//    )
+//    @SequenceGenerator(
+//            name = "post_view_avg_sequence",
+//            sequenceName = "post_view_avg_sequence"
+//    )
+//    @GenericField(name = "id", searchable = Searchable.YES, projectable = Projectable.YES)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(nullable = false)
+//    @OneToOne
+//    @JoinColumn(nullable = false)
     private Post post;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Long pastView;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     //TODO: This will handle for about 1 billion view max.
     private Long sqrPastView;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Double recentAvg;
 }

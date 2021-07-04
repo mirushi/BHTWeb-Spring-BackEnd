@@ -96,6 +96,11 @@ public interface DocService {
     @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.DocPermissionConstant).DOC_PENDING_SELF_CREATE)")
     DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, Authentication authentication);
 
+    @PreAuthorize(value = "hasPermission(#docID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).DELETE_PERMISSION)")
+    Boolean deleteDoc (@DocID Long docID, Authentication authentication);
+
     @PreAuthorize(value = "permitAll()")
     DocSummaryListDTO getDocBySearchTerm(
             String searchTerm,

@@ -43,7 +43,7 @@ import java.util.TreeSet;
 @Loader(namedQuery = "findDocById")
 @NamedQuery(name = "findDocById",
         query = "SELECT d FROM Doc d WHERE d.id = ?1 " +
-                "AND d.deletedDate IS NULL")
+                "AND d.deletedDtm IS NULL")
 @Where(clause = "DELETED_DATE is NULL")
 @NamedEntityGraph(
         name = "tagsAndDocFileUploads.all",
@@ -157,7 +157,7 @@ public class Doc {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @GenericField(searchable = Searchable.YES)
-    private LocalDateTime deletedDate;
+    private LocalDateTime deletedDtm;
 
     @ManyToMany
     @JoinTable(
@@ -186,15 +186,15 @@ public class Doc {
     public DocBusinessState getDocBusinessState () {
         //Refer to BHTCNPM confluence. Entity state page.
         if (DocStateType.APPROVED.equals(this.getDocState())
-                && deletedDate == null
+                && deletedDtm == null
                 && publishDtm.isBefore(LocalDateTime.now())) {
             return DocBusinessState.PUBLIC;
         }
-        if (!DocStateType.APPROVED.equals(this.getDocState()) && deletedDate == null
-                || deletedDate == null && publishDtm.isAfter(LocalDateTime.now())) {
+        if (!DocStateType.APPROVED.equals(this.getDocState()) && deletedDtm == null
+                || deletedDtm == null && publishDtm.isAfter(LocalDateTime.now())) {
             return DocBusinessState.UNLISTED;
         }
-        if (deletedDate != null) {
+        if (deletedDtm != null) {
             return DocBusinessState.DELETED;
         }
         throw new UnsupportedOperationException("Cannot determine doc business state.");

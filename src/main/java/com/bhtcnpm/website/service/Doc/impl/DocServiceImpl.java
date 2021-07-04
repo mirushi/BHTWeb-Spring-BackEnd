@@ -364,6 +364,12 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
+    public Boolean deleteDoc(Long docID, Authentication authentication) {
+        docRepository.deleteById(docID);
+        return true;
+    }
+
+    @Override
     public DocSummaryListDTO getDocBySearchTerm(
             String searchTerm,
             Long categoryID,
