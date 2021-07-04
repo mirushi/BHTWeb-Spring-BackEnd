@@ -21,9 +21,7 @@ public interface DocService {
     @PreAuthorize(value = "permitAll()")
     DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication);
 
-    @PreAuthorize(value = "hasPermission(#docID, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
-            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).APPROVE_PERMISSION)")
+    @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.DocPermissionConstant).DOC_UNLISTED_ALL_READ)")
     DocDetailsWithStateListDTO getAllPendingApprovalDoc (
             Predicate predicate,
             Pageable pageable,
