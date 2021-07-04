@@ -20,6 +20,7 @@ public abstract class DocSummaryMapper {
 
     @Mapping(target = "authorID", source = "author.id")
     @Mapping(target = "authorDisplayName", source = "author.displayName")
+    @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "subjectID", source = "subject.id")

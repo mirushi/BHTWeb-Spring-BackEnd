@@ -150,7 +150,7 @@ public class Doc {
     private String title;
 
     @Enumerated
-    @Column(columnDefinition = "smallint")
+    @Column(name = "doc_state", columnDefinition = "smallint")
     @GenericField(projectable = Projectable.YES, searchable = Searchable.YES)
     private DocStateType docState;
 

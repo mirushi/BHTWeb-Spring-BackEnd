@@ -42,7 +42,7 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
             "LEFT JOIN DOC_FILE_UPLOAD file ON d.ID = file.DOC_ID " +
             "LEFT JOIN DOC_DOWNLOAD dl ON dl.DOC_FILE_UPLOAD_ID = file.ID " +
             "LEFT JOIN USER_DOC_SAVE uds ON d.ID = uds.DOC_ID " +
-            "WHERE d.ID IN :docIDs AND d.DELETED_DATE IS NULL " +
+            "WHERE d.ID IN :docIDs AND d.DELETED_DTM IS NULL " +
             "GROUP BY d.ID")
     List<DocStatisticDTO> getDocStatisticDTOs (List<Long> docIDs, UUID userID);
 
@@ -68,8 +68,9 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
             value = "SELECT DOC.* " +
             "FROM DOC " +
             "LEFT JOIN USER_DOC_REACTION AS REACTION ON DOC.ID = REACTION.DOC_ID " +
-            "WHERE REACTION.DOC_REACTION_TYPE = "+ DocStateTypeConstant.APPROVED_ORDINAL +" AND DELETED_DATE IS NULL AND DOC.PUBLISH_DTM <= CURRENT_TIMESTAMP " +
+            "WHERE DOC.DOC_STATE = "+ DocStateTypeConstant.APPROVED_ORDINAL +" AND DELETED_DTM IS NULL AND DOC.PUBLISH_DTM <= CURRENT_TIMESTAMP() " +
             "GROUP BY DOC.ID " +
             "ORDER BY ROUND(((CASE WHEN COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.LIKE_ORDINAL +" THEN REACTION.USER_ID ELSE NULL END)) - COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.DISLIKE_ORDINAL +" THEN REACTION.USER_ID ELSE null END)) > 0 THEN 1 WHEN COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.LIKE_ORDINAL +" THEN REACTION.USER_ID ELSE NULL END)) - COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.DISLIKE_ORDINAL +" THEN REACTION.USER_ID ELSE null END)) < 0 THEN -1 ELSE 0 END) * (LOG(GREATEST(ABS(COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.LIKE_ORDINAL +" THEN REACTION.USER_ID ELSE NULL END)) - COUNT(DISTINCT (CASE WHEN REACTION.DOC_REACTION_TYPE = "+ DocReactionTypeConstant.DISLIKE_ORDINAL +" THEN REACTION.USER_ID ELSE null END))), 1))) + ((EXTRACT(EPOCH FROM DOC.PUBLISH_DTM) - 1446422400)/45000)), 7) DESC")
+    //Reddit Hot Algorithm (https://www.evanmiller.org/deriving-the-reddit-formula.html).
     List<Doc> getHotDocsPublicOnly(Pageable pageable);
 }
