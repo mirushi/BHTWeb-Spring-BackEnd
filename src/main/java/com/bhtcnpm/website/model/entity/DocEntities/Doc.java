@@ -118,7 +118,7 @@ public class Doc {
     private String imageURL;
 
     @Column(nullable = false)
-    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    @GenericField(name = "publishDtm", sortable = Sortable.YES, projectable = Projectable.YES)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime publishDtm;
@@ -156,7 +156,7 @@ public class Doc {
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @GenericField(searchable = Searchable.YES)
+    @GenericField(name = "deletedDtm", searchable = Searchable.YES)
     @Column(name = "deleted_dtm")
     private LocalDateTime deletedDtm;
 
