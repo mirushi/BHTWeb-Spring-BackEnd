@@ -25,7 +25,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
             "LEFT JOIN p.userPostLikes uLiked " +
             "LEFT JOIN PostComment pc ON p.id = pc.post.id " +
             "LEFT JOIN PostView pv ON p.id = pv.post.id " +
-            "WHERE p.id IN :postIDs AND pc.deletedDate IS NULL " +
+            "WHERE p.id IN :postIDs AND pc.deletedDtm IS NULL " +
             "GROUP BY p.id")
     List<PostStatisticDTO> getPostStatisticDTOs (List<Long> postIDs, UUID userID);
 

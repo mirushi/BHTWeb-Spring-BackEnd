@@ -7,6 +7,7 @@ import com.bhtcnpm.website.constant.security.evaluator.GenericOwnership;
 import com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest;
 import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest;
 import com.bhtcnpm.website.constant.security.permission.HighlightPostPermissionConstant;
+import com.bhtcnpm.website.constant.security.permission.PostCommentPermissionConstant;
 import com.bhtcnpm.website.constant.security.permission.PostPermissionConstant;
 import com.bhtcnpm.website.constant.security.permission.PostReportPermissionConstant;
 import com.bhtcnpm.website.model.entity.PostEntities.HighlightPost;
@@ -192,7 +193,7 @@ public class PostPermissionEvaluator implements SimplePermissionEvaluator {
 
         //Xét state của Post.
         if (PostBusinessState.PUBLIC.equals(state)) {
-            if (SecurityUtils.containsAuthority(authentication, PostReportPermissionConstant.POSTREPORT_PUBLIC_ALL_CREATE)) {
+            if (SecurityUtils.containsAuthority(authentication, PostCommentPermissionConstant.POSTCOMMENT_PUBLIC_SELF_CREATE)) {
                 return true;
             }
         }

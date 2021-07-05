@@ -4,6 +4,7 @@ import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
+import com.bhtcnpm.website.model.validator.dto.Doc.DocActionRequestSize;
 import com.bhtcnpm.website.model.validator.dto.Doc.DocID;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Pageable;
@@ -120,6 +121,9 @@ public interface DocService {
     DocFileUploadDTO uploadFileToGDrive(MultipartFile multipartFile, Authentication authentication) throws IOException, FileExtensionNotAllowedException;
 
     DocDownloadInfoDTO getDocDownloadInfo (UUID fileID);
+
+    @PreAuthorize(value = "permitAll()")
+    List<DocAvailableActionDTO> getAvailableDocAction (@DocActionRequestSize List<Long> docIDs, Authentication authentication);
 
     @PreAuthorize(value = "isAuthenticated()")
     DocSummaryWithStateListDTO getManagementDoc(

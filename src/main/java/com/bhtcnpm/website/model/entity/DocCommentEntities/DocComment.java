@@ -21,8 +21,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE doc_comment SET DELETED_DATE = CURRENT_TIMESTAMP() WHERE id = ? AND VERSION = ?")
-@Where(clause = "DELETED_DATE IS NULL")
+@SQLDelete(sql = "UPDATE doc_comment SET DELETED_DTM = CURRENT_TIMESTAMP() WHERE id = ? AND VERSION = ?")
+@Where(clause = "DELETED_DTM IS NULL")
 public class DocComment {
     @Id
     @GeneratedValue(
@@ -77,17 +77,17 @@ public class DocComment {
     @EqualsAndHashCode.Exclude
     private Set<UserDocCommentLike> userDocCommentLikes;
 
-    @Column(name = "deleted_date")
-    private LocalDateTime deletedDate;
+    @Column(name = "deleted_dtm")
+    private LocalDateTime deletedDtm;
 
     @Version
     private short version;
 
     public DocCommentBusinessState getDocCommentBusinessState () {
-        if (deletedDate == null) {
+        if (deletedDtm == null) {
             return DocCommentBusinessState.PUBLIC;
         }
-        if (deletedDate != null) {
+        if (deletedDtm != null) {
             return DocCommentBusinessState.DELETE;
         }
         return null;

@@ -7,9 +7,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 public class PostCommentPredicate {
     private static QPostComment qPostComment = QPostComment.postComment;
 
-    public static BooleanExpression notDeleted() {return qPostComment.deletedDate.isNull();}
+    public static BooleanExpression notDeleted() {return qPostComment.deletedDtm.isNull();}
 
-    public static BooleanExpression deleted() {return qPostComment.deletedDate.isNotNull();}
+    public static BooleanExpression deleted() {return qPostComment.deletedDtm.isNotNull();}
 
     public static BooleanExpression postCommentPublicBusinessState () {return notDeleted();}
 }

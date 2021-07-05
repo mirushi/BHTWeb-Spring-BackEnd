@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.service.Doc.impl;
 
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
+import com.bhtcnpm.website.constant.business.Doc.DocActionAvailableConstant;
 import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest;
@@ -50,6 +51,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -465,6 +467,55 @@ public class DocServiceImpl implements DocService {
         }
 
         return docDownloadInfoMapper.docFileUploadToDocDownloadInfoDTO(fileObject.get());
+    }
+
+    @Override
+    public List<DocAvailableActionDTO> getAvailableDocAction(List<Long> docIDs, Authentication authentication) {
+        List<DocAvailableActionDTO> docAvailableActionDTOList = new ArrayList<>();
+
+        for (Long docID : docIDs) {
+            if (docID == null) {
+                continue;
+            }
+            DocAvailableActionDTO docAvailableActionDTO = new DocAvailableActionDTO();
+            docAvailableActionDTO.setId(docID);
+            List<String> availableAction = new ArrayList<>();
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.READ_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.READ_ACTION);
+            }
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.UPDATE_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.UPDATE_ACTION);
+            }
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.DELETE_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.DELETE_ACTION);
+            }
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.SAVE_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.SAVE_ACTION);
+            }
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.REACT_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.REACT_ACTION);
+            }
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.APPROVE_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.APPROVE_ACTION);
+            }
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.REPORT_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.REPORT_ACTION);
+            }
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.COMMENT_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.COMMENT_ACTION);
+            }
+            docAvailableActionDTO.setAvailableActions(availableAction);
+
+            docAvailableActionDTOList.add(docAvailableActionDTO);
+        }
+
+        return docAvailableActionDTOList;
     }
 
     @Override

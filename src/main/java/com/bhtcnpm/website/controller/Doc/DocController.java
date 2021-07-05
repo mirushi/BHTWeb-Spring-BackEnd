@@ -5,6 +5,7 @@ import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
+import com.bhtcnpm.website.model.validator.dto.Doc.DocActionRequestSize;
 import com.bhtcnpm.website.model.validator.dto.Doc.DocID;
 import com.bhtcnpm.website.service.Doc.DocDownloadService;
 import com.bhtcnpm.website.service.Doc.DocService;
@@ -258,6 +259,17 @@ public class DocController {
         List<DocStatisticDTO> docStatisticDTOs = docService.getDocStatistics(docIDs, authentication);
 
         return new ResponseEntity<>(docStatisticDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping("/actionAvailable")
+    @ResponseBody
+    public ResponseEntity<List<DocAvailableActionDTO>> getDocActionAvailable (
+            @RequestParam @DocActionRequestSize List<Long> docIDs,
+            Authentication authentication
+    ) {
+        List<DocAvailableActionDTO> availableActionDTOList = docService.getAvailableDocAction(docIDs, authentication);
+
+        return new ResponseEntity<>(availableActionDTOList, HttpStatus.OK);
     }
 
     @PostMapping

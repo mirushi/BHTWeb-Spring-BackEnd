@@ -24,8 +24,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE exercise_comment SET DELETED_DATE = CURRENT_TIMESTAMP() WHERE id = ? AND VERSION = ?")
-@Where(clause = "DELETED_DATE is NULL")
+@SQLDelete(sql = "UPDATE exercise_comment SET DELETED_DTM = CURRENT_TIMESTAMP() WHERE id = ? AND VERSION = ?")
+@Where(clause = "DELETED_DTM is NULL")
 public class ExerciseComment {
     @Id
     @GeneratedValue(
@@ -76,18 +76,18 @@ public class ExerciseComment {
     )
     private Set<UserExerciseCommentLike> userExerciseCommentLikes;
 
-    @Column(name = "deleted_date")
-    private LocalDateTime deletedDate;
+    @Column(name = "deleted_dtm")
+    private LocalDateTime deletedDtm;
 
     @Version
     private short version;
 
     @Transient
     public ExerciseCommentBusinessState getExerciseCommentBusinessState () {
-        if (deletedDate == null) {
+        if (deletedDtm == null) {
             return ExerciseCommentBusinessState.PUBLIC;
         }
-        if (deletedDate != null) {
+        if (deletedDtm != null) {
             return ExerciseCommentBusinessState.DELETE;
         }
         return null;

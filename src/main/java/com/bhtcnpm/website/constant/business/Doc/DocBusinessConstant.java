@@ -7,6 +7,9 @@ public class DocBusinessConstant {
     //This constant is for maximum length that a title can have.
     public static final int TITLE_MAX = 128;
 
+    //Maximum number of docID that single request of get doc action can handle.
+    public static final int DOC_ACTION_MAX = 20;
+
     //This constant is for minimum length that a description must have.
     public static final int DESCRIPTION_MIN = 5;
     //This constant is for maximum length that a description can have.
