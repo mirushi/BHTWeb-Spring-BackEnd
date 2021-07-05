@@ -15,6 +15,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.UserDocSave;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocSaveId;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.DocFileUpload.DocFileUploadHostType;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
@@ -445,16 +446,13 @@ public class DocServiceImpl implements DocService {
             .fileSize(multipartFile.getSize())
             .downloadURL(uploadedFile.getWebViewLink())
             .thumbnailURL(String.format(DocFileUploadConstant.DRIVE_THUMBNAIL_URL, uploadedFile.getId()))
-            .uploader(author).remoteID(uploadedFile.getId()).rank(-1).doc(null)
+            .uploader(author)
+            .remoteID(uploadedFile.getId()).rank(-1).doc(null).hostType(DocFileUploadHostType.G_DRIVE)
             .build();
 
         fileUpload = docFileUploadRepository.save(fileUpload);
 
-        return DocFileUploadDTO.builder()
-                .fileName(fileUpload.getFileName())
-                .id(fileUpload.getId())
-                .fileSize(multipartFile.getSize())
-                .build();
+        return docFileUploadMapper.docFileUploadToDocFileUploadDTO(fileUpload);
     }
 
     @Override
