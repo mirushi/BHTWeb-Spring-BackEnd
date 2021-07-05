@@ -7,7 +7,8 @@ import java.util.List;
 
 @Value
 @Builder
-public class DocCommentAvailableActionDTO {
-    Long id;
-    List<String> availableActions;
+public class DocCommentListDTO {
+    List<DocCommentDTO> docCommentDTOs;
+    Integer totalPages;
+    Long totalElements;
 }

@@ -136,7 +136,7 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     @Override
     public boolean deletePostComment(Long commentID) {
-            postCommentRepository.deleteById(commentID);
+        postCommentRepository.deleteById(commentID);
         return true;
     }
 

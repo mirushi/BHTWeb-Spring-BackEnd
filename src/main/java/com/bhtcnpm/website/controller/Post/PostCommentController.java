@@ -130,5 +130,4 @@ public class PostCommentController {
 
         return new ResponseEntity<>(availableActionDTOList, HttpStatus.OK);
     }
-
 }

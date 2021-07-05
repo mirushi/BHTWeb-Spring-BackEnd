@@ -101,7 +101,7 @@ public class PostCommentPermissionEvaluator implements SimplePermissionEvaluator
             return checkPostCommentReportPermission(authentication, authenticatedUserID, state);
         }
 
-        throw new IllegalArgumentException("Post comment request permission is not supported.");
+        throw new IllegalArgumentException(String.format("Post comment request permission %s is not supported.", permission));
     }
 
     private boolean checkPostCommentReportPermission(Authentication authentication, UUID authenticatedUserID, PostCommentBusinessState state) {

@@ -2,6 +2,7 @@ package com.bhtcnpm.website.security.evaluator;
 
 import com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant;
 import com.bhtcnpm.website.security.evaluator.Doc.DocPermissionEvaluator;
+import com.bhtcnpm.website.security.evaluator.DocComment.DocCommentPermissionEvaluator;
 import com.bhtcnpm.website.security.evaluator.ExerciseComment.ExerciseCommentPermissionEvaluator;
 import com.bhtcnpm.website.security.evaluator.Post.PostPermissionEvaluator;
 import com.bhtcnpm.website.security.evaluator.PostComment.PostCommentPermissionEvaluator;
@@ -21,6 +22,7 @@ public class EntityPermissionEvaluator implements PermissionEvaluator {
     private final PostCommentPermissionEvaluator postCommentPermissionEvaluator;
     private final ExerciseCommentPermissionEvaluator exerciseCommentPermissionEvaluator;
     private final DocPermissionEvaluator docPermissionEvaluator;
+    private final DocCommentPermissionEvaluator docCommentPermissionEvaluator;
     private final UserWebsitePermissionEvaluator userWebsitePermissionEvaluator;
 
     @Override
@@ -46,6 +48,9 @@ public class EntityPermissionEvaluator implements PermissionEvaluator {
             }
             case ObjectTypeConstant.EXERCISECOMMENT_OBJECT: {
                 return exerciseCommentPermissionEvaluator.hasPermission(authentication, targetDomainObject, permissionString);
+            }
+            case ObjectTypeConstant.DOCCOMMENT_OBJECT: {
+                return docCommentPermissionEvaluator.hasPermission(authentication, targetDomainObject, permissionString);
             }
         }
 
@@ -74,6 +79,9 @@ public class EntityPermissionEvaluator implements PermissionEvaluator {
             }
             case ObjectTypeConstant.EXERCISECOMMENT_OBJECT: {
                 return exerciseCommentPermissionEvaluator.hasPermission(authentication, targetId, permissionString);
+            }
+            case ObjectTypeConstant.DOCCOMMENT_OBJECT: {
+                return docCommentPermissionEvaluator.hasPermission(authentication, targetId, permissionString);
             }
         }
         return false;
