@@ -386,7 +386,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .where(predicate)
                 .orderBy(qPostView.id.countDistinct().desc());
         query = groupByPost(query);
-        query = applyPaginator(query, pageable);
+        query = applyPaginatorPageOnly(query, pageable);
 
         Long totalElements = getPostTotalElements(predicate);
 
@@ -402,7 +402,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .where(predicate)
                 .orderBy(qUserPostLike.userPostLikeId.user.id.countDistinct().desc());
         query = groupByPost(query);
-        query = applyPaginator(query, pageable);
+        query = applyPaginatorPageOnly(query, pageable);
 
         Long totalElements = getPostTotalElements(predicate);
 
@@ -452,7 +452,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return queryCount.fetchCount();
     }
 
-    private JPAQuery<Post> applyPaginator (JPAQuery<Post> query, Pageable pageable) {
+    private JPAQuery<Post> applyPaginatorPageOnly(JPAQuery<Post> query, Pageable pageable) {
         return query.offset(pageable.getOffset()).limit(pageable.getPageSize());
     }
 
