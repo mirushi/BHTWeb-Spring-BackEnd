@@ -3,6 +3,7 @@ package com.bhtcnpm.website.model.dto.UserWebsite;
 import com.bhtcnpm.website.model.entity.DocCommentEntities.report.UserDocCommentReport;
 import com.bhtcnpm.website.model.entity.DocEntities.report.UserDocReport;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.UserExerciseReport;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.report.UserExerciseCommentReport;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.UserPostCommentReport;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostReport;
 import com.bhtcnpm.website.model.entity.UserWebsite;
@@ -61,6 +62,14 @@ public interface UserMapper {
         return userWebsiteListToUserSummaryDTOList(
                 userDocCommentReportList.stream()
                 .map(obj -> obj.getUserDocCommentReportId().getUser())
+                .collect(Collectors.toList())
+        );
+    }
+
+    default List<UserSummaryDTO> userExerciseCommentReportListToUserSummaryDTOList (List<UserExerciseCommentReport> userExerciseCommentReportList) {
+        return userWebsiteListToUserSummaryDTOList(
+                userExerciseCommentReportList.stream()
+                .map(obj -> obj.getUserExerciseCommentReportId().getUser())
                 .collect(Collectors.toList())
         );
     }

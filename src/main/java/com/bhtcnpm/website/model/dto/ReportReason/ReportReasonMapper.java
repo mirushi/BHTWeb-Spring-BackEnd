@@ -7,6 +7,8 @@ import com.bhtcnpm.website.model.entity.DocEntities.report.DocReportReason;
 import com.bhtcnpm.website.model.entity.DocEntities.report.UserDocReport;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseReportReason;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.UserExerciseReport;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.report.ExerciseCommentReportReason;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.report.UserExerciseCommentReport;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.PostCommentReportReason;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.UserPostCommentReport;
 import com.bhtcnpm.website.model.entity.PostEntities.PostReportReason;
@@ -59,6 +61,23 @@ public interface ReportReasonMapper {
     ReportReasonDTO docCommentReportToReportReasonDTO (DocCommentReportReason docCommentReportReason);
 
     Set<ReportReasonDTO> docCommentReportReasonListToReportReasonDTOsSet (List<DocCommentReportReason> docCommentReportReasons);
+
+    @Mapping(target = "id", source = "exerciseCommentReportReason.exerciseCommentReportReasonId.reportReason.id")
+    @Mapping(target = "reason", source = "exerciseCommentReportReason.exerciseCommentReportReasonId.reportReason.reason")
+    ReportReasonDTO exerciseCommentReportToReportReasonDTO (ExerciseCommentReportReason exerciseCommentReportReason);
+
+    Set<ReportReasonDTO> exerciseCommentReportReasonListToReportReasonDTOsSet (List<ExerciseCommentReportReason> exerciseCommentReportReasons);
+
+    default Set<ReportReasonDTO> userExerciseCommentReportToReportReasonDTO (List<UserExerciseCommentReport> userExerciseCommentReportList) {
+        Set<ReportReasonDTO> finalResult = new HashSet<>();
+
+        for (UserExerciseCommentReport uecr : userExerciseCommentReportList) {
+            Set<ReportReasonDTO> reportReasonDTOs = exerciseCommentReportReasonListToReportReasonDTOsSet(uecr.getReasons());
+            finalResult.addAll(reportReasonDTOs);
+        }
+
+        return finalResult;
+    }
 
     default Set<ReportReasonDTO> userDocCommentReportToReportReasonDTO (List<UserDocCommentReport> userDocCommentReportList) {
         Set<ReportReasonDTO> finalResult = new HashSet<>();

@@ -16,6 +16,12 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@NamedEntityGraph(
+        name = "exerciseCommentReport.all",
+        attributeNodes = {
+                @NamedAttributeNode(value = "userExerciseCommentReports")
+        }
+)
 public class ExerciseCommentReport {
     @Id
     @GeneratedValue(
