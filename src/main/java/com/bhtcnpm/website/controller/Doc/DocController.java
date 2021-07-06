@@ -44,9 +44,13 @@ public class DocController {
     @ResponseBody
     public ResponseEntity<DocSummaryListDTO> getAllDocuments (
             @QuerydslPredicate(root = Doc.class) Predicate predicate,
+            @RequestParam(value = "mostLiked", required = false) boolean mostLiked,
+            @RequestParam(value = "mostViewed", required = false) boolean mostViewed,
+            @RequestParam(value = "mostDownloaded", required = false) boolean mostDownloaded,
             @PageableDefault @Nullable Pageable pageable,
             Authentication authentication) {
-        DocSummaryListDTO result = docService.getAllDoc(predicate, pageable, authentication);
+        DocSummaryListDTO result = docService.getAllDoc(predicate, pageable,
+                mostLiked, mostViewed, mostDownloaded, authentication);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

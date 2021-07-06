@@ -36,6 +36,7 @@ import com.bhtcnpm.website.service.GoogleDriveService;
 import com.bhtcnpm.website.service.Post.PostService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.bhtcnpm.website.util.EnumConverter;
+import com.bhtcnpm.website.util.ValidationUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -107,17 +108,31 @@ public class DocServiceImpl implements DocService {
 
     private final ExerciseService exerciseService;
 
-    public DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication) {
+    @Override
+    public DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable,boolean mostLiked, boolean mostViewed, boolean mostDownloaded, Authentication authentication) {
+
+        ValidationUtils.assertAtMostOneParamIsTrue(mostLiked, mostViewed, mostDownloaded);
 
         //Create a pagable.
         pageable = PaginatorUtils.getPageableWithNewPageSizeAndMoreSort(pageable, PAGE_SIZE, Sort.by("publishDtm").descending());
 
         BooleanExpression publicDocFilter = DocPredicateGenerator.getBooleanExpressionOnBusinessState(DocBusinessState.PUBLIC);
         BooleanExpression authorizationFilter = DocPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
+        BooleanExpression finalPredicate = authorizationFilter.and(publicDocFilter).and(predicate);
 
-        Page<Doc> queryResult = docRepository.findAll(publicDocFilter.and(authorizationFilter).and(predicate), pageable);
+        Page<Doc> queryResult;
 
-        List<DocSummaryDTO> docSummaryDTOs= StreamSupport
+        if (mostLiked) {
+            queryResult = docRepository.getDocOrderByLikeCountDESC(finalPredicate, pageable);
+        } else if (mostViewed) {
+            queryResult = docRepository.getDocOrderByViewCountDESC(finalPredicate, pageable);
+        } else if (mostDownloaded) {
+            queryResult = docRepository.getDocOrderByDownloadCountDESC(finalPredicate, pageable);
+        } else {
+            queryResult = docRepository.findAll(finalPredicate, pageable);
+        }
+
+        List<DocSummaryDTO> docSummaryDTOs = StreamSupport
                 .stream(queryResult.spliterator(), false)
                 .map(docSummaryMapper::docToDocSummaryDTO)
                 .collect(Collectors.toList());
@@ -301,7 +316,7 @@ public class DocServiceImpl implements DocService {
         if (page == null) {
             page = 0;
         }
-        assertExactlyOneParamIsNotNull(postID, docID, exerciseID);
+        ValidationUtils.assertExactlyOneParamIsNotNull(postID, docID, exerciseID);
 
         Long currentDocID = null;
         String title = null;
@@ -545,23 +560,4 @@ public class DocServiceImpl implements DocService {
         );
         return dtoList;
     }
-
-    private void assertExactlyOneParamIsNotNull(Object... params) {
-        final String multipleParamViolation = "Only one param is allowed at a time.";
-        final String noParamViolation = "Exactly one param must not be null.";
-
-        boolean isNotNullParamExist = false;
-        for (int i=0; i<params.length; ++i) {
-            Object currentParam = params[i];
-            if (currentParam != null && isNotNullParamExist) {
-                throw new IllegalArgumentException(multipleParamViolation);
-            } else if (currentParam != null) {
-                isNotNullParamExist = true;
-            }
-        }
-        if (!isNotNullParamExist) {
-            throw new IllegalArgumentException(noParamViolation);
-        }
-    }
-
 }

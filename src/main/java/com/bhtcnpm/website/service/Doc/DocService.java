@@ -20,7 +20,7 @@ import java.util.UUID;
 public interface DocService {
 
     @PreAuthorize(value = "permitAll()")
-    DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication);
+    DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable,boolean mostLiked, boolean mostViewed, boolean mostDownloaded, Authentication authentication);
 
     @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.DocPermissionConstant).DOC_UNLISTED_ALL_READ)")
     DocDetailsWithStateListDTO getAllPendingApprovalDoc (
