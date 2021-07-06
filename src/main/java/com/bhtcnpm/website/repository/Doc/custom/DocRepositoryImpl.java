@@ -295,9 +295,9 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 .from(qDoc)
                 .leftJoin(qDocView).on(qDoc.id.eq(qDocView.doc.id))
                 .where(predicate)
-                .groupBy(qDoc.id, qDoc.author.id, qDoc.lastEditedUser.id, qDoc.category.id, qDoc.subject.id, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.submitDtm, qDoc.lastUpdatedDtm, qDoc.title, qDoc.docState, qDoc.deletedDtm, qDoc.version)
-                .orderBy(qDocView.id.countDistinct().desc())
-                .offset(pageable.getOffset()).limit(pageable.getPageSize());
+                .orderBy(qDocView.id.countDistinct().desc());
+        query = groupByDoc(query);
+        query = applyPaginatorPageOnly(query, pageable);
 
         Long totalElements = getDocTotalElements(predicate);
 
@@ -321,9 +321,9 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 .from(qDoc)
                 .leftJoin(qUserDocReaction).on(qUserDocReaction.userDocReactionId.doc.id.eq(qDoc.id))
                 .where(predicate)
-                .groupBy(qDoc.id, qDoc.author.id, qDoc.lastEditedUser.id, qDoc.category.id, qDoc.subject.id, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.submitDtm, qDoc.lastUpdatedDtm, qDoc.title, qDoc.docState, qDoc.deletedDtm, qDoc.version)
-                .orderBy(countLikeOnly.sum().subtract(countDislikeOnly.sum()).desc())
-                .offset(pageable.getOffset()).limit(pageable.getPageSize());
+                .orderBy(countLikeOnly.sum().subtract(countDislikeOnly.sum()).desc());
+        query = groupByDoc(query);
+        query = applyPaginatorPageOnly(query, pageable);
 
         long totalElements = getDocTotalElements(predicate);
 
@@ -338,9 +338,9 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 .leftJoin(qDocFileUpload).on(qDoc.id.eq(qDocFileUpload.doc.id))
                 .leftJoin(qDocDownload).on(qDocFileUpload.id.eq(qDocDownload.docFileUpload.id))
                 .where(predicate)
-                .groupBy(qDoc.id, qDoc.author.id, qDoc.lastEditedUser.id, qDoc.category.id, qDoc.subject.id, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.submitDtm, qDoc.lastUpdatedDtm, qDoc.title, qDoc.docState, qDoc.deletedDtm, qDoc.version)
-                .orderBy(qDocDownload.id.countDistinct().desc())
-                .offset(pageable.getOffset()).limit(pageable.getPageSize());
+                .orderBy(qDocDownload.id.countDistinct().desc());
+        query = groupByDoc(query);
+        query = applyPaginatorPageOnly(query, pageable);
 
         Long totalElements = getDocTotalElements(predicate);
 
@@ -479,5 +479,14 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 .from(qDoc)
                 .where(predicate);
         return queryCount.fetchCount();
+    }
+
+    //Workaround for buggy groupBy implementation of QueryDSL.
+    private JPAQuery<Doc> groupByDoc (JPAQuery<Doc> query) {
+        return query.groupBy(qDoc.id, qDoc.author.id, qDoc.lastEditedUser.id, qDoc.category.id, qDoc.subject.id, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.submitDtm, qDoc.lastUpdatedDtm, qDoc.title, qDoc.docState, qDoc.deletedDtm, qDoc.version);
+    }
+
+    private JPAQuery<Doc> applyPaginatorPageOnly (JPAQuery<Doc> query, Pageable pageable) {
+        return query.offset(pageable.getOffset()).limit(pageable.getPageSize());
     }
 }
