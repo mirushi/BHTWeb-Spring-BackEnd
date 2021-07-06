@@ -4,7 +4,6 @@ import com.bhtcnpm.website.model.dto.Doc.DocFileUploadDTO;
 import com.bhtcnpm.website.model.dto.ReportReason.ReportReasonDTO;
 import com.bhtcnpm.website.model.dto.Tag.TagDTO;
 import com.bhtcnpm.website.model.dto.UserWebsite.UserSummaryDTO;
-import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.enumeration.DocReport.DocReportActionType;
 import lombok.Value;
 

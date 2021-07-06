@@ -1,5 +1,7 @@
 package com.bhtcnpm.website.model.dto.ReportReason;
 
+import com.bhtcnpm.website.model.entity.DocCommentEntities.report.DocCommentReportReason;
+import com.bhtcnpm.website.model.entity.DocCommentEntities.report.UserDocCommentReport;
 import com.bhtcnpm.website.model.entity.DocEntities.report.DocReport;
 import com.bhtcnpm.website.model.entity.DocEntities.report.DocReportReason;
 import com.bhtcnpm.website.model.entity.DocEntities.report.UserDocReport;
@@ -51,6 +53,23 @@ public interface ReportReasonMapper {
     ReportReasonDTO docReportReasonToReportReasonDTO (DocReportReason docReportReason);
 
     Set<ReportReasonDTO> docReportReasonListToReportReasonDTOsSet (List<DocReportReason> docReportReasons);
+
+    @Mapping(target = "id", source = "docCommentReportReason.docCommentReportReasonId.reportReason.id")
+    @Mapping(target = "reason", source = "docCommentReportReason.docCommentReportReasonId.reportReason.reason")
+    ReportReasonDTO docCommentReportToReportReasonDTO (DocCommentReportReason docCommentReportReason);
+
+    Set<ReportReasonDTO> docCommentReportReasonListToReportReasonDTOsSet (List<DocCommentReportReason> docCommentReportReasons);
+
+    default Set<ReportReasonDTO> userDocCommentReportToReportReasonDTO (List<UserDocCommentReport> userDocCommentReportList) {
+        Set<ReportReasonDTO> finalResult = new HashSet<>();
+
+        for (UserDocCommentReport udcr : userDocCommentReportList) {
+            Set<ReportReasonDTO> reportReasonDTOs = docCommentReportReasonListToReportReasonDTOsSet(udcr.getReasons());
+            finalResult.addAll(reportReasonDTOs);
+        }
+
+        return finalResult;
+    }
 
     default Set<ReportReasonDTO> userPostReportToReportReasonDTO (List<UserPostReport> userPostReportList) {
         Set<ReportReasonDTO> finalResult = new HashSet<>();

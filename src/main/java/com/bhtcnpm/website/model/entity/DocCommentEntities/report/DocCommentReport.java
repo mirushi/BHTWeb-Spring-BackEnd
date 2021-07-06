@@ -16,6 +16,12 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@NamedEntityGraph(
+        name = "docCommentReport.all",
+        attributeNodes = {
+                @NamedAttributeNode(value = "userDocCommentReports")
+        }
+)
 public class DocCommentReport {
     @Id
     @GeneratedValue(
