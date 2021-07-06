@@ -44,7 +44,7 @@ public interface DocRepositoryCustom {
                                                           SortOrder sortByCreatedDtm,
                                                           Authentication authentication);
 
-    DocSummaryWithStateListDTO getMyDocSummaryWithStateList (String searchTerm,
+    DocSummaryWithStateAndFeedbackListDTO getMyDocSummaryWithStateList (String searchTerm,
                                                              String tagContent,
                                                              Long categoryID,
                                                              Long subjectID,

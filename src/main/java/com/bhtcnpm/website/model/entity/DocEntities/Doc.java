@@ -106,6 +106,10 @@ public class Doc {
     )
     private String description;
 
+    @Lob
+    @Column(columnDefinition = "text")
+    private String adminFeedback;
+
     @OneToMany(
             mappedBy = "doc",
             cascade = CascadeType.ALL,

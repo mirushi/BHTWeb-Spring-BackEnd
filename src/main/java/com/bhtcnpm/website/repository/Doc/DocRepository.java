@@ -28,6 +28,12 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
             "WHERE d.id = :docID")
     int setDocState (Long docID, DocStateType docState);
 
+    @Modifying
+    @Query(value = "UPDATE Doc as d " +
+            "SET d.docState = :docStateType, d.adminFeedback = :feedback " +
+            "WHERE d.id = :docID")
+    int setDocStateAndFeedback (Long docID, DocStateType docStateType, String feedback);
+
     @Query(nativeQuery = true, value = "SELECT d.ID AS id, COUNT(DISTINCT dc.ID) as commentCount, " +
             "COUNT(DISTINCT CASE WHEN reaction.DOC_REACTION_TYPE = 0 THEN reaction.USER_ID END) AS likeCount, " +
             "COUNT(DISTINCT CASE WHEN reaction.DOC_REACTION_TYPE = 1 THEN reaction.USER_ID END) AS dislikeCount, " +

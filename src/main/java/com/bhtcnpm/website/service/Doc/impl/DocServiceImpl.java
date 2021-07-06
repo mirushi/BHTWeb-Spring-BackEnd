@@ -157,7 +157,7 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocSummaryWithStateListDTO getMyDocuments(String searchTerm,
+    public DocSummaryWithStateAndFeedbackListDTO getMyDocuments(String searchTerm,
                                             Long categoryID,
                                             Long subjectID,
                                             DocStateType docState,
@@ -167,7 +167,7 @@ public class DocServiceImpl implements DocService {
                                             Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
-        DocSummaryWithStateListDTO dtoList = docRepository.getMyDocSummaryWithStateList(
+        DocSummaryWithStateAndFeedbackListDTO dtoList = docRepository.getMyDocSummaryWithStateList(
                 searchTerm,
                 null,
                 categoryID,
@@ -243,6 +243,18 @@ public class DocServiceImpl implements DocService {
     @Override
     public Boolean docReject(Long docID, Authentication authentication) {
         int rowChanged = docRepository.setDocState(docID, DocStateType.REJECTED);
+        if (rowChanged == 1) {
+            docRepository.indexDoc(docID);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Boolean rejectDocWithFeedback(Long docID, String feedback) {
+        int rowChanged = docRepository.setDocStateAndFeedback(docID, DocStateType.PENDING_FIX, feedback);
+
         if (rowChanged == 1) {
             docRepository.indexDoc(docID);
             return true;

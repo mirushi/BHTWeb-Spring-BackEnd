@@ -200,7 +200,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     }
 
     @Override
-    public DocSummaryWithStateListDTO getMyDocSummaryWithStateList (String searchTerm,
+    public DocSummaryWithStateAndFeedbackListDTO getMyDocSummaryWithStateList (String searchTerm,
                                                                     String tagContent,
                                                                     Long categoryID,
                                                                     Long subjectID,
@@ -230,13 +230,13 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
 
         Integer totalPages = (int)Math.ceil((double)resultCount / pageSize);
 
-        List<DocSummaryWithStateDTO> docSummaryDTOs = docSummaryMapper.docListToDocSummaryWithStateDTOList(searchResult.hits());
+        List<DocSummaryWithStateAndFeedbackDTO> docSummaryDTOs = docSummaryMapper.docListToDocSummaryWithStateAndFeedbackDTOList(searchResult.hits());
 
-        DocSummaryWithStateListDTO finalResult = new DocSummaryWithStateListDTO(
-                docSummaryDTOs,
-                totalPages,
-                resultCount
-        );
+        DocSummaryWithStateAndFeedbackListDTO finalResult = DocSummaryWithStateAndFeedbackListDTO.builder()
+                .docSummaryWithStateAndFeedbackDTOs(docSummaryDTOs)
+                .totalElements(resultCount)
+                .totalPages(totalPages)
+                .build();
 
         return finalResult;
     }
@@ -480,5 +480,4 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 .where(predicate);
         return queryCount.fetchCount();
     }
-
 }

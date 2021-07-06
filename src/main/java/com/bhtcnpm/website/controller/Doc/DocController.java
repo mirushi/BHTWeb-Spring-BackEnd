@@ -89,7 +89,7 @@ public class DocController {
 
     @GetMapping("myDocuments")
     @ResponseBody
-    public ResponseEntity<DocSummaryWithStateListDTO> getMyDocuments (
+    public ResponseEntity<DocSummaryWithStateAndFeedbackListDTO> getMyDocuments (
             @RequestParam(value = "searchTerm", required = false) String searchTerm,
             @RequestParam(value = "subjectID", required = false) Long subjectID,
             @RequestParam(value = "categoryID", required = false) Long categoryID,
@@ -99,7 +99,7 @@ public class DocController {
             @RequestParam(value = "sortByCreatedDtm", required = false) ApiSortOrder sortByCreatedDtm,
             Authentication authentication
     ) {
-        DocSummaryWithStateListDTO result = docService.getMyDocuments(
+        DocSummaryWithStateAndFeedbackListDTO result = docService.getMyDocuments(
                 searchTerm,
                 categoryID,
                 subjectID,
@@ -181,6 +181,20 @@ public class DocController {
     public ResponseEntity rejectDoc (@PathVariable Long id,
                                      Authentication authentication) {
         Boolean result = docService.docReject(id, authentication);
+
+        if (result) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/{id}/rejectionWithFeedback")
+    @ResponseBody
+    public ResponseEntity postRejectionWithFeedback (@PathVariable @DocID Long id,
+                                                     @RequestBody String feedback,
+                                                     Authentication authentication) {
+        Boolean result = docService.rejectDocWithFeedback(id, feedback);
 
         if (result) {
             return new ResponseEntity(HttpStatus.OK);

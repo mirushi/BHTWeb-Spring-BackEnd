@@ -30,7 +30,7 @@ public interface DocService {
     );
 
     @PreAuthorize(value = "isAuthenticated()")
-    DocSummaryWithStateListDTO getMyDocuments (String searchTerm,
+    DocSummaryWithStateAndFeedbackListDTO getMyDocuments (String searchTerm,
                                                Long categoryID,
                                                Long subjectID,
                                                DocStateType docState,
@@ -60,6 +60,11 @@ public interface DocService {
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).APPROVE_PERMISSION)")
     Boolean docReject(Long docID, Authentication authentication);
+
+    @PreAuthorize(value = "hasPermission(#docID, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
+            "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).APPROVE_PERMISSION)")
+    Boolean rejectDocWithFeedback (Long docID, String feedback);
 
     @PreAuthorize(value = "hasPermission(#docID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +

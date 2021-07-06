@@ -384,14 +384,13 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .from(qPost)
                 .leftJoin(qPostView).on(qPost.id.eq(qPostView.post.id))
                 .where(predicate)
-                .groupBy(qPost.id)
                 .orderBy(qPostView.id.countDistinct().desc());
+        query = groupByPost(query);
+        query = applyPaginator(query, pageable);
 
-        Long totalElements = query.fetchCount();
+        Long totalElements = getPostTotalElements(predicate);
 
-        JPQLQuery<Post> finalQuery = querydsl.applyPagination(pageable, query);
-
-        return new PageImpl<>(finalQuery.fetch(), pageable, totalElements);
+        return new PageImpl<>(query.fetch(), pageable, totalElements);
     }
 
     @Override
@@ -401,14 +400,13 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .from(qPost)
                 .leftJoin(qUserPostLike).on(qUserPostLike.userPostLikeId.post.id.eq(qPost.id))
                 .where(predicate)
-                .groupBy(qPost.id)
                 .orderBy(qUserPostLike.userPostLikeId.user.id.countDistinct().desc());
+        query = groupByPost(query);
+        query = applyPaginator(query, pageable);
 
-        Long totalElements = query.fetchCount();
+        Long totalElements = getPostTotalElements(predicate);
 
-        JPQLQuery<Post> finalQuery = querydsl.applyPagination(pageable, query);
-
-        return new PageImpl<>(finalQuery.fetch(), pageable, totalElements);
+        return new PageImpl<>(query.fetch(), pageable, totalElements);
     }
 
     private SearchScope<Post> getSearchScope () {return searchSession.scope(Post.class);}
@@ -446,4 +444,19 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         luceneIndexReader.close();
     }
 
+    private long getPostTotalElements (Predicate predicate) {
+        JPAQuery<Long> queryCount = new JPAQuery<>(em)
+                .select(qPost.id)
+                .from(qPost)
+                .where(predicate);
+        return queryCount.fetchCount();
+    }
+
+    private JPAQuery<Post> applyPaginator (JPAQuery<Post> query, Pageable pageable) {
+        return query.offset(pageable.getOffset()).limit(pageable.getPageSize());
+    }
+
+    private JPAQuery<Post> groupByPost (JPAQuery<Post> query) {
+        return query.groupBy(qPost.id, qPost.title, qPost.summary, qPost.imageURL, qPost.submitDtm, qPost.publishDtm, qPost.lastUpdatedDtm, qPost.lastUpdatedBy.id, qPost.readingTime, qPost.content, qPost.contentPlainText, qPost.adminFeedback, qPost.author.id, qPost.category.id, qPost.postState, qPost.deletedDate, qPost.deletedBy.id);
+    }
 }
