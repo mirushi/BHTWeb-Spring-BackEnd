@@ -16,6 +16,12 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@NamedEntityGraph(
+        name = "docReport.all",
+        attributeNodes = {
+                @NamedAttributeNode(value = "userDocReports")
+        }
+)
 public class DocReport {
     @Id
     @GeneratedValue(
@@ -57,7 +63,7 @@ public class DocReport {
 
     @Enumerated
     @Column(columnDefinition = "smallint")
-    private DocReportActionType actionType;
+    private DocReportActionType actionTaken;
 
     @Override
     public boolean equals (Object o) {

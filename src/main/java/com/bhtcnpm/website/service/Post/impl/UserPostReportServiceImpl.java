@@ -129,7 +129,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
 
     @Override
     public Boolean resolveReport (Long reportId, @Valid UserPostReportResolveRequestDTO dto, Authentication authentication) throws IDNotFoundException {
-        UUID userID = SecurityUtils.getUserID(authentication);
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
         Optional<PostReport> report = postReportRepository.findById(reportId);
         UserWebsite resolver = userWebsiteRepository.getOne(userID);

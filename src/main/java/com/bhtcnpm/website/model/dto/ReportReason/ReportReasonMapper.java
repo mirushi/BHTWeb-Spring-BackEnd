@@ -1,5 +1,8 @@
 package com.bhtcnpm.website.model.dto.ReportReason;
 
+import com.bhtcnpm.website.model.entity.DocEntities.report.DocReport;
+import com.bhtcnpm.website.model.entity.DocEntities.report.DocReportReason;
+import com.bhtcnpm.website.model.entity.DocEntities.report.UserDocReport;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseReportReason;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.UserExerciseReport;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.PostCommentReportReason;
@@ -43,6 +46,12 @@ public interface ReportReasonMapper {
 
     Set<ReportReasonDTO> exerciseReportReasonListToReportReasonDTOsSet (List<ExerciseReportReason> exerciseReportReasons);
 
+    @Mapping(target = "id", source = "docReportReason.docReportReasonId.reportReason.id")
+    @Mapping(target = "reason", source = "docReportReason.docReportReasonId.reportReason.reason")
+    ReportReasonDTO docReportReasonToReportReasonDTO (DocReportReason docReportReason);
+
+    Set<ReportReasonDTO> docReportReasonListToReportReasonDTOsSet (List<DocReportReason> docReportReasons);
+
     default Set<ReportReasonDTO> userPostReportToReportReasonDTO (List<UserPostReport> userPostReportList) {
         Set<ReportReasonDTO> finalResult = new HashSet<>();
 
@@ -70,6 +79,17 @@ public interface ReportReasonMapper {
 
         for (UserExerciseReport uer : userExerciseReportList) {
             Set<ReportReasonDTO> reportReasonDTOs = exerciseReportReasonListToReportReasonDTOsSet(uer.getReasons());
+            finalResult.addAll(reportReasonDTOs);
+        }
+
+        return finalResult;
+    }
+
+    default Set<ReportReasonDTO> docReportToReportReasonDTO (List<UserDocReport> docReportList) {
+        Set<ReportReasonDTO> finalResult = new HashSet<>();
+
+        for (UserDocReport dr : docReportList) {
+            Set<ReportReasonDTO> reportReasonDTOs = docReportReasonListToReportReasonDTOsSet(dr.getReasons());
             finalResult.addAll(reportReasonDTOs);
         }
 
