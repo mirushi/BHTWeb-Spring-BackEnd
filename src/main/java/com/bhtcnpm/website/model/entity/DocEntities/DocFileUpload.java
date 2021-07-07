@@ -6,6 +6,9 @@ import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocFileUpload.DocFileUploadHostType;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Loader;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,6 +22,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE doc_file_upload SET DELETED_DTM = CURRENT_TIMESTAMP() WHERE id = ?")
+@Where(clause = "DELETED_DTM is NULL")
 public class DocFileUpload {
     @Id
     @Column(columnDefinition = "uuid",
@@ -62,6 +67,9 @@ public class DocFileUpload {
     @ManyToOne
     @JoinColumn
     private Doc doc;
+
+    @Column(name = "deleted_dtm")
+    private LocalDateTime deletedDtm;
 
     @Override
     public boolean equals (Object o) {
