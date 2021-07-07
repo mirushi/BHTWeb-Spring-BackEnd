@@ -2,6 +2,7 @@ package com.bhtcnpm.website.service.Post;
 
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.model.validator.dto.Pagination;
 import com.bhtcnpm.website.model.validator.dto.Post.PostActionRequestSize;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -53,6 +55,10 @@ public interface PostService {
 
     @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.PostPermissionConstant).POST_PENDING_SELF_CREATE)")
     PostDetailsDTO createPost (@Valid PostRequestDTO postRequestDTO, Authentication authentication);
+
+    //TODO: Implement permission here.
+    @PreAuthorize(value = "isAuthenticated()")
+    String uploadImage (MultipartFile multipartFile, Authentication authentication) throws FileExtensionNotAllowedException, IOException;
 
     @PreAuthorize(value = "hasPermission(#postID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).POST_OBJECT, " +

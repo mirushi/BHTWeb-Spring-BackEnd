@@ -5,11 +5,13 @@ import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest;
 import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest;
+import com.bhtcnpm.website.model.dto.AWS.AmazonS3ResultDTO;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
 import com.bhtcnpm.website.repository.Post.PostRepository;
@@ -20,9 +22,11 @@ import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.evaluator.Post.PostPermissionEvaluator;
 import com.bhtcnpm.website.security.predicate.Post.PostPredicateGenerator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
+import com.bhtcnpm.website.service.FileUploadService;
 import com.bhtcnpm.website.service.Post.PostService;
 import com.bhtcnpm.website.service.Post.PostViewService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
+import com.bhtcnpm.website.util.FileUploadUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +38,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,6 +66,8 @@ public class PostServiceImpl implements PostService {
     private final PostPermissionEvaluator postPermissionEvaluator;
 
     private final PostViewService postViewService;
+
+    private final FileUploadService fileUploadService;
 
     private final ExerciseRepository exerciseRepository;
 
@@ -188,6 +195,19 @@ public class PostServiceImpl implements PostService {
         post = postRepository.save(post);
 
         return postMapper.postToPostDetailsDTO(post);
+    }
+
+    @Override
+    public String uploadImage(MultipartFile multipartFile, Authentication authentication) throws FileExtensionNotAllowedException, IOException {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        String key = FileUploadUtils.getS3PostImageURLUploadKey(userID, multipartFile);
+
+        AmazonS3ResultDTO result = fileUploadService.uploadImageToS3(key, multipartFile);
+
+        String imageURL = result.getDirectURL();
+
+        return imageURL;
     }
 
     @Override

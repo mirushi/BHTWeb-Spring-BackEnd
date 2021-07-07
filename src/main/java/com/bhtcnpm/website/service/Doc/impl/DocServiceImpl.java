@@ -1,11 +1,13 @@
 package com.bhtcnpm.website.service.Doc.impl;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
 import com.bhtcnpm.website.constant.business.Doc.DocActionAvailableConstant;
 import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest;
 import com.bhtcnpm.website.constant.sort.ApiSortOrder;
+import com.bhtcnpm.website.model.dto.AWS.AmazonS3ResultDTO;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.dto.Doc.mapper.*;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
@@ -32,10 +34,12 @@ import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Doc.DocFileUploadService;
 import com.bhtcnpm.website.service.Doc.DocService;
 import com.bhtcnpm.website.service.Exercise.ExerciseService;
+import com.bhtcnpm.website.service.FileUploadService;
 import com.bhtcnpm.website.service.GoogleDriveService;
 import com.bhtcnpm.website.service.Post.PostService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.bhtcnpm.website.util.EnumConverter;
+import com.bhtcnpm.website.util.FileUploadUtils;
 import com.bhtcnpm.website.util.ValidationUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -101,6 +105,8 @@ public class DocServiceImpl implements DocService {
     private final UserWebsiteRepository userWebsiteRepository;
 
     private final DocFileUploadService docFileUploadService;
+
+    private final FileUploadService fileUploadService;
 
     private final DocPermissionEvaluator docPermissionEvaluator;
 
@@ -391,6 +397,19 @@ public class DocServiceImpl implements DocService {
         doc = docRepository.save(doc);
 
         return docDetailsMapper.docToDocDetailsDTO(doc);
+    }
+
+    @Override
+    public String uploadImage(MultipartFile multipartFile, Authentication authentication) throws FileExtensionNotAllowedException, IOException {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        String key = FileUploadUtils.getS3DocImageURLUploadKey(userID, multipartFile);
+
+        AmazonS3ResultDTO result = fileUploadService.uploadImageToS3(key, multipartFile);
+
+        String imageURL = result.getDirectURL();
+
+        return imageURL;
     }
 
     @Override

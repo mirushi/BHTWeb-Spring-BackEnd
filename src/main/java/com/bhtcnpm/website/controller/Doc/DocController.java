@@ -299,6 +299,15 @@ public class DocController {
         return new ResponseEntity<>(docDetailsDTO, HttpStatus.OK);
     }
 
+    @PostMapping("image")
+    @ResponseBody
+    public ResponseEntity<String> uploadImage (@RequestParam("file") MultipartFile file,
+                                               Authentication authentication) throws FileExtensionNotAllowedException, IOException {
+        String imageURL = docService.uploadImage(file, authentication);
+
+        return new ResponseEntity<>(imageURL, HttpStatus.OK);
+    }
+
     @GetMapping("searchFilter")
     @ResponseBody
     public ResponseEntity<DocSummaryListDTO> searchFilter (

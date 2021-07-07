@@ -100,6 +100,10 @@ public interface DocService {
     @PreAuthorize(value = "hasRole(T(com.bhtcnpm.website.constant.security.permission.DocPermissionConstant).DOC_PENDING_SELF_CREATE)")
     DocDetailsDTO createDoc (DocRequestDTO docRequestDTO, Authentication authentication);
 
+    //TODO: Implement permission here.
+    @PreAuthorize(value = "isAuthenticated()")
+    String uploadImage (MultipartFile multipartFile, Authentication authentication) throws FileExtensionNotAllowedException, IOException;
+
     @PreAuthorize(value = "hasPermission(#docID, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.ObjectTypeConstant).DOC_OBJECT, " +
             "T(com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest).DELETE_PERMISSION)")

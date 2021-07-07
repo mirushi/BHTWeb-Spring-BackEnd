@@ -4,6 +4,7 @@ import com.bhtcnpm.website.model.binding.IgnorePostStateTypeBinding;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.model.validator.dto.Pagination;
 import com.bhtcnpm.website.model.validator.dto.Post.PostActionRequestSize;
@@ -23,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
@@ -89,6 +91,15 @@ public class PostController {
         PostDetailsDTO detailsDTO = postService.createPost(postRequestDTO, authentication);
 
         return new ResponseEntity<>(detailsDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("image")
+    @ResponseBody
+    public ResponseEntity<String> uploadImage (@RequestParam("file")MultipartFile file,
+                                               Authentication authentication) throws FileExtensionNotAllowedException, IOException {
+        String imageURL = postService.uploadImage(file, authentication);
+
+        return new ResponseEntity<>(imageURL, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

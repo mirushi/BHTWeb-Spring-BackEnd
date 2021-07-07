@@ -1,15 +1,19 @@
 package com.bhtcnpm.website.controller.UserWebsite;
 
 import com.bhtcnpm.website.model.dto.UserWebsite.*;
+import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,6 +66,15 @@ public class UserWebsiteController {
         return new ResponseEntity<>(userDetailsDTO, HttpStatus.OK);
     }
 
+    @PutMapping("/avatarImage")
+    @ResponseBody
+    public ResponseEntity<UserDetailsDTO> putUserAvatarImage (@RequestParam("file")MultipartFile file,
+                                              Authentication authentication) throws IOException, FileExtensionNotAllowedException {
+        UserDetailsDTO userDetailsDTO = userWebsiteService.putUserAvatarImage(file, authentication);
+
+        return new ResponseEntity<>(userDetailsDTO, HttpStatus.OK);
+    }
+
     @PutMapping("/{id}/details")
     @ResponseBody
     public ResponseEntity<UserDetailsDTO> putUserDetailsSpecific (@PathVariable("id") UUID userID,
@@ -79,5 +92,4 @@ public class UserWebsiteController {
 
         return new ResponseEntity<>(availableActionDTOs, HttpStatus.OK);
     }
-
 }
