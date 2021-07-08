@@ -42,7 +42,7 @@ public class DocCommentReportController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping("/documents/comments/report")
+    @GetMapping("/documents/comments/report")
     @ResponseBody
     public ResponseEntity<DocCommentReportListDTO> getUserReports (@PageableDefault @Nullable Pageable pageable,
                                                                    @Nullable Boolean isResolvedReport) {

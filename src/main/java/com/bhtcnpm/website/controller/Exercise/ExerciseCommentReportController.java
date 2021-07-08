@@ -42,7 +42,7 @@ public class ExerciseCommentReportController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping("/exercises/comments/report")
+    @GetMapping("/exercises/comments/report")
     @ResponseBody
     public ResponseEntity<ExerciseCommentReportListDTO> getUserReports (@PageableDefault @Nullable Pageable pageable,
                                                                         @Nullable Boolean isResolvedReport) {
