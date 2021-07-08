@@ -202,8 +202,9 @@ public class DocServiceImpl implements DocService {
             }
         }
 
-        List<DocFileUpload> fileUploadList = docFileUploadService.getFileUploadOwnerOnly(
+        List<DocFileUpload> fileUploadList = docFileUploadService.filterFileUploadForDoc(
                 docRequestDTO.getDocFileUploadRequestDTOs().stream().map(DocFileUploadRequestDTO::getId).collect(Collectors.toList()),
+                (oldDoc != null) ? (oldDoc.getId()) : (null),
                 authentication
         );
         fileUploadList = docFileUploadMapper.updateDocFileUpload(fileUploadList, docRequestDTO.getDocFileUploadRequestDTOs());
@@ -386,8 +387,9 @@ public class DocServiceImpl implements DocService {
     public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
-        List<DocFileUpload> fileUploadList = docFileUploadService.getFileUploadOwnerOnly(
+        List<DocFileUpload> fileUploadList = docFileUploadService.filterFileUploadForDoc(
                 docRequestDTO.getDocFileUploadRequestDTOs().stream().map(DocFileUploadRequestDTO::getId).collect(Collectors.toList()),
+                null,
                 authentication
         );
         fileUploadList = docFileUploadMapper.updateDocFileUpload(fileUploadList, docRequestDTO.getDocFileUploadRequestDTOs());

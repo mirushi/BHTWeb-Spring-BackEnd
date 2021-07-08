@@ -20,12 +20,12 @@ public class DocFileUploadServiceImpl implements DocFileUploadService {
     private final DocFileUploadRepository docFileUploadRepository;
 
     @Override
-    public List<DocFileUpload> getFileUploadOwnerOnly(List<UUID> docFileIDList, Authentication authentication) {
+    public List<DocFileUpload> filterFileUploadForDoc (List<UUID> docFileIDList, Long docID, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
-        List<DocFileUpload> fileUploadList = docFileUploadRepository.findAllByIdInAndUploaderId(docFileIDList, userID);
+        List<DocFileUpload> fileUploadList = docFileUploadRepository.filterDocFileUpload(docFileIDList, docID, userID);
         if (fileUploadList.size() != docFileIDList.size()){
-            throw new IllegalArgumentException("Some of the file(s) could not be found or not yours.");
+            throw new IllegalArgumentException("Some of the file(s) could not be found, not yours or has already been assigned to other Doc.");
         }
 
         return fileUploadList;
