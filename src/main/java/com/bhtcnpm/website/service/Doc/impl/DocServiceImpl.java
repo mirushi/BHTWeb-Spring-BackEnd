@@ -19,7 +19,9 @@ import com.bhtcnpm.website.model.entity.DocEntities.UserDocSaveId;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocFileUpload.DocFileUploadHostType;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
 import com.bhtcnpm.website.repository.Doc.DocRepository;
@@ -37,6 +39,7 @@ import com.bhtcnpm.website.service.Exercise.ExerciseService;
 import com.bhtcnpm.website.service.FileUploadService;
 import com.bhtcnpm.website.service.GoogleDriveService;
 import com.bhtcnpm.website.service.Post.PostService;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.bhtcnpm.website.util.EnumConverter;
 import com.bhtcnpm.website.util.FileUploadUtils;
@@ -46,6 +49,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jsoup.helper.Validate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -103,6 +107,8 @@ public class DocServiceImpl implements DocService {
     private final UserDocSaveRepository userDocSaveRepository;
 
     private final UserWebsiteRepository userWebsiteRepository;
+
+    private final UserWebsiteService userWebsiteService;
 
     private final DocFileUploadService docFileUploadService;
 
@@ -416,7 +422,20 @@ public class DocServiceImpl implements DocService {
 
     @Override
     public Boolean deleteDoc(Long docID, Authentication authentication) {
-        docRepository.deleteById(docID);
+        Optional<Doc> docOpt = docRepository.findById(docID);
+        Validate.isTrue(docOpt.isPresent(), String.format("Doc with id = %s cannot be found.", docID));
+        Doc docEntity = docOpt.get();
+        UUID authorID = docEntity.getAuthor().getId();
+
+        //Perform reputation reset.
+        long totalLike = userDocReactionRepository.countByDocReactionTypeAndUserDocReactionIdDocId(DocReactionType.LIKE, docID);
+        long totalDislike = userDocReactionRepository.countByDocReactionTypeAndUserDocReactionIdDocId(DocReactionType.DISLIKE, docID);
+
+        userWebsiteService.subtractUserReputationScore(authorID, ReputationType.DOC_LIKED, totalLike);
+        userWebsiteService.subtractUserReputationScore(authorID, ReputationType.DOC_DISLIKED, totalDislike);
+
+        docRepository.delete(docEntity);
+
         return true;
     }
 
@@ -473,19 +492,7 @@ public class DocServiceImpl implements DocService {
         //TODO: Limit how much user can upload (aka rate limiting).
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
-        byte[] fileContent = multipartFile.getBytes();
-        String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-
-        //Get mime type.
-        String mimeType = AllowedUploadExtension.getMimeType(extension);
-
-        //Generate random file name (for security reason, don't trust user submitted file name.
-        //https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html#file-upload-threats
-        String fileName = RandomStringUtils.randomAlphanumeric(FILE_NAME_RANDOM_LENGTH) + "." + extension;
-
-        //Get subfolder of userID to upload file.
-        com.google.api.services.drive.model.File uploadedFile = GoogleDriveService
-            .createGoogleFileWithUserID(DRIVE_UPLOAD_DEFAULT_FOLDER_ID, userID, mimeType, fileName, fileContent);
+        com.google.api.services.drive.model.File uploadedFile = fileUploadService.uploadToGoogleDrive(multipartFile, DRIVE_UPLOAD_DEFAULT_FOLDER_ID, authentication);
 
         //Get proxy for author.
         UserWebsite author = userWebsiteRepository.getOne(userID);

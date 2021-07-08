@@ -16,6 +16,7 @@ import com.bhtcnpm.website.repository.Post.UserPostReportRepository;
 import com.bhtcnpm.website.repository.ReportReasonRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
+import com.bhtcnpm.website.service.Post.PostService;
 import com.bhtcnpm.website.service.Post.UserPostReportService;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
     private final UserWebsiteRepository userWebsiteRepository;
     private final UserWebsiteService userWebsiteService;
     private final PostRepository postRepository;
+    private final PostService postService;
 
     private final PostReportMapper postReportMapper;
 
@@ -152,8 +154,8 @@ public class UserPostReportServiceImpl implements UserPostReportService {
         postReportRepository.save(postReport);
 
         if (PostReportActionType.DELETE.equals(actionType)) {
-            postRepository.deleteById(postReport.getPost().getId());
-            userWebsiteService.addUserReputationScore(postReport.getPost().getAuthor().getId(), ReputationType.POST_REPORTED_REMOVED);
+            postService.deletePost(postReport.getPost().getId(), authentication);
+            userWebsiteService.addUserReputationScore(postReport.getPost().getAuthor().getId(), ReputationType.POST_REPORTED_REMOVED, 1L);
         }
 
         return true;

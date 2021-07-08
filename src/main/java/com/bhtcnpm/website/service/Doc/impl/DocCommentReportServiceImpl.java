@@ -18,6 +18,7 @@ import com.bhtcnpm.website.repository.ReportReasonRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Doc.DocCommentReportService;
+import com.bhtcnpm.website.service.Doc.DocCommentService;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class DocCommentReportServiceImpl implements DocCommentReportService {
 
     private static final int PAGE_SIZE = 10;
     private final DocCommentRepository docCommentRepository;
+    private final DocCommentService docCommentService;
     private final DocCommentReportRepository docCommentReportRepository;
     private final UserWebsiteRepository userWebsiteRepository;
     private final UserWebsiteService userWebsiteService;
@@ -149,8 +151,8 @@ public class DocCommentReportServiceImpl implements DocCommentReportService {
         docCommentReportRepository.save(docCommentReport);
 
         if (DocCommentReportActionType.DELETE.equals(actionType)) {
-            docCommentRepository.deleteById(docCommentReport.getDocComment().getId());
-            userWebsiteService.addUserReputationScore(docCommentReport.getDocComment().getAuthor().getId(), ReputationType.COMMENT_REPORTED_REMOVED);
+            docCommentService.deleteDocComment(docCommentReport.getDocComment().getId());
+            userWebsiteService.addUserReputationScore(docCommentReport.getDocComment().getAuthor().getId(), ReputationType.COMMENT_REPORTED_REMOVED, 1L);
         }
 
         return true;

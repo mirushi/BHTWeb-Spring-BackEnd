@@ -5,6 +5,7 @@ import com.bhtcnpm.website.model.dto.Doc.DocUserOwnReactionStatisticDTO;
 import com.bhtcnpm.website.model.dto.UserDocReaction.UserDocReactionStatsDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReactionId;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.repository.custom.UserDocReactionRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -36,4 +37,7 @@ public interface UserDocReactionRepository extends JpaRepository<UserDocReaction
             "WHERE usr.userDocReactionId.doc.id IN :docIDs AND usr.userDocReactionId.user.id = :userID " +
             "ORDER BY usr.userDocReactionId.doc.id ASC ")
     List<DocUserOwnReactionStatisticDTO> getDocUserOwnReactionStatisticDTO (List<Long> docIDs, UUID userID);
+
+    long countByDocReactionTypeAndUserDocReactionIdDocId (DocReactionType docReactionType, Long docID);
+
 }

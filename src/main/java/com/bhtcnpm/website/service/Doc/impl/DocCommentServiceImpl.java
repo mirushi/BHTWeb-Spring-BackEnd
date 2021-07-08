@@ -125,7 +125,15 @@ public class DocCommentServiceImpl implements DocCommentService {
 
     @Override
     public boolean deleteDocComment(Long commentID) {
-        docCommentRepository.deleteById(commentID);
+        Optional<DocComment> docCommentOpt = docCommentRepository.findById(commentID);
+        Validate.isTrue(docCommentOpt.isPresent(), String.format("Doc comment with id = %s not found.", commentID));
+        DocComment docCommentEntity = docCommentOpt.get();
+
+        //Perform reputation reset.
+        long totalLike = userDocCommentLikeRepository.countByUserDocCommentLikeIdDocCommentId(commentID);
+        userWebsiteService.subtractUserReputationScore(docCommentEntity.getAuthor().getId(), ReputationType.COMMENT_LIKED, totalLike);
+
+        docCommentRepository.delete(docCommentEntity);
         return true;
     }
 
@@ -138,7 +146,7 @@ public class DocCommentServiceImpl implements DocCommentService {
         UserDocCommentLike entity = new UserDocCommentLike(id);
         userDocCommentLikeRepository.save(entity);
 
-        userWebsiteService.addUserReputationScore(docCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
+        userWebsiteService.addUserReputationScore(docCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED, 1L);
         return true;
     }
 
@@ -150,7 +158,7 @@ public class DocCommentServiceImpl implements DocCommentService {
                 new UserDocCommentLikeId(userWebsiteRepository.getOne(userID), docCommentRepository.getOne(commentID));
         userDocCommentLikeRepository.deleteById(id);
 
-        userWebsiteService.subtractUserReputationScore(docCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
+        userWebsiteService.subtractUserReputationScore(docCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED, 1L);
         return true;
     }
 

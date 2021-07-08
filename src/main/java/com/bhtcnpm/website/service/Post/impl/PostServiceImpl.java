@@ -171,7 +171,7 @@ public class PostServiceImpl implements PostService {
 
         userPostLikeRepository.save(userPostLike);
 
-        userWebsiteService.addUserReputationScore(postRepository.getOne(postID).getAuthor().getId(), ReputationType.POST_LIKED);
+        userWebsiteService.addUserReputationScore(postRepository.getOne(postID).getAuthor().getId(), ReputationType.POST_LIKED, 1L);
 
         return true;
     }
@@ -190,7 +190,7 @@ public class PostServiceImpl implements PostService {
             return false;
         }
 
-        userWebsiteService.subtractUserReputationScore(postRepository.getOne(postID).getAuthor().getId(), ReputationType.POST_LIKED);
+        userWebsiteService.subtractUserReputationScore(postRepository.getOne(postID).getAuthor().getId(), ReputationType.POST_LIKED, 1L);
         return true;
     }
 
@@ -256,7 +256,16 @@ public class PostServiceImpl implements PostService {
 //
 //        postRepository.removeIndexPost(entity);
 
-        postRepository.deleteById(postID);
+        Optional<Post> postOpt = postRepository.findById(postID);
+        Validate.isTrue(postOpt.isPresent(), String.format("Post with id = %s cannot be found.", postID));
+        Post postEntity = postOpt.get();
+        UUID authorID = postEntity.getAuthor().getId();
+
+        //Perform reputation reset.
+        long totalLike = userPostLikeRepository.countAllByUserPostLikeIdPostId(postID);
+        userWebsiteService.subtractUserReputationScore(authorID, ReputationType.POST_LIKED, totalLike);
+
+        postRepository.delete(postEntity);
 
         return true;
     }

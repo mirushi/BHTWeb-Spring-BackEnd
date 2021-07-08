@@ -180,8 +180,8 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     }
 
     @Override
-    public boolean addUserReputationScore(UUID userID, ReputationType reputationType) {
-        int rowAffected = uwRepository.addUserReputationScore(userID, reputationType.getNumVal());
+    public boolean addUserReputationScore(UUID authorID, ReputationType reputationType, long count) {
+        int rowAffected = uwRepository.addUserReputationScore(authorID, reputationType.getNumVal(), count);
         if (rowAffected == 1) {
             return true;
         }
@@ -189,8 +189,8 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     }
 
     @Override
-    public boolean subtractUserReputationScore(UUID userID, ReputationType reputationType) {
-        int rowAffected = uwRepository.subtractUserReputationScore(userID, reputationType.getNumVal());
+    public boolean subtractUserReputationScore(UUID authorID, ReputationType reputationType, long count) {
+        int rowAffected = uwRepository.subtractUserReputationScore(authorID, reputationType.getNumVal(), count);
         if (rowAffected == 1) {
             return true;
         }

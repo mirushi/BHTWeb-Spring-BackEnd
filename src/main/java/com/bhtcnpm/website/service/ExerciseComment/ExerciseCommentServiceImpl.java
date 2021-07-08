@@ -3,6 +3,7 @@ package com.bhtcnpm.website.service.ExerciseComment;
 import com.bhtcnpm.website.constant.business.ExerciseComment.ExerciseCommentActionAvailableConstant;
 import com.bhtcnpm.website.constant.security.evaluator.permission.ExerciseCommentActionPermissionRequest;
 import com.bhtcnpm.website.model.dto.ExerciseComment.*;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseComment;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.UserExerciseCommentLike;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.UserExerciseCommentLikeId;
@@ -15,6 +16,7 @@ import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.Validate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -122,7 +124,15 @@ public class ExerciseCommentServiceImpl implements ExerciseCommentService {
 
     @Override
     public boolean deleteExerciseComment(Long commentID) {
-        exerciseCommentRepository.deleteById(commentID);
+        Optional<ExerciseComment> exerciseCommentOpt = exerciseCommentRepository.findById(commentID);
+        Validate.isTrue(exerciseCommentOpt.isPresent(), String.format("Exercise comment with id = %s not found.", commentID));
+        ExerciseComment exerciseCommentEntity = exerciseCommentOpt.get();
+
+        //Perform reputation reset.
+        long totalLike = userExerciseCommentLikeRepository.countByUserExerciseCommentLikeIdExerciseCommentId(commentID);
+        userWebsiteService.subtractUserReputationScore(exerciseCommentEntity.getAuthor().getId(), ReputationType.COMMENT_LIKED, totalLike);
+
+        exerciseCommentRepository.delete(exerciseCommentEntity);
         return true;
     }
 
@@ -135,7 +145,7 @@ public class ExerciseCommentServiceImpl implements ExerciseCommentService {
         UserExerciseCommentLike entity = new UserExerciseCommentLike(id);
         userExerciseCommentLikeRepository.save(entity);
 
-        userWebsiteService.addUserReputationScore(exerciseCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
+        userWebsiteService.addUserReputationScore(exerciseCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED, 1L);
 
         return true;
     }
@@ -148,7 +158,7 @@ public class ExerciseCommentServiceImpl implements ExerciseCommentService {
                 new UserExerciseCommentLikeId(userWebsiteRepository.getOne(userID), exerciseCommentRepository.getOne(commentID));
         userExerciseCommentLikeRepository.deleteById(id);
 
-        userWebsiteService.subtractUserReputationScore(exerciseCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
+        userWebsiteService.subtractUserReputationScore(exerciseCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED, 1L);
 
         return true;
     }

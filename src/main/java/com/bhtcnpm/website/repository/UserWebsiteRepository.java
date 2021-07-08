@@ -41,13 +41,13 @@ public interface UserWebsiteRepository extends JpaRepository<UserWebsite, UUID> 
     @Modifying
     @Query(nativeQuery = true,
             value = "UPDATE USER_WEBSITE uw SET uw.REPUTATION_SCORE = uw.REPUTATION_SCORE + " +
-                    "(SELECT rsd.SCORE FROM REPUTATION_SCORE_DEFINITION rsd WHERE rsd.reputation_type = :reputationTypeOrdinal) " +
-                    "WHERE uw.id = :userID ")
-    int addUserReputationScore(UUID userID, short reputationTypeOrdinal);
+                    ":count * (SELECT rsd.SCORE FROM REPUTATION_SCORE_DEFINITION rsd WHERE rsd.reputation_type = :reputationTypeOrdinal) " +
+                    "WHERE uw.id = :authorID ")
+    int addUserReputationScore(UUID authorID, short reputationTypeOrdinal, long count);
 
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE USER_WEBSITE uw SET uw.REPUTATION_SCORE = uw.REPUTATION_SCORE - " +
-            "(SELECT rsd.SCORE FROM REPUTATION_SCORE_DEFINITION rsd WHERE rsd.reputation_type = :reputationTypeOrdinal) " +
-            "WHERE uw.id = :userID ")
-    int subtractUserReputationScore(UUID userID, short reputationTypeOrdinal);
+    @Query(nativeQuery = true, value = "UPDATE USER_WEBSITE uw SET uw.REPUTATION_SCORE = uw.REPUTATION_SCORE + " +
+            "(-1) * :count * (SELECT rsd.SCORE FROM REPUTATION_SCORE_DEFINITION rsd WHERE rsd.reputation_type = :reputationTypeOrdinal) " +
+            "WHERE uw.id = :authorID ")
+    int subtractUserReputationScore(UUID authorID, short reputationTypeOrdinal, long count);
 }

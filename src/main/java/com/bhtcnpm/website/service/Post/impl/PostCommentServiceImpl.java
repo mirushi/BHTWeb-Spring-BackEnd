@@ -16,6 +16,7 @@ import com.bhtcnpm.website.service.Post.PostCommentService;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.Validate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -140,7 +141,15 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     @Override
     public boolean deletePostComment(Long commentID) {
-        postCommentRepository.deleteById(commentID);
+        Optional<PostComment> postCommentOpt = postCommentRepository.findById(commentID);
+        Validate.isTrue(postCommentOpt.isPresent(), String.format("Post comment with id = %s not found.", commentID));
+        PostComment postCommentEntity = postCommentOpt.get();
+
+        //Perform reputation reset.
+        long totalLike = userPostCommentLikeRepository.countByUserPostCommentLikeIdPostCommentId(commentID);
+        userWebsiteService.subtractUserReputationScore(postCommentEntity.getAuthor().getId(), ReputationType.COMMENT_LIKED, totalLike);
+
+        postCommentRepository.delete(postCommentEntity);
         return true;
     }
 
@@ -156,7 +165,7 @@ public class PostCommentServiceImpl implements PostCommentService {
         UserPostCommentLike entity = new UserPostCommentLike(id);
         userPostCommentLikeRepository.save(entity);
 
-        userWebsiteService.addUserReputationScore(postCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
+        userWebsiteService.addUserReputationScore(postCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED, 1L);
 
         return true;
     }
@@ -173,7 +182,7 @@ public class PostCommentServiceImpl implements PostCommentService {
                 new UserPostCommentLikeId(userWebsiteRepository.getOne(userID), postCommentRepository.getOne(commentID));
         userPostCommentLikeRepository.deleteById(id);
 
-        userWebsiteService.subtractUserReputationScore(postCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
+        userWebsiteService.subtractUserReputationScore(postCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED, 1L);
 
         return true;
     }

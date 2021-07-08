@@ -42,8 +42,8 @@ public interface UserWebsiteService {
     List<UserWebsiteAvailableActionDTO> getUserWebsiteAvailableAction (List<UUID> userIDs, Authentication authentication);
 
     @PreAuthorize(value = "isAuthenticated()")
-    boolean addUserReputationScore(UUID userID, ReputationType reputationType);
+    boolean addUserReputationScore(UUID authorID, ReputationType reputationType, long count);
 
     @PreAuthorize(value = "isAuthenticated()")
-    boolean subtractUserReputationScore (UUID userID, ReputationType reputationType);
+    boolean subtractUserReputationScore (UUID authorID, ReputationType reputationType, long count);
 }

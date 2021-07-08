@@ -40,6 +40,7 @@ public class ExerciseCommentReportServiceImpl implements ExerciseCommentReportSe
 
     private static final int PAGE_SIZE = 10;
     private final ExerciseCommentRepository exerciseCommentRepository;
+    private final ExerciseCommentService exerciseCommentService;
     private final ExerciseCommentReportRepository exerciseCommentReportRepository;
     private final UserWebsiteRepository userWebsiteRepository;
     private final UserWebsiteService userWebsiteService;
@@ -148,8 +149,8 @@ public class ExerciseCommentReportServiceImpl implements ExerciseCommentReportSe
         exerciseCommentReportRepository.save(exerciseCommentReport);
 
         if (ExerciseCommentReportActionType.DELETE.equals(actionType)) {
-            exerciseCommentRepository.deleteById(exerciseCommentReport.getExerciseComment().getId());
-            userWebsiteService.addUserReputationScore(exerciseCommentReport.getExerciseComment().getAuthor().getId(), ReputationType.COMMENT_REPORTED_REMOVED);
+            exerciseCommentService.deleteExerciseComment(exerciseCommentReport.getExerciseComment().getId());
+            userWebsiteService.addUserReputationScore(exerciseCommentReport.getExerciseComment().getAuthor().getId(), ReputationType.COMMENT_REPORTED_REMOVED, 1L);
         }
 
         return true;

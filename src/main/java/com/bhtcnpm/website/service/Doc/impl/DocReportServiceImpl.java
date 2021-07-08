@@ -18,6 +18,7 @@ import com.bhtcnpm.website.repository.ReportReasonRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Doc.DocReportService;
+import com.bhtcnpm.website.service.Doc.DocService;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,7 @@ public class DocReportServiceImpl implements DocReportService {
     private final UserWebsiteRepository userWebsiteRepository;
     private final UserWebsiteService userWebsiteService;
     private final DocRepository docRepository;
+    private final DocService docService;
 
     private final DocReportMapper docReportMapper;
 
@@ -145,8 +147,8 @@ public class DocReportServiceImpl implements DocReportService {
         docReportRepository.save(docReport);
 
         if (DocReportActionType.DELETE.equals(actionType)) {
-            docRepository.deleteById(docReport.getDoc().getId());
-            userWebsiteService.addUserReputationScore(docReport.getDoc().getAuthor().getId(), ReputationType.DOC_REPORTED_REMOVED);
+            docService.deleteDoc(docReport.getDoc().getId(), authentication);
+            userWebsiteService.addUserReputationScore(docReport.getDoc().getAuthor().getId(), ReputationType.DOC_REPORTED_REMOVED, 1L);
         }
 
         return true;

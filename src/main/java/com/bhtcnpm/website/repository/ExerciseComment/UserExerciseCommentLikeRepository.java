@@ -5,4 +5,5 @@ import com.bhtcnpm.website.model.entity.ExerciseEntities.UserExerciseCommentLike
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserExerciseCommentLikeRepository extends JpaRepository<UserExerciseCommentLike, UserExerciseCommentLikeId> {
+    long countByUserExerciseCommentLikeIdExerciseCommentId (Long exerciseCommentID);
 }

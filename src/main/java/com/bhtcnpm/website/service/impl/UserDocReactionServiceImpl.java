@@ -103,14 +103,14 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
             return;
         }
         if (DocReactionType.DISLIKE.equals(oldReaction)) {
-            userWebsiteService.subtractUserReputationScore(userID, ReputationType.DOC_DISLIKED);
+            userWebsiteService.subtractUserReputationScore(userID, ReputationType.DOC_DISLIKED, 1L);
         } else if (DocReactionType.LIKE.equals(oldReaction)) {
-            userWebsiteService.subtractUserReputationScore(userID, ReputationType.DOC_LIKED);
+            userWebsiteService.subtractUserReputationScore(userID, ReputationType.DOC_LIKED, 1L);
         }
         if (DocReactionType.LIKE.equals(newReaction)) {
-            userWebsiteService.addUserReputationScore(userID, ReputationType.DOC_LIKED);
+            userWebsiteService.addUserReputationScore(userID, ReputationType.DOC_LIKED, 1L);
         } else if (DocReactionType.DISLIKE.equals(newReaction)) {
-            userWebsiteService.addUserReputationScore(userID, ReputationType.DOC_DISLIKED);
+            userWebsiteService.addUserReputationScore(userID, ReputationType.DOC_DISLIKED, 1L);
         }
     }
 }

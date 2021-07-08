@@ -17,6 +17,7 @@ import com.bhtcnpm.website.repository.ReportReasonRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Post.PostCommentReportService;
+import com.bhtcnpm.website.service.Post.PostCommentService;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,8 @@ public class PostCommentReportServiceImpl implements PostCommentReportService {
     private static final int PAGE_SIZE = 10;
 
     private final PostCommentRepository postCommentRepository;
+
+    private final PostCommentService postCommentService;
 
     private final PostCommentReportRepository postCommentReportRepository;
 
@@ -155,8 +158,8 @@ public class PostCommentReportServiceImpl implements PostCommentReportService {
         postCommentReportRepository.save(postCommentReport);
 
         if (PostCommentReportActionType.DELETE.equals(actionType)) {
-            postCommentRepository.deleteById(postCommentReport.getPostComment().getId());
-            userWebsiteService.addUserReputationScore(postCommentReport.getPostComment().getAuthor().getId(), ReputationType.COMMENT_REPORTED_REMOVED);
+            postCommentService.deletePostComment(postCommentReport.getPostComment().getId());
+            userWebsiteService.addUserReputationScore(postCommentReport.getPostComment().getAuthor().getId(), ReputationType.COMMENT_REPORTED_REMOVED, 1L);
         }
 
         return true;
