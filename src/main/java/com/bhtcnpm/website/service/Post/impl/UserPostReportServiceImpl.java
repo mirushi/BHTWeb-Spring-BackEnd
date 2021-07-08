@@ -8,6 +8,7 @@ import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.ReportReason.ReportReason;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.Post.PostReportRepository;
 import com.bhtcnpm.website.repository.Post.PostRepository;
@@ -16,6 +17,7 @@ import com.bhtcnpm.website.repository.ReportReasonRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Post.UserPostReportService;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +43,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
     private final UserPostReportRepository userPostReportRepository;
     private final ReportReasonRepository reportReasonRepository;
     private final UserWebsiteRepository userWebsiteRepository;
+    private final UserWebsiteService userWebsiteService;
     private final PostRepository postRepository;
 
     private final PostReportMapper postReportMapper;
@@ -150,6 +153,7 @@ public class UserPostReportServiceImpl implements UserPostReportService {
 
         if (PostReportActionType.DELETE.equals(actionType)) {
             postRepository.deleteById(postReport.getPost().getId());
+            userWebsiteService.addUserReputationScore(postReport.getPost().getAuthor().getId(), ReputationType.POST_REPORTED_REMOVED);
         }
 
         return true;

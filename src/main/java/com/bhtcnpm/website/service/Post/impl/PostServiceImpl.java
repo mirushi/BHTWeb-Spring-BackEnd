@@ -11,6 +11,7 @@ import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
@@ -25,11 +26,13 @@ import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.FileUploadService;
 import com.bhtcnpm.website.service.Post.PostService;
 import com.bhtcnpm.website.service.Post.PostViewService;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.bhtcnpm.website.util.FileUploadUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.Validate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -68,6 +71,8 @@ public class PostServiceImpl implements PostService {
     private final PostViewService postViewService;
 
     private final FileUploadService fileUploadService;
+
+    private final UserWebsiteService userWebsiteService;
 
     private final ExerciseRepository exerciseRepository;
 
@@ -156,21 +161,24 @@ public class PostServiceImpl implements PostService {
         UserPostLikeId id = new UserPostLikeId();
         id.setPost(postRepository.getOne(postID));
         id.setUser(userWebsiteRepository.getOne(userID));
+
+        if (userPostLikeRepository.existsByUserPostLikeId(id)) {
+            return true;
+        }
+
         UserPostLike userPostLike = new UserPostLike();
         userPostLike.setUserPostLikeId(id);
 
         userPostLikeRepository.save(userPostLike);
+
+        userWebsiteService.addUserReputationScore(postRepository.getOne(postID).getAuthor().getId(), ReputationType.POST_LIKED);
 
         return true;
     }
 
     @Override
     public Boolean deleteUserPostLike(Long postID, Authentication authentication) {
-        UUID userID = SecurityUtils.getUserID(authentication);
-
-        if (userID == null) {
-            throw new IllegalArgumentException("Cannot extract userID from authentication.");
-        }
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
         UserPostLikeId id = new UserPostLikeId();
         id.setPost(postRepository.getOne(postID));
@@ -182,6 +190,7 @@ public class PostServiceImpl implements PostService {
             return false;
         }
 
+        userWebsiteService.subtractUserReputationScore(postRepository.getOne(postID).getAuthor().getId(), ReputationType.POST_LIKED);
         return true;
     }
 

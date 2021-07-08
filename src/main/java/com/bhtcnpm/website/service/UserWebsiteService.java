@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.service;
 
 import com.bhtcnpm.website.model.dto.UserWebsite.*;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -40,4 +41,9 @@ public interface UserWebsiteService {
     @PreAuthorize(value = "permitAll()")
     List<UserWebsiteAvailableActionDTO> getUserWebsiteAvailableAction (List<UUID> userIDs, Authentication authentication);
 
+    @PreAuthorize(value = "isAuthenticated()")
+    boolean addUserReputationScore(UUID userID, ReputationType reputationType);
+
+    @PreAuthorize(value = "isAuthenticated()")
+    boolean subtractUserReputationScore (UUID userID, ReputationType reputationType);
 }

@@ -9,6 +9,7 @@ import com.bhtcnpm.website.model.entity.DocCommentEntities.report.*;
 import com.bhtcnpm.website.model.entity.ReportReason.ReportReason;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocCommentReport.DocCommentReportActionType;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.Doc.DocCommentReportRepository;
 import com.bhtcnpm.website.repository.Doc.DocCommentRepository;
@@ -17,6 +18,7 @@ import com.bhtcnpm.website.repository.ReportReasonRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Doc.DocCommentReportService;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,6 +43,7 @@ public class DocCommentReportServiceImpl implements DocCommentReportService {
     private final DocCommentRepository docCommentRepository;
     private final DocCommentReportRepository docCommentReportRepository;
     private final UserWebsiteRepository userWebsiteRepository;
+    private final UserWebsiteService userWebsiteService;
     private final UserDocCommentReportRepository userDocCommentReportRepository;
     private final ReportReasonRepository reportReasonRepository;
     private final DocCommentReportMapper docCommentReportMapper;
@@ -147,6 +150,7 @@ public class DocCommentReportServiceImpl implements DocCommentReportService {
 
         if (DocCommentReportActionType.DELETE.equals(actionType)) {
             docCommentRepository.deleteById(docCommentReport.getDocComment().getId());
+            userWebsiteService.addUserReputationScore(docCommentReport.getDocComment().getAuthor().getId(), ReputationType.COMMENT_REPORTED_REMOVED);
         }
 
         return true;

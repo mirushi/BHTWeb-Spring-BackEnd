@@ -9,6 +9,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.report.*;
 import com.bhtcnpm.website.model.entity.ReportReason.ReportReason;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocReport.DocReportActionType;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.Doc.DocReportRepository;
 import com.bhtcnpm.website.repository.Doc.DocRepository;
@@ -17,6 +18,7 @@ import com.bhtcnpm.website.repository.ReportReasonRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Doc.DocReportService;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,6 +43,7 @@ public class DocReportServiceImpl implements DocReportService {
     private final UserDocReportRepository userDocReportRepository;
     private final ReportReasonRepository reportReasonRepository;
     private final UserWebsiteRepository userWebsiteRepository;
+    private final UserWebsiteService userWebsiteService;
     private final DocRepository docRepository;
 
     private final DocReportMapper docReportMapper;
@@ -143,6 +146,7 @@ public class DocReportServiceImpl implements DocReportService {
 
         if (DocReportActionType.DELETE.equals(actionType)) {
             docRepository.deleteById(docReport.getDoc().getId());
+            userWebsiteService.addUserReputationScore(docReport.getDoc().getAuthor().getId(), ReputationType.DOC_REPORTED_REMOVED);
         }
 
         return true;

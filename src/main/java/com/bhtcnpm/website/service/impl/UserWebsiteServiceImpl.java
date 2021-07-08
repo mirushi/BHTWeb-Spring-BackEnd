@@ -1,11 +1,11 @@
 package com.bhtcnpm.website.service.impl;
 
-import com.bhtcnpm.website.constant.api.amazon.s3.AmazonS3Constant;
 import com.bhtcnpm.website.constant.business.UserWebsite.UserWebsiteActionAvailableConstant;
 import com.bhtcnpm.website.constant.security.evaluator.permission.UserWebsiteActionPermissionRequest;
 import com.bhtcnpm.website.model.dto.AWS.AmazonS3ResultDTO;
 import com.bhtcnpm.website.model.dto.UserWebsite.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
@@ -16,7 +16,6 @@ import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.util.FileUploadUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -180,4 +179,21 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
         return userWebsiteAvailableActionDTOList;
     }
 
+    @Override
+    public boolean addUserReputationScore(UUID userID, ReputationType reputationType) {
+        int rowAffected = uwRepository.addUserReputationScore(userID, reputationType.getNumVal());
+        if (rowAffected == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean subtractUserReputationScore(UUID userID, ReputationType reputationType) {
+        int rowAffected = uwRepository.subtractUserReputationScore(userID, reputationType.getNumVal());
+        if (rowAffected == 1) {
+            return true;
+        }
+        return false;
+    }
 }

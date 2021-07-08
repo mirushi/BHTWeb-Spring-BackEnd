@@ -6,12 +6,14 @@ import com.bhtcnpm.website.model.dto.DocComment.*;
 import com.bhtcnpm.website.model.entity.DocCommentEntities.DocComment;
 import com.bhtcnpm.website.model.entity.DocCommentEntities.UserDocCommentLike;
 import com.bhtcnpm.website.model.entity.DocCommentEntities.UserDocCommentLikeId;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.repository.Doc.DocCommentRepository;
 import com.bhtcnpm.website.repository.Doc.UserDocCommentLikeRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.evaluator.DocComment.DocCommentPermissionEvaluator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Doc.DocCommentService;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.Validate;
@@ -40,6 +42,8 @@ public class DocCommentServiceImpl implements DocCommentService {
     private final UserDocCommentLikeRepository userDocCommentLikeRepository;
 
     private final UserWebsiteRepository userWebsiteRepository;
+
+    private final UserWebsiteService userWebsiteService;
 
     private final DocCommentMapper docCommentMapper;
 
@@ -133,6 +137,8 @@ public class DocCommentServiceImpl implements DocCommentService {
                 new UserDocCommentLikeId(userWebsiteRepository.getOne(userID), docCommentRepository.getOne(commentID));
         UserDocCommentLike entity = new UserDocCommentLike(id);
         userDocCommentLikeRepository.save(entity);
+
+        userWebsiteService.addUserReputationScore(docCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
         return true;
     }
 
@@ -143,6 +149,8 @@ public class DocCommentServiceImpl implements DocCommentService {
         UserDocCommentLikeId id =
                 new UserDocCommentLikeId(userWebsiteRepository.getOne(userID), docCommentRepository.getOne(commentID));
         userDocCommentLikeRepository.deleteById(id);
+
+        userWebsiteService.subtractUserReputationScore(docCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
         return true;
     }
 

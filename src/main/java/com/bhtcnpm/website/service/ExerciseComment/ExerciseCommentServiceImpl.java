@@ -6,11 +6,13 @@ import com.bhtcnpm.website.model.dto.ExerciseComment.*;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseComment;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.UserExerciseCommentLike;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.UserExerciseCommentLikeId;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.repository.ExerciseComment.ExerciseCommentRepository;
 import com.bhtcnpm.website.repository.ExerciseComment.UserExerciseCommentLikeRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.evaluator.ExerciseComment.ExerciseCommentPermissionEvaluator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,12 +29,13 @@ import java.util.UUID;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ExerciseCommentImpl implements ExerciseCommentService {
+public class ExerciseCommentServiceImpl implements ExerciseCommentService {
     private static final int PAGE_SIZE = 10;
     private static final int CHILD_PAGE_SIZE = 100;
     private final ExerciseCommentRepository exerciseCommentRepository;
     private final UserExerciseCommentLikeRepository userExerciseCommentLikeRepository;
     private final UserWebsiteRepository userWebsiteRepository;
+    private final UserWebsiteService userWebsiteService;
     private final ExerciseCommentMapper exerciseCommentMapper;
     private final ExerciseCommentPermissionEvaluator exerciseCommentPermissionEvaluator;
 
@@ -131,6 +134,9 @@ public class ExerciseCommentImpl implements ExerciseCommentService {
                 new UserExerciseCommentLikeId(userWebsiteRepository.getOne(userID), exerciseCommentRepository.getOne(commentID));
         UserExerciseCommentLike entity = new UserExerciseCommentLike(id);
         userExerciseCommentLikeRepository.save(entity);
+
+        userWebsiteService.addUserReputationScore(exerciseCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
+
         return true;
     }
 
@@ -141,6 +147,9 @@ public class ExerciseCommentImpl implements ExerciseCommentService {
         UserExerciseCommentLikeId id =
                 new UserExerciseCommentLikeId(userWebsiteRepository.getOne(userID), exerciseCommentRepository.getOne(commentID));
         userExerciseCommentLikeRepository.deleteById(id);
+
+        userWebsiteService.subtractUserReputationScore(exerciseCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
+
         return true;
     }
 

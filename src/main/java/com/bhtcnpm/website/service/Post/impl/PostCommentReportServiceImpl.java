@@ -8,6 +8,7 @@ import com.bhtcnpm.website.model.entity.PostCommentEntities.*;
 import com.bhtcnpm.website.model.entity.ReportReason.ReportReason;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostCommentReportAction.PostCommentReportActionType;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.Post.PostCommentReportRepository;
 import com.bhtcnpm.website.repository.Post.PostCommentRepository;
@@ -16,6 +17,7 @@ import com.bhtcnpm.website.repository.ReportReasonRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Post.PostCommentReportService;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -43,6 +45,8 @@ public class PostCommentReportServiceImpl implements PostCommentReportService {
     private final PostCommentReportRepository postCommentReportRepository;
 
     private final UserWebsiteRepository userWebsiteRepository;
+
+    private final UserWebsiteService userWebsiteService;
 
     private final UserPostCommentReportRepository userPostCommentReportRepository;
 
@@ -152,6 +156,7 @@ public class PostCommentReportServiceImpl implements PostCommentReportService {
 
         if (PostCommentReportActionType.DELETE.equals(actionType)) {
             postCommentRepository.deleteById(postCommentReport.getPostComment().getId());
+            userWebsiteService.addUserReputationScore(postCommentReport.getPostComment().getAuthor().getId(), ReputationType.COMMENT_REPORTED_REMOVED);
         }
 
         return true;

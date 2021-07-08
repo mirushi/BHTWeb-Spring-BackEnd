@@ -61,7 +61,7 @@ public class UserWebsite {
     @FullTextField(norms = Norms.YES, searchable = Searchable.YES)
     private String displayName;
 
-    @Column(nullable = false)
+    @Column(name = "reputation_score", nullable = false)
     private Long reputationScore;
 
     @Column(nullable = false, length = GenericBusinessConstant.URL_MAX_LENGTH)

@@ -9,6 +9,7 @@ import com.bhtcnpm.website.model.entity.ExerciseEntities.report.*;
 import com.bhtcnpm.website.model.entity.ReportReason.ReportReason;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.ExerciseCommentReport.ExerciseCommentReportActionType;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.Exercise.ExerciseCommentReportRepository;
 import com.bhtcnpm.website.repository.Exercise.UserExerciseCommentReportRepository;
@@ -16,6 +17,7 @@ import com.bhtcnpm.website.repository.ExerciseComment.ExerciseCommentRepository;
 import com.bhtcnpm.website.repository.ReportReasonRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,6 +42,7 @@ public class ExerciseCommentReportServiceImpl implements ExerciseCommentReportSe
     private final ExerciseCommentRepository exerciseCommentRepository;
     private final ExerciseCommentReportRepository exerciseCommentReportRepository;
     private final UserWebsiteRepository userWebsiteRepository;
+    private final UserWebsiteService userWebsiteService;
     private final UserExerciseCommentReportRepository userExerciseCommentReportRepository;
     private final ReportReasonRepository reportReasonRepository;
     private final ExerciseCommentReportMapper exerciseCommentReportMapper;
@@ -146,6 +149,7 @@ public class ExerciseCommentReportServiceImpl implements ExerciseCommentReportSe
 
         if (ExerciseCommentReportActionType.DELETE.equals(actionType)) {
             exerciseCommentRepository.deleteById(exerciseCommentReport.getExerciseComment().getId());
+            userWebsiteService.addUserReputationScore(exerciseCommentReport.getExerciseComment().getAuthor().getId(), ReputationType.COMMENT_REPORTED_REMOVED);
         }
 
         return true;

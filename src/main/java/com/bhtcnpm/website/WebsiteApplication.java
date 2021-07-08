@@ -56,6 +56,7 @@ public class WebsiteApplication {
         objectMapper.setInjectableValues(injects);
         factoryBean.setResources(new Resource[]{
                 new ClassPathResource("data/UserWebsite/user-website.json"),
+                new ClassPathResource("data/UserWebsite/reputation-score-definition.json"),
                 new ClassPathResource("data/Subject/subject-faculty.json"),
                 new ClassPathResource("data/Subject/subject-group.json"),
                 new ClassPathResource("data/Subject/subject.json"),
@@ -68,6 +69,7 @@ public class WebsiteApplication {
                 new ClassPathResource("data/Doc/doc.json"),
                 new ClassPathResource("data/Doc/doc-file-upload.json"),
                 new ClassPathResource("data/Doc/user-doc-reaction.json"),
+                new ClassPathResource("data/Doc/doc-comment.json"),
                 new ClassPathResource("data/report-reason.json"),
                 new ClassPathResource("data/Exercise/exercise-category.json"),
                 new ClassPathResource("data/Exercise/NMLT/exercise-topic-nmlt.json"),
@@ -80,7 +82,8 @@ public class WebsiteApplication {
                 new ClassPathResource("data/Exercise/DSTT/exercise-03-dstt.json"),
                 new ClassPathResource("data/Exercise/DSTT/exercise-04-dstt.json"),
                 new ClassPathResource("data/Exercise/DSTT/exercise-05-dstt.json"),
-                new ClassPathResource("data/Exercise/exercise-report.json")
+                new ClassPathResource("data/Exercise/exercise-report.json"),
+                new ClassPathResource("data/Exercise/exercise-comment.json")
         });
         factoryBean.setMapper(objectMapper);
 

@@ -6,12 +6,14 @@ import com.bhtcnpm.website.model.dto.PostComment.*;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.UserPostCommentLike;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.UserPostCommentLikeId;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.repository.Post.PostCommentRepository;
 import com.bhtcnpm.website.repository.Post.UserPostCommentLikeRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.evaluator.PostComment.PostCommentPermissionEvaluator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Post.PostCommentService;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,6 +42,8 @@ public class PostCommentServiceImpl implements PostCommentService {
     private final UserPostCommentLikeRepository userPostCommentLikeRepository;
 
     private final UserWebsiteRepository userWebsiteRepository;
+
+    private final UserWebsiteService userWebsiteService;
 
     private final PostCommentMapper postCommentMapper;
 
@@ -151,6 +155,9 @@ public class PostCommentServiceImpl implements PostCommentService {
                 new UserPostCommentLikeId(userWebsiteRepository.getOne(userID), postCommentRepository.getOne(commentID));
         UserPostCommentLike entity = new UserPostCommentLike(id);
         userPostCommentLikeRepository.save(entity);
+
+        userWebsiteService.addUserReputationScore(postCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
+
         return true;
     }
 
@@ -165,6 +172,9 @@ public class PostCommentServiceImpl implements PostCommentService {
         UserPostCommentLikeId id =
                 new UserPostCommentLikeId(userWebsiteRepository.getOne(userID), postCommentRepository.getOne(commentID));
         userPostCommentLikeRepository.deleteById(id);
+
+        userWebsiteService.subtractUserReputationScore(postCommentRepository.getOne(commentID).getAuthor().getId(), ReputationType.COMMENT_LIKED);
+
         return true;
     }
 
