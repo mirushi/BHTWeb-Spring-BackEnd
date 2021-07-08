@@ -1,10 +1,10 @@
 package com.bhtcnpm.website.model.dto.DocComment;
 
 import com.bhtcnpm.website.model.validator.dto.DocComment.DocCommentContent;
-import lombok.Value;
+import lombok.*;
 
-@Value
+@Data
 public class DocCommentRequestDTO {
     @DocCommentContent
-    String content;
+    private String content;
 }

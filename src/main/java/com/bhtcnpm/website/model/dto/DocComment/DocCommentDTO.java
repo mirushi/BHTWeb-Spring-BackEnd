@@ -1,13 +1,14 @@
 package com.bhtcnpm.website.model.dto.DocComment;
 
 import com.bhtcnpm.website.model.entity.DocCommentEntities.DocComment;
-import lombok.Data;
-import lombok.Value;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DocCommentDTO {
     private Long id;
     private UUID authorID;
