@@ -49,7 +49,11 @@ public class ExerciseQuestion {
     private String explanation;
 
     @ManyToOne
+    @JoinColumn(name = "exercise_id")
     private Exercise exercise;
+
+    @Column(name = "suggested_duration")
+    private Integer suggestedDuration;
 
     @OneToMany(
             mappedBy = "question",

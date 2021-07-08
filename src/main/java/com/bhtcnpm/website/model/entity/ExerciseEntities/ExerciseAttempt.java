@@ -37,6 +37,7 @@ public class ExerciseAttempt {
     private UserWebsite user;
 
     @ManyToOne
+    @JoinColumn(name = "exercise_id")
     private Exercise exercise;
 
     @Version

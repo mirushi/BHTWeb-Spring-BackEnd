@@ -29,7 +29,6 @@ public class AllowedUploadExtension {
         allowedImageTypesMapping.put("bmp", "image/bmp");
     }
 
-    //TODO: Check real contentType instead of just rely on extension.
     public static String getMimeType(String extension) throws FileExtensionNotAllowedException {
         String mimetype = allowedMimeTypesMapping.get(extension);
 

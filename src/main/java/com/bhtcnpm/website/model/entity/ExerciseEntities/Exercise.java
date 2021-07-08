@@ -2,6 +2,7 @@ package com.bhtcnpm.website.model.entity.ExerciseEntities;
 
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.ExerciseState.ExerciseStateType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -87,6 +88,10 @@ public class Exercise {
             orphanRemoval = true
     )
     private List<ExerciseNote> exerciseNotes;
+
+    @Enumerated
+    @Column(name = "exercise_state", columnDefinition = "smallint")
+    private ExerciseStateType exerciseState;
 
     @Version
     private short version;

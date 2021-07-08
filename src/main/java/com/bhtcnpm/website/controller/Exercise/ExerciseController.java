@@ -1,9 +1,6 @@
 package com.bhtcnpm.website.controller.Exercise;
 
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseStatisticDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseUserStatisticDTO;
+import com.bhtcnpm.website.model.dto.Exercise.*;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.service.Exercise.ExerciseService;
 import com.querydsl.core.types.Predicate;
@@ -32,6 +29,15 @@ public class ExerciseController {
         List<ExerciseSummaryDTO> exerciseSummaryDTOs = exerciseService.getExerciseList(predicate, authentication);
 
         return new ResponseEntity<>(exerciseSummaryDTOs, HttpStatus.OK);
+    }
+
+    @PostMapping
+    @ResponseBody
+    public ResponseEntity<ExerciseDetailsDTO> postExercise (@RequestBody ExerciseRequestDTO dto,
+                                                            Authentication authentication) {
+        ExerciseDetailsDTO exerciseDetails = exerciseService.createExercise(dto, authentication);
+
+        return new ResponseEntity<>(exerciseDetails, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

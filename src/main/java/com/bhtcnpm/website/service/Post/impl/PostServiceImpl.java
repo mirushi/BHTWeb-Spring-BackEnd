@@ -196,10 +196,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDetailsDTO createPost(PostRequestDTO postRequestDTO, Authentication authentication) {
-        UUID userID = SecurityUtils.getUserID(authentication);
-        if (userID == null) {
-            throw new IllegalArgumentException("Cannot create post. Not authenticated.");
-        }
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
         Post post = postMapper.postRequestDTOToPost(postRequestDTO, userID, null);
         post = postRepository.save(post);
 

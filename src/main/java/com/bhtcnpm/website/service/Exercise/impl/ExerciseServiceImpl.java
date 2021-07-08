@@ -97,4 +97,13 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         return exerciseUserStatisticDTOs;
     }
+
+    @Override
+    public ExerciseDetailsDTO createExercise(ExerciseRequestDTO dto, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+        Exercise exercise = exerciseMapper.updateExerciseFromExerciseRequestDTO(dto, null, userID);
+        exercise = exerciseRepository.save(exercise);
+
+        return exerciseMapper.exerciseToExerciseDetailsDTO(exercise);
+    }
 }
