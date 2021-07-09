@@ -108,6 +108,9 @@ public class Exercise {
     @Column(name = "exercise_state", columnDefinition = "smallint", nullable = false)
     private ExerciseStateType exerciseState;
 
+    @Column(name = "deleted_dtm")
+    private LocalDateTime deletedDtm;
+
     @Version
     private short version;
 
