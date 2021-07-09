@@ -65,6 +65,7 @@ public class Exercise {
     @Column
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @UpdateTimestamp
     private LocalDateTime lastUpdatedDtm = LocalDateTime.now();
 
     @ManyToOne

@@ -8,6 +8,7 @@
     "exercise": {
       "id": 1
     },
+    "stateType": "APPROVED",
     "answers": [
       {"content": "Đúng", "isCorrect": true, "rank": 1, "question": {"id": 1} ,"version": 0},
       {"content": "Sai", "isCorrect": false, "rank": 2, "question": {"id": 1} ,"version": 0}
@@ -23,6 +24,7 @@
     "exercise": {
       "id": 1
     },
+    "stateType": "APPROVED",
     "answers": [
       {"content": "Đúng", "isCorrect": false, "rank": 1,"question": {"id": 2},"version": 0},
       {"content": "Sai", "isCorrect": true, "rank": 2,"question": {"id": 2},"version": 0}
@@ -38,6 +40,7 @@
     "exercise": {
       "id": 1
     },
+    "stateType": "APPROVED",
     "answers": [
       {"content": "Đúng", "isCorrect": false, "rank": 1,"question": {"id": 3},"version": 0},
       {"content": "Sai", "isCorrect": true, "rank": 2,"question": {"id": 3},"version": 0}
@@ -53,6 +56,7 @@
     "exercise": {
       "id": 1
     },
+    "stateType": "APPROVED",
     "answers": [
       {"content": "mật mã", "isCorrect": false, "rank": 1,"question": {"id": 4},"version": 0},
       {"content": "chỉ thị", "isCorrect": true, "rank": 2,"question": {"id": 4},"version": 0},
@@ -70,6 +74,7 @@
     "exercise": {
       "id": 1
     },
+    "stateType": "APPROVED",
     "answers": [
       {"content": "các số", "isCorrect": true, "rank": 1,"question": {"id": 5},"version": 0},
       {"content": "các chữ", "isCorrect": false, "rank": 2,"question": {"id": 5},"version": 0},
@@ -87,6 +92,7 @@
     "exercise": {
       "id": 1
     },
+    "stateType": "APPROVED",
     "answers": [
       {"content": "0", "isCorrect": false, "rank": 1,"question": {"id": 6},"version": 0},
       {"content": "1", "isCorrect": false, "rank": 2,"question": {"id": 6},"version": 0},
@@ -104,6 +110,7 @@
     "exercise": {
       "id": 1
     },
+    "stateType": "APPROVED",
     "answers": [
       {"content": "110000", "isCorrect": true, "rank": 1,"question": {"id": 7},"version": 0},
       {"content": "110001", "isCorrect": false, "rank": 2,"question": {"id": 7},"version": 0},
@@ -121,6 +128,7 @@
     "exercise": {
       "id": 1
     },
+    "stateType": "APPROVED",
     "answers": [
       {"content": "111101", "isCorrect": false, "rank": 1,"question": {"id": 8},"version": 0},
       {"content": "111111", "isCorrect": false, "rank": 2,"question": {"id": 8},"version": 0},
@@ -138,6 +146,7 @@
     "exercise": {
       "id": 1
     },
+    "stateType": "APPROVED",
     "answers": [
       {"content": "73", "isCorrect": false, "rank": 1,"question": {"id": 9},"version": 0},
       {"content": "74", "isCorrect": false, "rank": 2,"question": {"id": 9},"version": 0},
@@ -155,6 +164,7 @@
     "exercise": {
       "id": 1
     },
+    "stateType": "APPROVED",
     "answers": [
       {"content": "10110001", "isCorrect": false, "rank": 1,"question": {"id": 10},"version": 0},
       {"content": "10110010", "isCorrect": true, "rank": 2,"question": {"id": 10},"version": 0},

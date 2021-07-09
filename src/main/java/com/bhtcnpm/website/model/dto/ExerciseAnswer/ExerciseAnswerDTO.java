@@ -1,4 +1,4 @@
-package com.bhtcnpm.website.model.dto.Exercise;
+package com.bhtcnpm.website.model.dto.ExerciseAnswer;
 
 import lombok.Data;
 

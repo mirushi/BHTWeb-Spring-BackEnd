@@ -34,6 +34,7 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
             "WHERE d.id = :docID")
     int setDocStateAndFeedback (Long docID, DocStateType docStateType, String feedback);
 
+    //TODO: We can save statistics directly in entity to optimize performance.
     @Query(nativeQuery = true, value = "SELECT d.ID AS id, COUNT(DISTINCT dc.ID) as commentCount, " +
             "COUNT(DISTINCT CASE WHEN reaction.DOC_REACTION_TYPE = 0 THEN reaction.USER_ID END) AS likeCount, " +
             "COUNT(DISTINCT CASE WHEN reaction.DOC_REACTION_TYPE = 1 THEN reaction.USER_ID END) AS dislikeCount, " +

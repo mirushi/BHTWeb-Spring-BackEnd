@@ -1,13 +1,21 @@
 package com.bhtcnpm.website.model.entity.ExerciseEntities;
 
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.ExerciseQuestion.ExerciseQuestionStateType;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -59,6 +67,25 @@ public class ExerciseQuestion {
 
     @Column(name = "suggested_duration")
     private Integer suggestedDuration;
+
+    @Column(name = "submit_dtm")
+    private LocalDateTime submitDtm = LocalDateTime.now();
+
+    @Column(name = "publish_dtm")
+    private LocalDateTime publishDtm = LocalDateTime.now();
+
+    @ManyToOne
+    @JoinColumn(name = "last_updated_by")
+    private UserWebsite lastUpdatedBy;
+
+    @Column
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @UpdateTimestamp
+    private LocalDateTime lastUpdatedDtm = LocalDateTime.now();
+
+    @Column(name = "state_type", nullable = false)
+    private ExerciseQuestionStateType stateType;
 
     @OneToMany(
             mappedBy = "question",

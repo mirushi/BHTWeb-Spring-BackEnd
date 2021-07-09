@@ -1,8 +1,8 @@
 package com.bhtcnpm.website.controller.Exercise;
 
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuestionResultDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuestionSubmitDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuestionWithAnswersDTO;
+import com.bhtcnpm.website.model.dto.ExerciseQuestion.ExerciseQuestionResultDTO;
+import com.bhtcnpm.website.model.dto.ExerciseQuestion.ExerciseQuestionSubmitDTO;
+import com.bhtcnpm.website.model.dto.ExerciseQuestion.ExerciseQuestionWithAnswersDTO;
 import com.bhtcnpm.website.service.Exercise.ExerciseQuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,5 +37,4 @@ public class ExerciseQuestionController {
 
         return new ResponseEntity<>(resultDTOs, HttpStatus.OK);
     }
-
 }

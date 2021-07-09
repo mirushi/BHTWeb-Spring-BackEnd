@@ -1,5 +1,6 @@
-package com.bhtcnpm.website.model.dto.Exercise;
+package com.bhtcnpm.website.model.dto.ExerciseQuestion;
 
+import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerDTO;
 import lombok.Data;
 
 import java.util.List;
