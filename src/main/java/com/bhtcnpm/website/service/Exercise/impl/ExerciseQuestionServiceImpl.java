@@ -1,8 +1,6 @@
 package com.bhtcnpm.website.service.Exercise.impl;
 
-import com.bhtcnpm.website.model.dto.ExerciseQuestion.ExerciseQuestionResultDTO;
-import com.bhtcnpm.website.model.dto.ExerciseQuestion.ExerciseQuestionSubmitDTO;
-import com.bhtcnpm.website.model.dto.ExerciseQuestion.ExerciseQuestionWithAnswersDTO;
+import com.bhtcnpm.website.model.dto.ExerciseQuestion.*;
 import com.bhtcnpm.website.model.dto.ExerciseQuestion.mapper.ExerciseQuestionMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseAnswer;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseAttempt;
@@ -103,5 +101,14 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
         }
 
         return resultList;
+    }
+
+    @Override
+    public ExerciseQuestionPublicDTO createQuestion(Long exerciseID, ExerciseQuestionRequestDTO requestDTO, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        ExerciseQuestion exerciseQuestion = exerciseQuestionMapper.exerciseQuestionRequestDTOToExerciseQuestion(requestDTO, exerciseID, userID);
+        exerciseQuestion = exerciseQuestionRepository.save(exerciseQuestion);
+        return exerciseQuestionMapper.exerciseQuestionToExerciseQuestionPublicDTO(exerciseQuestion);
     }
 }

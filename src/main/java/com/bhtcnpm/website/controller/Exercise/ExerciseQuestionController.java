@@ -1,8 +1,6 @@
 package com.bhtcnpm.website.controller.Exercise;
 
-import com.bhtcnpm.website.model.dto.ExerciseQuestion.ExerciseQuestionResultDTO;
-import com.bhtcnpm.website.model.dto.ExerciseQuestion.ExerciseQuestionSubmitDTO;
-import com.bhtcnpm.website.model.dto.ExerciseQuestion.ExerciseQuestionWithAnswersDTO;
+import com.bhtcnpm.website.model.dto.ExerciseQuestion.*;
 import com.bhtcnpm.website.service.Exercise.ExerciseQuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,5 +34,15 @@ public class ExerciseQuestionController {
         List<ExerciseQuestionResultDTO> resultDTOs = exerciseQuestionService.submitAttemptAndGetResult(exerciseID, submitDTO, authentication);
 
         return new ResponseEntity<>(resultDTOs, HttpStatus.OK);
+    }
+
+    @PostMapping("/exercises/{exerciseID}/questions")
+    @ResponseBody
+    public ResponseEntity<ExerciseQuestionPublicDTO> createQuestion (@PathVariable("exerciseID") Long exerciseID,
+                                                                                @RequestBody ExerciseQuestionRequestDTO requestDTO,
+                                                                                Authentication authentication) {
+        ExerciseQuestionPublicDTO dto = exerciseQuestionService.createQuestion(exerciseID, requestDTO, authentication);
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }

@@ -6,10 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.Builder.Default;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
@@ -36,6 +34,7 @@ import java.util.List;
                 @NamedAttributeNode(value = "correctAnswers")
         }
 )
+@Builder
 public class ExerciseQuestion {
     @Id
     @GeneratedValue(
@@ -69,9 +68,11 @@ public class ExerciseQuestion {
     private Integer suggestedDuration;
 
     @Column(name = "submit_dtm", updatable = false)
+    @Builder.Default
     private LocalDateTime submitDtm = LocalDateTime.now();
 
     @Column(name = "publish_dtm")
+    @Builder.Default
     private LocalDateTime publishDtm = LocalDateTime.now();
 
     @ManyToOne
