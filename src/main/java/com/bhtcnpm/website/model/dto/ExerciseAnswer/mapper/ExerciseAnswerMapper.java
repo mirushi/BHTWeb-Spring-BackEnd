@@ -2,6 +2,7 @@ package com.bhtcnpm.website.model.dto.ExerciseAnswer.mapper;
 
 import com.bhtcnpm.website.model.dto.ExerciseAnswer.*;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseAnswer;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion;
 import com.bhtcnpm.website.repository.Exercise.ExerciseQuestionRepository;
 import org.apache.commons.lang3.Validate;
 import org.mapstruct.Mapper;
@@ -10,6 +11,7 @@ import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Mapper
 public abstract class ExerciseAnswerMapper {
@@ -32,14 +34,28 @@ public abstract class ExerciseAnswerMapper {
     public abstract ExerciseAnswer updateExerciseAnswerFromExerciseAnswerRequestDTO (ExerciseAnswerRequestContentOnlyDTO dto ,@MappingTarget ExerciseAnswer entity);
 
     public ExerciseAnswer createNewExerciseAnswerFromExerciseAnswerRequestContentOnlyDTO(ExerciseAnswerRequestContentOnlyDTO requestContentOnlyDTO, Long questionID) {
+        return this.createNewExerciseAnswerFromExerciseAnswerRequestContentOnlyDTO(requestContentOnlyDTO, exerciseQuestionRepository.getOne(questionID));
+    }
+
+    public ExerciseAnswer createNewExerciseAnswerFromExerciseAnswerRequestContentOnlyDTO(ExerciseAnswerRequestContentOnlyDTO requestContentOnlyDTO, ExerciseQuestion questionEntity) {
         return ExerciseAnswer.builder()
                 .id(null)
                 .content(requestContentOnlyDTO.getContent())
                 .isCorrect(requestContentOnlyDTO.getIsCorrect())
                 .rank(requestContentOnlyDTO.getRank())
-                .question(exerciseQuestionRepository.getOne(questionID))
+                .question(questionEntity)
                 .version((short)0)
                 .build();
+    }
+
+    public List<ExerciseAnswer> createNewExerciseAnswerListFromExerciseAnswerRequestContentOnlyDTOList (List<ExerciseAnswerRequestContentOnlyDTO> requestDTOList, ExerciseQuestion questionEntity) {
+        return requestDTOList.stream()
+                .map(obj -> this.createNewExerciseAnswerFromExerciseAnswerRequestContentOnlyDTO(obj, questionEntity))
+                .collect(Collectors.toList());
+    }
+
+    public List<ExerciseAnswer> createNewExerciseAnswerListFromExerciseAnswerRequestContentOnlyDTOList (List<ExerciseAnswerRequestContentOnlyDTO> requestDTOList, Long questionID) {
+        return this.createNewExerciseAnswerListFromExerciseAnswerRequestContentOnlyDTOList(requestDTOList, exerciseQuestionRepository.getOne(questionID));
     }
 
     public ExerciseAnswer exerciseAnswerRequestWithIDToExerciseAnswer (ExerciseAnswerRequestWithIDDTO requestDTO, ExerciseAnswer entity) {

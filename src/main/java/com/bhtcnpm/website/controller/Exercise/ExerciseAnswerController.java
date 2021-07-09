@@ -45,18 +45,8 @@ public class ExerciseAnswerController {
 
         return new ResponseEntity<>(answerWithIsCorrectDTOs, HttpStatus.OK);
     }
-
+    
     @PostMapping("/exercises/questions/{id}/answers")
-    @ResponseBody
-    public ResponseEntity<ExerciseAnswerWithIsCorrectDTO> createAnswer (@PathVariable("id") Long questionID,
-                                                                        @RequestBody ExerciseAnswerRequestContentOnlyDTO exerciseAnswerRequestContentOnlyDTO,
-                                                                        Authentication authentication) {
-        ExerciseAnswerWithIsCorrectDTO dto = exerciseAnswerService.createAnswer(exerciseAnswerRequestContentOnlyDTO, questionID, authentication);
-
-        return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
-
-    @PostMapping("/exercises/questions/{id}/multipleAnswers")
     @ResponseBody
     public ResponseEntity<List<ExerciseAnswerWithIsCorrectDTO>> createMultipleAnswers (@PathVariable("id") Long questionID,
                                                                                  @RequestBody List<ExerciseAnswerRequestContentOnlyDTO> exerciseAnswerRequestContentOnlyDTOs,

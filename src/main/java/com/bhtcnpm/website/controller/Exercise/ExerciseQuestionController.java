@@ -38,11 +38,22 @@ public class ExerciseQuestionController {
 
     @PostMapping("/exercises/{exerciseID}/questions")
     @ResponseBody
-    public ResponseEntity<ExerciseQuestionPublicDTO> createQuestion (@PathVariable("exerciseID") Long exerciseID,
-                                                                                @RequestBody ExerciseQuestionRequestDTO requestDTO,
-                                                                                Authentication authentication) {
-        ExerciseQuestionPublicDTO dto = exerciseQuestionService.createQuestion(exerciseID, requestDTO, authentication);
+    public ResponseEntity<List<ExerciseQuestionPublicDTO>> createMultipleQuestions (@PathVariable("exerciseID") Long exerciseID,
+                                                                                    @RequestBody List<ExerciseQuestionRequestDTO> requestDTOList,
+                                                                                    Authentication authentication) {
+        List<ExerciseQuestionPublicDTO> dtoList = exerciseQuestionService.createMultipleQuestions(exerciseID, requestDTOList, authentication);
 
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
+
+    @PostMapping("/exercises/{exerciseID}/questionsWithAnswers")
+    @ResponseBody
+    public ResponseEntity<List<ExerciseQuestionPublicWithAnswersDTO>> createMultipleQuestionsWithAnswers (@PathVariable("exerciseID") Long exerciseID,
+                                                                                                          @RequestBody List<ExerciseQuestionRequestWithAnswersDTO> requestDTOList,
+                                                                                                          Authentication authentication) {
+        List<ExerciseQuestionPublicWithAnswersDTO> dtoList = exerciseQuestionService.createMultipleQuestionsWithAnswers(exerciseID, requestDTOList, authentication);
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
 }

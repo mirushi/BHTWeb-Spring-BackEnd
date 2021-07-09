@@ -111,4 +111,37 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
         exerciseQuestion = exerciseQuestionRepository.save(exerciseQuestion);
         return exerciseQuestionMapper.exerciseQuestionToExerciseQuestionPublicDTO(exerciseQuestion);
     }
+
+    @Override
+    public List<ExerciseQuestionPublicDTO> createMultipleQuestions(Long exerciseID, List<ExerciseQuestionRequestDTO> requestDTOList, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionMapper.exerciseQuestionRequestDTOListToExerciseQuestionList(requestDTOList, exerciseID, userID);
+
+        exerciseQuestionList = exerciseQuestionRepository.saveAll(exerciseQuestionList);
+
+        return exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicDTOList(exerciseQuestionList);
+    }
+
+    @Override
+    public ExerciseQuestionPublicWithAnswersDTO createQuestionWithAnswers(Long exerciseID, ExerciseQuestionRequestWithAnswersDTO requestDTO, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        ExerciseQuestion exerciseQuestion = exerciseQuestionMapper.exerciseQuestionRequestWithAnswersDTOToExerciseQuestion(requestDTO, exerciseID, userID);
+
+        exerciseQuestion = exerciseQuestionRepository.save(exerciseQuestion);
+
+        return exerciseQuestionMapper.exerciseQuestionToExerciseQuestionPublicWithAnswersDTO(exerciseQuestion);
+    }
+
+    @Override
+    public List<ExerciseQuestionPublicWithAnswersDTO> createMultipleQuestionsWithAnswers(Long exerciseID, List<ExerciseQuestionRequestWithAnswersDTO> requestDTOList, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionMapper.exerciseQuestionRequestWithAnswersDTOListToExerciseQuestionList(requestDTOList, exerciseID, userID);
+
+        exerciseQuestionList = exerciseQuestionRepository.saveAll(exerciseQuestionList);
+
+        return exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicWithAnswersDTOList(exerciseQuestionList);
+    }
 }

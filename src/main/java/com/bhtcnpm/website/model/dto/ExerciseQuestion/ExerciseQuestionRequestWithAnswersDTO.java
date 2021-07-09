@@ -5,6 +5,7 @@ import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerRequestContent
 import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerRequestWithIDDTO;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -12,7 +13,7 @@ public class ExerciseQuestionRequestWithAnswersDTO {
     private String content;
     private Integer rank;
     private String explanation;
-    private Long exerciseID;
     private Integer suggestedDuration;
+    private LocalDateTime publishDtm;
     private List<ExerciseAnswerRequestContentOnlyDTO> exerciseAnswerRequestDTOs;
 }
