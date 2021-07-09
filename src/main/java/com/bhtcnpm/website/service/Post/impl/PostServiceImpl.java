@@ -218,10 +218,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDetailsDTO editPost(PostRequestDTO postRequestDTO, Long postID, Authentication authentication) {
-        UUID userID = SecurityUtils.getUserID(authentication);
-        if (userID == null) {
-            throw new AccessDeniedException("You must authenticated before using this API.");
-        }
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
         Optional<Post> optionalPost = postRepository.findByIDWithTags(postID);
         if (!optionalPost.isPresent()) {

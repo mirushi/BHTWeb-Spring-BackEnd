@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.entity.ExerciseEntities;
 
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,6 +52,10 @@ public class ExerciseQuestion {
     @ManyToOne
     @JoinColumn(name = "exercise_id")
     private Exercise exercise;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private UserWebsite author;
 
     @Column(name = "suggested_duration")
     private Integer suggestedDuration;

@@ -12,6 +12,7 @@ import com.bhtcnpm.website.service.Exercise.ExerciseService;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.Validate;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -105,5 +106,17 @@ public class ExerciseServiceImpl implements ExerciseService {
         exercise = exerciseRepository.save(exercise);
 
         return exerciseMapper.exerciseToExerciseDetailsDTO(exercise);
+    }
+
+    @Override
+    public ExerciseDetailsDTO updateExercise(ExerciseRequestDTO dto, Long exerciseID, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+        Optional<Exercise> exerciseOpt = exerciseRepository.findById(exerciseID);
+        Validate.isTrue(exerciseOpt.isPresent(), String.format("Exercise with id = %s not found", exerciseID));
+
+        Exercise exerciseEntity = exerciseOpt.get();
+        exerciseEntity = exerciseMapper.updateExerciseFromExerciseRequestDTO(dto, exerciseEntity, userID);
+
+        return exerciseMapper.exerciseToExerciseDetailsDTO(exerciseEntity);
     }
 }

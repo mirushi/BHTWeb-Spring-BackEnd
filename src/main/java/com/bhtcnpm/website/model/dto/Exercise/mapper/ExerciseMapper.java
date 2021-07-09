@@ -3,6 +3,7 @@ package com.bhtcnpm.website.model.dto.Exercise.mapper;
 import com.bhtcnpm.website.model.dto.Exercise.*;
 import com.bhtcnpm.website.model.dto.Tag.TagMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
+import com.bhtcnpm.website.model.entity.enumeration.ExerciseState.ExerciseStateType;
 import com.bhtcnpm.website.repository.Exercise.ExerciseCategoryRepository;
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
 import com.bhtcnpm.website.repository.Exercise.ExerciseTopicRepository;
@@ -75,11 +76,14 @@ public abstract class ExerciseMapper {
 
         if (entity == null) {
             newExercise.setSubmitDtm(LocalDateTime.now());
-            newExercise.setPublishDtm(LocalDateTime.now());
+            newExercise.setPublishDtm((exerciseRequestDTO.getPublishDtm() != null && exerciseRequestDTO.getPublishDtm().isAfter(LocalDateTime.now()) ? (exerciseRequestDTO.getPublishDtm()) : (LocalDateTime.now())));
             newExercise.setAuthor(userWebsiteRepository.getOne(userID));
+            //TODO: Change this to PENDING once we have GUI for approval.
+            newExercise.setExerciseState(ExerciseStateType.APPROVED);
             newExercise.setVersion((short)0);
         }
 
+        newExercise.setLastUpdatedBy(userWebsiteRepository.getOne(userID));
         newExercise.setTitle(exerciseRequestDTO.getTitle());
         newExercise.setDescription(exerciseRequestDTO.getDescription());
         newExercise.setSuggestedDuration(exerciseRequestDTO.getSuggestedDuration());

@@ -3,10 +3,15 @@ package com.bhtcnpm.website.model.entity.ExerciseEntities;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.ExerciseState.ExerciseStateType;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -41,16 +46,26 @@ public class Exercise {
     private Integer suggestedDuration;
 
     @Column(name = "submit_dtm", nullable = false, updatable = false)
-    private LocalDateTime submitDtm;
+    private LocalDateTime submitDtm = LocalDateTime.now();
 
     @Column(name = "publish_dtm", nullable = false, updatable = false)
-    private LocalDateTime publishDtm;
+    private LocalDateTime publishDtm = LocalDateTime.now();
 
     @Column(name = "rank")
     private Integer rank;
 
     @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
     private UserWebsite author;
+
+    @ManyToOne
+    @JoinColumn(name = "last_updated_by")
+    private UserWebsite lastUpdatedBy;
+
+    @Column
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime lastUpdatedDtm = LocalDateTime.now();
 
     @ManyToOne
     private ExerciseTopic topic;
@@ -90,7 +105,7 @@ public class Exercise {
     private List<ExerciseNote> exerciseNotes;
 
     @Enumerated
-    @Column(name = "exercise_state", columnDefinition = "smallint")
+    @Column(name = "exercise_state", columnDefinition = "smallint", nullable = false)
     private ExerciseStateType exerciseState;
 
     @Version

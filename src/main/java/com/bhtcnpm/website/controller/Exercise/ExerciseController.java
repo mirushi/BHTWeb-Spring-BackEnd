@@ -40,6 +40,16 @@ public class ExerciseController {
         return new ResponseEntity<>(exerciseDetails, HttpStatus.OK);
     }
 
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<ExerciseDetailsDTO> putExerciseDetails (@PathVariable Long id,
+                                                                  @RequestBody ExerciseRequestDTO dto,
+                                                                  Authentication authentication) {
+        ExerciseDetailsDTO exerciseDetails = exerciseService.updateExercise(dto, id, authentication);
+
+        return new ResponseEntity<>(exerciseDetails, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<ExerciseDetailsDTO> getExerciseDetails (@PathVariable Long id) {
