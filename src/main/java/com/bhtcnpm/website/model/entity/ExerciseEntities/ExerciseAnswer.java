@@ -34,6 +34,7 @@ public class ExerciseAnswer {
     private Integer rank;
 
     @ManyToOne
+    @JoinColumn(name = "question_id", nullable = false ,updatable = false)
     private ExerciseQuestion question;
 
     @Version

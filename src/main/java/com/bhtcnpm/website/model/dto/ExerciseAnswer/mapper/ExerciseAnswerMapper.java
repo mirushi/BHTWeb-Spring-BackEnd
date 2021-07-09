@@ -1,18 +1,15 @@
 package com.bhtcnpm.website.model.dto.ExerciseAnswer.mapper;
 
-import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerDTO;
-import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerRequestAllDTO;
-import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerRequestContentOnlyDTO;
-import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerWithIsCorrectDTO;
+import com.bhtcnpm.website.model.dto.ExerciseAnswer.*;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseAnswer;
 import com.bhtcnpm.website.repository.Exercise.ExerciseQuestionRepository;
+import org.apache.commons.lang3.Validate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Mapper
 public abstract class ExerciseAnswerMapper {
@@ -33,6 +30,47 @@ public abstract class ExerciseAnswerMapper {
     @Mapping(target = "question", ignore = true)
     @Mapping(target = "version", ignore = true)
     public abstract ExerciseAnswer updateExerciseAnswerFromExerciseAnswerRequestDTO (ExerciseAnswerRequestContentOnlyDTO dto ,@MappingTarget ExerciseAnswer entity);
+
+    public ExerciseAnswer createNewExerciseAnswerFromExerciseAnswerRequestContentOnlyDTO(ExerciseAnswerRequestContentOnlyDTO requestContentOnlyDTO, Long questionID) {
+        return ExerciseAnswer.builder()
+                .id(null)
+                .content(requestContentOnlyDTO.getContent())
+                .isCorrect(requestContentOnlyDTO.getIsCorrect())
+                .rank(requestContentOnlyDTO.getRank())
+                .question(exerciseQuestionRepository.getOne(questionID))
+                .version((short)0)
+                .build();
+    }
+
+    public ExerciseAnswer exerciseAnswerRequestWithIDToExerciseAnswer (ExerciseAnswerRequestWithIDDTO requestDTO, ExerciseAnswer entity) {
+        Validate.notNull(entity, "Cannot update null entity in exerciseAnswerRequestWithIDToExerciseAnswer.");
+
+        entity.setIsCorrect(requestDTO.getIsCorrect());
+        entity.setContent(requestDTO.getContent());
+        entity.setRank(requestDTO.getRank());
+
+        return entity;
+    }
+
+    public List<ExerciseAnswer> updateExerciseAnswerWithExerciseAnswerRequestWithIDDTOList (List<ExerciseAnswerRequestWithIDDTO> requestDTOList, List<ExerciseAnswer> entityList) {
+        List<ExerciseAnswer> resultList = new ArrayList<>(entityList.size());
+        Map<Long, ExerciseAnswerRequestWithIDDTO> exerciseAnswerRequestWithIDDTOMap = new HashMap<>(requestDTOList.size());
+
+        for (ExerciseAnswerRequestWithIDDTO dto : requestDTOList) {
+            exerciseAnswerRequestWithIDDTOMap.put(dto.getId(), dto);
+        }
+
+        for (ExerciseAnswer entity : entityList) {
+            ExerciseAnswerRequestWithIDDTO dto = exerciseAnswerRequestWithIDDTOMap.get(entity.getId());
+            if (dto == null) {
+                continue;
+            }
+            ExerciseAnswer answer = this.exerciseAnswerRequestWithIDToExerciseAnswer(dto, entity);
+            resultList.add(answer);
+        }
+
+        return resultList;
+    }
 
     public ExerciseAnswer exerciseAnswerDTOToExerciseAnswer (ExerciseAnswerRequestAllDTO exerciseAnswerDTO) {
         return ExerciseAnswer.builder()

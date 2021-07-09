@@ -2,6 +2,7 @@ package com.bhtcnpm.website.controller.Exercise;
 
 import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerDTO;
 import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerRequestContentOnlyDTO;
+import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerRequestWithIDDTO;
 import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerWithIsCorrectDTO;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseAnswer;
 import com.bhtcnpm.website.service.Exercise.ExerciseAnswerService;
@@ -55,6 +56,16 @@ public class ExerciseAnswerController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    @PostMapping("/exercises/questions/{id}/multipleAnswers")
+    @ResponseBody
+    public ResponseEntity<List<ExerciseAnswerWithIsCorrectDTO>> createMultipleAnswers (@PathVariable("id") Long questionID,
+                                                                                 @RequestBody List<ExerciseAnswerRequestContentOnlyDTO> exerciseAnswerRequestContentOnlyDTOs,
+                                                                                 Authentication authentication) {
+        List<ExerciseAnswerWithIsCorrectDTO> dtoList = exerciseAnswerService.createMultipleAnswers(exerciseAnswerRequestContentOnlyDTOs, questionID, authentication);
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+
     @PutMapping("/exercises/questions/answers/{id}")
     @ResponseBody
     public ResponseEntity<ExerciseAnswerWithIsCorrectDTO> putExerciseAnswer (@PathVariable("id") Long exerciseAnswerID,
@@ -63,6 +74,15 @@ public class ExerciseAnswerController {
         ExerciseAnswerWithIsCorrectDTO dto = exerciseAnswerService.updateAnswer(exerciseAnswerRequestContentOnlyDTO, exerciseAnswerID ,authentication);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @PutMapping("/exercises/questions/answers")
+    @ResponseBody
+    public ResponseEntity<List<ExerciseAnswerWithIsCorrectDTO>> putMultipleAnswer (@RequestBody List<ExerciseAnswerRequestWithIDDTO> exerciseAnswerRequestWithIDDTOs,
+                                                                                   Authentication authentication) {
+        List<ExerciseAnswerWithIsCorrectDTO> dtoList = exerciseAnswerService.updateMultipleAnswers(exerciseAnswerRequestWithIDDTOs, authentication);
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @DeleteMapping("/exercises/questions/answers/{id}")

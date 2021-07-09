@@ -68,7 +68,7 @@ public class ExerciseQuestion {
     @Column(name = "suggested_duration")
     private Integer suggestedDuration;
 
-    @Column(name = "submit_dtm")
+    @Column(name = "submit_dtm", updatable = false)
     private LocalDateTime submitDtm = LocalDateTime.now();
 
     @Column(name = "publish_dtm")

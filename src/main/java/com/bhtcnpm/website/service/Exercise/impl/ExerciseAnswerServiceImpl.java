@@ -2,6 +2,7 @@ package com.bhtcnpm.website.service.Exercise.impl;
 
 import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerDTO;
 import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerRequestContentOnlyDTO;
+import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerRequestWithIDDTO;
 import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerWithIsCorrectDTO;
 import com.bhtcnpm.website.model.dto.ExerciseAnswer.mapper.ExerciseAnswerMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseAnswer;
@@ -17,8 +18,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -48,14 +51,7 @@ public class ExerciseAnswerServiceImpl implements ExerciseAnswerService {
 
     @Override
     public ExerciseAnswerWithIsCorrectDTO createAnswer(ExerciseAnswerRequestContentOnlyDTO requestDTO, Long questionID, Authentication authentication) {
-        ExerciseAnswer exerciseAnswer = ExerciseAnswer.builder()
-                .id(null)
-                .content(requestDTO.getContent())
-                .isCorrect(requestDTO.getIsCorrect())
-                .rank(requestDTO.getRank())
-                .question(exerciseQuestionRepository.getOne(questionID))
-                .version((short)0)
-                .build();
+        ExerciseAnswer exerciseAnswer = exerciseAnswerMapper.createNewExerciseAnswerFromExerciseAnswerRequestContentOnlyDTO(requestDTO, questionID);
 
         exerciseAnswer = exerciseAnswerRepository.save(exerciseAnswer);
 
@@ -63,16 +59,39 @@ public class ExerciseAnswerServiceImpl implements ExerciseAnswerService {
     }
 
     @Override
+    public List<ExerciseAnswerWithIsCorrectDTO> createMultipleAnswers (List<ExerciseAnswerRequestContentOnlyDTO> requestDTOs, Long questionID, Authentication authentication) {
+        List<ExerciseAnswer> exerciseAnswers = requestDTOs.stream()
+                .map(obj -> exerciseAnswerMapper.createNewExerciseAnswerFromExerciseAnswerRequestContentOnlyDTO(obj, questionID))
+                .collect(Collectors.toList());
+
+        exerciseAnswers = exerciseAnswerRepository.saveAll(exerciseAnswers);
+
+        return exerciseAnswerMapper.exerciseAnswerListToExerciseAnswerWithIsCorrectDTOList(exerciseAnswers);
+    }
+
+    @Override
     public ExerciseAnswerWithIsCorrectDTO updateAnswer(ExerciseAnswerRequestContentOnlyDTO requestDTO, Long answerID, Authentication authentication) {
         Optional<ExerciseAnswer> exerciseAnswer = exerciseAnswerRepository.findById(answerID);
         Validate.isTrue(exerciseAnswer.isPresent(), "Exercise Answer with id = %s does not exists.", answerID);
 
-        ExerciseAnswer entity =exerciseAnswer.get();
+        ExerciseAnswer entity = exerciseAnswer.get();
         entity = exerciseAnswerMapper.updateExerciseAnswerFromExerciseAnswerRequestDTO(requestDTO, entity);
 
         entity = exerciseAnswerRepository.save(entity);
 
         return exerciseAnswerMapper.exerciseAnswerToExerciseAnswerWithIsCorrectDTO(entity);
+    }
+
+    @Override
+    public List<ExerciseAnswerWithIsCorrectDTO> updateMultipleAnswers (List<ExerciseAnswerRequestWithIDDTO> requestDTOList, Authentication authentication) {
+        List<ExerciseAnswer> exerciseAnswerList = exerciseAnswerRepository.findAllById(requestDTOList.stream().map(ExerciseAnswerRequestWithIDDTO::getId).collect(Collectors.toList()));
+        Validate.isTrue(exerciseAnswerList.size() == requestDTOList.size(), "Some answers cannot be found.");
+
+        exerciseAnswerList = exerciseAnswerMapper.updateExerciseAnswerWithExerciseAnswerRequestWithIDDTOList(requestDTOList, exerciseAnswerList);
+
+        exerciseAnswerList = exerciseAnswerRepository.saveAll(exerciseAnswerList);
+
+        return exerciseAnswerMapper.exerciseAnswerListToExerciseAnswerWithIsCorrectDTOList(exerciseAnswerList);
     }
 
     @Override
