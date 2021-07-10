@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.service;
 
 import com.bhtcnpm.website.model.dto.ExerciseSubjectUserScore.ExerciseSubjectScoreboardWithUserRankDTO;
+import com.bhtcnpm.website.model.dto.ExerciseSubjectUserScore.ExerciseSubjectUserScoreDTO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 
@@ -12,4 +13,7 @@ public interface ExerciseSubjectUserScoreService {
 
     @PreAuthorize(value = "permitAll()")
     ExerciseSubjectScoreboardWithUserRankDTO getScoreboard (Long subjectID, Authentication authentication);
+
+    @PreAuthorize(value = "permitAll()")
+    ExerciseSubjectUserScoreDTO getUserScore (UUID userID, Long subjectID);
 }

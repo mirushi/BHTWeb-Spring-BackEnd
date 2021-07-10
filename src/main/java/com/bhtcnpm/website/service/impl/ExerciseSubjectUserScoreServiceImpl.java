@@ -59,21 +59,31 @@ public class ExerciseSubjectUserScoreServiceImpl implements ExerciseSubjectUserS
         List<ExerciseSubjectUserScore> first10User = exerciseSubjectUserScoreRepository.findFirst10ByExerciseSubjectUserScoreIdSubjectIdOrderByTotalScoreDesc(subjectID);
 
         //Lấy rank của user.
-        ExerciseSubjectUserScore userRankEntity = null;
-        //TODO: Change integer to long.
-        Integer userRank = null;
+        ExerciseSubjectUserScoreDTO userRankDTO = null;
         if (userID != null) {
-            ExerciseSubjectUserScoreId id = new ExerciseSubjectUserScoreId();
-            id.setUser(userWebsiteRepository.getOne(userID));
-            id.setSubject(subjectRepository.getOne(subjectID));
-            Optional<ExerciseSubjectUserScore> exerciseSubjectUserScore = exerciseSubjectUserScoreRepository.findById(id);
-            userRankEntity = exerciseSubjectUserScore.get();
+            userRankDTO = this.getUserScore(userID, subjectID);
         }
 
         //Mapper.
-        ExerciseSubjectScoreboardWithUserRankDTO resultDTO = exerciseSubjectScoreboardMapper.createExerciseSubjectScoreboard(first10User, userRankEntity, userRank);
+        ExerciseSubjectScoreboardWithUserRankDTO resultDTO = exerciseSubjectScoreboardMapper.createExerciseSubjectScoreboard(first10User, userRankDTO);
 
         return resultDTO;
     }
 
+    @Override
+    public ExerciseSubjectUserScoreDTO getUserScore (UUID userID, Long subjectID) {
+        ExerciseSubjectUserScoreId id = new ExerciseSubjectUserScoreId();
+        id.setUser(userWebsiteRepository.getOne(userID));
+        id.setSubject(subjectRepository.getOne(subjectID));
+
+        Optional<ExerciseSubjectUserScore> score = exerciseSubjectUserScoreRepository.findById(id);
+        if (score.isEmpty()) {
+            return null;
+        }
+
+        ExerciseSubjectUserScore scoreEntity = score.get();
+        Long userRank = exerciseSubjectUserScoreRepository.getUserSubjectRank(scoreEntity.getTotalScore(), subjectID);
+
+        return exerciseSubjectScoreboardMapper.exerciseSubjectUserScoreToExerciseSubjectUserScoreDTO(scoreEntity, userRank.intValue());
+    }
 }

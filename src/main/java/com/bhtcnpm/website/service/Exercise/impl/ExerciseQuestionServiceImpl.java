@@ -110,8 +110,14 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
         if (userID != null) {
             //Lấy về điểm tổng tốt nhất của user trước đó.
             Integer userPreviousMaxScore = exerciseAttemptRepository.findMaxScoreAttemptByUserInExercise(userID, exerciseID);
-            if (userPreviousMaxScore != null && totalScore > userPreviousMaxScore) {
-                exerciseSubjectUserScoreService.addScore(userID, exerciseEntity.getTopic().getSubject().getId(), totalScore - userPreviousMaxScore);
+            int scoreIncrease = 0;
+            if (userPreviousMaxScore == null) {
+                scoreIncrease = totalScore;
+            } else if (totalScore > userPreviousMaxScore) {
+                scoreIncrease = totalScore - userPreviousMaxScore;
+            }
+            if (scoreIncrease > 0) {
+                exerciseSubjectUserScoreService.addScore(userID, exerciseEntity.getTopic().getSubject().getId(), scoreIncrease);
             }
 
             ExerciseAttempt exerciseAttempt = new ExerciseAttempt();

@@ -26,12 +26,8 @@ public interface ExerciseSubjectScoreboardMapper {
         return result;
     }
 
-    default ExerciseSubjectScoreboardWithUserRankDTO createExerciseSubjectScoreboard (List<ExerciseSubjectUserScore> first10User, ExerciseSubjectUserScore userRankEntity, Integer userRank) {
+    default ExerciseSubjectScoreboardWithUserRankDTO createExerciseSubjectScoreboard (List<ExerciseSubjectUserScore> first10User, ExerciseSubjectUserScoreDTO userRankDTO) {
         List<ExerciseSubjectUserScoreDTO> scoreBoard = exerciseSubjectUserScoreListToExerciseSubjectUserScoreDTOList(first10User);
-        ExerciseSubjectUserScoreDTO userRankDTO = null;
-        if (userRankEntity != null) {
-            userRankDTO = exerciseSubjectUserScoreToExerciseSubjectUserScoreDTO(userRankEntity, userRank);
-        }
 
         ExerciseSubjectScoreboardWithUserRankDTO result = new ExerciseSubjectScoreboardWithUserRankDTO();
         result.setExerciseScoreboard(scoreBoard);
