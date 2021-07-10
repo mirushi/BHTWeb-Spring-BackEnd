@@ -7,12 +7,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
-import lombok.Builder.Default;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -102,6 +100,10 @@ public class ExerciseQuestion {
     )
     @Where(clause = "is_correct = true")
     private List<ExerciseAnswer> correctAnswers;
+
+    @ManyToOne
+    @JoinColumn(name = "difficulty_type_id")
+    private ExerciseQuestionDifficulty difficultyType;
 
     @Version
     private short version;

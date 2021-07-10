@@ -9,6 +9,7 @@
       "id": 3
     },
     "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
     "answers": [
       {"content": "Số thực", "isCorrect": false, "rank": 1, "question": {"id": 11} ,"version": 0},
       {"content": "Số thuần ảo", "isCorrect": true, "rank": 2, "question": {"id": 11} ,"version": 0}

@@ -45,7 +45,7 @@ public class ExerciseAnswerController {
 
         return new ResponseEntity<>(answerWithIsCorrectDTOs, HttpStatus.OK);
     }
-    
+
     @PostMapping("/exercises/questions/{id}/answers")
     @ResponseBody
     public ResponseEntity<List<ExerciseAnswerWithIsCorrectDTO>> createMultipleAnswers (@PathVariable("id") Long questionID,

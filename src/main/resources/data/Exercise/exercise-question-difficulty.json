@@ -1,0 +1,38 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestionDifficulty",
+    "id": 1,
+    "name": "Mặc định",
+    "score": 1
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestionDifficulty",
+    "id": 2,
+    "name": "Không tính điểm",
+    "score": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestionDifficulty",
+    "id": 1,
+    "name": "Dễ",
+    "score": 1
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestionDifficulty",
+    "id": 1,
+    "name": "Trung bình",
+    "score": 2
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestionDifficulty",
+    "id": 1,
+    "name": "Khó",
+    "score": 8
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestionDifficulty",
+    "id": 1,
+    "name": "Rất khó",
+    "score": 16
+  }
+]

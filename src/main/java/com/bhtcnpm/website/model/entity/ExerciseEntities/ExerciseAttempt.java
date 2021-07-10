@@ -33,6 +33,9 @@ public class ExerciseAttempt {
     @Column(name = "correct_answered_questions")
     private Integer correctAnsweredQuestions;
 
+    @Column(name = "total_score")
+    private Integer totalScore;
+
     @ManyToOne
     private UserWebsite user;
 

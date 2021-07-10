@@ -72,6 +72,7 @@ public class WebsiteApplication {
                 new ClassPathResource("data/Doc/doc-comment.json"),
                 new ClassPathResource("data/report-reason.json"),
                 new ClassPathResource("data/Exercise/exercise-category.json"),
+                new ClassPathResource("data/Exercise/exercise-question-difficulty.json"),
                 new ClassPathResource("data/Exercise/NMLT/exercise-topic-nmlt.json"),
                 new ClassPathResource("data/Exercise/NMLT/exercise-01-nmlt.json"),
                 new ClassPathResource("data/Exercise/NMLT/exercise-01-question-01-nmlt.json"),

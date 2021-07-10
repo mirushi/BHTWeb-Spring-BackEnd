@@ -9,6 +9,7 @@
       "id": 3
     },
     "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
     "answers": [
       {"content": "Số thực", "isCorrect": false, "rank": 1, "question": {"id": 11} ,"version": 0},
       {"content": "Số thuần ảo", "isCorrect": true, "rank": 2, "question": {"id": 11} ,"version": 0}
@@ -25,6 +26,7 @@
       "id": 3
     },
     "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
     "answers": [
       {"content": "Số thực", "isCorrect": true, "rank": 1, "question": {"id": 12} ,"version": 0},
       {"content": "Số thuần ảo", "isCorrect": false, "rank": 2, "question": {"id": 12} ,"version": 0}
@@ -41,6 +43,7 @@
       "id": 3
     },
     "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
     "answers": [
       {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = y + xi\\)</span></p>", "isCorrect": false, "rank": 1, "question": {"id": 13} ,"version": 0},
       {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = iy\\)</span></p>", "isCorrect": false, "rank": 2, "question": {"id": 13} ,"version": 0},
@@ -59,6 +62,7 @@
       "id": 3
     },
     "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
     "answers": [
       {"content": "Khi cả phần thực và phần ảo lần lượt bằng nhau", "isCorrect": true, "rank": 1, "question": {"id": 14} ,"version": 0},
       {"content": "Chỉ cần phần thực bằng nhau", "isCorrect": false, "rank": 2, "question": {"id": 14} ,"version": 0},
@@ -77,6 +81,7 @@
       "id": 3
     },
     "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
     "answers": [
       {"content": "<p><span class=\"math-tex\">\\(x = \\frac{4}{3}; y = \\frac{2}{3}\\)</span></p>\n", "isCorrect": false, "rank": 1, "question": {"id": 15} ,"version": 0},
       {"content": "<p><span class=\"math-tex\">\\(x = \\frac{3}{2}; y = \\frac{1}{2}\\)</span></p>\n", "isCorrect": true, "rank": 2, "question": {"id": 15} ,"version": 0},
