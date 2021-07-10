@@ -51,7 +51,7 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
         List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository.findAllByExerciseId(exerciseID);
 
         List<ExerciseQuestionDifficulty> difficultyTypeList = exerciseQuestionDifficultyRepository.findAll();
-        Map<Long, Integer> difficultyScore = new HashMap<>();
+        Map<Integer, Integer> difficultyScore = new HashMap<>();
         for (ExerciseQuestionDifficulty difficulty : difficultyTypeList) {
             difficultyScore.put(difficulty.getId(), difficulty.getScore());
         }
@@ -174,5 +174,19 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
         exerciseQuestionList = exerciseQuestionRepository.saveAll(exerciseQuestionList);
 
         return exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicWithAnswersDTOList(exerciseQuestionList);
+    }
+
+    @Override
+    public List<ExerciseQuestionPublicDTO> updateMultipleQuestions(List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList, Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository
+                .findAllById(requestDTOList.stream().map(obj -> obj.getId()).collect(Collectors.toList()));
+
+        Validate.isTrue(exerciseQuestionList.size() == requestDTOList.size(), "Some question(s) could not be found.");
+
+        exerciseQuestionList = exerciseQuestionMapper.updateExerciseQuestionListFromExerciseQuestionRequestDTOList(requestDTOList, userID, exerciseQuestionList);
+
+        return exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicDTOList(exerciseQuestionList);
     }
 }

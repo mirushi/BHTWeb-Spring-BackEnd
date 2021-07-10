@@ -23,7 +23,7 @@ public class ExerciseQuestionDifficulty {
             name = "exercise_question_difficulty_type_sequence",
             sequenceName = "exercise_question_difficulty_type_sequence"
     )
-    private Long id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;

@@ -56,4 +56,13 @@ public class ExerciseQuestionController {
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
+    @PutMapping("/exercises/questions")
+    @ResponseBody
+    public ResponseEntity<List<ExerciseQuestionPublicDTO>> updateMultipleQuestions (@RequestBody List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList,
+                                                                                         Authentication authentication) {
+        List<ExerciseQuestionPublicDTO> dtoList = exerciseQuestionService.updateMultipleQuestions(requestDTOList, authentication);
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
+    
 }

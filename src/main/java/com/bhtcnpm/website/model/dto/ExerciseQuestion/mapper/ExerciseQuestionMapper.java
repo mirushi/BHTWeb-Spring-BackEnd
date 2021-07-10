@@ -4,24 +4,25 @@ import com.bhtcnpm.website.model.dto.ExerciseAnswer.mapper.ExerciseAnswerMapper;
 import com.bhtcnpm.website.model.dto.ExerciseQuestion.*;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion;
 import com.bhtcnpm.website.model.entity.enumeration.ExerciseQuestion.ExerciseQuestionStateType;
+import com.bhtcnpm.website.repository.Exercise.ExerciseQuestionDifficultyRepository;
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.util.DtmUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
-@Mapper(uses = {ExerciseAnswerMapper.class})
+@Mapper(uses = {ExerciseAnswerMapper.class}, imports = {LocalDateTime.class})
 public abstract class ExerciseQuestionMapper {
 
     protected UserWebsiteRepository userWebsiteRepository;
     protected ExerciseRepository exerciseRepository;
+    protected ExerciseQuestionDifficultyRepository exerciseQuestionDifficultyRepository;
     protected ExerciseAnswerMapper exerciseAnswerMapper;
 
     @Mapping(target = "exerciseAnswerDTOs", source = "answers")
@@ -89,6 +90,33 @@ public abstract class ExerciseQuestionMapper {
                 .collect(Collectors.toList());
     }
 
+    @Mapping(target = "answers", ignore = true)
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "correctAnswers", ignore = true)
+    @Mapping(target = "exercise", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "stateType", ignore = true)
+    @Mapping(target = "submitDtm", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    @Mapping(target = "difficultyType", expression = "java(exerciseQuestionDifficultyRepository.getOne(requestDTO.getDifficultyID()))")
+    @Mapping(target = "lastUpdatedBy", expression = "java(userWebsiteRepository.getOne(userID))")
+    @Mapping(target = "lastUpdatedDtm", expression = "java(LocalDateTime.now())")
+    public abstract ExerciseQuestion updateExerciseQuestionFromExerciseQuestionRequestDTO (ExerciseQuestionRequestWithIDContentOnlyDTO requestDTO, UUID userID, @MappingTarget ExerciseQuestion entity);
+
+    public List<ExerciseQuestion> updateExerciseQuestionListFromExerciseQuestionRequestDTOList (List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList, UUID userID, List<ExerciseQuestion> entityList) {
+
+        Map<Long, ExerciseQuestionRequestWithIDContentOnlyDTO> dtoMap = new HashMap<>();
+        for (ExerciseQuestionRequestWithIDContentOnlyDTO dto : requestDTOList) {
+            dtoMap.put(dto.getId(), dto);
+        }
+
+        List<ExerciseQuestion> result = entityList.stream()
+                .map(obj -> this.updateExerciseQuestionFromExerciseQuestionRequestDTO(dtoMap.get(obj.getId()), userID, obj))
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
 //    public ExerciseQuestion updateExerciseQuestionFromExerciseQuestionRequestDTO (ExerciseQuestionRequestWithAnswersDTO dto, ExerciseQuestion entity, UUID userID) {
 //        ExerciseQuestion newExerciseQuestion = Objects.requireNonNullElseGet(entity, ExerciseQuestion::new);
 //
@@ -125,4 +153,7 @@ public abstract class ExerciseQuestionMapper {
 
     @Autowired
     public void setExerciseAnswerMapper (ExerciseAnswerMapper exerciseAnswerMapper) { this.exerciseAnswerMapper = exerciseAnswerMapper; }
+
+    @Autowired
+    public void setExerciseQuestionDifficultyRepository (ExerciseQuestionDifficultyRepository exerciseQuestionDifficultyRepository) { this.exerciseQuestionDifficultyRepository = exerciseQuestionDifficultyRepository; }
 }
