@@ -35,10 +35,17 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
     private final UserWebsiteRepository userWebsiteRepository;
 
     @Override
-    public List<ExerciseQuestionWithAnswersDTO> getExerciseQuestionWithAnswers(Long exerciseID) {
+    public List<ExerciseQuestionWithAnswersPublicDTO> getPublicExerciseQuestionWithAnswers(Long exerciseID) {
         List<ExerciseQuestion> exerciseQuestions = exerciseQuestionRepository.findAllByExerciseIdOrderByRankAsc(exerciseID);
 
-        return exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionWithAnswersDTOList(exerciseQuestions);
+        return exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionWithAnswersPublicDTOList(exerciseQuestions);
+    }
+
+    @Override
+    public List<ExerciseQuestionWithAnswersDTO> getExerciseQuestionsWithAnswers(Long exerciseID) {
+        List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository.findAllByExerciseIdOrderByRankAsc(exerciseID);
+
+        return exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionWithAnswersDTOList(exerciseQuestionList);
     }
 
     @Override
@@ -135,7 +142,7 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
     }
 
     @Override
-    public ExerciseQuestionPublicDTO createQuestion(Long exerciseID, ExerciseQuestionRequestDTO requestDTO, Authentication authentication) {
+    public ExerciseQuestionDTO createQuestion(Long exerciseID, ExerciseQuestionRequestDTO requestDTO, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
         ExerciseQuestion exerciseQuestion = exerciseQuestionMapper.exerciseQuestionRequestDTOToExerciseQuestion(requestDTO, exerciseID, userID);
@@ -144,7 +151,7 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
     }
 
     @Override
-    public List<ExerciseQuestionPublicDTO> createMultipleQuestions(Long exerciseID, List<ExerciseQuestionRequestDTO> requestDTOList, Authentication authentication) {
+    public List<ExerciseQuestionDTO> createMultipleQuestions(Long exerciseID, List<ExerciseQuestionRequestDTO> requestDTOList, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
         List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionMapper.exerciseQuestionRequestDTOListToExerciseQuestionList(requestDTOList, exerciseID, userID);
@@ -155,7 +162,7 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
     }
 
     @Override
-    public ExerciseQuestionPublicWithAnswersDTO createQuestionWithAnswers(Long exerciseID, ExerciseQuestionRequestWithAnswersDTO requestDTO, Authentication authentication) {
+    public ExerciseQuestionWithAnswersDTO createQuestionWithAnswers(Long exerciseID, ExerciseQuestionRequestWithAnswersDTO requestDTO, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
         ExerciseQuestion exerciseQuestion = exerciseQuestionMapper.exerciseQuestionRequestWithAnswersDTOToExerciseQuestion(requestDTO, exerciseID, userID);
@@ -166,7 +173,7 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
     }
 
     @Override
-    public List<ExerciseQuestionPublicWithAnswersDTO> createMultipleQuestionsWithAnswers(Long exerciseID, List<ExerciseQuestionRequestWithAnswersDTO> requestDTOList, Authentication authentication) {
+    public List<ExerciseQuestionWithAnswersDTO> createMultipleQuestionsWithAnswers(Long exerciseID, List<ExerciseQuestionRequestWithAnswersDTO> requestDTOList, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
         List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionMapper.exerciseQuestionRequestWithAnswersDTOListToExerciseQuestionList(requestDTOList, exerciseID, userID);
@@ -177,7 +184,7 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
     }
 
     @Override
-    public List<ExerciseQuestionPublicDTO> updateMultipleQuestions(List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList, Long exerciseID, Authentication authentication) {
+    public List<ExerciseQuestionDTO> updateMultipleQuestions(List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList, Long exerciseID, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
         List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository
@@ -192,16 +199,16 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
                 .filter(obj -> obj.getId() == null)
                 .map(exerciseQuestionMapper::exerciseQuestionRequestDTOWithIDToExerciseQuestionRequestDTO)
                         .collect(Collectors.toList());
-        List<ExerciseQuestionPublicDTO> newExerciseAnswerSavedDTOList = this.createMultipleQuestions(exerciseID, newExerciseAnswerList, authentication);
+        List<ExerciseQuestionDTO> newExerciseAnswerSavedDTOList = this.createMultipleQuestions(exerciseID, newExerciseAnswerList, authentication);
 
-        List<ExerciseQuestionPublicDTO> resultingList = exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicDTOList(exerciseQuestionList);
+        List<ExerciseQuestionDTO> resultingList = exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicDTOList(exerciseQuestionList);
         resultingList.addAll(newExerciseAnswerSavedDTOList);
 
         return resultingList;
     }
 
     @Override
-    public List<ExerciseQuestionPublicWithAnswersDTO> updateMultipleQuestionsWithAnswers(List<ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> requestDTOList, Long exerciseID ,Authentication authentication) {
+    public List<ExerciseQuestionWithAnswersDTO> updateMultipleQuestionsWithAnswers(List<ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> requestDTOList, Long exerciseID , Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
         List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository
@@ -215,9 +222,9 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
                         .filter(obj -> obj.getId() == null)
                         .map(exerciseQuestionMapper::exerciseQuestionRequestDTOWithIDToExerciseQuestionRequestDTO)
                         .collect(Collectors.toList());
-        List<ExerciseQuestionPublicWithAnswersDTO> newExerciseQuestionSavedList = this.createMultipleQuestionsWithAnswers(exerciseID, newExerciseQuestionList, authentication);
+        List<ExerciseQuestionWithAnswersDTO> newExerciseQuestionSavedList = this.createMultipleQuestionsWithAnswers(exerciseID, newExerciseQuestionList, authentication);
 
-        List<ExerciseQuestionPublicWithAnswersDTO> resultingList = exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicWithAnswersDTOList(exerciseQuestionList);
+        List<ExerciseQuestionWithAnswersDTO> resultingList = exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicWithAnswersDTOList(exerciseQuestionList);
         resultingList.addAll(newExerciseQuestionSavedList);
         return resultingList;
     }

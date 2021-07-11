@@ -20,10 +20,19 @@ public class ExerciseQuestionController {
 
     @GetMapping("/exercises/{exerciseID}/questionsAndAnswers")
     @ResponseBody
-    public ResponseEntity<List<ExerciseQuestionWithAnswersDTO>> getExerciseQuestionsWithAnswers (@PathVariable("exerciseID") Long exerciseID) {
-        List<ExerciseQuestionWithAnswersDTO> exerciseQuestionWithAnswersDTOs = exerciseQuestionService.getExerciseQuestionWithAnswers(exerciseID);
+    public ResponseEntity<List<ExerciseQuestionWithAnswersPublicDTO>> getExerciseQuestionsWithAnswers (@PathVariable("exerciseID") Long exerciseID) {
+        List<ExerciseQuestionWithAnswersPublicDTO> exerciseQuestionWithAnswersPublicDTOS = exerciseQuestionService.getPublicExerciseQuestionWithAnswers(exerciseID);
 
-        return new ResponseEntity<>(exerciseQuestionWithAnswersDTOs, HttpStatus.OK);
+        return new ResponseEntity<>(exerciseQuestionWithAnswersPublicDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping("/exercises/{exerciseID}/questions")
+    @ResponseBody
+    public ResponseEntity<List<ExerciseQuestionWithAnswersDTO>> getExerciseQuestionsWithAnswers (@PathVariable("exerciseID") Long exerciseID,
+                                                                                                 Authentication authentication) {
+        List<ExerciseQuestionWithAnswersDTO> dtoList = exerciseQuestionService.getExerciseQuestionsWithAnswers(exerciseID);
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @PostMapping("/exercises/{exerciseID}/attempt")
@@ -38,40 +47,40 @@ public class ExerciseQuestionController {
 
     @PostMapping("/exercises/{exerciseID}/questions")
     @ResponseBody
-    public ResponseEntity<List<ExerciseQuestionPublicDTO>> createMultipleQuestions (@PathVariable("exerciseID") Long exerciseID,
-                                                                                    @RequestBody List<ExerciseQuestionRequestDTO> requestDTOList,
-                                                                                    Authentication authentication) {
-        List<ExerciseQuestionPublicDTO> dtoList = exerciseQuestionService.createMultipleQuestions(exerciseID, requestDTOList, authentication);
+    public ResponseEntity<List<ExerciseQuestionDTO>> createMultipleQuestions (@PathVariable("exerciseID") Long exerciseID,
+                                                                              @RequestBody List<ExerciseQuestionRequestDTO> requestDTOList,
+                                                                              Authentication authentication) {
+        List<ExerciseQuestionDTO> dtoList = exerciseQuestionService.createMultipleQuestions(exerciseID, requestDTOList, authentication);
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @PostMapping("/exercises/{exerciseID}/questionsWithAnswers")
     @ResponseBody
-    public ResponseEntity<List<ExerciseQuestionPublicWithAnswersDTO>> createMultipleQuestionsWithAnswers (@PathVariable("exerciseID") Long exerciseID,
-                                                                                                          @RequestBody List<ExerciseQuestionRequestWithAnswersDTO> requestDTOList,
-                                                                                                          Authentication authentication) {
-        List<ExerciseQuestionPublicWithAnswersDTO> dtoList = exerciseQuestionService.createMultipleQuestionsWithAnswers(exerciseID, requestDTOList, authentication);
+    public ResponseEntity<List<ExerciseQuestionWithAnswersDTO>> createMultipleQuestionsWithAnswers (@PathVariable("exerciseID") Long exerciseID,
+                                                                                                    @RequestBody List<ExerciseQuestionRequestWithAnswersDTO> requestDTOList,
+                                                                                                    Authentication authentication) {
+        List<ExerciseQuestionWithAnswersDTO> dtoList = exerciseQuestionService.createMultipleQuestionsWithAnswers(exerciseID, requestDTOList, authentication);
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @PutMapping("/exercises/{exerciseID}/questions")
     @ResponseBody
-    public ResponseEntity<List<ExerciseQuestionPublicDTO>> updateMultipleQuestions (@PathVariable("exerciseID") Long exerciseID,
-                                                                                    @RequestBody List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList,
-                                                                                    Authentication authentication) {
-        List<ExerciseQuestionPublicDTO> dtoList = exerciseQuestionService.updateMultipleQuestions(requestDTOList, exerciseID, authentication);
+    public ResponseEntity<List<ExerciseQuestionDTO>> updateMultipleQuestions (@PathVariable("exerciseID") Long exerciseID,
+                                                                              @RequestBody List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList,
+                                                                              Authentication authentication) {
+        List<ExerciseQuestionDTO> dtoList = exerciseQuestionService.updateMultipleQuestions(requestDTOList, exerciseID, authentication);
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @PutMapping("/exercises/{exerciseID}/questionsWithAnswers")
     @ResponseBody
-    public ResponseEntity<List<ExerciseQuestionPublicWithAnswersDTO>> updateMultipleQuestionsWithAnswers (@PathVariable("exerciseID") Long exerciseID,
-                                                                                                          @RequestBody List<ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> requestDTOList,
-                                                                                                          Authentication authentication) {
-        List<ExerciseQuestionPublicWithAnswersDTO> dtoList = exerciseQuestionService.updateMultipleQuestionsWithAnswers(requestDTOList, exerciseID ,authentication);
+    public ResponseEntity<List<ExerciseQuestionWithAnswersDTO>> updateMultipleQuestionsWithAnswers (@PathVariable("exerciseID") Long exerciseID,
+                                                                                                    @RequestBody List<ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> requestDTOList,
+                                                                                                    Authentication authentication) {
+        List<ExerciseQuestionWithAnswersDTO> dtoList = exerciseQuestionService.updateMultipleQuestionsWithAnswers(requestDTOList, exerciseID ,authentication);
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }

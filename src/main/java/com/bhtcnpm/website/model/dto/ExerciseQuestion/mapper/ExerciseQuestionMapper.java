@@ -9,11 +9,9 @@ import com.bhtcnpm.website.repository.Exercise.ExerciseQuestionDifficultyReposit
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.util.DtmUtils;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -31,19 +29,28 @@ public abstract class ExerciseQuestionMapper {
     protected ExerciseAnswerMapper exerciseAnswerMapper;
 
     @Mapping(target = "exerciseAnswerDTOs", source = "answers")
+    @Named("questionWithAnswerPublic")
+    public abstract ExerciseQuestionWithAnswersPublicDTO exerciseQuestionToExerciseQuestionWithAnswersPublicDTO(ExerciseQuestion exerciseQuestion);
+
+    @Mapping(target = ".", qualifiedByName = "questionWithAnswerPublic")
+    public abstract List<ExerciseQuestionWithAnswersPublicDTO> exerciseQuestionListToExerciseQuestionWithAnswersPublicDTOList(List<ExerciseQuestion> exerciseQuestionList);
+
+    @Mapping(target = "exerciseID", source = "exercise.id")
+    @Named("questionWithAnswer")
     public abstract ExerciseQuestionWithAnswersDTO exerciseQuestionToExerciseQuestionWithAnswersDTO (ExerciseQuestion exerciseQuestion);
 
-    public abstract List<ExerciseQuestionWithAnswersDTO> exerciseQuestionListToExerciseQuestionWithAnswersDTOList (List<ExerciseQuestion> exerciseQuestionList);
+    @Mapping(target = ".", qualifiedByName = "questionWithAnswer")
+    public abstract List<ExerciseQuestionWithAnswersDTO> exerciseQuestionListToExerciseQuestionWithAnswersDTOList(List<ExerciseQuestion> exerciseQuestionList);
 
     @Mapping(target = "exerciseID", source = "exercise.id")
-    public abstract ExerciseQuestionPublicDTO exerciseQuestionToExerciseQuestionPublicDTO (ExerciseQuestion exerciseQuestion);
+    public abstract ExerciseQuestionDTO exerciseQuestionToExerciseQuestionPublicDTO (ExerciseQuestion exerciseQuestion);
 
-    public abstract List<ExerciseQuestionPublicDTO> exerciseQuestionListToExerciseQuestionPublicDTOList (List<ExerciseQuestion> exerciseQuestionsList);
+    public abstract List<ExerciseQuestionDTO> exerciseQuestionListToExerciseQuestionPublicDTOList (List<ExerciseQuestion> exerciseQuestionsList);
 
     @Mapping(target = "exerciseID", source = "exercise.id")
-    public abstract ExerciseQuestionPublicWithAnswersDTO exerciseQuestionToExerciseQuestionPublicWithAnswersDTO (ExerciseQuestion exerciseQuestion);
+    public abstract ExerciseQuestionWithAnswersDTO exerciseQuestionToExerciseQuestionPublicWithAnswersDTO (ExerciseQuestion exerciseQuestion);
 
-    public abstract List<ExerciseQuestionPublicWithAnswersDTO> exerciseQuestionListToExerciseQuestionPublicWithAnswersDTOList (List<ExerciseQuestion> exerciseQuestionList);
+    public abstract List<ExerciseQuestionWithAnswersDTO> exerciseQuestionListToExerciseQuestionPublicWithAnswersDTOList (List<ExerciseQuestion> exerciseQuestionList);
 
     public abstract ExerciseQuestionRequestDTO exerciseQuestionRequestDTOWithIDToExerciseQuestionRequestDTO (ExerciseQuestionRequestWithIDContentOnlyDTO dto);
 

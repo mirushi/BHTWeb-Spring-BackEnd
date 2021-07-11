@@ -4,6 +4,7 @@ import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.constant.domain.UserWebsite.UWDomainConstant;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostSave;
@@ -89,6 +90,13 @@ public class UserWebsite {
     @ToString.Exclude
     @JsonIgnore
     private List<Doc> postedDocs;
+
+    @OneToMany(
+            mappedBy = "author",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Exercise> postedExercises;
 
     @OneToMany(
             mappedBy = "userDocReactionId.user",

@@ -148,7 +148,8 @@ public class Doc {
             searchable = Searchable.YES
     )
     @KeywordField(
-            name = "title_sort",norms = Norms.YES,
+            name = "title_sort",
+            norms = Norms.YES,
             sortable = Sortable.YES
     )
     private String title;
