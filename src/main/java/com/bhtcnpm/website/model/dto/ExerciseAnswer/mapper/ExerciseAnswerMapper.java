@@ -8,12 +8,14 @@ import org.apache.commons.lang3.Validate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Mapper
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public abstract class ExerciseAnswerMapper {
 
     protected ExerciseQuestionRepository exerciseQuestionRepository;
@@ -27,6 +29,10 @@ public abstract class ExerciseAnswerMapper {
     public abstract ExerciseAnswerWithIsCorrectDTO exerciseAnswerToExerciseAnswerWithIsCorrectDTO (ExerciseAnswer exerciseAnswer);
 
     public abstract List<ExerciseAnswerWithIsCorrectDTO> exerciseAnswerListToExerciseAnswerWithIsCorrectDTOList (Iterable<ExerciseAnswer> exerciseAnswerList);
+
+    public abstract ExerciseAnswerRequestContentOnlyDTO answerRequestWithIDDTOToAnswerRequestContentOnlyDTO(ExerciseAnswerRequestWithIDDTO dto);
+
+    public abstract List<ExerciseAnswerRequestContentOnlyDTO> answerRequestWithIDDTOListToAnswerRequestContentOnlyDTOList (List<ExerciseAnswerRequestWithIDDTO> dtoList);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "question", ignore = true)
@@ -88,6 +94,7 @@ public abstract class ExerciseAnswerMapper {
         return resultList;
     }
 
+
     public ExerciseAnswer exerciseAnswerDTOToExerciseAnswer (ExerciseAnswerRequestAllDTO exerciseAnswerDTO) {
         return ExerciseAnswer.builder()
                 .id(exerciseAnswerDTO.getId())
@@ -100,6 +107,41 @@ public abstract class ExerciseAnswerMapper {
     }
 
     public abstract List<ExerciseAnswer> exerciseAnswerDTOListToExerciseAnswerList (List<ExerciseAnswerRequestAllDTO> dto);
+
+    @Mapping(target = "question", expression = "java(exerciseQuestionRepository.getOne(questionID))")
+    @Mapping(target = "version", ignore = true)
+    public abstract ExerciseAnswer exerciseAnswerRequestWithIDDTOToExerciseAnswer (ExerciseAnswerRequestWithIDDTO dto, Long questionID);
+
+    public List<ExerciseAnswer> exerciseAnswerRequestWithIDDTOListToExerciseAnswerList (List<ExerciseAnswerRequestWithIDDTO> dtoList, Long questionID) {
+        return dtoList.stream()
+                .map(obj -> this.exerciseAnswerRequestWithIDDTOToExerciseAnswer(obj, questionID))
+                .collect(Collectors.toList());
+    }
+
+    @Mapping(target = "question", expression = "java((entity.getQuestion() != null) ? (entity.getQuestion()) : (exerciseQuestionRepository.getOne(questionID)))")
+    @Mapping(target = "version", ignore = true)
+    public abstract ExerciseAnswer updateExerciseAnswerWithExerciseAnswerRequestWithIDDTO (ExerciseAnswerRequestWithIDDTO dto, Long questionID, @MappingTarget ExerciseAnswer entity);
+
+    public List<ExerciseAnswer> updateExerciseAnswerListWithExerciseAnswerRequestWithIDDTOList (List<ExerciseAnswerRequestWithIDDTO> dtoList, Long questionID, List<ExerciseAnswer> entityList) {
+        List<ExerciseAnswer> finalList = new ArrayList<>();
+        Map<Long, ExerciseAnswer> entityMap = entityList.stream().collect(Collectors.toMap(ExerciseAnswer::getId, Function.identity()));
+
+        for (ExerciseAnswerRequestWithIDDTO dto : dtoList) {
+            ExerciseAnswer entity;
+            if (dto.getId() != null) {
+                entity = entityMap.get(dto.getId());
+                Validate.notNull(entity, String.format("Answer with ID = %s not found. Cannot update, did you mean create ?", dto.getId()));
+            } else {
+                entity = new ExerciseAnswer();
+            }
+
+            entity = this.updateExerciseAnswerWithExerciseAnswerRequestWithIDDTO(dto, questionID, entity);
+
+            finalList.add(entity);
+        }
+
+        return finalList;
+    }
 
     @Autowired
     public void setExerciseQuestionRepository (ExerciseQuestionRepository exerciseQuestionRepository) { this.exerciseQuestionRepository = exerciseQuestionRepository; }

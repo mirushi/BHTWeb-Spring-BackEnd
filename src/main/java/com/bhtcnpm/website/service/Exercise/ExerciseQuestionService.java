@@ -12,5 +12,6 @@ public interface ExerciseQuestionService {
     List<ExerciseQuestionPublicDTO> createMultipleQuestions (Long exerciseID, List<ExerciseQuestionRequestDTO> requestDTOList, Authentication authentication);
     ExerciseQuestionPublicWithAnswersDTO createQuestionWithAnswers (Long exerciseID, ExerciseQuestionRequestWithAnswersDTO requestDTO, Authentication authentication);
     List<ExerciseQuestionPublicWithAnswersDTO> createMultipleQuestionsWithAnswers (Long exerciseID, List<ExerciseQuestionRequestWithAnswersDTO> requestDTOList, Authentication authentication);
-    List<ExerciseQuestionPublicDTO> updateMultipleQuestions (List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList, Authentication authentication);
+    List<ExerciseQuestionPublicDTO> updateMultipleQuestions (List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList, Long exerciseID, Authentication authentication);
+    List<ExerciseQuestionPublicWithAnswersDTO> updateMultipleQuestionsWithAnswers (List<ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> requestDTOList, Long exerciseID ,Authentication authentication);
 }

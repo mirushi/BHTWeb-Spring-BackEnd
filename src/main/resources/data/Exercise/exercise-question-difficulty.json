@@ -13,25 +13,25 @@
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestionDifficulty",
-    "id": 1,
+    "id": 3,
     "name": "Dễ",
     "score": 1
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestionDifficulty",
-    "id": 1,
+    "id": 4,
     "name": "Trung bình",
     "score": 2
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestionDifficulty",
-    "id": 1,
+    "id": 5,
     "name": "Khó",
     "score": 8
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestionDifficulty",
-    "id": 1,
+    "id": 6,
     "name": "Rất khó",
     "score": 16
   }

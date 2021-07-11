@@ -177,16 +177,48 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
     }
 
     @Override
-    public List<ExerciseQuestionPublicDTO> updateMultipleQuestions(List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList, Authentication authentication) {
+    public List<ExerciseQuestionPublicDTO> updateMultipleQuestions(List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList, Long exerciseID, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
         List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository
-                .findAllById(requestDTOList.stream().map(obj -> obj.getId()).collect(Collectors.toList()));
-
-        Validate.isTrue(exerciseQuestionList.size() == requestDTOList.size(), "Some question(s) could not be found.");
-
+                .findAllById(requestDTOList.stream().map(ExerciseQuestionRequestWithIDContentOnlyDTO::getId).collect(Collectors.toList()));
         exerciseQuestionList = exerciseQuestionMapper.updateExerciseQuestionListFromExerciseQuestionRequestDTOList(requestDTOList, userID, exerciseQuestionList);
+        exerciseQuestionList = exerciseQuestionRepository.saveAll(exerciseQuestionList);
 
-        return exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicDTOList(exerciseQuestionList);
+        //Xử lý trường hợp tạo mới.
+        //Tách ra vì trong khi tạo mới sẽ set thêm tác giả, ... nữa.
+        //TODO: Kiểm tra rank không trùng nhau.
+        List<ExerciseQuestionRequestDTO> newExerciseAnswerList = requestDTOList.stream()
+                .filter(obj -> obj.getId() == null)
+                .map(exerciseQuestionMapper::exerciseQuestionRequestDTOWithIDToExerciseQuestionRequestDTO)
+                        .collect(Collectors.toList());
+        List<ExerciseQuestionPublicDTO> newExerciseAnswerSavedDTOList = this.createMultipleQuestions(exerciseID, newExerciseAnswerList, authentication);
+
+        List<ExerciseQuestionPublicDTO> resultingList = exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicDTOList(exerciseQuestionList);
+        resultingList.addAll(newExerciseAnswerSavedDTOList);
+
+        return resultingList;
+    }
+
+    @Override
+    public List<ExerciseQuestionPublicWithAnswersDTO> updateMultipleQuestionsWithAnswers(List<ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> requestDTOList, Long exerciseID ,Authentication authentication) {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository
+                .findAllById(requestDTOList.stream().map(ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO::getId).collect(Collectors.toList()));
+        exerciseQuestionList = exerciseQuestionMapper
+                .updateExerciseQuestionListFromExerciseQuestionRequestWithIDAndAnswersWithIDsDTOList(requestDTOList, userID, exerciseQuestionList);
+        exerciseQuestionList = exerciseQuestionRepository.saveAll(exerciseQuestionList);
+
+        //Xử lý trường hợp tạo mới.
+        List<ExerciseQuestionRequestWithAnswersDTO> newExerciseQuestionList = requestDTOList.stream()
+                        .filter(obj -> obj.getId() == null)
+                        .map(exerciseQuestionMapper::exerciseQuestionRequestDTOWithIDToExerciseQuestionRequestDTO)
+                        .collect(Collectors.toList());
+        List<ExerciseQuestionPublicWithAnswersDTO> newExerciseQuestionSavedList = this.createMultipleQuestionsWithAnswers(exerciseID, newExerciseQuestionList, authentication);
+
+        List<ExerciseQuestionPublicWithAnswersDTO> resultingList = exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicWithAnswersDTOList(exerciseQuestionList);
+        resultingList.addAll(newExerciseQuestionSavedList);
+        return resultingList;
     }
 }

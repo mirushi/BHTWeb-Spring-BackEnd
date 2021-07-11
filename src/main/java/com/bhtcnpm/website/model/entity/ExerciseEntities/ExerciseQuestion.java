@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -94,9 +95,7 @@ public class ExerciseQuestion {
     private List<ExerciseAnswer> answers;
 
     @OneToMany(
-            mappedBy = "question",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            mappedBy = "question"
     )
     @Where(clause = "is_correct = true")
     private List<ExerciseAnswer> correctAnswers;
@@ -120,5 +119,15 @@ public class ExerciseQuestion {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void setAnswers (List<ExerciseAnswer> answers) {
+        if (this.answers == null) {
+            this.answers = new ArrayList<>();
+        }
+        this.answers.clear();
+        if (answers != null) {
+            this.answers.addAll(answers);
+        }
     }
 }

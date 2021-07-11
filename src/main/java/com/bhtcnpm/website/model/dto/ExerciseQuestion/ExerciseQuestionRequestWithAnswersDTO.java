@@ -14,6 +14,7 @@ public class ExerciseQuestionRequestWithAnswersDTO {
     private Integer rank;
     private String explanation;
     private Integer suggestedDuration;
+    private Integer difficultyID;
     private LocalDateTime publishDtm;
     private List<ExerciseAnswerRequestContentOnlyDTO> exerciseAnswerRequestDTOs;
 }

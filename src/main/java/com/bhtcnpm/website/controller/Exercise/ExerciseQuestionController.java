@@ -56,13 +56,23 @@ public class ExerciseQuestionController {
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
-    @PutMapping("/exercises/questions")
+    @PutMapping("/exercises/{exerciseID}/questions")
     @ResponseBody
-    public ResponseEntity<List<ExerciseQuestionPublicDTO>> updateMultipleQuestions (@RequestBody List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList,
-                                                                                         Authentication authentication) {
-        List<ExerciseQuestionPublicDTO> dtoList = exerciseQuestionService.updateMultipleQuestions(requestDTOList, authentication);
+    public ResponseEntity<List<ExerciseQuestionPublicDTO>> updateMultipleQuestions (@PathVariable("exerciseID") Long exerciseID,
+                                                                                    @RequestBody List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList,
+                                                                                    Authentication authentication) {
+        List<ExerciseQuestionPublicDTO> dtoList = exerciseQuestionService.updateMultipleQuestions(requestDTOList, exerciseID, authentication);
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
-    
+
+    @PutMapping("/exercises/{exerciseID}/questionsWithAnswers")
+    @ResponseBody
+    public ResponseEntity<List<ExerciseQuestionPublicWithAnswersDTO>> updateMultipleQuestionsWithAnswers (@PathVariable("exerciseID") Long exerciseID,
+                                                                                                          @RequestBody List<ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> requestDTOList,
+                                                                                                          Authentication authentication) {
+        List<ExerciseQuestionPublicWithAnswersDTO> dtoList = exerciseQuestionService.updateMultipleQuestionsWithAnswers(requestDTOList, exerciseID ,authentication);
+
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
 }

@@ -11,13 +11,17 @@ import com.bhtcnpm.website.util.DtmUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Mapper(uses = {ExerciseAnswerMapper.class}, imports = {LocalDateTime.class})
+@Mapper(uses = {ExerciseAnswerMapper.class},
+        imports = {LocalDateTime.class},
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public abstract class ExerciseQuestionMapper {
 
     protected UserWebsiteRepository userWebsiteRepository;
@@ -41,6 +45,10 @@ public abstract class ExerciseQuestionMapper {
     public abstract ExerciseQuestionPublicWithAnswersDTO exerciseQuestionToExerciseQuestionPublicWithAnswersDTO (ExerciseQuestion exerciseQuestion);
 
     public abstract List<ExerciseQuestionPublicWithAnswersDTO> exerciseQuestionListToExerciseQuestionPublicWithAnswersDTOList (List<ExerciseQuestion> exerciseQuestionList);
+
+    public abstract ExerciseQuestionRequestDTO exerciseQuestionRequestDTOWithIDToExerciseQuestionRequestDTO (ExerciseQuestionRequestWithIDContentOnlyDTO dto);
+
+    public abstract ExerciseQuestionRequestWithAnswersDTO exerciseQuestionRequestDTOWithIDToExerciseQuestionRequestDTO (ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO dto);
 
     public ExerciseQuestion exerciseQuestionRequestDTOToExerciseQuestion (ExerciseQuestionRequestDTO requestDTO, Long exerciseID, UUID userID) {
         return ExerciseQuestion.builder()
@@ -77,6 +85,7 @@ public abstract class ExerciseQuestionMapper {
         result.setLastUpdatedBy(userWebsiteRepository.getOne(userID));
         //TODO: Change this to PENDING when approval system is done.
         result.setStateType(ExerciseQuestionStateType.APPROVED);
+        result.setDifficultyType(exerciseQuestionDifficultyRepository.getOne(requestDTO.getDifficultyID()));
         result.setAnswers(exerciseAnswerMapper
                         .createNewExerciseAnswerListFromExerciseAnswerRequestContentOnlyDTOList(requestDTO.getExerciseAnswerRequestDTOs(), result));
         result.setVersion((short)0);
@@ -110,11 +119,32 @@ public abstract class ExerciseQuestionMapper {
             dtoMap.put(dto.getId(), dto);
         }
 
-        List<ExerciseQuestion> result = entityList.stream()
+        return entityList.stream()
                 .map(obj -> this.updateExerciseQuestionFromExerciseQuestionRequestDTO(dtoMap.get(obj.getId()), userID, obj))
                 .collect(Collectors.toList());
+    }
 
-        return result;
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "correctAnswers", ignore = true)
+    @Mapping(target = "exercise", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "stateType", ignore = true)
+    @Mapping(target = "submitDtm", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    @Mapping(target = "difficultyType", expression = "java(exerciseQuestionDifficultyRepository.getOne(requestDTO.getDifficultyID()))")
+    @Mapping(target = "lastUpdatedBy", expression = "java(userWebsiteRepository.getOne(userID))")
+    @Mapping(target = "lastUpdatedDtm", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "answers", expression = "java(exerciseAnswerMapper.updateExerciseAnswerListWithExerciseAnswerRequestWithIDDTOList(requestDTO.getExerciseAnswerRequestDTOs(), entity.getId(), entity.getAnswers()))")
+    public abstract ExerciseQuestion updateExerciseQuestionFromExerciseQuestionRequestWithIDAndAnswersWithIDsDTO (ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO requestDTO, UUID userID, @MappingTarget ExerciseQuestion entity);
+
+    public List<ExerciseQuestion> updateExerciseQuestionListFromExerciseQuestionRequestWithIDAndAnswersWithIDsDTOList (List<ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> requestDTOList, UUID userID, List<ExerciseQuestion> entityList) {
+        Map<Long, ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> dtoMap =
+                requestDTOList.stream()
+                        .collect(Collectors.toMap(ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO::getId, Function.identity()));
+
+        return entityList.stream()
+                .map(obj -> this.updateExerciseQuestionFromExerciseQuestionRequestWithIDAndAnswersWithIDsDTO(dtoMap.get(obj.getId()), userID, obj))
+                .collect(Collectors.toList());
     }
 
 //    public ExerciseQuestion updateExerciseQuestionFromExerciseQuestionRequestDTO (ExerciseQuestionRequestWithAnswersDTO dto, ExerciseQuestion entity, UUID userID) {
