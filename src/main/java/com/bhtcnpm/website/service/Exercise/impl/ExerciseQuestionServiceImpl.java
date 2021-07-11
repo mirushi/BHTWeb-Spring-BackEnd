@@ -221,4 +221,16 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
         resultingList.addAll(newExerciseQuestionSavedList);
         return resultingList;
     }
+
+    @Override
+    public void deleteQuestion(Long questionID, Authentication authentication) {
+        exerciseQuestionRepository.deleteById(questionID);
+    }
+
+    @Override
+    public void deleteMultipleQuestions (List<Long> questionIDs, Authentication authentication) {
+        List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository.findAllByIdIn(questionIDs);
+
+        exerciseQuestionRepository.deleteAll(exerciseQuestionList);
+    }
 }

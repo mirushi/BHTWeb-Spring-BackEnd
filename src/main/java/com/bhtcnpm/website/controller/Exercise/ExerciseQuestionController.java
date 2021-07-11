@@ -75,4 +75,22 @@ public class ExerciseQuestionController {
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
+
+    @DeleteMapping("/exercises/questions/{questionID}")
+    @ResponseBody
+    public ResponseEntity deleteQuestion (@PathVariable("questionID") Long questionID,
+                                          Authentication authentication) {
+        exerciseQuestionService.deleteQuestion(questionID, authentication);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/exercises/questions")
+    @ResponseBody
+    public ResponseEntity deleteMultipleQuestions (@RequestParam("ids") List<Long> questionIDs,
+                                                   Authentication authentication) {
+        exerciseQuestionService.deleteMultipleQuestions(questionIDs, authentication);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

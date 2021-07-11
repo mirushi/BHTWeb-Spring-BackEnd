@@ -14,4 +14,6 @@ public interface ExerciseQuestionService {
     List<ExerciseQuestionPublicWithAnswersDTO> createMultipleQuestionsWithAnswers (Long exerciseID, List<ExerciseQuestionRequestWithAnswersDTO> requestDTOList, Authentication authentication);
     List<ExerciseQuestionPublicDTO> updateMultipleQuestions (List<ExerciseQuestionRequestWithIDContentOnlyDTO> requestDTOList, Long exerciseID, Authentication authentication);
     List<ExerciseQuestionPublicWithAnswersDTO> updateMultipleQuestionsWithAnswers (List<ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> requestDTOList, Long exerciseID ,Authentication authentication);
+    void deleteQuestion (Long questionID, Authentication authentication);
+    void deleteMultipleQuestions (List<Long> questionIDs, Authentication authentication);
 }
