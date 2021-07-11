@@ -14,4 +14,5 @@ public interface ExerciseService {
     List<ExerciseUserStatisticDTO> getExerciseUserStatistic (List<Long> exerciseIDs, Authentication authentication);
     ExerciseDetailsDTO createExercise (ExerciseRequestDTO dto, Authentication authentication);
     ExerciseDetailsDTO updateExercise (ExerciseRequestDTO dto, Long exerciseID, Authentication authentication);
+    void deleteExercise (Long exerciseID);
 }

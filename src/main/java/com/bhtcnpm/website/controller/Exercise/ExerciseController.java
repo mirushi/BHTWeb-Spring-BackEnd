@@ -31,25 +31,6 @@ public class ExerciseController {
         return new ResponseEntity<>(exerciseSummaryDTOs, HttpStatus.OK);
     }
 
-    @PostMapping
-    @ResponseBody
-    public ResponseEntity<ExerciseDetailsDTO> postExercise (@RequestBody ExerciseRequestDTO dto,
-                                                            Authentication authentication) {
-        ExerciseDetailsDTO exerciseDetails = exerciseService.createExercise(dto, authentication);
-
-        return new ResponseEntity<>(exerciseDetails, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}")
-    @ResponseBody
-    public ResponseEntity<ExerciseDetailsDTO> putExerciseDetails (@PathVariable Long id,
-                                                                  @RequestBody ExerciseRequestDTO dto,
-                                                                  Authentication authentication) {
-        ExerciseDetailsDTO exerciseDetails = exerciseService.updateExercise(dto, id, authentication);
-
-        return new ResponseEntity<>(exerciseDetails, HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<ExerciseDetailsDTO> getExerciseDetails (@PathVariable Long id) {
@@ -73,5 +54,33 @@ public class ExerciseController {
         List<ExerciseUserStatisticDTO> exerciseUserStatisticDTO = exerciseService.getExerciseUserStatistic(exerciseIDs, authentication);
 
         return new ResponseEntity<>(exerciseUserStatisticDTO, HttpStatus.OK);
+    }
+
+    @PostMapping
+    @ResponseBody
+    public ResponseEntity<ExerciseDetailsDTO> postExercise (@RequestBody ExerciseRequestDTO dto,
+                                                            Authentication authentication) {
+        ExerciseDetailsDTO exerciseDetails = exerciseService.createExercise(dto, authentication);
+
+        return new ResponseEntity<>(exerciseDetails, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<ExerciseDetailsDTO> putExerciseDetails (@PathVariable Long id,
+                                                                  @RequestBody ExerciseRequestDTO dto,
+                                                                  Authentication authentication) {
+        ExerciseDetailsDTO exerciseDetails = exerciseService.updateExercise(dto, id, authentication);
+
+        return new ResponseEntity<>(exerciseDetails, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{exerciseID}")
+    @ResponseBody
+    public ResponseEntity deleteExercise (@PathVariable("exerciseID") Long exerciseID,
+                                          Authentication authentication) {
+        exerciseService.deleteExercise(exerciseID);
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

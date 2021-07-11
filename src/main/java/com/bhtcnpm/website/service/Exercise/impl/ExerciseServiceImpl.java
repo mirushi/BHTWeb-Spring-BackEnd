@@ -119,4 +119,14 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         return exerciseMapper.exerciseToExerciseDetailsDTO(exerciseEntity);
     }
+
+    @Override
+    public void deleteExercise(Long exerciseID) {
+        Optional<Exercise> exerciseOpt = exerciseRepository.findById(exerciseID);
+        Validate.isTrue(exerciseOpt.isPresent(), String.format("Exercise with id = %s not found.", exerciseID));
+        Exercise exerciseEntity = exerciseOpt.get();
+
+        exerciseRepository.delete(exerciseEntity);
+//        exerciseRepository.deleteById(exerciseID);
+    }
 }

@@ -11,7 +11,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Loader;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,6 +27,13 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE exercise SET DELETED_DTM = CURRENT_TIMESTAMP() WHERE id = ? AND VERSION = ?")
+//@Loader(namedQuery = "findExerciseById")
+//@NamedQuery(
+//        name = "findExerciseById",
+//        query = "SELECT d FROM Doc d WHERE d.id = ?1 AND d.deletedDtm IS NULL "
+//)
+@Where(clause = "DELETED_DTM IS NULL")
 public class Exercise {
     @Id
     @GeneratedValue(
@@ -111,6 +121,13 @@ public class Exercise {
 
     @Column(name = "deleted_dtm")
     private LocalDateTime deletedDtm;
+
+    @OneToMany(
+            mappedBy = "exercise",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ExerciseComment> exerciseComments;
 
     @Version
     private short version;
