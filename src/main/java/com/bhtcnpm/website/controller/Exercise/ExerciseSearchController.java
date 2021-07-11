@@ -3,6 +3,8 @@ package com.bhtcnpm.website.controller.Exercise;
 import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSearchResultDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSearchResultDTOList;
+import com.bhtcnpm.website.model.dto.Exercise.filter.ExerciseSearchFilterRequestDTO;
+import com.bhtcnpm.website.model.dto.Exercise.sort.ExerciseSearchSortRequestDTO;
 import com.bhtcnpm.website.service.Exercise.ExerciseSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,26 +27,17 @@ public class ExerciseSearchController {
     @GetMapping
     @ResponseBody
     public ResponseEntity<ExerciseSearchResultDTOList> searchExercise (
-            @RequestParam(value = "searchTerm", required = false) String searchTerm,
-            @RequestParam(value = "categoryID", required = false) Long categoryID,
-            @RequestParam(value = "subjectID", required = false) Long subjectID,
-            @RequestParam(value = "authorID", required = false)UUID authorID,
-            @RequestParam(value = "tags", required = false) Long tagID,
+            ExerciseSearchFilterRequestDTO filterRequestDTO,
             @RequestParam(value = "page") Integer page,
-            @RequestParam(value = "sortByPublishDtm", required = false)ApiSortOrder sortByPublishDtm,
+            ExerciseSearchSortRequestDTO sortRequestDTO,
             Authentication authentication) {
-//        ExerciseSearchResultDTOList dtoList = exerciseSearchService.searchExercise(
-//                searchTerm,
-//                categoryID,
-//                subjectID,
-//                authorID,
-//                tagID,
-//                page,
-//                sortByPublishDtm
-//        );
-//
-//        return new ResponseEntity<>(dtoList, HttpStatus.OK);
-        return null;
-    }
+        ExerciseSearchResultDTOList dtoList = exerciseSearchService.searchExercise(
+                filterRequestDTO,
+                sortRequestDTO,
+                page,
+                authentication
+        );
 
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    }
 }
