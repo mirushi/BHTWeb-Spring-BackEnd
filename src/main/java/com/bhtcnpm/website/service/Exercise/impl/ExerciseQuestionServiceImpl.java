@@ -229,7 +229,7 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
 
     @Override
     public void deleteMultipleQuestions (List<Long> questionIDs, Authentication authentication) {
-        List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository.findAllByIdIn(questionIDs);
+        List<ExerciseQuestion> exerciseQuestionList = exerciseQuestionRepository.findAllById(questionIDs);
 
         exerciseQuestionRepository.deleteAll(exerciseQuestionList);
     }
