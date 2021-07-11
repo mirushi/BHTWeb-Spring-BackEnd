@@ -2,6 +2,7 @@ package com.bhtcnpm.website.model.dto.ExerciseQuestion.mapper;
 
 import com.bhtcnpm.website.model.dto.ExerciseAnswer.mapper.ExerciseAnswerMapper;
 import com.bhtcnpm.website.model.dto.ExerciseQuestion.*;
+import com.bhtcnpm.website.model.dto.ExerciseQuestionDifficulty.mapper.ExerciseQuestionDifficultyMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion;
 import com.bhtcnpm.website.model.entity.enumeration.ExerciseQuestion.ExerciseQuestionStateType;
 import com.bhtcnpm.website.repository.Exercise.ExerciseQuestionDifficultyRepository;
@@ -19,7 +20,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Mapper(uses = {ExerciseAnswerMapper.class},
+@Mapper(uses = {ExerciseAnswerMapper.class, ExerciseQuestionDifficultyMapper.class},
         imports = {LocalDateTime.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public abstract class ExerciseQuestionMapper {
@@ -34,13 +35,11 @@ public abstract class ExerciseQuestionMapper {
 
     public abstract List<ExerciseQuestionWithAnswersDTO> exerciseQuestionListToExerciseQuestionWithAnswersDTOList (List<ExerciseQuestion> exerciseQuestionList);
 
-    @Mapping(target = "authorID", source = "author.id")
     @Mapping(target = "exerciseID", source = "exercise.id")
     public abstract ExerciseQuestionPublicDTO exerciseQuestionToExerciseQuestionPublicDTO (ExerciseQuestion exerciseQuestion);
 
     public abstract List<ExerciseQuestionPublicDTO> exerciseQuestionListToExerciseQuestionPublicDTOList (List<ExerciseQuestion> exerciseQuestionsList);
 
-    @Mapping(target = "authorID", source = "author.id")
     @Mapping(target = "exerciseID", source = "exercise.id")
     public abstract ExerciseQuestionPublicWithAnswersDTO exerciseQuestionToExerciseQuestionPublicWithAnswersDTO (ExerciseQuestion exerciseQuestion);
 
@@ -60,8 +59,11 @@ public abstract class ExerciseQuestionMapper {
                 .suggestedDuration(requestDTO.getSuggestedDuration())
                 .publishDtm(DtmUtils.checkAndGetPublishDtm(requestDTO.getPublishDtm()))
                 .lastUpdatedBy(userWebsiteRepository.getOne(userID))
+                .lastUpdatedDtm(LocalDateTime.now())
                 //TODO: Change this to PENDING when approval system is done.
                 .stateType(ExerciseQuestionStateType.APPROVED)
+                //TODO: Even perform mapping between difficulty DTO and entity instead of manually getOne.
+                .difficultyType(exerciseQuestionDifficultyRepository.getOne(requestDTO.getDifficultyID()))
                 .version((short)0)
                 .build();
     }

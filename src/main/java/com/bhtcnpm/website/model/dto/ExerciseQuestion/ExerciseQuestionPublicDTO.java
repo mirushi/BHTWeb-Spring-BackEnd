@@ -1,5 +1,7 @@
 package com.bhtcnpm.website.model.dto.ExerciseQuestion;
 
+import com.bhtcnpm.website.model.dto.ExerciseQuestionDifficulty.ExerciseQuestionDifficultyDTO;
+import com.bhtcnpm.website.model.dto.UserWebsite.UserSummaryDTO;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,7 +14,10 @@ public class ExerciseQuestionPublicDTO {
     private Integer rank;
     private String explanation;
     private Long exerciseID;
-    private UUID authorID;
+    private UserSummaryDTO author;
     private Integer suggestedDuration;
     private LocalDateTime publishDtm;
+    private LocalDateTime lastUpdatedDtm;
+    private UserSummaryDTO lastUpdatedBy;
+    private ExerciseQuestionDifficultyDTO difficultyType;
 }

@@ -1,6 +1,8 @@
 package com.bhtcnpm.website.model.dto.ExerciseQuestion;
 
 import com.bhtcnpm.website.model.dto.ExerciseAnswer.ExerciseAnswerWithIsCorrectDTO;
+import com.bhtcnpm.website.model.dto.ExerciseQuestionDifficulty.ExerciseQuestionDifficultyDTO;
+import com.bhtcnpm.website.model.dto.UserWebsite.UserSummaryDTO;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,8 +16,11 @@ public class ExerciseQuestionPublicWithAnswersDTO {
     private Integer rank;
     private String explanation;
     private Long exerciseID;
-    private UUID authorID;
+    private UserSummaryDTO author;
     private Integer suggestedDuration;
     private LocalDateTime publishDtm;
+    private LocalDateTime lastUpdatedDtm;
+    private UserSummaryDTO lastUpdatedBy;
+    private ExerciseQuestionDifficultyDTO difficultyType;
     private List<ExerciseAnswerWithIsCorrectDTO> answers;
 }
