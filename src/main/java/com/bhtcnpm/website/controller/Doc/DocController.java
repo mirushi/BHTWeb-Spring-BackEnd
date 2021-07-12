@@ -2,6 +2,7 @@ package com.bhtcnpm.website.controller.Doc;
 
 import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseAvailableActionDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
@@ -388,6 +389,4 @@ public class DocController {
 
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
-
-
 }

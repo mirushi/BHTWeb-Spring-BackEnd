@@ -1,5 +1,7 @@
 package com.bhtcnpm.website.model.entity.ExerciseEntities;
 
+import com.bhtcnpm.website.constant.domain.Exercise.ExerciseApprovalState;
+import com.bhtcnpm.website.constant.domain.Exercise.ExerciseBusinessState;
 import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
@@ -21,6 +23,7 @@ import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -182,6 +185,41 @@ public class Exercise {
 
     @Version
     private short version;
+
+    @Transient
+    public ExerciseBusinessState getExerciseBusinessState () {
+        //Refer to BHTCNPM confluence. Entity state page.
+        if (ExerciseStateType.APPROVED.equals(this.getExerciseState())
+                && deletedDtm == null
+                && publishDtm.isBefore(LocalDateTime.now())) {
+            return ExerciseBusinessState.PUBLIC;
+        }
+        if (!ExerciseStateType.APPROVED.equals(this.getExerciseState()) && deletedDtm == null
+                || this.deletedDtm == null && publishDtm.isAfter(LocalDateTime.now())) {
+            return ExerciseBusinessState.UNLISTED;
+        }
+        if (deletedDtm != null) {
+            return ExerciseBusinessState.DELETED;
+        }
+        throw new UnsupportedOperationException("Cannot determine exercise business state.");
+    }
+
+    @Transient
+    public ExerciseApprovalState getExerciseApprovalState() {
+        if (ExerciseStateType.APPROVED.equals(exerciseState)) {
+            return ExerciseApprovalState.APPROVED;
+        }
+        if (ExerciseStateType.REJECTED.equals(exerciseState)) {
+            return ExerciseApprovalState.REJECTED;
+        }
+        if (ExerciseStateType.PENDING_APPROVAL.equals(exerciseState)) {
+            return ExerciseApprovalState.PENDING;
+        }
+        if (ExerciseStateType.PENDING_FIX.equals(exerciseState)) {
+            return ExerciseApprovalState.PENDING;
+        }
+        throw new UnsupportedOperationException("Approval state cannot be determined.");
+    }
 
     @Override
     public boolean equals (Object o) {

@@ -83,4 +83,13 @@ public class ExerciseController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @GetMapping(value = "/actionAvailable")
+    @ResponseBody
+    public ResponseEntity<List<ExerciseAvailableActionDTO>> getExerciseActionAvailable(@RequestParam List<Long> exerciseIDs,
+                                                                                       Authentication authentication) {
+        List<ExerciseAvailableActionDTO> availableActionDTOList = exerciseService.getAvailableExerciseAction(exerciseIDs, authentication);
+
+        return new ResponseEntity<>(availableActionDTOList, HttpStatus.OK);
+    }
 }

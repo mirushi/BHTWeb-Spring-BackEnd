@@ -1,10 +1,13 @@
 package com.bhtcnpm.website.service.Exercise.impl;
 
+import com.bhtcnpm.website.constant.business.Exercise.ExerciseActionAvailableConstant;
+import com.bhtcnpm.website.constant.security.evaluator.permission.ExerciseActionPermissionRequest;
 import com.bhtcnpm.website.model.dto.Exercise.*;
 import com.bhtcnpm.website.model.dto.Exercise.mapper.ExerciseMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
+import com.bhtcnpm.website.security.evaluator.Exercise.ExercisePermissionEvaluator;
 import com.bhtcnpm.website.security.predicate.Exercise.ExerciseOrderingGenerator;
 import com.bhtcnpm.website.security.predicate.Exercise.ExercisePredicateGenerator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
@@ -18,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,6 +33,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
     private final ExerciseMapper exerciseMapper;
+    private final ExercisePermissionEvaluator exercisePermissionEvaluator;
 
     @Override
     public List<ExerciseSummaryDTO> getExerciseList(Predicate predicate, Authentication authentication) {
@@ -123,5 +128,38 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public void deleteExercise(Long exerciseID) {
         exerciseRepository.deleteById(exerciseID);
+    }
+
+    @Override
+    public List<ExerciseAvailableActionDTO> getAvailableExerciseAction(List<Long> exerciseIDs, Authentication authentication) {
+        List<ExerciseAvailableActionDTO> exerciseAvailableActionDTOList = new ArrayList<>();
+
+        for (Long exerciseID : exerciseIDs) {
+            if (exerciseID == null) {
+                continue;
+            }
+
+            ExerciseAvailableActionDTO exerciseAvailableActionDTO = new ExerciseAvailableActionDTO();
+            exerciseAvailableActionDTO.setId(exerciseID);
+            List<String> availableAction = new ArrayList<>();
+
+            if (exercisePermissionEvaluator.hasPermission(authentication, exerciseID, ExerciseActionPermissionRequest.READ_PERMISSION)) {
+                availableAction.add(ExerciseActionAvailableConstant.READ_ACTION);
+            }
+            if (exercisePermissionEvaluator.hasPermission(authentication, exerciseID, ExerciseActionPermissionRequest.UPDATE_PERMISSION)) {
+                availableAction.add(ExerciseActionAvailableConstant.UPDATE_ACTION);
+            }
+            if (exercisePermissionEvaluator.hasPermission(authentication, exerciseID, ExerciseActionPermissionRequest.DELETE_PERMISSION)) {
+                availableAction.add(ExerciseActionAvailableConstant.DELETE_ACTION);
+            }
+            if (exercisePermissionEvaluator.hasPermission(authentication, exerciseID, ExerciseActionPermissionRequest.REPORT_PERMISSION)) {
+                availableAction.add(ExerciseActionAvailableConstant.REPORT_ACTION);
+            }
+
+            exerciseAvailableActionDTO.setAvailableActions(availableAction);
+
+            exerciseAvailableActionDTOList.add(exerciseAvailableActionDTO);
+        }
+        return exerciseAvailableActionDTOList;
     }
 }
