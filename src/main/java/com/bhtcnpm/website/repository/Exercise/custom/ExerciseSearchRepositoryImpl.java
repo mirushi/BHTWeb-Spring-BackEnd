@@ -1,7 +1,6 @@
 package com.bhtcnpm.website.repository.Exercise.custom;
 
 import com.bhtcnpm.website.constant.business.Exercise.ExerciseSearchConstant;
-import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Exercise.filter.ExerciseSearchFilterRequestDTO;
 import com.bhtcnpm.website.model.dto.Exercise.sort.ExerciseSearchSortRequestDTO;
@@ -9,14 +8,9 @@ import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseCategory;
 import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.bhtcnpm.website.model.entity.enumeration.ExerciseState.ExerciseStateType;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.search.engine.search.predicate.dsl.MatchPredicateMatchingStep;
-import org.hibernate.search.engine.search.predicate.dsl.PredicateFinalStep;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.engine.search.sort.SearchSort;
-import org.hibernate.search.engine.search.sort.dsl.SortFinalStep;
 import org.hibernate.search.engine.search.sort.dsl.SortThenStep;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.scope.SearchScope;
@@ -26,7 +20,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -87,7 +80,7 @@ public class ExerciseSearchRepositoryImpl implements ExerciseSearchRepository {
                         Long categoryID = filterRequestDTO.getCategoryID();
                         Long subjectID = filterRequestDTO.getSubjectID();
                         UUID authorID = filterRequestDTO.getAuthorID();
-                        Long tagID = filterRequestDTO.getTagID();
+                        Long tagID = filterRequestDTO.getTags();
                         if (StringUtils.isNotEmpty(searchTerm)) {
                             var predicate = f.match()
                                     .field("title")

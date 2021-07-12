@@ -10,5 +10,5 @@ public class ExerciseSearchFilterRequestDTO {
     private Long categoryID;
     private Long subjectID;
     private UUID authorID;
-    private Long tagID;
+    private Long tags;
 }
