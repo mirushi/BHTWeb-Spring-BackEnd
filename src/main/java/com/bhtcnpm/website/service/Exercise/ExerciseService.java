@@ -42,4 +42,5 @@ public interface ExerciseService {
 
     List<ExerciseAvailableActionDTO> getAvailableExerciseAction (List<Long> exerciseIDs, Authentication authentication);
 
+    void updateAttempts(Long exerciseID);
 }

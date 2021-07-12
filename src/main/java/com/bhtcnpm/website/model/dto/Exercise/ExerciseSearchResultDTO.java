@@ -14,5 +14,6 @@ public class ExerciseSearchResultDTO {
     private UserSummaryDTO author;
     private SubjectSummaryDTO subject;
     private ExerciseCategoryDTO category;
+    private Long attempts;
     private LocalDateTime publishDtm;
 }

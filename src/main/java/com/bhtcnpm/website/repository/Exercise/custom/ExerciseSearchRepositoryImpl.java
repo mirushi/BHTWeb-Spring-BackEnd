@@ -64,12 +64,20 @@ public class ExerciseSearchRepositoryImpl implements ExerciseSearchRepository {
 
         //Avoid null pointer exception - inverse equals caller and callee.
         if (sortRequestDTO != null) {
+            //PublishDtm.
             if (ApiSortOrder.ASC.equals(sortRequestDTO.getSortByPublishDtm())) {
                 sortThenStep = sortThenStep.then().field("publishDtm").asc();
             } else if (ApiSortOrder.DESC.equals(sortRequestDTO.getSortByPublishDtm())) {
                 sortThenStep = sortThenStep.then().field("publishDtm").desc();
             }
+            //Attempts.
+            if (ApiSortOrder.ASC.equals(sortRequestDTO.getSortByAttempts())) {
+                sortThenStep = sortThenStep.then().field("attempts").asc();
+            } else if (ApiSortOrder.DESC.equals(sortRequestDTO.getSortByAttempts())) {
+                sortThenStep = sortThenStep.then().field("attempts").desc();
+            }
         }
+
         SearchSort searchSort = sortThenStep.toSort();
         //TODO: Do a sort for attempts count of user.
         SearchResult<Exercise> searchResult = searchSession.search(Exercise.class)

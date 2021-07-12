@@ -6,6 +6,7 @@ import com.bhtcnpm.website.model.dto.Exercise.*;
 import com.bhtcnpm.website.model.dto.Exercise.mapper.ExerciseMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
+import com.bhtcnpm.website.repository.Exercise.ExerciseAttemptRepository;
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
 import com.bhtcnpm.website.security.evaluator.Exercise.ExercisePermissionEvaluator;
 import com.bhtcnpm.website.security.predicate.Exercise.ExerciseOrderingGenerator;
@@ -32,6 +33,7 @@ import java.util.UUID;
 public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
+    private final ExerciseAttemptRepository exerciseAttemptRepository;
     private final ExerciseMapper exerciseMapper;
     private final ExercisePermissionEvaluator exercisePermissionEvaluator;
 
@@ -161,5 +163,16 @@ public class ExerciseServiceImpl implements ExerciseService {
             exerciseAvailableActionDTOList.add(exerciseAvailableActionDTO);
         }
         return exerciseAvailableActionDTOList;
+    }
+
+    @Override
+    public void updateAttempts(Long exerciseID) {
+        Optional<Exercise> exerciseOpt = exerciseRepository.findById(exerciseID);
+        Validate.isTrue(exerciseOpt.isPresent(), "Exercise ID not found. Cannot update.");
+        Exercise exercise = exerciseOpt.get();
+
+        Long exerciseAttempts = exerciseAttemptRepository.countByExerciseId(exerciseID);
+        exercise.setAttempts(exerciseAttempts);
+        exerciseRepository.save(exercise);
     }
 }

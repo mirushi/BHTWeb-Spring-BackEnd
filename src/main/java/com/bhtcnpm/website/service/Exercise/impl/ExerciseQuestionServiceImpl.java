@@ -10,6 +10,7 @@ import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Exercise.ExerciseQuestionService;
+import com.bhtcnpm.website.service.Exercise.ExerciseService;
 import com.bhtcnpm.website.service.ExerciseSubjectUserScoreService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.Validate;
@@ -32,6 +33,7 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
     private final ExerciseQuestionMapper exerciseQuestionMapper;
     private final ExerciseAttemptRepository exerciseAttemptRepository;
     private final ExerciseRepository exerciseRepository;
+    private final ExerciseService exerciseService;
     private final UserWebsiteRepository userWebsiteRepository;
 
     @Override
@@ -136,6 +138,9 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
             exerciseAttempt.setVersion((short)0);
 
             exerciseAttemptRepository.save(exerciseAttempt);
+
+            //Cập nhập biến đếm.
+            exerciseService.updateAttempts(exerciseID);
         }
 
         return resultList;
