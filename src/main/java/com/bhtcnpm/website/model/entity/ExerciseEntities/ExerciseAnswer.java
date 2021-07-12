@@ -1,9 +1,6 @@
 package com.bhtcnpm.website.model.entity.ExerciseEntities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +10,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ExerciseAnswer {
     @Id
     @GeneratedValue(
@@ -25,16 +23,18 @@ public class ExerciseAnswer {
     )
     private Long id;
 
-    @Column(name = "content")
+    @Lob
+    @Column(name = "content", columnDefinition = "text",nullable = false)
     private String content;
 
-    @Column(name = "is_correct")
+    @Column(name = "is_correct", nullable = false)
     private Boolean isCorrect;
 
-    @Column(name = "rank")
+    @Column(name = "rank", nullable = false)
     private Integer rank;
 
     @ManyToOne
+    @JoinColumn(name = "question_id", nullable = false ,updatable = false)
     private ExerciseQuestion question;
 
     @Version

@@ -2,10 +2,15 @@ package com.bhtcnpm.website.model.entity.DocEntities;
 
 import com.bhtcnpm.website.constant.domain.Doc.DocApprovalState;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
-import com.bhtcnpm.website.model.entity.*;
+import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
+import com.bhtcnpm.website.model.entity.Tag;
+import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.Doc.comparator.DocFileUploadComparatorRankBased;
-import com.bhtcnpm.website.search.bridge.*;
+import com.bhtcnpm.website.search.bridge.DocCategoryIDValueBridge;
+import com.bhtcnpm.website.search.bridge.SubjectIDValueBridge;
+import com.bhtcnpm.website.search.bridge.TagValueBridge;
+import com.bhtcnpm.website.search.bridge.UserWebsiteIDValueBridge;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -16,13 +21,16 @@ import org.hibernate.search.engine.backend.types.*;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
-import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @Entity(name = "Doc")
 @Indexed
@@ -31,12 +39,12 @@ import java.util.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE doc SET DELETED_DATE = "+ "CURRENT_TIMESTAMP()" +" WHERE id = ? AND VERSION = ?")
+@SQLDelete(sql = "UPDATE doc SET DELETED_DTM = CURRENT_TIMESTAMP() WHERE id = ? AND VERSION = ?")
 @Loader(namedQuery = "findDocById")
 @NamedQuery(name = "findDocById",
         query = "SELECT d FROM Doc d WHERE d.id = ?1 " +
-                "AND d.deletedDate IS NULL")
-@Where(clause = "DELETED_DATE is NULL")
+                "AND d.deletedDtm IS NULL")
+@Where(clause = "DELETED_DTM is NULL")
 @NamedEntityGraph(
         name = "tagsAndDocFileUploads.all",
         attributeNodes = {
@@ -45,7 +53,6 @@ import java.util.*;
         }
 )
 public class Doc {
-
     @Id
     @GeneratedValue (
             strategy = GenerationType.SEQUENCE,
@@ -84,11 +91,11 @@ public class Doc {
     @ManyToOne
     @JoinColumn(nullable = false)
     @GenericField(
-            valueBridge = @ValueBridgeRef(type = DocSubjectIDValueBridge.class),
+            valueBridge = @ValueBridgeRef(type = SubjectIDValueBridge.class),
             searchable = Searchable.YES,
             name = "subjectID"
     )
-    private DocSubject subject;
+    private Subject subject;
 
     @Column(nullable = false)
     @FullTextField(analyzer = "default",
@@ -98,6 +105,10 @@ public class Doc {
             searchable = Searchable.YES
     )
     private String description;
+
+    @Lob
+    @Column(columnDefinition = "text")
+    private String adminFeedback;
 
     @OneToMany(
             mappedBy = "doc",
@@ -111,7 +122,7 @@ public class Doc {
     private String imageURL;
 
     @Column(nullable = false)
-    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    @GenericField(name = "publishDtm", sortable = Sortable.YES, projectable = Projectable.YES)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime publishDtm;
@@ -137,20 +148,22 @@ public class Doc {
             searchable = Searchable.YES
     )
     @KeywordField(
-            name = "title_sort",norms = Norms.YES,
+            name = "title_sort",
+            norms = Norms.YES,
             sortable = Sortable.YES
     )
     private String title;
 
     @Enumerated
-    @Column(columnDefinition = "smallint")
+    @Column(name = "doc_state", columnDefinition = "smallint")
     @GenericField(projectable = Projectable.YES, searchable = Searchable.YES)
     private DocStateType docState;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @GenericField(searchable = Searchable.YES)
-    private LocalDateTime deletedDate;
+    @GenericField(name = "deletedDtm", searchable = Searchable.YES)
+    @Column(name = "deleted_dtm")
+    private LocalDateTime deletedDtm;
 
     @ManyToMany
     @JoinTable(
@@ -179,15 +192,15 @@ public class Doc {
     public DocBusinessState getDocBusinessState () {
         //Refer to BHTCNPM confluence. Entity state page.
         if (DocStateType.APPROVED.equals(this.getDocState())
-                && deletedDate == null
+                && deletedDtm == null
                 && publishDtm.isBefore(LocalDateTime.now())) {
             return DocBusinessState.PUBLIC;
         }
-        if (!DocStateType.APPROVED.equals(this.getDocState()) && deletedDate == null
-                || deletedDate == null && publishDtm.isAfter(LocalDateTime.now())) {
+        if (!DocStateType.APPROVED.equals(this.getDocState()) && deletedDtm == null
+                || deletedDtm == null && publishDtm.isAfter(LocalDateTime.now())) {
             return DocBusinessState.UNLISTED;
         }
-        if (deletedDate != null) {
+        if (deletedDtm != null) {
             return DocBusinessState.DELETED;
         }
         throw new UnsupportedOperationException("Cannot determine doc business state.");

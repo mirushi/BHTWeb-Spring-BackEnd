@@ -9,16 +9,18 @@ import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReactionId;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.repository.Doc.DocRepository;
 import com.bhtcnpm.website.repository.Doc.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.UserDocReactionService;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,6 +34,8 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
     private final UserDocReactionRepository reactionRepository;
 
     private final UserWebsiteRepository userWebsiteRepository;
+
+    private final UserWebsiteService userWebsiteService;
 
     private final DocRepository docRepository;
 
@@ -68,6 +72,7 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
         //Nếu user đã react rồi thì cập nhật reaction cũ bằng reaction mới.
         Optional<UserDocReaction> userDocReactionObject = reactionRepository.findById(userDocReactionId);
         UserDocReaction userDocReaction;
+        DocReactionType oldReactionType = null;
 
         //Xoá reaction của User ra khỏi hệ thống nếu như User chọn là none.
         if (DocReactionType.NONE.equals(userDocReactionUserOwnDTO.getDocReactionType())) {
@@ -79,6 +84,7 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
 
         if (userDocReactionObject.isPresent()) {
             userDocReaction = userDocReactionObject.get();
+            oldReactionType = userDocReaction.getDocReactionType();
         } else {
             userDocReaction = new UserDocReaction();
             userDocReaction.setUserDocReactionId(userDocReactionId);
@@ -86,6 +92,25 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
         userDocReaction.setDocReactionType(userDocReactionUserOwnDTO.getDocReactionType());
         userDocReaction = reactionRepository.save(userDocReaction);
 
+        updateUserReputation(doc.getAuthor().getId(), oldReactionType, userDocReactionUserOwnDTO.getDocReactionType());
+
         return userDocReactionMapper.userDocReactionToUserDocReactionDTO(userDocReaction);
+    }
+
+    private void updateUserReputation (UUID userID, DocReactionType oldReaction, DocReactionType newReaction) {
+        //TODO: Performance can be improved by grouping subtract and update.
+        if (oldReaction != null && oldReaction.equals(newReaction)) {
+            return;
+        }
+        if (DocReactionType.DISLIKE.equals(oldReaction)) {
+            userWebsiteService.subtractUserReputationScore(userID, ReputationType.DOC_DISLIKED, 1L);
+        } else if (DocReactionType.LIKE.equals(oldReaction)) {
+            userWebsiteService.subtractUserReputationScore(userID, ReputationType.DOC_LIKED, 1L);
+        }
+        if (DocReactionType.LIKE.equals(newReaction)) {
+            userWebsiteService.addUserReputationScore(userID, ReputationType.DOC_LIKED, 1L);
+        } else if (DocReactionType.DISLIKE.equals(newReaction)) {
+            userWebsiteService.addUserReputationScore(userID, ReputationType.DOC_DISLIKED, 1L);
+        }
     }
 }

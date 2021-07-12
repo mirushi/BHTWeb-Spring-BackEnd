@@ -8,6 +8,7 @@
     "submitDtm": "2021-06-16T23:37:29Z",
     "publishDtm": "2021-06-16T23:37:29Z",
     "rank": 1,
+    "exerciseState": "APPROVED",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
@@ -31,6 +32,7 @@
     "submitDtm": "2021-06-16T23:37:29Z",
     "publishDtm": "2021-06-16T23:37:29Z",
     "rank": 2,
+    "exerciseState": "APPROVED",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
@@ -54,6 +56,7 @@
     "submitDtm": "2021-06-16T23:37:29Z",
     "publishDtm": "2021-06-16T23:37:29Z",
     "rank": 3,
+    "exerciseState": "APPROVED",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
@@ -77,6 +80,7 @@
     "submitDtm": "2021-06-16T23:37:29Z",
     "publishDtm": "2021-06-16T23:37:29Z",
     "rank": 4,
+    "exerciseState": "APPROVED",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
@@ -100,6 +104,7 @@
     "submitDtm": "2021-06-16T23:37:29Z",
     "publishDtm": "2021-06-16T23:37:29Z",
     "rank": 5,
+    "exerciseState": "APPROVED",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
@@ -123,6 +128,7 @@
     "submitDtm": "2021-06-16T23:37:29Z",
     "publishDtm": "2021-06-16T23:37:29Z",
     "rank": 6,
+    "exerciseState": "APPROVED",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
@@ -146,6 +152,7 @@
     "submitDtm": "2021-06-16T23:37:29Z",
     "publishDtm": "2021-06-16T23:37:29Z",
     "rank": 7,
+    "exerciseState": "APPROVED",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
@@ -169,6 +176,7 @@
     "submitDtm": "2021-06-16T23:37:29Z",
     "publishDtm": "2021-06-16T23:37:29Z",
     "rank": 8,
+    "exerciseState": "APPROVED",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },

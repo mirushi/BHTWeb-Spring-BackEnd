@@ -6,10 +6,10 @@ import com.bhtcnpm.website.constant.domain.Post.PostDomainConstant;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
-import com.bhtcnpm.website.search.bridge.UserWebsiteIDValueBridge;
 import com.bhtcnpm.website.search.bridge.PostCategoryIDValueBridge;
 import com.bhtcnpm.website.search.bridge.TagValueBridge;
-import com.fasterxml.jackson.annotation.*;
+import com.bhtcnpm.website.search.bridge.UserWebsiteIDValueBridge;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -95,11 +95,11 @@ public class Post {
     private Integer readingTime;
 
     @Lob
-    @Column(nullable = false)
+    @Column(columnDefinition = "text", nullable = false)
     private String content;
 
     @Lob
-    @Column(nullable = false, length = PostDomainConstant.CONTENT_PLAIN_TEXT_LENGTH)
+    @Column(columnDefinition = "text", nullable = false)
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,
@@ -108,7 +108,7 @@ public class Post {
     private String contentPlainText;
 
     @Lob
-    @Column
+    @Column(columnDefinition = "text")
     private String adminFeedback;
 
     @ManyToOne

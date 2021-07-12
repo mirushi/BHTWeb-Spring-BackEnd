@@ -1,24 +1,19 @@
 package com.bhtcnpm.website.model.dto.Exercise;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ExerciseSummaryWithTopicDTO {
     private Long id;
     private String title;
     private String description;
     private Boolean attempted;
+    private Integer maxCorrectAnsweredQuestions;
+    private Long totalQuestions;
     private Long topicID;
     private String topicName;
-
-    public ExerciseSummaryWithTopicDTO (Long id, String title, String description,Long topicID, String topicName, Boolean attempted) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.topicID = topicID;
-        this.topicName = topicName;
-        this.attempted = attempted;
-    }
 }

@@ -2,14 +2,12 @@ package com.bhtcnpm.website.model.dto.UserPostReport;
 
 import com.bhtcnpm.website.model.dto.ReportReason.ReportReasonDTO;
 import com.bhtcnpm.website.model.dto.UserWebsite.UserSummaryDTO;
-import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 public class PostReportDTO {

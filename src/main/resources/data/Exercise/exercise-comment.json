@@ -1,0 +1,47 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseComment",
+    "id": 1,
+    "content": "Bạn nào ra kết quả khác ở câu 3 không ?",
+    "author": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+    "exercise": {"id": 1},
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseComment",
+    "id": 2,
+    "content": "Câu 3 hình như đề sai rồi.",
+    "author": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+    "exercise": {"id": 1},
+    "parentComment": {"id": 1},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseComment",
+    "id": 3,
+    "content": "Mình làm đúng hết rồi. Đề hay, cảm ơn admin nhiều <3.",
+    "author": {"id": "343f0c68-9cc4-474e-9da2-89626c04c0da"},
+    "exercise": {"id": 1},
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseComment",
+    "id": 4,
+    "content": "Cảm ơn admin",
+    "author": {"id": "343f0c68-9cc4-474e-9da2-89626c04c0da"},
+    "exercise": {"id": 3},
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseComment",
+    "id": 5,
+    "content": "Thanks mirushi.",
+    "author": {"id": "343f0c68-9cc4-474e-9da2-89626c04c0da"},
+    "exercise": {"id": 3},
+    "parentComment": null,
+    "version": 0
+  }
+]

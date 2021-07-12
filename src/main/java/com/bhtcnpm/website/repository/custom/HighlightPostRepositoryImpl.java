@@ -1,11 +1,15 @@
 package com.bhtcnpm.website.repository.custom;
 
-import com.bhtcnpm.website.model.entity.PostEntities.*;
+import com.bhtcnpm.website.model.entity.PostEntities.HighlightPost;
+import com.bhtcnpm.website.model.entity.PostEntities.HighlightPostId;
+import com.bhtcnpm.website.model.entity.PostEntities.Post;
+import com.bhtcnpm.website.model.entity.PostEntities.QHighlightPost;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Component;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;

@@ -1,0 +1,51 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.UserWebsiteEntities.ReputationScoreDefinition",
+    "id": 1,
+    "reputationType": "POST_LIKED",
+    "score": 10,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.UserWebsiteEntities.ReputationScoreDefinition",
+    "id": 2,
+    "reputationType": "POST_REPORTED_REMOVED",
+    "score": -5,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.UserWebsiteEntities.ReputationScoreDefinition",
+    "id": 3,
+    "reputationType": "DOC_LIKED",
+    "score": 10,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.UserWebsiteEntities.ReputationScoreDefinition",
+    "id": 4,
+    "reputationType": "DOC_DISLIKED",
+    "score": -2,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.UserWebsiteEntities.ReputationScoreDefinition",
+    "id": 5,
+    "reputationType": "DOC_REPORTED_REMOVED",
+    "score": -5,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.UserWebsiteEntities.ReputationScoreDefinition",
+    "id": 6,
+    "reputationType": "COMMENT_LIKED",
+    "score": 5,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.UserWebsiteEntities.ReputationScoreDefinition",
+    "id": 7,
+    "reputationType": "COMMENT_REPORTED_REMOVED",
+    "score": -5,
+    "version": 0
+  }
+]

@@ -8,6 +8,9 @@
     "exercise": {
       "id": 3
     },
+    "author": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+    "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
     "answers": [
       {"content": "Số thực", "isCorrect": false, "rank": 1, "question": {"id": 11} ,"version": 0},
       {"content": "Số thuần ảo", "isCorrect": true, "rank": 2, "question": {"id": 11} ,"version": 0}

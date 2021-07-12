@@ -1,9 +1,7 @@
 package com.bhtcnpm.website.model.entity;
 
 import com.bhtcnpm.website.model.entity.enumeration.ActivityType.ActivityType;
-import com.bhtcnpm.website.model.entity.enumeration.ActivityType.ActivityTypeConverter;
 import lombok.Data;
-import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
-import com.bhtcnpm.website.model.entity.ReportReason.ReportReasonFeedbackId;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,8 +29,8 @@ public class UserPostReportId implements Serializable {
         if (this == o) return true;
         if (!(o instanceof UserPostReportId)) return false;
         UserPostReportId that = (UserPostReportId) o;
-        return Objects.equals(getUser(), that.getUser()) &&
-                Objects.equals(getPostReport(), that.getPostReport());
+        return Objects.equals(getUser(), that.getUser())
+                && Objects.equals(getPostReport(), that.getPostReport());
     }
 
     @Override

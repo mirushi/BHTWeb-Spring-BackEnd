@@ -1,9 +1,10 @@
 package com.bhtcnpm.website.model.entity;
 
+import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.constant.domain.UserWebsite.UWDomainConstant;
-import com.bhtcnpm.website.constant.domain.UserWebsiteRole.UWRRequiredRole;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocReaction;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostLike;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostSave;
@@ -16,10 +17,6 @@ import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
-import org.springframework.security.core.CredentialsContainer;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -28,7 +25,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user_website")
@@ -40,7 +36,7 @@ import java.util.stream.Collectors;
 public class UserWebsite {
     //New account will automatically be created if not found in db.
     @Id
-    @Column(columnDefinition = "BINARY(16)",
+    @Column(columnDefinition = "uuid",
             nullable = false,
             unique = true)
     @GenericField(
@@ -66,27 +62,14 @@ public class UserWebsite {
     @FullTextField(norms = Norms.YES, searchable = Searchable.YES)
     private String displayName;
 
-    @Column(nullable = false)
+    @Column(name = "reputation_score", nullable = false)
     private Long reputationScore;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = GenericBusinessConstant.URL_MAX_LENGTH)
     private String avatarURL;
 
     @Column(nullable = false)
     private String aboutMe;
-
-    @ManyToMany (
-            cascade = { CascadeType.PERSIST },
-            fetch = FetchType.EAGER
-    )
-    @JoinTable (
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Set<UserWebsiteRole> roles;
 
     @OneToMany (
             mappedBy = "author",
@@ -107,6 +90,13 @@ public class UserWebsite {
     @ToString.Exclude
     @JsonIgnore
     private List<Doc> postedDocs;
+
+    @OneToMany(
+            mappedBy = "author",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Exercise> postedExercises;
 
     @OneToMany(
             mappedBy = "userDocReactionId.user",
@@ -148,11 +138,11 @@ public class UserWebsite {
     @JsonIgnore
     private Set<UserPostSave> userPostSaves;
 
-    @ManyToMany(mappedBy = "usersSaved")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    private Set<Course> savedCourses;
+//    @ManyToMany(mappedBy = "usersSaved")
+//    @EqualsAndHashCode.Exclude
+//    @ToString.Exclude
+//    @JsonIgnore
+//    private Set<Course> savedCourses;
 
     @Version
     private short version;

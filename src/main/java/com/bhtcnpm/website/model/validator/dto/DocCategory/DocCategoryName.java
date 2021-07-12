@@ -1,8 +1,6 @@
 package com.bhtcnpm.website.model.validator.dto.DocCategory;
 
 import com.bhtcnpm.website.constant.business.DocCategory.DocCategoryBusinessConstant;
-import com.bhtcnpm.website.constant.business.PostCategory.PostCategoryBusinessConstant;
-import com.bhtcnpm.website.constant.message.PostCategory.PostCategoryValidationErrorMessage;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

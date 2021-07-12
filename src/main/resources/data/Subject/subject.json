@@ -1,0 +1,254 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 1,
+    "name": "Cấu trúc rời rạc",
+    "description": "Cấu trúc rời rạc là môn học ở giai đoạn kiến thức đại cương, là môn học bắt buộc đối với tất cả sinh viên. Đây là một trong những môn thi tuyển sinh đầu vào ở bậc Sau đại học ngành công nghệ thông tin. Môn học này giúp cho sinh viên có kiến thức, có kỹ năng giải quyết được những bài toán liên quan đến Toán rời rạc (cơ sở logic, các phương pháp đếm, quan hệ, đại số Bool và hàm Bool), và Lý thuyết đồ thị (các khái niệm cơ bản về lý thuyết đồ thị, đường đi, chu trình và cây).",
+    "imageURL": "https://i.imgur.com/L1oG5Q1.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 7
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 2,
+    "name": "Đại số tuyến tính",
+    "description": "Đại số tuyến tính là môn học ở giai đoạn kiến thức đại cương, là môn học bắt buộc đối với tất cả sinh viên. Môn học này giúp cho sinh viên nắm được khái niệm và làm được các phép toán về: ma trận, hạng, định thức, hệ phương trình tuyến tính; cách giải hệ phương trình tuyến tính bằng phương pháp Cramer, phương pháp Gauss, phương pháp Gauss-Jordan; về không gian vector, sự phụ thuộc, độc lập tuyến tính, tập sinh, cơ sở và số chiều của không gian vector; ma trận chéo hóa và ý nghĩa của việc chéo hóa ma trận; về ánh xạ tuyến tính, toán tử tuyến tính, dạng toàn phương và phép đưa dạng toàn phương về dạng chính tắc; để từ đó SV có thể tiếp tục học tập những môn chuyên ngành, hay phục vụ cho quá trình làm khóa luận tốt nghiệp.",
+    "imageURL": "https://i.imgur.com/MHZtgoN.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 7
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 3,
+    "name": "Giải tích",
+    "description": "Môn Giải tích là môn học ở giai đoạn kiến thức đại cương, là môn học bắt buộc đối với tất cả sinh viên. Môn học này giúp cho SV có kiến thức cơ bản về phép tính vi phân hàm nhiều biến; phép tính tích phân hàm nhiều biến (tích phân bội); tích phân đường, tích phân mặt; cũng như là kỹ năng khảo sát chuỗi số, chuỗi hàm, tích phân suy rộng,…cùng với việc nhận dạng và giải quyết một số phương trình vi phân cấp một, cấp cao,…để từ đó SV có thể tiếp tục học tập những môn chuyên ngành, hay phục vụ cho quá trình làm khóa luận tốt nghiệp.",
+    "imageURL": "https://i.imgur.com/zXFBHpT.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 7
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 4,
+    "name": "Kỹ năng nghề nghiệp",
+    "description": "Môn học cung cấp các kiến thức về các kỹ năng hỗ trợ trong lĩnh vực CNTT. Các kỹ năng này gồm kỹ năng giao tiếp, kỹ năng làm việc nhóm, kỹ năng tư duy, kỹ năng quản lý thời gian và kỹ năng thuyết trình. Nội dung môn học hướng sinh viên tới việc tìm hiểu và thực hành các kỹ năng này. Sinh viên sẽ có những kiến thức và kỹ năng ở mức độ cơ bản để có thể đáp ứng các yêu cầu học tập và làm việc trong ngành CNTT.",
+    "imageURL": "https://i.imgur.com/7cknlCq.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 8
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 5,
+    "name": "Nhập môn lập trình",
+    "description": "Môn học sẽ cung cấp các kiến thức nền tảng về máy tính, tư duy và các kỹ năng\ncăn bản lập trình cho tất cả sinh viên các ngành Công nghệ thông tin.",
+    "imageURL": "https://i.imgur.com/QZpduA3.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 5
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 6,
+    "name": "Nhập môn mạch số",
+    "description": "Môn học sẽ cung cấp các kiến thức nền tảng về máy tính, tư duy và các kỹ năng\ncăn bản lập trình cho tất cả sinh viên các ngành Công nghệ thông tin.",
+    "imageURL": "https://i.imgur.com/ps78az1.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 3
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 7,
+    "name": "Nhập môn phát triển Game",
+    "description": "Môn học giới thiệu cho Sinh viên những khái niệm, thông tin cơ bản trong ngành game và đi sâu vào kỹ thuật lập trình DirectX để xây dựng các game 2D đơn giản như Tetris, Battle City, Mario, Contras... Chương 1 giới thiệu tổng quan về ngành game. Chương 2 giới thiệu về kỹ thuật lập trình Windows dùng C++ và Windows SDK. Chương 3 giới thiệu kỹ thuật làm chuyển động và kỹ thuật lập trình DirectX cơ bản. Chương 4 cung cấp kỹ thuật làm việc với Sprite và xử lý thiết bị nhập. Chương 5 thảo luận về các kỹ thuật hỗ trợ khác như phép biến đổi, lập trình DirectSound, hiển thị chữ ... Chương 6 bàn luận về Game Engine và cách xây dựng một game engine đơn giản.",
+    "imageURL": "https://i.imgur.com/2v6qhfm.png",
+    "subjectGroup": {
+      "id": 2
+    },
+    "subjectFaculty": {
+      "id": 1
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 8,
+    "name": "Xác suất thống kê",
+    "description": "Xác suất thống kê là môn học bắt buộc (hoặc tự chọn) của sinh viên một số ngành thuộc lĩnh vực công nghệ thông tin. Đây là một trong những môn thi tuyển sinh đầu vào ở bậc Sau đại học ngành Khoa học máy tính. Môn học này trình bày các khái niệm và phương pháp về: Lý thuyết xác suất (Không gian xác suất; Biến ngẫu nhiên; Hàm đăc trưng; Dãy các biến ngẫu nhiên; Các quy luật phân phối xác suất; Các định lý giới hạn phân phối xác suất) và Thống kê (Mẫu ngẫu nhiên; Ước lượng điểm và ước lượng khoảng; Kiểm định các giả thiết thống kê; Phân tích tương quan và hồi quy; Một số vấn đề về quá trình ngẫu nhiên). Ngoài ra, môn học này còn giới thiệu về cách thức nhận diện, phân tích và xử lý một vấn đề thực tế; xử lý các số liệu thống kê; để từ đó giúp cho người dùng đưa ra các suy luận phù hợp (nhằm hỗ trợ cho quá trình ra quyết định).",
+    "imageURL": "https://i.imgur.com/s7oujyK.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 7
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 9,
+    "name": "Cơ sở dữ liệu",
+    "description": "Môn học trình bày về sự cần thiết của cơ sở dữ liệu trong doanh nghiệp và trong các loại hình tổ chức khác. Cung cấp sự hiểu biết về nguyên lý của các hệ thống cơ sở dữ liệu, tập trung trên CSDL quan hệ (mô hình dữ liệu quan hệ, các ngôn ngữ truy vấn).\nSinh viên có khả năng sử dụng các kỹ thuật, công cụ để có thể thiết kế, thao tác với\nmột CSDL quan hệ thông qua hệ quản trị CSDL cụ thể (MS SQL Server), phục vụ cho nhiều môn học nâng cao về CSDL trong những học kỳ kế tiếp.",
+    "imageURL": "https://i.imgur.com/d9TZMYh.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 2
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 10,
+    "name": "Cấu trúc dữ liệu và giải thuật",
+    "description": "Môn học giúp sinh viên hiểu tầm quan trọng của giải thuật và cách tổ chức dữ\nliệu, là hai thành tố quan trọng nhất cho một chương trình. Nắm bắt, áp dụng\nđược các giải thuật, cấu trúc dữ liệu thường được áp dụng trong việc giải quyết\nbài toán trong tin học. Giúp củng cố và phát triển kỹ năng lập trình vừa được học\ntrong môn học trước.",
+    "imageURL": "https://i.imgur.com/jwXORKp.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 5
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 11,
+    "name": "Hệ điều hành",
+    "description": "Kích hoạt tiến trình và khóa ngữ cảnh tiến trình.Xử lý theo lô, hệ điều hành chia sẻ thời gian, nhiều chương trình, Quản lý tiến trình, quản lý bộ nhớ và đồng bộ hóa. Ngăn ngừa, tránh và loại bế tắc….",
+    "imageURL": "https://i.imgur.com/mgk5x07.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 3
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 12,
+    "name": "Kiến trúc máy tính",
+    "description": "Môn học này trình bày kiến thức cơ bản về kiến trúc máy tính bao gồm: lịch sử hình thành máy tính và các công nghệ liên quan đến phát triển máy tính; các khái niệm chính trong kiến trúc máy tính như thành phần cấu tạo, quy tắc hoạt động, kiến trúc tập lệnh và hiệu suất của một máy tính. Môn học cũng cung cấp kiến thức liên quan đến lập trình hợp ngữ và các vấn đề liên quan tới CPU như thiết kế datapath cơ bản và cơ chế pipeline.",
+    "imageURL": "https://i.imgur.com/Bdb6czl.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 3
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 13,
+    "name": "Lập trình trực quan",
+    "description": "Môn học này trình bày các khái niệm và phương pháp lập trình trực quan trên môi trường Windows, cách trình bày các cách thức, quy trình tạo một ứng dụng trên Windows, cách cách thức xử lý thông điệp, các giao diện điều khiển, cơ chế quản lý bộ nhớ, thư viện liên kết động, lập trình đa nhiệm…",
+    "imageURL": "https://i.imgur.com/ieSCgRJ.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 1
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 14,
+    "name": "Nhập môn Mạng máy tính",
+    "description": "Cung cấp cho sinh viên những khái niệm cơ bản về mạng máy tính và truyền dữ liệu trên mạng; các dịch vụ mạng cơ bản, kỹ thuật mạng không dây.",
+    "imageURL": "https://i.imgur.com/0BFLISd.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 4
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 15,
+    "name": "Nhập môn Công nghệ Phần mềm",
+    "description": "Môn học này nhằm cung cấp cho các sinh viên các kiến thức cơ sở liên quan đến các đối tượng chính yếu trong lĩnh vực công nghệ phần mềm (qui trình công nghệ, phương pháp kỹ thuật thực hiện, phương pháp tổ chức quản lý, công cụ và môi trường triển khai phần mềm, …). Giúp sinh viên hiểu và biết tiến hành xây dựng phần mềm một cách có hệ thống, có phương pháp. Trong quá trình học, sinh viên sẽ được giới thiệu nhiều phương pháp khác nhau để có được góc nhìn tổng quan về các phương pháp. Và để minh họa cụ thể hơn, phương pháp OMT (Object Modeling Technique) được chọn để trình bày (với một sự lược giản để thích hợp với tính chất nhập môn của môn học).",
+    "imageURL": "https://i.imgur.com/qf8udAd.png",
+    "subjectGroup": {
+      "id": 2
+    },
+    "subjectFaculty": {
+      "id": 1
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 16,
+    "name": "Lập trình hướng đối tượng",
+    "description": "Môn học trang bị cho sinh viên kiến thức và kỹ năng về lập trình hướng đối tượng, các nguyên lý cơ bản của thiết kế hướng đối tượng, các vấn đề căn bản và một số vấn đề nâng cao trong việc cài đặt các lớp và phương thức. Các quan niệm nằm sau cây thừa kế, đa hình, các tính chất của đối tượng, thừa kế và phân lớp. Cách thức trao đổi và truyền thông giữa các đối tượng.",
+    "imageURL": "https://i.imgur.com/GK7RRVN.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 1
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 17,
+    "name": "Pháp luật Đại cương",
+    "description": "Môn học nằm trong khối kiến thức đại cương trong chương trình đào tạo. Môn học hướng đến việc trang bị những kiến thức nền tảng về nhà nước và pháp luật cho người học. Qua đó, người học có những kiến thức cơ bản về nhà nước và pháp luật hướng đến việc hình thành kỹ năng sống và thái độ sống chuẩn mực theo hiến pháp và pháp luật.",
+    "imageURL": "https://i.imgur.com/qeNfDnX.png",
+    "subjectGroup": {
+      "id": 1
+    },
+    "subjectFaculty": {
+      "id": 8
+    },
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.SubjectEntities.Subject",
+    "id": 18,
+    "name": "Phương pháp Mô hình hoá",
+    "description": "Trình bày các kiến trúc, nền tảng về các phương pháp mô hình hóa thông tin, tri thức, biểu diễn vấn đề và lời giải, mô hình hóa hệ thống. Sinh viên tiếp cận với các các phương pháp mô hình hóa và biểu diễn vấn đề như mô hình hóa và biểu diễn dữ liệu, mô hình hóa và biểu diễn quan hệ, mô hình hóa và biểu diễn tiến trình, mô hình hóa và biểu diễn tri thức như phương pháp SDLC, JSD, SSM, OOA...Sinh viên làm quen với các công cụ đùn biểu diễn mô hình như công cụ CASE (upper và lower), các ngôn ngữ mô phỏng mô hình hóa như ngôn ngữ UML, VRML..nhằm hiện thực hóa một hệ thống. Học phần là sự kết hợp giữa các bài giảng, thuyết trình, bài tập nhỏ, tự nghiên cứu tài liệu và báo cáo đồ án kết thúc môn học. Học phần được chia làm 2 phần: phần 1 dẫn nhập và giới thiệu những khái niệm về các mô hình đặc trung hiện nay, phần 2 là giới thiệu về phương pháp luận dùng cho mô hình hóa, và phần 3 giới thiệu cụ thể về các mô hình biểu diễn thông tin, dữ liệu, thời gian thực.",
+    "imageURL": "https://i.imgur.com/apFv0sc.png",
+    "subjectGroup": {
+      "id": 2
+    },
+    "subjectFaculty": {
+      "id": 1
+    },
+    "version": 0
+  }
+]

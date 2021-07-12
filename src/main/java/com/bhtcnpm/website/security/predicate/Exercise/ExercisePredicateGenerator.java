@@ -11,4 +11,5 @@ public class ExercisePredicateGenerator {
     public static BooleanExpression getBooleanExpressionAllExerciseOfSubject (Long subjectID) {
         return ExercisePredicate.bySubjectID(subjectID);
     }
+
 }

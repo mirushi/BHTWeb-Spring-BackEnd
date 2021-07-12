@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.security.predicate.PostComment;
 
-import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.constant.domain.PostComment.PostCommentBusinessState;
 import com.querydsl.core.types.dsl.BooleanExpression;
 

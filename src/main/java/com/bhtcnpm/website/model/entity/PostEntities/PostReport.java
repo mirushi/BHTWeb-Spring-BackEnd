@@ -4,20 +4,19 @@ import com.bhtcnpm.website.constant.domain.PostReport.PostReportDomainConstant;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostReportAction.PostReportActionType;
 import com.bhtcnpm.website.model.validator.entity.UserPostReport.ValidUPREntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "post_report")
 @Builder
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ValidUPREntity
@@ -68,4 +67,15 @@ public class PostReport {
     @Enumerated
     @Column(columnDefinition = "smallint")
     private PostReportActionType actionTaken;
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PostReport)) return false;
+        PostReport that = (PostReport) o;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() { return getClass().hashCode(); }
 }

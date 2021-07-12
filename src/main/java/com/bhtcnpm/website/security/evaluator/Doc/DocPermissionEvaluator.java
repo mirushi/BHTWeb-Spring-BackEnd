@@ -4,7 +4,9 @@ import com.bhtcnpm.website.constant.domain.Doc.DocApprovalState;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.GenericOwnership;
 import com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest;
+import com.bhtcnpm.website.constant.security.permission.DocCommentPermissionConstant;
 import com.bhtcnpm.website.constant.security.permission.DocPermissionConstant;
+import com.bhtcnpm.website.constant.security.permission.DocReportPermissionConstant;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.repository.Doc.DocRepository;
 import com.bhtcnpm.website.security.evaluator.base.SimplePermissionEvaluator;
@@ -82,12 +84,121 @@ public class DocPermissionEvaluator implements SimplePermissionEvaluator {
             return this.checkDocApprovePermission(authentication, authenticatedUserID, approvalState);
         }
 
+        //Kiểm tra quyền Reaction.
+        if (DocActionPermissionRequest.REACT_PERMISSION.equals(permission)) {
+            return this.checkDocReactPermission(authentication, authenticatedUserID, state);
+        }
+
         //Kiểm tra quyền Save.
         if (DocActionPermissionRequest.SAVE_PERMISSION.equals(permission)) {
             return this.checkDocSavePermission(authentication, authenticatedUserID, state, targetDomainObject);
         }
 
+        //Kiểm tra quyền Delete.
+        if (DocActionPermissionRequest.DELETE_PERMISSION.equals(permission)) {
+            return this.checkDocDeletePermission(authentication, authenticatedUserID, state, targetDomainObject);
+        }
+
+        //Kiểm tra quyền report của user.
+        if (DocActionPermissionRequest.REPORT_PERMISSION.equals(permission)) {
+            return this.checkDocReportPermission(authentication, authenticatedUserID, state);
+        }
+
+        //Kiểm tra quyền comment của user.
+        if (DocActionPermissionRequest.COMMENT_PERMISSION.equals(permission)) {
+            return this.checkDocCommentPermission(authentication, authenticatedUserID, state);
+        }
+
         throw new IllegalArgumentException(String.format("Doc permission %s is not supported. Denying access to docID = %s", permission, targetDomainObject.getId()));
+    }
+
+    private boolean checkDocCommentPermission (Authentication authentication, UUID authenticatedUserID, DocBusinessState state) {
+        //Bắt buộc phải có tài khoản mới được highlight post.
+        log.info("Checking doc comment permission.");
+        if (authenticatedUserID == null) {
+            log.warn("User ID not found in authentication object. Denying access.");
+            return false;
+        }
+
+        //Xét state của Doc.
+        if (DocBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, DocCommentPermissionConstant.DOCCOMMENT_PUBLIC_SELF_CREATE)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkDocReportPermission (Authentication authentication, UUID authenticatedUserID, DocBusinessState state) {
+        //Bắt buộc phải có tài khoản mới được highlight post.
+        log.info("Checking doc report permission.");
+        if (authenticatedUserID == null) {
+            log.warn("User ID not found in authentication object. Denying access.");
+            return false;
+        }
+
+        if (DocBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, DocReportPermissionConstant.DOCREPORT_PUBLIC_ALL_CREATE)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkDocReactPermission(Authentication authentication, UUID authenticatedUserID, DocBusinessState state) {
+        //Bắt buộc phải có tài khoản mới được like.
+        log.info("Checking doc like permission.");
+        if (authenticatedUserID == null) {
+            log.warn("User ID not found in authentication object. Denying access.");
+            return false;
+        }
+
+        //Xét state của Doc.
+        if (DocBusinessState.PUBLIC.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, DocPermissionConstant.DOC_PUBLIC_ALL_REACT)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkDocDeletePermission (Authentication authentication, UUID authenticatedUserID, DocBusinessState state, Doc targetDomainObject) {
+        //Bắt buộc phải có tài khoản mới được deleted.
+        log.info("Checking doc delete permission.");
+        if (authenticatedUserID == null) {
+            log.warn("User ID not found in authentication object. Denying access.");
+            return false;
+        }
+
+        //Xét state của Doc.
+        if (DocBusinessState.PUBLIC.equals(state)) {
+            if (isOwnerAndContainsAuthority(authentication, targetDomainObject, DocPermissionConstant.DOC_PUBLIC_SELF_DELETE)) {
+                return true;
+            } else if (SecurityUtils.containsAuthority(authentication, DocPermissionConstant.DOC_PUBLIC_ALL_DELETE)) {
+                return true;
+            }
+            return false;
+        }
+        else if (DocBusinessState.UNLISTED.equals(state)) {
+            if (isOwnerAndContainsAuthority(authentication, targetDomainObject, DocPermissionConstant.DOC_UNLISTED_SELF_DELETE)) {
+                return true;
+            }
+            else if (SecurityUtils.containsAuthority(authentication, DocPermissionConstant.DOC_UNLISTED_ALL_DELETE)) {
+                return true;
+            }
+            return false;
+        }
+        else if (DocBusinessState.DELETED.equals(state)) {
+            if (SecurityUtils.containsAuthority(authentication, DocPermissionConstant.DOC_DELETED_ALL_DELETE)) {
+                return true;
+            }
+            return false;
+        }
+
+        return false;
     }
 
     private boolean checkDocSavePermission (Authentication authentication, UUID authenticatedUserID, DocBusinessState state, Doc targetDomainObject) {

@@ -3,7 +3,7 @@ package com.bhtcnpm.website.model.dto.Doc;
 import com.bhtcnpm.website.model.dto.Tag.TagDTO;
 import com.bhtcnpm.website.model.validator.dto.Doc.*;
 import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryID;
-import com.bhtcnpm.website.model.validator.dto.DocSubject.DocSubjectID;
+import com.bhtcnpm.website.model.validator.dto.Subject.SubjectID;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ public class DocRequestDTO {
     @DocCategoryID
     private Long categoryID;
 
-    @DocSubjectID
+    @SubjectID
     private Long subjectID;
 
     @DocTitle

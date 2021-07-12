@@ -5,7 +5,6 @@ import com.bhtcnpm.website.model.validator.dto.Post.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Data

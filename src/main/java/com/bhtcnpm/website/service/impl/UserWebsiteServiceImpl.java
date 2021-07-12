@@ -2,20 +2,27 @@ package com.bhtcnpm.website.service.impl;
 
 import com.bhtcnpm.website.constant.business.UserWebsite.UserWebsiteActionAvailableConstant;
 import com.bhtcnpm.website.constant.security.evaluator.permission.UserWebsiteActionPermissionRequest;
+import com.bhtcnpm.website.model.dto.AWS.AmazonS3ResultDTO;
 import com.bhtcnpm.website.model.dto.UserWebsite.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
+import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.evaluator.UserWebsite.UserWebsitePermissionEvaluator;
 import com.bhtcnpm.website.security.util.SecurityUtils;
+import com.bhtcnpm.website.service.FileUploadService;
 import com.bhtcnpm.website.service.UserWebsiteService;
+import com.bhtcnpm.website.util.FileUploadUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +39,7 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     private final UserWebsiteRepository uwRepository;
     private final UserMapper userMapper;
     private final UserWebsitePermissionEvaluator userWebsitePermissionEvaluator;
+    private final FileUploadService fileUploadService;
 
     @Override
     public UserSummaryWithStatisticDTO getUserSummaryWithStatistic(Authentication authentication) {
@@ -113,6 +121,22 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
     }
 
     @Override
+    public UserDetailsDTO putUserAvatarImage(MultipartFile multipartFile, Authentication authentication) throws FileExtensionNotAllowedException, IOException {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        String key = FileUploadUtils.getS3AvatarURLUploadKey(userID, multipartFile);
+
+        AmazonS3ResultDTO result = fileUploadService.uploadImageToS3(key, multipartFile);
+
+        String newAvatarURL = result.getDirectURL();
+        UserWebsite user = uwRepository.getOne(userID);
+        user.setAvatarURL(newAvatarURL);
+        user = uwRepository.save(user);
+
+        return userMapper.userWebsiteToUserDetailsDTO(user);
+    }
+
+    @Override
     public UserDetailsDTO putSpecificUserDetails(UserRequestDTO userRequestDTO, UUID userID) {
         Optional<UserWebsite> object = uwRepository.findById(userID);
 
@@ -155,4 +179,21 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
         return userWebsiteAvailableActionDTOList;
     }
 
+    @Override
+    public boolean addUserReputationScore(UUID authorID, ReputationType reputationType, long count) {
+        int rowAffected = uwRepository.addUserReputationScore(authorID, reputationType.getNumVal(), count);
+        if (rowAffected == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean subtractUserReputationScore(UUID authorID, ReputationType reputationType, long count) {
+        int rowAffected = uwRepository.subtractUserReputationScore(authorID, reputationType.getNumVal(), count);
+        if (rowAffected == 1) {
+            return true;
+        }
+        return false;
+    }
 }

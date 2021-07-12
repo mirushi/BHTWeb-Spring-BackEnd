@@ -1,6 +1,6 @@
 package com.bhtcnpm.website.util;
 
-import com.bhtcnpm.website.constant.ApiSortOrder;
+import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 
 public class EnumConverter {

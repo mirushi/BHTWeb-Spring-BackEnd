@@ -1,5 +1,9 @@
 package com.bhtcnpm.website.model.dto.UserWebsite;
 
+import com.bhtcnpm.website.model.entity.DocCommentEntities.report.UserDocCommentReport;
+import com.bhtcnpm.website.model.entity.DocEntities.report.UserDocReport;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.UserExerciseReport;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.report.UserExerciseCommentReport;
 import com.bhtcnpm.website.model.entity.PostCommentEntities.UserPostCommentReport;
 import com.bhtcnpm.website.model.entity.PostEntities.UserPostReport;
 import com.bhtcnpm.website.model.entity.UserWebsite;
@@ -34,6 +38,40 @@ public interface UserMapper {
         );
 
         return userSummaryDTOs;
+    }
+
+    default List<UserSummaryDTO> userExerciseReportListToUserSummaryDTOList (List<UserExerciseReport> userExerciseReportList) {
+        List<UserSummaryDTO> userSummaryDTOs = userWebsiteListToUserSummaryDTOList(
+                userExerciseReportList.stream()
+                .map(obj -> obj.getUserExerciseReportId().getUser())
+                .collect(Collectors.toList())
+        );
+
+        return userSummaryDTOs;
+    }
+
+    default List<UserSummaryDTO> userDocReportListToUserSummaryDTOList (List<UserDocReport> userDocReportList) {
+        return userWebsiteListToUserSummaryDTOList(
+                userDocReportList.stream()
+                .map(obj -> obj.getUserDocReportId().getUser())
+                .collect(Collectors.toList())
+        );
+    }
+
+    default List<UserSummaryDTO> userDocCommentReportListToUserSummaryDTOList (List<UserDocCommentReport> userDocCommentReportList) {
+        return userWebsiteListToUserSummaryDTOList(
+                userDocCommentReportList.stream()
+                .map(obj -> obj.getUserDocCommentReportId().getUser())
+                .collect(Collectors.toList())
+        );
+    }
+
+    default List<UserSummaryDTO> userExerciseCommentReportListToUserSummaryDTOList (List<UserExerciseCommentReport> userExerciseCommentReportList) {
+        return userWebsiteListToUserSummaryDTOList(
+                userExerciseCommentReportList.stream()
+                .map(obj -> obj.getUserExerciseCommentReportId().getUser())
+                .collect(Collectors.toList())
+        );
     }
 
     @Mapping(target = "id", source = "userWebsite.id")

@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Mapper
 public abstract class DocFileUploadMapper {
@@ -46,6 +45,7 @@ public abstract class DocFileUploadMapper {
         return docFileUploadList;
     }
 
+    @Mapping(target = "hostType", source = "hostType")
     public abstract DocFileUploadDTO docFileUploadToDocFileUploadDTO (DocFileUpload docFileUpload);
 
     public abstract List<DocFileUploadDTO> docFileUploadListToDocFileUploadDTOList (List<DocFileUpload> docFileUploadList);

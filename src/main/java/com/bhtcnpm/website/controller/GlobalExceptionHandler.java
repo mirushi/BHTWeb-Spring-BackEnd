@@ -5,16 +5,12 @@ import com.bhtcnpm.website.model.dto.ApiError;
 import com.bhtcnpm.website.model.dto.ApiErrorDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

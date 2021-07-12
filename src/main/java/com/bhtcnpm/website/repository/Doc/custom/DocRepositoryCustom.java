@@ -1,15 +1,12 @@
 package com.bhtcnpm.website.repository.Doc.custom;
 
-import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.model.dto.Doc.*;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryListDTO;
-import com.bhtcnpm.website.model.dto.Post.PostSummaryWithStateListDTO;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
-import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.querydsl.core.types.Predicate;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
@@ -47,7 +44,7 @@ public interface DocRepositoryCustom {
                                                           SortOrder sortByCreatedDtm,
                                                           Authentication authentication);
 
-    DocSummaryWithStateListDTO getMyDocSummaryWithStateList (String searchTerm,
+    DocSummaryWithStateAndFeedbackListDTO getMyDocSummaryWithStateList (String searchTerm,
                                                              String tagContent,
                                                              Long categoryID,
                                                              Long subjectID,
@@ -59,6 +56,9 @@ public interface DocRepositoryCustom {
                                                              SortOrder sortByCreatedDtm);
     List<DocSuggestionDTO> searchRelatedDocs (UUID authorID, Long categoryID, Long subjectID, Long currentDocID, String title, String description,
                                               int page, int pageSize, DocBusinessState docBusinessState, Authentication authentication) throws IOException;
+    Page<Doc> getDocOrderByViewCountDESC (Predicate predicate, Pageable pageable);
+    Page<Doc> getDocOrderByLikeCountDESC (Predicate predicate, Pageable pageable);
+    Page<Doc> getDocOrderByDownloadCountDESC (Predicate predicate, Pageable pageable);
     void indexDoc (Long docID);
     void indexDoc (Doc doc);
     void removeIndexDoc (Long docID);

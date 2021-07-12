@@ -25,7 +25,7 @@ public class DocPermissionConstant {
     public static final String DOC_PENDING_SELF_CREATE = "ROLE_DOC_PENDING_SELF_CREATE";
 
     //Like permissions.
-    public static final String DOC_PUBLIC_ALL_LIKE = "ROLE_DOC_PUBLIC_ALL_LIKE";
+    public static final String DOC_PUBLIC_ALL_REACT = "ROLE_DOC_PUBLIC_ALL_REACT";
 
     //Save permissions.
     public static final String DOC_PUBLIC_ALL_SAVE = "ROLE_DOC_PUBLIC_ALL_SAVE";

@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Mapper(uses = {TagMapper.class})
+@Mapper(uses = {TagMapper.class, DocFileUploadMapper.class})
 public abstract class DocDetailsMapper {
 
     public static DocDetailsMapper INSTANCE = Mappers.getMapper(DocDetailsMapper.class);
@@ -20,6 +20,7 @@ public abstract class DocDetailsMapper {
     @Mapping(target = "authorID", source = "author.id")
     @Mapping(target = "authorName", source = "author.name")
     @Mapping(target = "authorDisplayName", source = "author.displayName")
+    @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "subjectID", source = "subject.id")
@@ -31,6 +32,7 @@ public abstract class DocDetailsMapper {
     @Mapping(target = "authorID", source = "author.id")
     @Mapping(target = "authorName", source = "author.name")
     @Mapping(target = "authorDisplayName", source = "author.displayName")
+    @Mapping(target = "authorAvatarURL", source = "author.avatarURL")
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "subjectID", source = "subject.id")

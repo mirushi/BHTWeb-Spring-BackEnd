@@ -1,23 +1,18 @@
 package com.bhtcnpm.website.repository.custom;
 
-import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
-import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.search.lucene.LuceneIndexUtils;
 import com.bhtcnpm.website.security.predicate.Post.PostHibernateSearchPredicateGenerator;
-import com.bhtcnpm.website.security.predicate.Post.PostPredicateGenerator;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -34,6 +29,8 @@ import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.scope.SearchScope;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.hibernate.search.mapper.orm.work.SearchIndexingPlan;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
@@ -380,6 +377,38 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return finalQuery.fetch();
     }
 
+    @Override
+    public Page<Post> getPostOrderByViewCountDESC(Predicate predicate, Pageable pageable) {
+        JPAQuery<Post> query = new JPAQuery<>(em)
+                .select(qPost)
+                .from(qPost)
+                .leftJoin(qPostView).on(qPost.id.eq(qPostView.post.id))
+                .where(predicate)
+                .orderBy(qPostView.id.countDistinct().desc());
+        query = groupByPost(query);
+        query = applyPaginatorPageOnly(query, pageable);
+
+        Long totalElements = getPostTotalElements(predicate);
+
+        return new PageImpl<>(query.fetch(), pageable, totalElements);
+    }
+
+    @Override
+    public Page<Post> getPostOrderByLikeCountDESC(Predicate predicate, Pageable pageable) {
+        JPAQuery<Post> query = new JPAQuery<>(em)
+                .select(qPost)
+                .from(qPost)
+                .leftJoin(qUserPostLike).on(qUserPostLike.userPostLikeId.post.id.eq(qPost.id))
+                .where(predicate)
+                .orderBy(qUserPostLike.userPostLikeId.user.id.countDistinct().desc());
+        query = groupByPost(query);
+        query = applyPaginatorPageOnly(query, pageable);
+
+        Long totalElements = getPostTotalElements(predicate);
+
+        return new PageImpl<>(query.fetch(), pageable, totalElements);
+    }
+
     private SearchScope<Post> getSearchScope () {return searchSession.scope(Post.class);}
 
     @Override
@@ -415,4 +444,19 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         luceneIndexReader.close();
     }
 
+    private long getPostTotalElements (Predicate predicate) {
+        JPAQuery<Long> queryCount = new JPAQuery<>(em)
+                .select(qPost.id)
+                .from(qPost)
+                .where(predicate);
+        return queryCount.fetchCount();
+    }
+
+    private JPAQuery<Post> applyPaginatorPageOnly(JPAQuery<Post> query, Pageable pageable) {
+        return query.offset(pageable.getOffset()).limit(pageable.getPageSize());
+    }
+
+    private JPAQuery<Post> groupByPost (JPAQuery<Post> query) {
+        return query.groupBy(qPost.id, qPost.title, qPost.summary, qPost.imageURL, qPost.submitDtm, qPost.publishDtm, qPost.lastUpdatedDtm, qPost.lastUpdatedBy.id, qPost.readingTime, qPost.content, qPost.contentPlainText, qPost.adminFeedback, qPost.author.id, qPost.category.id, qPost.postState, qPost.deletedDate, qPost.deletedBy.id);
+    }
 }

@@ -6,12 +6,12 @@ import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -22,8 +22,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE post_comment SET DELETED_DATE = "+ "CURRENT_TIMESTAMP()" +" WHERE id = ? AND VERSION = ?")
-@Where(clause = "DELETED_DATE is NULL")
+@SQLDelete(sql = "UPDATE post_comment SET DELETED_DTM = "+ "CURRENT_TIMESTAMP()" +" WHERE id = ? AND VERSION = ?")
+@Where(clause = "DELETED_DTM is NULL")
 public class PostComment {
     @Id
     @GeneratedValue (
@@ -38,7 +38,7 @@ public class PostComment {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(nullable = false)
+    @Column(columnDefinition = "text", nullable = false)
     private String content;
 
     @ManyToOne
@@ -78,18 +78,18 @@ public class PostComment {
     @EqualsAndHashCode.Exclude
     private Set<UserPostCommentLike> userPostCommentLikes;
 
-    @Column(name = "deleted_date")
-    private LocalDateTime deletedDate;
+    @Column(name = "deleted_dtm")
+    private LocalDateTime deletedDtm;
 
     @Version
     private short version;
 
     @Transient
     public PostCommentBusinessState getPostCommentBusinessState() {
-        if (deletedDate == null) {
+        if (deletedDtm == null) {
             return PostCommentBusinessState.PUBLIC;
         }
-        if (deletedDate != null) {
+        if (deletedDtm != null) {
             return PostCommentBusinessState.DELETE;
         }
         return null;

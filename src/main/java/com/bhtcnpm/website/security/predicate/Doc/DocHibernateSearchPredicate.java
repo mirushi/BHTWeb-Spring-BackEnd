@@ -20,7 +20,7 @@ public class DocHibernateSearchPredicate {
 
     public static SearchPredicate deleted (SearchScope<Doc> scope) {
         return scope.predicate().exists()
-                .field("deletedDate").toPredicate();
+                .field("deletedDtm").toPredicate();
     }
 
     public static SearchPredicate notDeleted (SearchScope<Doc> scope) {

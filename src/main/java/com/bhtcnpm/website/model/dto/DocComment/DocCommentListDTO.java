@@ -1,14 +1,14 @@
 package com.bhtcnpm.website.model.dto.DocComment;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+@Value
+@Builder
 public class DocCommentListDTO {
-    private List<DocCommentDTO> docCommentDTOs;
-    private Integer totalPages;
-    private Long totalElements;
+    List<DocCommentDTO> docCommentDTOs;
+    Integer totalPages;
+    Long totalElements;
 }

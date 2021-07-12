@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface DocFileUploadService {
-    List<DocFileUpload> getFileUploadOwnerOnly (List<UUID> docFileIDList, Authentication authentication);
+    List<DocFileUpload> filterFileUploadForDoc (List<UUID> docFileIDList, Long docID, Authentication authentication);
 }

@@ -8,6 +8,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -64,4 +65,15 @@ public class PostCommentReport {
     @Enumerated
     @Column(columnDefinition = "smallint")
     private PostCommentReportActionType actionTaken;
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PostCommentReport)) return false;
+        PostCommentReport that = (PostCommentReport) o;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {return getClass().hashCode();}
 }

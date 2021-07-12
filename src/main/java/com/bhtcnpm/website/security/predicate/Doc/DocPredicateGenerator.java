@@ -5,7 +5,6 @@ import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.security.core.Authentication;
 
 import java.util.UUID;

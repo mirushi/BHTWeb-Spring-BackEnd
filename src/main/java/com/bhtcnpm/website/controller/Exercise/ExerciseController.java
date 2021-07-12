@@ -1,9 +1,6 @@
 package com.bhtcnpm.website.controller.Exercise;
 
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseStatisticDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
-import com.bhtcnpm.website.model.dto.Exercise.ExerciseUserStatisticDTO;
+import com.bhtcnpm.website.model.dto.Exercise.*;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.service.Exercise.ExerciseService;
 import com.querydsl.core.types.Predicate;
@@ -57,5 +54,42 @@ public class ExerciseController {
         List<ExerciseUserStatisticDTO> exerciseUserStatisticDTO = exerciseService.getExerciseUserStatistic(exerciseIDs, authentication);
 
         return new ResponseEntity<>(exerciseUserStatisticDTO, HttpStatus.OK);
+    }
+
+    @PostMapping
+    @ResponseBody
+    public ResponseEntity<ExerciseDetailsDTO> postExercise (@RequestBody ExerciseRequestDTO dto,
+                                                            Authentication authentication) {
+        ExerciseDetailsDTO exerciseDetails = exerciseService.createExercise(dto, authentication);
+
+        return new ResponseEntity<>(exerciseDetails, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<ExerciseDetailsDTO> putExerciseDetails (@PathVariable Long id,
+                                                                  @RequestBody ExerciseRequestDTO dto,
+                                                                  Authentication authentication) {
+        ExerciseDetailsDTO exerciseDetails = exerciseService.updateExercise(dto, id, authentication);
+
+        return new ResponseEntity<>(exerciseDetails, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{exerciseID}")
+    @ResponseBody
+    public ResponseEntity deleteExercise (@PathVariable("exerciseID") Long exerciseID,
+                                          Authentication authentication) {
+        exerciseService.deleteExercise(exerciseID);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/actionAvailable")
+    @ResponseBody
+    public ResponseEntity<List<ExerciseAvailableActionDTO>> getExerciseActionAvailable(@RequestParam List<Long> exerciseIDs,
+                                                                                       Authentication authentication) {
+        List<ExerciseAvailableActionDTO> availableActionDTOList = exerciseService.getAvailableExerciseAction(exerciseIDs, authentication);
+
+        return new ResponseEntity<>(availableActionDTOList, HttpStatus.OK);
     }
 }

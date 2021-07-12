@@ -2,7 +2,6 @@ package com.bhtcnpm.website.controller;
 
 import com.bhtcnpm.website.model.dto.Announcement.AnnouncementDTO;
 import com.bhtcnpm.website.model.dto.Announcement.AnnouncementListDTO;
-import com.bhtcnpm.website.model.entity.Announcement;
 import com.bhtcnpm.website.service.AnnouncementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

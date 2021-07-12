@@ -13,8 +13,8 @@ public class DocPredicate {
 
     public static BooleanExpression approved () {return qDoc.docState.eq(DocStateType.APPROVED);}
     public static BooleanExpression notApproved() {return qDoc.docState.ne(DocStateType.APPROVED);}
-    public static BooleanExpression deleted() {return qDoc.deletedDate.isNotNull(); }
-    public static BooleanExpression notDeleted() {return qDoc.deletedDate.isNull();}
+    public static BooleanExpression deleted() {return qDoc.deletedDtm.isNotNull(); }
+    public static BooleanExpression notDeleted() {return qDoc.deletedDtm.isNull();}
     public static BooleanExpression userOwn (UUID userID) {return qDoc.author.id.eq(userID);}
     public static BooleanExpression docPublishDtmReached() {return qDoc.publishDtm.loe(LocalDateTime.now());}
     public static BooleanExpression docPublishDtmNotReached() {return qDoc.publishDtm.gt(LocalDateTime.now());}

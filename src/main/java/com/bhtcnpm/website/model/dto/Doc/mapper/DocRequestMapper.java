@@ -7,7 +7,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.repository.Doc.DocCategoryRepository;
 import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
-import com.bhtcnpm.website.repository.Doc.DocSubjectRepository;
+import com.bhtcnpm.website.repository.Subject.SubjectRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -26,7 +26,7 @@ public abstract class DocRequestMapper {
 
     protected DocCategoryRepository docCategoryRepository;
 
-    protected DocSubjectRepository docSubjectRepository;
+    protected SubjectRepository subjectRepository;
 
     protected UserWebsiteRepository userWebsiteRepository;
 
@@ -57,7 +57,7 @@ public abstract class DocRequestMapper {
         newDoc.setLastUpdatedDtm(LocalDateTime.now());
         newDoc.setLastEditedUser(userWebsiteRepository.getOne(userID));
         newDoc.setCategory(docCategoryRepository.getOne(docRequestDTO.getCategoryID()));
-        newDoc.setSubject(docSubjectRepository.getOne(docRequestDTO.getSubjectID()));
+        newDoc.setSubject(subjectRepository.getOne(docRequestDTO.getSubjectID()));
         newDoc.setTitle(docRequestDTO.getTitle());
         newDoc.setDescription(docRequestDTO.getDescription());
         newDoc.setImageURL(docRequestDTO.getImageURL());
@@ -73,8 +73,8 @@ public abstract class DocRequestMapper {
     }
 
     @Autowired
-    public void setDocSubjectRepository (DocSubjectRepository docSubjectRepository) {
-        this.docSubjectRepository = docSubjectRepository;
+    public void setSubjectRepository (SubjectRepository subjectRepository) {
+        this.subjectRepository = subjectRepository;
     }
 
     @Autowired

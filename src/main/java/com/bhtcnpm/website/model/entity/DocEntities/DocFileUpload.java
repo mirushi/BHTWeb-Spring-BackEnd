@@ -1,12 +1,14 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
+import com.bhtcnpm.website.constant.business.DocFileUpload.DocFileUploadPreviewURLConstant;
+import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.model.entity.UserWebsite;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.UUIDSerializer;
+import com.bhtcnpm.website.model.entity.enumeration.DocFileUpload.DocFileUploadHostType;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.Loader;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,9 +22,11 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE doc_file_upload SET DELETED_DTM = CURRENT_TIMESTAMP() WHERE id = ?")
+@Where(clause = "DELETED_DTM is NULL")
 public class DocFileUpload {
     @Id
-    @Column(columnDefinition = "BINARY(16)",
+    @Column(columnDefinition = "uuid",
             nullable = false,
             unique = true)
     @Builder.Default
@@ -41,23 +45,31 @@ public class DocFileUpload {
     @Column(nullable = false)
     private Long fileSize;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = GenericBusinessConstant.URL_MAX_LENGTH)
     private String downloadURL;
 
-    @Column(nullable = false)
+    @Enumerated
+    @Column(name = "host_type", nullable = false)
+    private DocFileUploadHostType hostType;
+
+    @Column(nullable = false, length = GenericBusinessConstant.URL_MAX_LENGTH)
     private String thumbnailURL;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createdDtm;
+    @Builder.Default
+    private LocalDateTime createdDtm = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(nullable = false)
     private UserWebsite uploader;
-
+    
     @ManyToOne
     @JoinColumn
     private Doc doc;
+
+    @Column(name = "deleted_dtm")
+    private LocalDateTime deletedDtm;
 
     @Override
     public boolean equals (Object o) {
@@ -71,4 +83,15 @@ public class DocFileUpload {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+    @Transient
+    public String getPreviewURL () {
+        String previewURLModel = "";
+        if (DocFileUploadHostType.G_DRIVE.equals(getHostType())) {
+            previewURLModel = DocFileUploadPreviewURLConstant.G_DRIVE;
+        }
+
+        return String.format(previewURLModel, getRemoteID());
+    }
 }
+

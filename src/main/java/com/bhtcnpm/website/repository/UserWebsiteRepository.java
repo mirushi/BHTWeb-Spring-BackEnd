@@ -3,7 +3,10 @@ package com.bhtcnpm.website.repository;
 import com.bhtcnpm.website.model.dto.UserWebsite.UserFullStatisticDTO;
 import com.bhtcnpm.website.model.dto.UserWebsite.UserStatisticDTO;
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -34,4 +37,17 @@ public interface UserWebsiteRepository extends JpaRepository<UserWebsite, UUID> 
 
     @Query("SELECT uw.name FROM UserWebsite uw WHERE uw.email = :email")
     String findUsernameByEmail (String email);
+
+    @Modifying
+    @Query(nativeQuery = true,
+            value = "UPDATE USER_WEBSITE uw SET uw.REPUTATION_SCORE = uw.REPUTATION_SCORE + " +
+                    ":count * (SELECT rsd.SCORE FROM REPUTATION_SCORE_DEFINITION rsd WHERE rsd.reputation_type = :reputationTypeOrdinal) " +
+                    "WHERE uw.id = :authorID ")
+    int addUserReputationScore(UUID authorID, short reputationTypeOrdinal, long count);
+
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE USER_WEBSITE uw SET uw.REPUTATION_SCORE = uw.REPUTATION_SCORE + " +
+            "(-1) * :count * (SELECT rsd.SCORE FROM REPUTATION_SCORE_DEFINITION rsd WHERE rsd.reputation_type = :reputationTypeOrdinal) " +
+            "WHERE uw.id = :authorID ")
+    int subtractUserReputationScore(UUID authorID, short reputationTypeOrdinal, long count);
 }

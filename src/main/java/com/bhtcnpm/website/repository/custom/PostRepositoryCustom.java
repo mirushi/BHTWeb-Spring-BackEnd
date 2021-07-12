@@ -1,10 +1,8 @@
 package com.bhtcnpm.website.repository.custom;
 
-import com.bhtcnpm.website.constant.ApiSortOrder;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
-import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
@@ -33,6 +31,8 @@ public interface PostRepositoryCustom {
     PostDetailsWithStateListDTO getPostDetailsListWithStateFilter(Predicate predicate, Pageable pageable, PostStateType postStateType);
     List<PostQuickSearchResult> quickSearch (int page, int pageSize, String searchTerm);
     List<Post> findByCategoryNameOrderByPublishDtmDesc (Predicate predicate, Pageable pageable, String categoryName);
+    Page<Post> getPostOrderByViewCountDESC(Predicate predicate, Pageable pageable);
+    Page<Post> getPostOrderByLikeCountDESC(Predicate predicate, Pageable pageable);
     void indexPost (Long postID);
     void indexPost (Post post);
     void removeIndexPost (Long postID);

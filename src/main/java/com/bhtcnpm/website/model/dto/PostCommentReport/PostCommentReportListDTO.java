@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.model.dto.PostCommentReport;
 
-import com.bhtcnpm.website.model.entity.PostCommentEntities.PostCommentReport;
 import lombok.Data;
 
 import java.util.List;

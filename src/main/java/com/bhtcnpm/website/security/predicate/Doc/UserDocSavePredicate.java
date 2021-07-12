@@ -12,8 +12,8 @@ public class UserDocSavePredicate {
 
     public static BooleanExpression approved() {return qUserDocSave.userDocSaveId.doc.docState.eq(DocStateType.APPROVED);}
     public static BooleanExpression notApproved() {return qUserDocSave.userDocSaveId.doc.docState.ne(DocStateType.APPROVED);}
-    public static BooleanExpression deleted() {return qUserDocSave.userDocSaveId.doc.deletedDate.isNotNull();}
-    public static BooleanExpression notDeleted() {return qUserDocSave.userDocSaveId.doc.deletedDate.isNull();}
+    public static BooleanExpression deleted() {return qUserDocSave.userDocSaveId.doc.deletedDtm.isNotNull();}
+    public static BooleanExpression notDeleted() {return qUserDocSave.userDocSaveId.doc.deletedDtm.isNull();}
 
     public static BooleanExpression userOwn (UUID userID) {return qUserDocSave.userDocSaveId.user.id.eq(userID);}
     public static BooleanExpression docPublishDtmReached() {return qUserDocSave.userDocSaveId.doc.publishDtm.loe(LocalDateTime.now());}

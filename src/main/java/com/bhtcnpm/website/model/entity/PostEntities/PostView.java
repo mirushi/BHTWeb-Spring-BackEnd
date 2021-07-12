@@ -1,14 +1,11 @@
 package com.bhtcnpm.website.model.entity.PostEntities;
 
-import com.bhtcnpm.website.model.entity.DocEntities.Doc;
-import com.bhtcnpm.website.model.entity.DocEntities.DocView;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -1,10 +1,10 @@
 package com.bhtcnpm.website.model.entity.ExerciseEntities;
 
+import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 import java.util.List;
@@ -40,7 +40,7 @@ public class ExerciseTopic {
     private Integer rank;
 
     @ManyToOne
-    private ExerciseSubject subject;
+    private Subject subject;
 
     @OneToMany (
             mappedBy = "topic",

@@ -1,8 +1,6 @@
 package com.bhtcnpm.website;
 
 import lombok.SneakyThrows;
-import org.hibernate.search.engine.cfg.BackendSettings;
-import org.hibernate.search.engine.cfg.IndexSettings;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.beans.factory.annotation.Autowired;

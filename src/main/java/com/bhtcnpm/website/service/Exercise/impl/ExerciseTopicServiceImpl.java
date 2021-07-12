@@ -1,6 +1,9 @@
 package com.bhtcnpm.website.service.Exercise.impl;
 
-import com.bhtcnpm.website.model.dto.Exercise.*;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryWithTopicDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseTopicDTO;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseTopicWithExerciseListDTO;
 import com.bhtcnpm.website.model.dto.Exercise.mapper.ExerciseMapper;
 import com.bhtcnpm.website.model.dto.Exercise.mapper.ExerciseTopicMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseTopic;
@@ -59,7 +62,7 @@ public class ExerciseTopicServiceImpl implements ExerciseTopicService {
                 exerciseSummaryDTOList = new ArrayList<>();
             }
 
-            ExerciseSummaryDTO exerciseSummaryDTO = exerciseMapper.exerciseWithTopicToExerciseSummaryDTOList(exercise);
+            ExerciseSummaryDTO exerciseSummaryDTO = exerciseMapper.exerciseWithTopicToExerciseSummaryDTO(exercise);
             exerciseSummaryDTOList.add(exerciseSummaryDTO);
 
             exerciseOfTopic.put(topicID, exerciseSummaryDTOList);

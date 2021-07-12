@@ -1,23 +1,32 @@
 package com.bhtcnpm.website.model.dto.DocComment;
 
-import lombok.Data;
+import com.bhtcnpm.website.model.entity.DocCommentEntities.DocComment;
+import lombok.*;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DocCommentDTO {
-
     private Long id;
-
     private UUID authorID;
-
-    private String authorName;
-
+    private String authorDisplayName;
     private String authorAvatarURL;
-
+    private LocalDateTime submitDtm;
+    private LocalDateTime lastEditedDtm;
     private String content;
+    private Long childCommentCount;
 
-    private List<DocCommentDTO> childComments;
-
+    public DocCommentDTO (DocComment docComment, Long childCommentCount) {
+        this.id = docComment.getId();
+        this.authorID = docComment.getAuthor().getId();
+        this.authorDisplayName = docComment.getAuthor().getDisplayName();
+        this.authorAvatarURL = docComment.getAuthor().getAvatarURL();
+        this.submitDtm = docComment.getSubmitDtm();
+        this.lastEditedDtm = docComment.getLastEditedDtm();
+        this.content = docComment.getContent();
+        this.childCommentCount = childCommentCount;
+    }
 }

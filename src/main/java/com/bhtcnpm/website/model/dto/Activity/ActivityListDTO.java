@@ -1,6 +1,5 @@
 package com.bhtcnpm.website.model.dto.Activity;
 
-import com.bhtcnpm.website.model.dto.Activity.ActivityDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

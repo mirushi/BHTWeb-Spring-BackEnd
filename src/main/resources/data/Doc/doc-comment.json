@@ -1,0 +1,27 @@
+[
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocCommentEntities.DocComment",
+    "id": 1,
+    "content": "Tài liệu này có vẻ hay đó. Bạn lấy nguồn từ đâu vậy ?",
+    "author": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+    "doc": {"id": 1},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocCommentEntities.DocComment",
+    "id": 2,
+    "content": "Mình lấy từ đề thi của trường á.",
+    "author": {"id": "343f0c68-9cc4-474e-9da2-89626c04c0da"},
+    "doc": {"id": 1},
+    "parentComment": {"id": 1},
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocCommentEntities.DocComment",
+    "id": 3,
+    "content": "Cảm ơn nhé.",
+    "author": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+    "doc": {"id": 1},
+    "version": 0
+  }
+]

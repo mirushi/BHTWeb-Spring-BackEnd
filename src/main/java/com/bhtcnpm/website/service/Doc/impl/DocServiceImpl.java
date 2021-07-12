@@ -1,10 +1,13 @@
 package com.bhtcnpm.website.service.Doc.impl;
 
-import com.bhtcnpm.website.constant.ApiSortOrder;
+import com.amazonaws.services.s3.AmazonS3;
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
+import com.bhtcnpm.website.constant.business.Doc.DocActionAvailableConstant;
 import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest;
+import com.bhtcnpm.website.constant.sort.ApiSortOrder;
+import com.bhtcnpm.website.model.dto.AWS.AmazonS3ResultDTO;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.dto.Doc.mapper.*;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseDetailsDTO;
@@ -14,10 +17,16 @@ import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocSave;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocSaveId;
 import com.bhtcnpm.website.model.entity.Tag;
-import com.bhtcnpm.website.repository.Doc.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.DocFileUpload.DocFileUploadHostType;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
+import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
+import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
+import com.bhtcnpm.website.repository.Doc.DocRepository;
+import com.bhtcnpm.website.repository.Doc.UserDocReactionRepository;
+import com.bhtcnpm.website.repository.Doc.UserDocSaveRepository;
 import com.bhtcnpm.website.repository.TagRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.evaluator.Doc.DocPermissionEvaluator;
@@ -27,28 +36,34 @@ import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Doc.DocFileUploadService;
 import com.bhtcnpm.website.service.Doc.DocService;
 import com.bhtcnpm.website.service.Exercise.ExerciseService;
+import com.bhtcnpm.website.service.FileUploadService;
 import com.bhtcnpm.website.service.GoogleDriveService;
-import com.bhtcnpm.website.service.PostService;
+import com.bhtcnpm.website.service.Post.PostService;
+import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.bhtcnpm.website.util.EnumConverter;
+import com.bhtcnpm.website.util.FileUploadUtils;
+import com.bhtcnpm.website.util.ValidationUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jsoup.helper.Validate;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -87,15 +102,17 @@ public class DocServiceImpl implements DocService {
 
     private final TagRepository tagRepository;
 
-    private final DocCommentRepository docCommentRepository;
-
     private final UserDocReactionRepository userDocReactionRepository;
 
     private final UserDocSaveRepository userDocSaveRepository;
 
     private final UserWebsiteRepository userWebsiteRepository;
 
+    private final UserWebsiteService userWebsiteService;
+
     private final DocFileUploadService docFileUploadService;
+
+    private final FileUploadService fileUploadService;
 
     private final DocPermissionEvaluator docPermissionEvaluator;
 
@@ -103,17 +120,31 @@ public class DocServiceImpl implements DocService {
 
     private final ExerciseService exerciseService;
 
-    public DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable, Authentication authentication) {
+    @Override
+    public DocSummaryListDTO getAllDoc (Predicate predicate, Pageable pageable,boolean mostLiked, boolean mostViewed, boolean mostDownloaded, Authentication authentication) {
+
+        ValidationUtils.assertAtMostOneParamIsTrue(mostLiked, mostViewed, mostDownloaded);
 
         //Create a pagable.
         pageable = PaginatorUtils.getPageableWithNewPageSizeAndMoreSort(pageable, PAGE_SIZE, Sort.by("publishDtm").descending());
 
         BooleanExpression publicDocFilter = DocPredicateGenerator.getBooleanExpressionOnBusinessState(DocBusinessState.PUBLIC);
         BooleanExpression authorizationFilter = DocPredicateGenerator.getBooleanExpressionOnAuthentication(authentication);
+        BooleanExpression finalPredicate = authorizationFilter.and(publicDocFilter).and(predicate);
 
-        Page<Doc> queryResult = docRepository.findAll(publicDocFilter.and(authorizationFilter).and(predicate), pageable);
+        Page<Doc> queryResult;
 
-        List<DocSummaryDTO> docSummaryDTOs= StreamSupport
+        if (mostLiked) {
+            queryResult = docRepository.getDocOrderByLikeCountDESC(finalPredicate, pageable);
+        } else if (mostViewed) {
+            queryResult = docRepository.getDocOrderByViewCountDESC(finalPredicate, pageable);
+        } else if (mostDownloaded) {
+            queryResult = docRepository.getDocOrderByDownloadCountDESC(finalPredicate, pageable);
+        } else {
+            queryResult = docRepository.findAll(finalPredicate, pageable);
+        }
+
+        List<DocSummaryDTO> docSummaryDTOs = StreamSupport
                 .stream(queryResult.spliterator(), false)
                 .map(docSummaryMapper::docToDocSummaryDTO)
                 .collect(Collectors.toList());
@@ -138,7 +169,7 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public DocSummaryWithStateListDTO getMyDocuments(String searchTerm,
+    public DocSummaryWithStateAndFeedbackListDTO getMyDocuments(String searchTerm,
                                             Long categoryID,
                                             Long subjectID,
                                             DocStateType docState,
@@ -148,7 +179,7 @@ public class DocServiceImpl implements DocService {
                                             Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
-        DocSummaryWithStateListDTO dtoList = docRepository.getMyDocSummaryWithStateList(
+        DocSummaryWithStateAndFeedbackListDTO dtoList = docRepository.getMyDocSummaryWithStateList(
                 searchTerm,
                 null,
                 categoryID,
@@ -177,8 +208,9 @@ public class DocServiceImpl implements DocService {
             }
         }
 
-        List<DocFileUpload> fileUploadList = docFileUploadService.getFileUploadOwnerOnly(
+        List<DocFileUpload> fileUploadList = docFileUploadService.filterFileUploadForDoc(
                 docRequestDTO.getDocFileUploadRequestDTOs().stream().map(DocFileUploadRequestDTO::getId).collect(Collectors.toList()),
+                (oldDoc != null) ? (oldDoc.getId()) : (null),
                 authentication
         );
         fileUploadList = docFileUploadMapper.updateDocFileUpload(fileUploadList, docRequestDTO.getDocFileUploadRequestDTOs());
@@ -224,6 +256,18 @@ public class DocServiceImpl implements DocService {
     @Override
     public Boolean docReject(Long docID, Authentication authentication) {
         int rowChanged = docRepository.setDocState(docID, DocStateType.REJECTED);
+        if (rowChanged == 1) {
+            docRepository.indexDoc(docID);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Boolean rejectDocWithFeedback(Long docID, String feedback) {
+        int rowChanged = docRepository.setDocStateAndFeedback(docID, DocStateType.PENDING_FIX, feedback);
+
         if (rowChanged == 1) {
             docRepository.indexDoc(docID);
             return true;
@@ -297,7 +341,7 @@ public class DocServiceImpl implements DocService {
         if (page == null) {
             page = 0;
         }
-        assertExactlyOneParamIsNotNull(postID, docID, exerciseID);
+        ValidationUtils.assertExactlyOneParamIsNotNull(postID, docID, exerciseID);
 
         Long currentDocID = null;
         String title = null;
@@ -349,8 +393,9 @@ public class DocServiceImpl implements DocService {
     public DocDetailsDTO createDoc(DocRequestDTO docRequestDTO, Authentication authentication) {
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
-        List<DocFileUpload> fileUploadList = docFileUploadService.getFileUploadOwnerOnly(
+        List<DocFileUpload> fileUploadList = docFileUploadService.filterFileUploadForDoc(
                 docRequestDTO.getDocFileUploadRequestDTOs().stream().map(DocFileUploadRequestDTO::getId).collect(Collectors.toList()),
+                null,
                 authentication
         );
         fileUploadList = docFileUploadMapper.updateDocFileUpload(fileUploadList, docRequestDTO.getDocFileUploadRequestDTOs());
@@ -360,6 +405,38 @@ public class DocServiceImpl implements DocService {
         doc = docRepository.save(doc);
 
         return docDetailsMapper.docToDocDetailsDTO(doc);
+    }
+
+    @Override
+    public String uploadImage(MultipartFile multipartFile, Authentication authentication) throws FileExtensionNotAllowedException, IOException {
+        UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
+
+        String key = FileUploadUtils.getS3DocImageURLUploadKey(userID, multipartFile);
+
+        AmazonS3ResultDTO result = fileUploadService.uploadImageToS3(key, multipartFile);
+
+        String imageURL = result.getDirectURL();
+
+        return imageURL;
+    }
+
+    @Override
+    public Boolean deleteDoc(Long docID, Authentication authentication) {
+        Optional<Doc> docOpt = docRepository.findById(docID);
+        Validate.isTrue(docOpt.isPresent(), String.format("Doc with id = %s cannot be found.", docID));
+        Doc docEntity = docOpt.get();
+        UUID authorID = docEntity.getAuthor().getId();
+
+        //Perform reputation reset.
+        long totalLike = userDocReactionRepository.countByDocReactionTypeAndUserDocReactionIdDocId(DocReactionType.LIKE, docID);
+        long totalDislike = userDocReactionRepository.countByDocReactionTypeAndUserDocReactionIdDocId(DocReactionType.DISLIKE, docID);
+
+        userWebsiteService.subtractUserReputationScore(authorID, ReputationType.DOC_LIKED, totalLike);
+        userWebsiteService.subtractUserReputationScore(authorID, ReputationType.DOC_DISLIKED, totalDislike);
+
+        docRepository.delete(docEntity);
+
+        return true;
     }
 
     @Override
@@ -415,19 +492,7 @@ public class DocServiceImpl implements DocService {
         //TODO: Limit how much user can upload (aka rate limiting).
         UUID userID = SecurityUtils.getUserIDOnNullThrowException(authentication);
 
-        byte[] fileContent = multipartFile.getBytes();
-        String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-
-        //Get mime type.
-        String mimeType = AllowedUploadExtension.getMimeType(extension);
-
-        //Generate random file name (for security reason, don't trust user submitted file name.
-        //https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html#file-upload-threats
-        String fileName = RandomStringUtils.randomAlphanumeric(FILE_NAME_RANDOM_LENGTH) + "." + extension;
-
-        //Get subfolder of userID to upload file.
-        com.google.api.services.drive.model.File uploadedFile = GoogleDriveService
-            .createGoogleFileWithUserID(DRIVE_UPLOAD_DEFAULT_FOLDER_ID, userID, mimeType, fileName, fileContent);
+        com.google.api.services.drive.model.File uploadedFile = fileUploadService.uploadToGoogleDrive(multipartFile, DRIVE_UPLOAD_DEFAULT_FOLDER_ID, authentication);
 
         //Get proxy for author.
         UserWebsite author = userWebsiteRepository.getOne(userID);
@@ -439,15 +504,12 @@ public class DocServiceImpl implements DocService {
             .downloadURL(uploadedFile.getWebViewLink())
             .thumbnailURL(String.format(DocFileUploadConstant.DRIVE_THUMBNAIL_URL, uploadedFile.getId()))
             .uploader(author)
+            .remoteID(uploadedFile.getId()).rank(-1).doc(null).hostType(DocFileUploadHostType.G_DRIVE)
             .build();
 
         fileUpload = docFileUploadRepository.save(fileUpload);
 
-        return DocFileUploadDTO.builder()
-                .fileName(fileUpload.getFileName())
-                .id(fileUpload.getId())
-                .fileSize(multipartFile.getSize())
-                .build();
+        return docFileUploadMapper.docFileUploadToDocFileUploadDTO(fileUpload);
     }
 
     @Override
@@ -460,6 +522,55 @@ public class DocServiceImpl implements DocService {
         }
 
         return docDownloadInfoMapper.docFileUploadToDocDownloadInfoDTO(fileObject.get());
+    }
+
+    @Override
+    public List<DocAvailableActionDTO> getAvailableDocAction(List<Long> docIDs, Authentication authentication) {
+        List<DocAvailableActionDTO> docAvailableActionDTOList = new ArrayList<>();
+
+        for (Long docID : docIDs) {
+            if (docID == null) {
+                continue;
+            }
+            DocAvailableActionDTO docAvailableActionDTO = new DocAvailableActionDTO();
+            docAvailableActionDTO.setId(docID);
+            List<String> availableAction = new ArrayList<>();
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.READ_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.READ_ACTION);
+            }
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.UPDATE_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.UPDATE_ACTION);
+            }
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.DELETE_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.DELETE_ACTION);
+            }
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.SAVE_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.SAVE_ACTION);
+            }
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.REACT_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.REACT_ACTION);
+            }
+
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.APPROVE_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.APPROVE_ACTION);
+            }
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.REPORT_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.REPORT_ACTION);
+            }
+            if (docPermissionEvaluator.hasPermission(authentication, docID, DocActionPermissionRequest.COMMENT_PERMISSION)) {
+                availableAction.add(DocActionAvailableConstant.COMMENT_ACTION);
+            }
+            docAvailableActionDTO.setAvailableActions(availableAction);
+
+            docAvailableActionDTOList.add(docAvailableActionDTO);
+        }
+
+        return docAvailableActionDTOList;
     }
 
     @Override
@@ -489,23 +600,4 @@ public class DocServiceImpl implements DocService {
         );
         return dtoList;
     }
-
-    private void assertExactlyOneParamIsNotNull(Object... params) {
-        final String multipleParamViolation = "Only one param is allowed at a time.";
-        final String noParamViolation = "Exactly one param must not be null.";
-
-        boolean isNotNullParamExist = false;
-        for (int i=0; i<params.length; ++i) {
-            Object currentParam = params[i];
-            if (currentParam != null && isNotNullParamExist) {
-                throw new IllegalArgumentException(multipleParamViolation);
-            } else if (currentParam != null) {
-                isNotNullParamExist = true;
-            }
-        }
-        if (!isNotNullParamExist) {
-            throw new IllegalArgumentException(noParamViolation);
-        }
-    }
-
 }

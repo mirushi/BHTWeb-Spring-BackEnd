@@ -1,7 +1,6 @@
 package com.bhtcnpm.website.security.predicate.Post;
 
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
-import com.bhtcnpm.website.constant.security.permission.PostPermissionConstant;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;

@@ -6,14 +6,21 @@ import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.dto.Doc.mapper.DocSuggestionMapper;
 import com.bhtcnpm.website.model.dto.Doc.mapper.DocSummaryMapper;
 import com.bhtcnpm.website.model.entity.DocEntities.*;
+import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
-import com.bhtcnpm.website.repository.Doc.custom.DocRepositoryCustom;
 import com.bhtcnpm.website.search.lucene.LuceneIndexUtils;
 import com.bhtcnpm.website.security.predicate.Doc.DocHibernateSearchPredicateGenerator;
+import com.blazebit.persistence.Criteria;
+import com.blazebit.persistence.CriteriaBuilderFactory;
+import com.blazebit.persistence.querydsl.BlazeJPAQuery;
+import com.blazebit.persistence.spi.CriteriaBuilderConfiguration;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +36,8 @@ import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.scope.SearchScope;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.hibernate.search.mapper.orm.work.SearchIndexingPlan;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
@@ -38,6 +47,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.Expression;
 import java.io.IOException;
 import java.util.*;
 
@@ -48,6 +58,9 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     private final EntityManager em;
 
     private final QDoc qDoc = QDoc.doc;
+    private final QDocFileUpload qDocFileUpload = QDocFileUpload.docFileUpload;
+    private final QDocView qDocView = QDocView.docView;
+    private final QDocDownload qDocDownload = QDocDownload.docDownload;
     private final QUserDocReaction qUserDocReaction = QUserDocReaction.userDocReaction;
 
     private final EntityPath<Doc> path;
@@ -64,7 +77,9 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     private final Querydsl querydsl;
     private SearchSortFactory searchSortFactory;
 
-    public DocRepositoryImpl (EntityManager em, DocSummaryMapper docSummaryMapper, DocSuggestionMapper docSuggestionMapper) throws IOException {
+    private final CriteriaBuilderFactory criteriaBuilderFactory;
+
+    public DocRepositoryImpl (EntityManager em, DocSummaryMapper docSummaryMapper, DocSuggestionMapper docSuggestionMapper, CriteriaBuilderFactory criteriaBuilderFactory) throws IOException {
         this.em = em;
         this.path = SimpleEntityPathResolver.INSTANCE.createPath(Doc.class);
         this.builder = new PathBuilder<Doc>(path.getType(), path.getMetadata());
@@ -74,18 +89,19 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
 
         this.luceneIndexReader = LuceneIndexUtils.getReader("Doc");
         this.searchSession = Search.session(em);
+        this.criteriaBuilderFactory = criteriaBuilderFactory;
     }
 
     @Override
     public List<DocSummaryDTO> getTrendingDoc(Pageable pageable) {
-         JPAQuery query = new JPAQuery<Doc>(em)
+         JPAQuery<DocSummaryDTO> query = new JPAQuery<Doc>(em)
                  .select(Projections.constructor(DocSummaryDTO.class, qDoc.id, qDoc.author.id, qDoc.author.displayName, qDoc.category.id, qDoc.category.name, qDoc.subject.id, qDoc.subject.name, qDoc.title, qDoc.description, qDoc.imageURL, qDoc.publishDtm))
                  .from(qDoc)
                  .join(qUserDocReaction).on(qUserDocReaction.userDocReactionId.doc.id.eq(qDoc.id))
 //                 .orderBy(qDoc.docFileUpload.downloadCount.desc())
                  .groupBy(qDoc);
 
-         JPQLQuery finalQuery = querydsl.applyPagination(pageable, query);
+         JPQLQuery<DocSummaryDTO> finalQuery = querydsl.applyPagination(pageable, query);
 
          return finalQuery.fetch();
     }
@@ -184,7 +200,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     }
 
     @Override
-    public DocSummaryWithStateListDTO getMyDocSummaryWithStateList (String searchTerm,
+    public DocSummaryWithStateAndFeedbackListDTO getMyDocSummaryWithStateList (String searchTerm,
                                                                     String tagContent,
                                                                     Long categoryID,
                                                                     Long subjectID,
@@ -214,13 +230,13 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
 
         Integer totalPages = (int)Math.ceil((double)resultCount / pageSize);
 
-        List<DocSummaryWithStateDTO> docSummaryDTOs = docSummaryMapper.docListToDocSummaryWithStateDTOList(searchResult.hits());
+        List<DocSummaryWithStateAndFeedbackDTO> docSummaryDTOs = docSummaryMapper.docListToDocSummaryWithStateAndFeedbackDTOList(searchResult.hits());
 
-        DocSummaryWithStateListDTO finalResult = new DocSummaryWithStateListDTO(
-                docSummaryDTOs,
-                totalPages,
-                resultCount
-        );
+        DocSummaryWithStateAndFeedbackListDTO finalResult = DocSummaryWithStateAndFeedbackListDTO.builder()
+                .docSummaryWithStateAndFeedbackDTOs(docSummaryDTOs)
+                .totalElements(resultCount)
+                .totalPages(totalPages)
+                .build();
 
         return finalResult;
     }
@@ -270,6 +286,65 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
         List<Doc> hits = searchResults.hits();
 
         return docSuggestionMapper.docListToDocSuggestionListDTO(hits);
+    }
+
+    @Override
+    public Page<Doc> getDocOrderByViewCountDESC(Predicate predicate, Pageable pageable) {
+        JPAQuery<Doc> query = new JPAQuery<>(em)
+                .select(qDoc)
+                .from(qDoc)
+                .leftJoin(qDocView).on(qDoc.id.eq(qDocView.doc.id))
+                .where(predicate)
+                .orderBy(qDocView.id.countDistinct().desc());
+        query = groupByDoc(query);
+        query = applyPaginatorPageOnly(query, pageable);
+
+        Long totalElements = getDocTotalElements(predicate);
+
+        return new PageImpl<>(query.fetch(), pageable, totalElements);
+    }
+
+    @Override
+    public Page<Doc> getDocOrderByLikeCountDESC(Predicate predicate, Pageable pageable) {
+        NumberExpression<Long> countLikeOnly = new CaseBuilder()
+                .when(qUserDocReaction.docReactionType.eq(DocReactionType.LIKE))
+                .then(1L)
+                .otherwise(0L);
+
+        NumberExpression<Long> countDislikeOnly = new CaseBuilder()
+                .when(qUserDocReaction.docReactionType.eq(DocReactionType.DISLIKE))
+                .then(1L)
+                .otherwise(0L);
+
+        JPAQuery<Doc> query = new JPAQuery<>(em)
+                .select(qDoc)
+                .from(qDoc)
+                .leftJoin(qUserDocReaction).on(qUserDocReaction.userDocReactionId.doc.id.eq(qDoc.id))
+                .where(predicate)
+                .orderBy(countLikeOnly.sum().subtract(countDislikeOnly.sum()).desc());
+        query = groupByDoc(query);
+        query = applyPaginatorPageOnly(query, pageable);
+
+        long totalElements = getDocTotalElements(predicate);
+
+        return new PageImpl<>(query.fetch(), pageable, totalElements);
+    }
+
+    @Override
+    public Page<Doc> getDocOrderByDownloadCountDESC(Predicate predicate, Pageable pageable) {
+        JPAQuery<Doc> query = new JPAQuery<>(em)
+                .select(qDoc)
+                .from(qDoc)
+                .leftJoin(qDocFileUpload).on(qDoc.id.eq(qDocFileUpload.doc.id))
+                .leftJoin(qDocDownload).on(qDocFileUpload.id.eq(qDocDownload.docFileUpload.id))
+                .where(predicate)
+                .orderBy(qDocDownload.id.countDistinct().desc());
+        query = groupByDoc(query);
+        query = applyPaginatorPageOnly(query, pageable);
+
+        Long totalElements = getDocTotalElements(predicate);
+
+        return new PageImpl<>(query.fetch(), pageable, totalElements);
     }
 
     @Override
@@ -347,7 +422,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                     if (subjectID != null) {
                         b.filter(f.match()
                                 .field("subjectID")
-                                .matching(em.getReference(DocSubject.class, subjectID))
+                                .matching(em.getReference(Subject.class, subjectID))
                         );
                     }
                     if (authorID != null) {
@@ -386,5 +461,32 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     @PreDestroy
     public void cleanUp () throws IOException {
         luceneIndexReader.close();
+    }
+
+    private List<Doc> tupleToDocConverter (List<Tuple> tupleResult) {
+//        List<Doc> entityList = new ArrayList<>();
+//
+//        for (Tuple row : tupleResult) {
+//            Doc entity = new Doc();
+//
+//        }
+        return null;
+    }
+
+    private long getDocTotalElements(Predicate predicate) {
+        JPAQuery<Long> queryCount = new JPAQuery<>(em)
+                .select(qDoc.id)
+                .from(qDoc)
+                .where(predicate);
+        return queryCount.fetchCount();
+    }
+
+    //Workaround for buggy groupBy implementation of QueryDSL.
+    private JPAQuery<Doc> groupByDoc (JPAQuery<Doc> query) {
+        return query.groupBy(qDoc.id, qDoc.author.id, qDoc.lastEditedUser.id, qDoc.category.id, qDoc.subject.id, qDoc.description, qDoc.imageURL, qDoc.publishDtm, qDoc.submitDtm, qDoc.lastUpdatedDtm, qDoc.title, qDoc.docState, qDoc.deletedDtm, qDoc.version);
+    }
+
+    private JPAQuery<Doc> applyPaginatorPageOnly (JPAQuery<Doc> query, Pageable pageable) {
+        return query.offset(pageable.getOffset()).limit(pageable.getPageSize());
     }
 }

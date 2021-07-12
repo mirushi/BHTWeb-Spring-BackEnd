@@ -1,9 +1,10 @@
 package com.bhtcnpm.website.model.entity.DocEntities;
 
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
-import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionTypeConverter;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;

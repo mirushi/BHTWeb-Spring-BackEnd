@@ -1,17 +1,15 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
-import com.bhtcnpm.website.model.dto.Tag.TagDTO;
 import com.bhtcnpm.website.model.validator.dto.Doc.*;
 import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryID;
 import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryName;
-import com.bhtcnpm.website.model.validator.dto.DocSubject.DocSubjectID;
-import com.bhtcnpm.website.model.validator.dto.DocSubject.DocSubjectName;
+import com.bhtcnpm.website.model.validator.dto.Subject.SubjectID;
+import com.bhtcnpm.website.model.validator.dto.Subject.SubjectName;
 import com.bhtcnpm.website.model.validator.dto.UserWebsite.UserWebsiteDisplayName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -25,16 +23,18 @@ public class DocSummaryDTO {
     @UserWebsiteDisplayName
     private String authorDisplayName;
 
+    private String authorAvatarURL;
+
     @DocCategoryID
     private Long categoryID;
 
     @DocCategoryName
     private String categoryName;
 
-    @DocSubjectID
+    @SubjectID
     private Long subjectID;
 
-    @DocSubjectName
+    @SubjectName
     private String subjectName;
 
     @DocTitle
