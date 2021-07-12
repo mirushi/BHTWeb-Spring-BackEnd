@@ -20,5 +20,5 @@ public class ExerciseQuestionWithAnswersPublicDTO {
     private LocalDateTime lastUpdatedDtm;
     private UserSummaryDTO lastUpdatedBy;
     private ExerciseQuestionDifficultyDTO difficultyType;
-    private List<ExerciseAnswerDTO> exerciseAnswerDTOs;
+    private List<ExerciseAnswerDTO> answers;
 }

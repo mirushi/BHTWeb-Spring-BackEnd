@@ -28,7 +28,6 @@ public abstract class ExerciseQuestionMapper {
     protected ExerciseQuestionDifficultyRepository exerciseQuestionDifficultyRepository;
     protected ExerciseAnswerMapper exerciseAnswerMapper;
 
-    @Mapping(target = "exerciseAnswerDTOs", source = "answers")
     @Named("questionWithAnswerPublic")
     public abstract ExerciseQuestionWithAnswersPublicDTO exerciseQuestionToExerciseQuestionWithAnswersPublicDTO(ExerciseQuestion exerciseQuestion);
 
