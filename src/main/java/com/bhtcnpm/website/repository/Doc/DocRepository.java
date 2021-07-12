@@ -53,13 +53,6 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
             "GROUP BY d.ID")
     List<DocStatisticDTO> getDocStatisticDTOs (List<Long> docIDs, UUID userID);
 
-    //Please don't pass different value for searchTerm and searchTermExact.
-    @Query("SELECT new com.bhtcnpm.website.model.dto.Doc.DocQuickSearchResult(d.id, d.imageURL, d.title) " +
-            "FROM Doc d " +
-            "WHERE d.title LIKE %:searchTerm% " +
-            "ORDER BY "+ "(CASE WHEN EXISTS (SELECT 1 FROM d WHERE d.title = :searchTermExact) THEN TRUE ELSE FALSE END)" +" DESC, length(d.title)")
-    List<DocQuickSearchResult> quickSearch (Pageable pageable, String searchTerm, String searchTermExact);
-
 //    @Modifying
 //    @Query("UPDATE Doc d SET d.docFileUpload.downloadCount = d.docFileUpload.downloadCount + 1 WHERE d.id = :docID")
 //    int incrementDownloadCount(Long docID);

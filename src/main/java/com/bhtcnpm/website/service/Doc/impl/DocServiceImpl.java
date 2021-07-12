@@ -96,6 +96,8 @@ public class DocServiceImpl implements DocService {
 
     private final DocFileUploadMapper docFileUploadMapper;
 
+    private final DocSearchMapper docSearchMapper;
+
     private final DocRepository docRepository;
 
     private final DocFileUploadRepository docFileUploadRepository;
@@ -599,5 +601,12 @@ public class DocServiceImpl implements DocService {
                 authentication
         );
         return dtoList;
+    }
+
+    @Override
+    public List<DocQuickSearchResult> quickSearch(Pageable pageable, String searchTerm) {
+        Page<Doc> searchResult = docRepository.quickSearch(pageable, searchTerm);
+
+        return docSearchMapper.docListToDocQuickSearchResultList(searchResult.getContent());
     }
 }

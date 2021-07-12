@@ -59,6 +59,7 @@ public interface DocRepositoryCustom {
     Page<Doc> getDocOrderByViewCountDESC (Predicate predicate, Pageable pageable);
     Page<Doc> getDocOrderByLikeCountDESC (Predicate predicate, Pageable pageable);
     Page<Doc> getDocOrderByDownloadCountDESC (Predicate predicate, Pageable pageable);
+    Page<Doc> quickSearch (Pageable pageable, String searchTerm);
     void indexDoc (Long docID);
     void indexDoc (Doc doc);
     void removeIndexDoc (Long docID);

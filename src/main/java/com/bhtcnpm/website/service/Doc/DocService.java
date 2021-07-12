@@ -146,4 +146,6 @@ public interface DocService {
             ApiSortOrder sortByCreatedDtm,
             Authentication authentication
     );
+
+    List<DocQuickSearchResult> quickSearch (Pageable pageable, String searchTerm);
 }

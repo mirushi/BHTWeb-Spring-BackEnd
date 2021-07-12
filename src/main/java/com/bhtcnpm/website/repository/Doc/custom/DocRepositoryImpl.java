@@ -38,6 +38,7 @@ import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.hibernate.search.mapper.orm.work.SearchIndexingPlan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
@@ -348,6 +349,27 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     }
 
     @Override
+    public Page<Doc> quickSearch(Pageable pageable, String searchTerm) {
+        SearchResult<Doc> searchResult = getDocSearchResult(
+                searchTerm,
+                null,
+                null,
+                null,
+                null,
+                DocStateType.APPROVED,
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                null,
+                null,
+                DocBusinessState.PUBLIC,
+                null,
+        true
+        );
+
+        return this.searchResultToPage(searchResult, pageable.getPageNumber(), pageable.getPageSize());
+    }
+
+    @Override
     public void indexDoc(Long docID) {
         Doc doc = em.getReference(Doc.class, docID);
         indexDoc(doc);
@@ -488,5 +510,12 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
 
     private JPAQuery<Doc> applyPaginatorPageOnly (JPAQuery<Doc> query, Pageable pageable) {
         return query.offset(pageable.getOffset()).limit(pageable.getPageSize());
+    }
+
+    private Page<Doc> searchResultToPage (SearchResult<Doc> docSearchResult, int page, int pageSize) {
+        long resultCount = docSearchResult.total().hitCountLowerBound();
+        int totalPages = (int)Math.ceil((double)resultCount/pageSize);
+        List<Doc> docList = docSearchResult.hits();
+        return new PageImpl<>(docList, PageRequest.of(page, pageSize), resultCount);
     }
 }
