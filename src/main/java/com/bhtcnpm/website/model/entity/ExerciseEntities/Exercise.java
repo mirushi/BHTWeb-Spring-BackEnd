@@ -1,12 +1,10 @@
 package com.bhtcnpm.website.model.entity.ExerciseEntities;
 
+import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.ExerciseState.ExerciseStateType;
-import com.bhtcnpm.website.search.bridge.ExerciseCategoryIDValueBridge;
-import com.bhtcnpm.website.search.bridge.ExerciseTopicIDValueBridge;
-import com.bhtcnpm.website.search.bridge.TagValueBridge;
-import com.bhtcnpm.website.search.bridge.UserWebsiteIDValueBridge;
+import com.bhtcnpm.website.search.bridge.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -112,12 +110,24 @@ public class Exercise {
     private LocalDateTime lastUpdatedDtm = LocalDateTime.now();
 
     @ManyToOne
+    @JoinColumn(name = "topic_id", nullable = false)
     @GenericField(
             valueBridge = @ValueBridgeRef(type = ExerciseTopicIDValueBridge.class),
             searchable = Searchable.YES,
             name = "topicID"
     )
     private ExerciseTopic topic;
+
+    @Transient
+    @GenericField(
+            valueBridge = @ValueBridgeRef(type = SubjectIDValueBridge.class),
+            searchable = Searchable.YES,
+            name = "subjectID"
+    )
+    @IndexingDependency(derivedFrom = @ObjectPath(
+            @PropertyValue(propertyName = "topic")
+    ))
+    private Subject subject;
 
     @ManyToOne
     @GenericField(
@@ -185,5 +195,10 @@ public class Exercise {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @PostLoad
+    private void postLoad() {
+        this.subject = topic.getSubject();
     }
 }
