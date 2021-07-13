@@ -187,6 +187,22 @@ public class Post {
     @ManyToOne
     private UserWebsite deletedBy;
 
+    @Column(name = "hotness")
+    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    private Double hotness = 0d;
+
+    @Column(name = "wilson")
+    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    private Double wilson = 0d;
+
+    @Column(name = "likes")
+    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    private Long likes = 0L;
+
+    @Column(name = "views")
+    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    private Long views = 0L;
+
     @Version
     private short version;
 

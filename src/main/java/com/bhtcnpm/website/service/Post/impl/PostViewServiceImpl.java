@@ -5,6 +5,7 @@ import com.bhtcnpm.website.repository.Post.PostRepository;
 import com.bhtcnpm.website.repository.Post.PostViewRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
+import com.bhtcnpm.website.service.Post.PostService;
 import com.bhtcnpm.website.service.Post.PostViewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,8 @@ public class PostViewServiceImpl implements PostViewService {
 
     private final UserWebsiteRepository uwRepository;
 
+    private final PostService postService;
+
     @Override
     public boolean addPostView(Long postID, UUID userID, String ipAddress) {
         boolean isUserViewedPost = postViewRepository.existsByPostIdAndUserIdOrIpAddress(postID, userID, ipAddress);
@@ -39,6 +42,10 @@ public class PostViewServiceImpl implements PostViewService {
         postView.setIpAddress(ipAddress);
 
         postViewRepository.save(postView);
+
+        postService.updateViews(postID);
+        postService.updateHotness(postID);
+        postService.updateWilson(postID);
 
         return true;
     }

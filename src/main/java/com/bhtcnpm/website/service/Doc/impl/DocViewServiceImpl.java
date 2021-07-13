@@ -7,6 +7,7 @@ import com.bhtcnpm.website.repository.Doc.DocRepository;
 import com.bhtcnpm.website.repository.Doc.DocViewRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
+import com.bhtcnpm.website.service.Doc.DocService;
 import com.bhtcnpm.website.service.Doc.DocViewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ public class DocViewServiceImpl implements DocViewService {
 
     private final DocViewRepository docViewRepository;
     private final DocRepository docRepository;
+    private final DocService docService;
     private final UserWebsiteRepository uwRepository;
 
     @Override
@@ -45,6 +47,8 @@ public class DocViewServiceImpl implements DocViewService {
                 .build();
 
         docViewRepository.save(docView);
+
+        docService.updateViews(docID);
 
         return true;
     }

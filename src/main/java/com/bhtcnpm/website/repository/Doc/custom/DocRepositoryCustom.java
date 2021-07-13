@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.repository.Doc.custom;
 
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
+import com.bhtcnpm.website.constant.sort.AdvancedSort;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
@@ -30,6 +31,7 @@ public interface DocRepositoryCustom {
                                          Integer pageSize,
                                          SortOrder sortByPublishDtm,
                                          SortOrder sortByCreatedDtm,
+                                         AdvancedSort advancedSort,
                                          Authentication authentication);
 
     DocSummaryWithStateListDTO getDocSummaryWithStateList(String searchTerm,

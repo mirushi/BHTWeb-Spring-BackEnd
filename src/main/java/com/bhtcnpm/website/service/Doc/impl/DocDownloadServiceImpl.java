@@ -8,11 +8,14 @@ import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
 import com.bhtcnpm.website.service.Doc.DocDownloadService;
+import com.bhtcnpm.website.service.Doc.DocService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.Validate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,6 +27,8 @@ public class DocDownloadServiceImpl implements DocDownloadService {
     private final DocFileUploadRepository docFileUploadRepository;
     private final UserWebsiteRepository uwRepository;
 
+    private final DocService docService;
+
     @Override
     public boolean addDocDownload(UUID docFileUploadID, UUID userID, String ipAddress) {
         boolean isUserDownloadedDoc = docDownloadRepository.existsByDocIdAndUserIdOrIpAddress(docFileUploadID, userID, ipAddress);
@@ -31,7 +36,10 @@ public class DocDownloadServiceImpl implements DocDownloadService {
             return false;
         }
 
-        DocFileUpload docFileUpload = docFileUploadRepository.getOne(docFileUploadID);
+        Optional<DocFileUpload> docFileUploadOpt = docFileUploadRepository.findById(docFileUploadID);
+        Validate.isTrue(docFileUploadOpt.isPresent());
+
+        DocFileUpload docFileUpload = docFileUploadOpt.get();
 
         UserWebsite user = null;
         if (userID != null) {
@@ -46,6 +54,8 @@ public class DocDownloadServiceImpl implements DocDownloadService {
                 .build();
 
         docDownloadRepository.save(docDownload);
+
+        docService.updateDownloads(docFileUpload.getDoc().getId());
 
         return true;
     }

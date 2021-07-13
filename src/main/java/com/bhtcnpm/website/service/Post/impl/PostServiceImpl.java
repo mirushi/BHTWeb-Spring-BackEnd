@@ -1,10 +1,12 @@
 package com.bhtcnpm.website.service.Post.impl;
 
+import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.constant.business.Post.PostActionAvailableConstant;
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.permission.HighlightPostPermissionRequest;
 import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPermissionRequest;
+import com.bhtcnpm.website.constant.sort.AdvancedSort;
 import com.bhtcnpm.website.model.dto.AWS.AmazonS3ResultDTO;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
@@ -16,6 +18,7 @@ import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
 import com.bhtcnpm.website.repository.Post.PostRepository;
+import com.bhtcnpm.website.repository.Post.PostViewRepository;
 import com.bhtcnpm.website.repository.Post.UserPostLikeRepository;
 import com.bhtcnpm.website.repository.Post.UserPostSaveRepository;
 import com.bhtcnpm.website.repository.TagRepository;
@@ -44,6 +47,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +65,8 @@ public class PostServiceImpl implements PostService {
 
     private final UserPostSaveRepository userPostSaveRepository;
 
+    private final PostViewRepository postViewRepository;
+
     private final UserWebsiteRepository userWebsiteRepository;
 
     private final TagRepository tagRepository;
@@ -67,8 +74,6 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
 
     private final PostPermissionEvaluator postPermissionEvaluator;
-
-    private final PostViewService postViewService;
 
     private final FileUploadService fileUploadService;
 
@@ -173,6 +178,9 @@ public class PostServiceImpl implements PostService {
 
         userWebsiteService.addUserReputationScore(postRepository.getOne(postID).getAuthor().getId(), ReputationType.POST_LIKED, 1L);
 
+        this.updateLikes(postID);
+        this.updateHotness(postID);
+        this.updateWilson(postID);
         return true;
     }
 
@@ -191,6 +199,9 @@ public class PostServiceImpl implements PostService {
         }
 
         userWebsiteService.subtractUserReputationScore(postRepository.getOne(postID).getAuthor().getId(), ReputationType.POST_LIKED, 1L);
+        this.updateLikes(postID);
+        this.updateHotness(postID);
+        this.updateWilson(postID);
         return true;
     }
 
@@ -341,7 +352,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostSummaryListDTO getPostBySearchTerm(String sortByPublishDtm, Integer page, String searchTerm, Long postCategoryID, Long tagID, Authentication authentication) {
+    public PostSummaryListDTO getPostBySearchTerm(String sortByPublishDtm, Integer page, String searchTerm, Long postCategoryID, AdvancedSort advancedSort, Long tagID, Authentication authentication) {
         String tagContent = null;
 
         if (tagID != null) {
@@ -351,7 +362,7 @@ public class PostServiceImpl implements PostService {
             }
         }
 
-        PostSummaryListDTO postSummaryListDTO = postRepository.searchBySearchTerm(sortByPublishDtm, postCategoryID, page, PAGE_SIZE , searchTerm, tagContent, authentication);
+        PostSummaryListDTO postSummaryListDTO = postRepository.searchBySearchTerm(sortByPublishDtm, postCategoryID, page, PAGE_SIZE , searchTerm, tagContent, advancedSort ,authentication);
         return postSummaryListDTO;
     }
 
@@ -541,4 +552,44 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    @Override
+    public void updateHotness(Long postID) {
+        Post post = this.getEntityFromIDOnNullThrowException(postID);
+
+        //TODO: Temporary we will use publish dtm as hotness.
+        long nowEpoch = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - GenericBusinessConstant.WEB_START_TIME_EPOCH;
+        post.setHotness((double)nowEpoch);
+        postRepository.save(post);
+    }
+
+    @Override
+    public void updateWilson(Long postID) {
+        //TODO: Temporary we will use like count as wilson score.
+        Post post = this.getEntityFromIDOnNullThrowException(postID);
+        long postTotalLike = userPostLikeRepository.countAllByUserPostLikeIdPostId(postID);
+        post.setWilson((double)postTotalLike);
+        postRepository.save(post);
+    }
+
+    @Override
+    public void updateLikes(Long postID) {
+        Post post = getEntityFromIDOnNullThrowException(postID);
+        long postTotalLike = userPostLikeRepository.countAllByUserPostLikeIdPostId(postID);
+        post.setLikes(postTotalLike);
+        postRepository.save(post);
+    }
+
+    @Override
+    public void updateViews(Long postID) {
+        Post post = getEntityFromIDOnNullThrowException(postID);
+        long postTotalViews = postViewRepository.countByPostId(postID);
+        post.setViews(postTotalViews);
+        postRepository.save(post);
+    }
+
+    private Post getEntityFromIDOnNullThrowException (Long postID) {
+        Optional<Post> postOpt = postRepository.findById(postID);
+        Validate.isTrue(postOpt.isPresent());
+        return postOpt.get();
+    }
 }

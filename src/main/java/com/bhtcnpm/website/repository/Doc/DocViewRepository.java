@@ -11,4 +11,6 @@ public interface DocViewRepository extends JpaRepository<DocView, Long> {
             "FROM DocView dv " +
             "WHERE dv.doc.id = :docID AND ( dv.user.id = :userID OR dv.ipAddress = :ipAddress AND dv.user.id IS NULL)")
     boolean existsByDocIdAndUserIdOrIpAddress (Long docID, UUID userID, String ipAddress);
+
+    long countByDocId (Long docID);
 }

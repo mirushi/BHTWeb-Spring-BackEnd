@@ -185,6 +185,30 @@ public class Doc {
     )
     private Set<UserDocReaction> userDocReactions;
 
+    @Column(name = "hotness")
+    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    private Double hotness = 0d;
+
+    @Column(name = "wilson")
+    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    private Double wilson = 0d;
+
+    @Column(name = "up_vote")
+    @GenericField(name = "up_vote", sortable = Sortable.YES, projectable = Projectable.YES)
+    private Long upVotes = 0L;
+
+    @Column(name = "down_vote")
+    @GenericField(name = "down_vote", sortable = Sortable.YES, projectable = Projectable.YES)
+    private Long downVotes = 0L;
+
+    @Column(name = "views")
+    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    private Long views;
+
+    @Column(name = "downloads")
+    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    private Long downloads;
+
     @Version
     private short version;
 

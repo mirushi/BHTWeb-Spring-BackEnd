@@ -2,6 +2,8 @@ package com.bhtcnpm.website.repository.Doc.custom;
 
 import com.bhtcnpm.website.constant.business.Doc.DocBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
+import com.bhtcnpm.website.constant.sort.AdvancedSort;
+import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.dto.Doc.mapper.DocSuggestionMapper;
 import com.bhtcnpm.website.model.dto.Doc.mapper.DocSummaryMapper;
@@ -128,6 +130,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                                                Integer pageSize,
                                                SortOrder sortByPublishDtm,
                                                SortOrder sortByCreatedDtm,
+                                               AdvancedSort advancedSort,
                                                Authentication authentication) {
 
         SearchResult<Doc> searchResult = getDocSearchResult(
@@ -142,6 +145,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 sortByPublishDtm,
                 sortByCreatedDtm,
                 DocBusinessState.PUBLIC,
+                null,
                 authentication,
                 false
         );
@@ -180,6 +184,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 pageSize,
                 sortByPublishDtm,
                 sortByCreatedDtm,
+                null,
                 null,
                 authentication,
                 false
@@ -222,6 +227,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 pageSize,
                 sortByPublishDtm,
                 sortByCreatedDtm,
+                null,
                 null,
                 null,
                 true
@@ -363,6 +369,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 null,
                 DocBusinessState.PUBLIC,
                 null,
+                null,
         true
         );
 
@@ -408,6 +415,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                                                   SortOrder sortByPublishDtm,
                                                   SortOrder sortByCreatedDtm,
                                                   DocBusinessState docBusinessState,
+                                                  AdvancedSort advancedSort,
                                                   Authentication authentication,
                                                   boolean ignoreAuthorization) {
 
@@ -466,11 +474,25 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                     }
                 }))
                 .sort(f -> f.composite( b -> {
+                    b.add(f.score());
                     if (sortByPublishDtm != null) {
                         b.add(f.field("publishDtm").order(sortByPublishDtm));
                     }
                     if (sortByCreatedDtm != null) {
                         b.add(f.field("createdDtm").order(sortByCreatedDtm));
+                    }
+                    if (AdvancedSort.HOT.equals(advancedSort)) {
+                        b.add(f.field("hotness").desc());
+                    } else if (AdvancedSort.BEST.equals(advancedSort)) {
+                        b.add(f.field("wilson").desc());
+                    } else if (AdvancedSort.TOP.equals(advancedSort)) {
+                        b.add(f.field("up_vote").desc());
+                    } else if (AdvancedSort.VIEWS.equals(advancedSort)) {
+                        b.add(f.field("views").desc());
+                    } else if (AdvancedSort.DOWNLOADS.equals(advancedSort)) {
+                        b.add(f.field("downloads").desc());
+                    } else if (AdvancedSort.NEWEST.equals(advancedSort)) {
+                        b.add(f.field("publishDtm").desc());
                     }
                 }))
                 .fetch(page * pageSize, pageSize);

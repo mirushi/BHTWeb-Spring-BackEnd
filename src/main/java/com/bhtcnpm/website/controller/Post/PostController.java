@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.controller.Post;
 
+import com.bhtcnpm.website.constant.sort.AdvancedSort;
 import com.bhtcnpm.website.model.binding.IgnorePostStateTypeBinding;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.Post;
@@ -277,9 +278,10 @@ public class PostController {
             @RequestParam(value = "page") @Pagination Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) String sortByPublishDtm,
             @RequestParam(value = "postCategoryID", required = false) Long postCategoryID,
+            @RequestParam(value = "advancedSort", required = false) AdvancedSort advancedSort,
             @RequestParam(value = "tags", required = false) Long tagID,
             Authentication authentication) {
-        return new ResponseEntity<>(postService.getPostBySearchTerm(sortByPublishDtm, page, searchTerm, postCategoryID, tagID, authentication), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getPostBySearchTerm(sortByPublishDtm, page, searchTerm, postCategoryID, advancedSort, tagID, authentication), HttpStatus.OK);
     }
 
     @GetMapping("relatedSameAuthor")

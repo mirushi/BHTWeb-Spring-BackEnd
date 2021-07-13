@@ -5,5 +5,7 @@ public enum AdvancedSort {
     TRENDING,
     BEST,
     TOP,
-    NEWEST
+    NEWEST,
+    VIEWS,
+    DOWNLOADS
 }
