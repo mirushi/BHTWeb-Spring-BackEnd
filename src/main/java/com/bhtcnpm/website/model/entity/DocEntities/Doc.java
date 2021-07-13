@@ -108,6 +108,7 @@ public class Doc {
 
     @Lob
     @Column(columnDefinition = "text")
+    @Type(type = "org.hibernate.type.TextType")
     private String adminFeedback;
 
     @OneToMany(

@@ -38,6 +38,7 @@ public class DocComment {
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "text", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
     private String content;
 
     @ManyToOne

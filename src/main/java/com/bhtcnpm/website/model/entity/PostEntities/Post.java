@@ -96,10 +96,12 @@ public class Post {
 
     @Lob
     @Column(columnDefinition = "text", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
     private String content;
 
     @Lob
     @Column(columnDefinition = "text", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,
@@ -109,6 +111,7 @@ public class Post {
 
     @Lob
     @Column(columnDefinition = "text")
+    @Type(type = "org.hibernate.type.TextType")
     private String adminFeedback;
 
     @ManyToOne

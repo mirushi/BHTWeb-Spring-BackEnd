@@ -27,7 +27,7 @@ import org.springframework.security.web.authentication.session.NullAuthenticated
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
 @KeycloakConfiguration
-@Profile("dev")
+//@Profile("dev")
 //TODO: Please disable debug before goes production.
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor

@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.model.entity.ExerciseEntities;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -25,6 +26,7 @@ public class ExerciseAnswer {
 
     @Lob
     @Column(name = "content", columnDefinition = "text",nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
     private String content;
 
     @Column(name = "is_correct", nullable = false)
