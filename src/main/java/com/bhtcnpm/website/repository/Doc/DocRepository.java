@@ -40,9 +40,9 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
             "COUNT(DISTINCT CASE WHEN reaction.DOC_REACTION_TYPE = 1 THEN reaction.USER_ID END) AS dislikeCount, " +
             "COUNT(DISTINCT dv.id) AS viewCount, " +
             "COUNT(DISTINCT dl.ID) AS downloadCount, " +
-            "CASE WHEN reaction.USER_ID = :userID THEN reaction.DOC_REACTION_TYPE END AS docReactionType, " +
+            "userOwnReaction.DOC_REACTION_TYPE as docReactionType, " +
             "CASE WHEN COUNT(CASE WHEN uds.USER_ID = :userID THEN 1 END) > 0 THEN TRUE ELSE FALSE END AS savedStatus " +
-            "FROM DOC d " +
+            "FROM DOC d LEFT JOIN (SELECT subReaction.DOC_ID, subReaction.DOC_REACTION_TYPE FROM USER_DOC_REACTION subReaction WHERE subReaction.USER_ID = :userID) userOwnReaction ON userOwnReaction.DOC_ID = d.ID " +
             "LEFT JOIN USER_DOC_REACTION reaction ON d.ID = reaction.DOC_ID " +
             "LEFT JOIN DOC_COMMENT dc ON d.ID = dc.DOC_ID " +
             "LEFT JOIN DOC_VIEW dv ON d.ID = dv.DOC_ID " +
@@ -50,7 +50,7 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
             "LEFT JOIN DOC_DOWNLOAD dl ON dl.DOC_FILE_UPLOAD_ID = file.ID " +
             "LEFT JOIN USER_DOC_SAVE uds ON d.ID = uds.DOC_ID " +
             "WHERE d.ID IN :docIDs AND d.DELETED_DTM IS NULL " +
-            "GROUP BY d.ID")
+            "GROUP BY d.ID, userOwnReaction.DOC_REACTION_TYPE")
     List<DocStatisticDTO> getDocStatisticDTOs (List<Long> docIDs, UUID userID);
 
 //    @Modifying
