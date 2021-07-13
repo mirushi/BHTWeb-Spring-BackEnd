@@ -20,8 +20,8 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long>, Query
             "MAX(attempts.correctAnsweredQuestions)," +
             "COUNT(DISTINCT questions.id)) " +
             "FROM Exercise exercise " +
-            "LEFT JOIN exercise.exerciseAttempts attempts " +
-            "LEFT JOIN exercise.exerciseQuestions questions " +
+            "LEFT JOIN ExerciseAttempt attempts ON attempts.exercise.id = exercise.id " +
+            "LEFT JOIN ExerciseQuestion questions ON questions.exercise.id = exercise.id " +
             "GROUP BY exercise " +
             "ORDER BY exercise.rank ASC")
     List<ExerciseSummaryDTO> getExerciseSummaryWithUserAttempts (Predicate predicate);

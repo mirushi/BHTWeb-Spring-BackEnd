@@ -2,6 +2,7 @@ package com.bhtcnpm.website.service.Exercise;
 
 import com.bhtcnpm.website.model.dto.Exercise.*;
 import com.querydsl.core.types.Predicate;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.security.core.Authentication;
@@ -9,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 public interface ExerciseService {
-    List<ExerciseSummaryDTO> getExerciseList (Predicate predicate, Authentication authentication);
+    List<ExerciseSummaryDTO> getExerciseList (Predicate predicate, Pageable pageable, Authentication authentication);
     List<ExerciseSummaryWithTopicDTO> getExerciseWithTopic (Predicate predicate, Authentication authentication);
 
     @PreAuthorize(value = "hasPermission(#id, " +

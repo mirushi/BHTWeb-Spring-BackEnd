@@ -40,5 +40,6 @@ public class PostViewAvg {
     private Long sqrPastView;
 
 //    @Column(nullable = false)
+    @Column(columnDefinition = "float(8)")
     private Double recentAvg;
 }

@@ -17,6 +17,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.Validate;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -38,8 +39,9 @@ public class ExerciseServiceImpl implements ExerciseService {
     private final ExercisePermissionEvaluator exercisePermissionEvaluator;
 
     @Override
-    public List<ExerciseSummaryDTO> getExerciseList(Predicate predicate, Authentication authentication) {
+    public List<ExerciseSummaryDTO> getExerciseList(Predicate predicate, Pageable pageable, Authentication authentication) {
         UUID userID = SecurityUtils.getUserID(authentication);
+
         Sort sortByRankAsc = ExerciseOrderingGenerator.orderByRankAsc();
 
         List<ExerciseSummaryDTO> exerciseSummaryDTOList;

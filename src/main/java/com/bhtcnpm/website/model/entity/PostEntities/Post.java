@@ -187,11 +187,11 @@ public class Post {
     @ManyToOne
     private UserWebsite deletedBy;
 
-    @Column(name = "hotness")
+    @Column(name = "hotness", columnDefinition = "float(8)")
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     private Double hotness = 0d;
 
-    @Column(name = "wilson")
+    @Column(name = "wilson", columnDefinition = "float(8)")
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     private Double wilson = 0d;
 
