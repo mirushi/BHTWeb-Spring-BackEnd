@@ -13,7 +13,8 @@ public class WebsiteApplicationConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")
+                        .allowedOrigins("http://localhost:3000", "http://uitstudy.space", "https://uitstudy.space:443", "https://uitstudy.space",
+                                "http://www.uitstudy.space", "https://www.uitstudy.space:443", "https://www.uitstudy.space")
                         .allowedMethods("GET", "PUT", "POST", "DELETE")
                         .allowedHeaders("Authorization", "Cache-Control" ,"Content-Type");
             }
