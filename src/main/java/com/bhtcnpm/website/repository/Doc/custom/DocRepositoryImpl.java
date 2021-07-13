@@ -2,6 +2,8 @@ package com.bhtcnpm.website.repository.Doc.custom;
 
 import com.bhtcnpm.website.constant.business.Doc.DocBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
+import com.bhtcnpm.website.constant.sort.AdvancedSort;
+import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.dto.Doc.mapper.DocSuggestionMapper;
 import com.bhtcnpm.website.model.dto.Doc.mapper.DocSummaryMapper;
@@ -38,6 +40,7 @@ import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.hibernate.search.mapper.orm.work.SearchIndexingPlan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
@@ -127,6 +130,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                                                Integer pageSize,
                                                SortOrder sortByPublishDtm,
                                                SortOrder sortByCreatedDtm,
+                                               AdvancedSort advancedSort,
                                                Authentication authentication) {
 
         SearchResult<Doc> searchResult = getDocSearchResult(
@@ -141,6 +145,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 sortByPublishDtm,
                 sortByCreatedDtm,
                 DocBusinessState.PUBLIC,
+                null,
                 authentication,
                 false
         );
@@ -179,6 +184,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 pageSize,
                 sortByPublishDtm,
                 sortByCreatedDtm,
+                null,
                 null,
                 authentication,
                 false
@@ -221,6 +227,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                 pageSize,
                 sortByPublishDtm,
                 sortByCreatedDtm,
+                null,
                 null,
                 null,
                 true
@@ -348,6 +355,28 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
     }
 
     @Override
+    public Page<Doc> quickSearch(Pageable pageable, String searchTerm) {
+        SearchResult<Doc> searchResult = getDocSearchResult(
+                searchTerm,
+                null,
+                null,
+                null,
+                null,
+                DocStateType.APPROVED,
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                null,
+                null,
+                DocBusinessState.PUBLIC,
+                null,
+                null,
+        true
+        );
+
+        return this.searchResultToPage(searchResult, pageable.getPageNumber(), pageable.getPageSize());
+    }
+
+    @Override
     public void indexDoc(Long docID) {
         Doc doc = em.getReference(Doc.class, docID);
         indexDoc(doc);
@@ -386,6 +415,7 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                                                   SortOrder sortByPublishDtm,
                                                   SortOrder sortByCreatedDtm,
                                                   DocBusinessState docBusinessState,
+                                                  AdvancedSort advancedSort,
                                                   Authentication authentication,
                                                   boolean ignoreAuthorization) {
 
@@ -444,11 +474,25 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
                     }
                 }))
                 .sort(f -> f.composite( b -> {
+                    b.add(f.score());
                     if (sortByPublishDtm != null) {
                         b.add(f.field("publishDtm").order(sortByPublishDtm));
                     }
                     if (sortByCreatedDtm != null) {
                         b.add(f.field("createdDtm").order(sortByCreatedDtm));
+                    }
+                    if (AdvancedSort.HOT.equals(advancedSort)) {
+                        b.add(f.field("hotness").desc());
+                    } else if (AdvancedSort.BEST.equals(advancedSort)) {
+                        b.add(f.field("wilson").desc());
+                    } else if (AdvancedSort.TOP.equals(advancedSort)) {
+                        b.add(f.field("up_vote").desc());
+                    } else if (AdvancedSort.VIEWS.equals(advancedSort)) {
+                        b.add(f.field("views").desc());
+                    } else if (AdvancedSort.DOWNLOADS.equals(advancedSort)) {
+                        b.add(f.field("downloads").desc());
+                    } else if (AdvancedSort.NEWEST.equals(advancedSort)) {
+                        b.add(f.field("publishDtm").desc());
                     }
                 }))
                 .fetch(page * pageSize, pageSize);
@@ -488,5 +532,12 @@ public class DocRepositoryImpl implements DocRepositoryCustom {
 
     private JPAQuery<Doc> applyPaginatorPageOnly (JPAQuery<Doc> query, Pageable pageable) {
         return query.offset(pageable.getOffset()).limit(pageable.getPageSize());
+    }
+
+    private Page<Doc> searchResultToPage (SearchResult<Doc> docSearchResult, int page, int pageSize) {
+        long resultCount = docSearchResult.total().hitCountLowerBound();
+        int totalPages = (int)Math.ceil((double)resultCount/pageSize);
+        List<Doc> docList = docSearchResult.hits();
+        return new PageImpl<>(docList, PageRequest.of(page, pageSize), resultCount);
     }
 }

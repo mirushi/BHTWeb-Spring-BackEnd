@@ -3,6 +3,7 @@ package com.bhtcnpm.website.repository.custom;
 import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.constant.business.Post.PostBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
+import com.bhtcnpm.website.constant.sort.AdvancedSort;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.UserWebsite;
@@ -23,6 +24,7 @@ import org.apache.lucene.search.Query;
 import org.hibernate.search.backend.lucene.LuceneExtension;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.query.SearchResult;
+import org.hibernate.search.engine.search.sort.SearchSort;
 import org.hibernate.search.engine.search.sort.dsl.SortFinalStep;
 import org.hibernate.search.engine.search.sort.dsl.SortThenStep;
 import org.hibernate.search.mapper.orm.Search;
@@ -88,29 +90,36 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                                     String tagContent,
                                                     PostStateType postStateType,
                                                     PostBusinessState postBusinessState,
+                                                    AdvancedSort advancedSort,
                                                     Authentication authentication) {
         SearchScope<Post> scope = getSearchScope();
 
+        final boolean userCustomSort = sortByPublishDtm != null || advancedSort != null;
+
         //Build dynamic sorting condition based on user input.
         //Intermediate step.
-        SortThenStep sortThenStep = null;
-
-        //Final step.
-        SortFinalStep sortFinalStep;
+        SortThenStep sortThenStep = scope.sort().score();
 
         //Avoid null pointer exception - inverse equals caller and callee.
         if (GenericBusinessConstant.SORT_ASC.equalsIgnoreCase(sortByPublishDtm)) {
-            sortThenStep = scope.sort().field("publishDtm").asc();
+            sortThenStep = sortThenStep.then().field("publishDtm").asc();
         } else if (GenericBusinessConstant.SORT_DESC.equalsIgnoreCase(sortByPublishDtm)) {
-            sortThenStep = scope.sort().field("publishDtm").desc();
+            sortThenStep = sortThenStep.then().field("publishDtm").desc();
         }
 
-        //Sort then step is null. Which means user don't want to sort by publish datetime. Only by relevance.
-        if (sortThenStep == null) {
-            sortFinalStep = scope.sort().score();
-        } else {
-            sortFinalStep = sortThenStep.then().score();
+        if (AdvancedSort.HOT.equals(advancedSort)) {
+            sortThenStep = sortThenStep.then().field("hotness").desc();
+        } else if (AdvancedSort.BEST.equals(advancedSort)) {
+            sortThenStep = sortThenStep.then().field("wilson").desc();
+        } else if (AdvancedSort.NEWEST.equals(advancedSort)) {
+            sortThenStep = sortThenStep.then().field("publishDtm").desc();
+        } else if (AdvancedSort.TOP.equals(advancedSort)) {
+            sortThenStep = sortThenStep.then().field("likes").desc();
+        } else if (AdvancedSort.VIEWS.equals(advancedSort)) {
+            sortThenStep = sortThenStep.then().field("views").desc();
         }
+
+        SearchSort searchSort = sortThenStep.toSort();
 
         //Filter search result based on user reading permission.
         SearchPredicate authorizationFilteringPredicate = PostHibernateSearchPredicateGenerator.getSearchPredicateOnAuthentication(authentication, scope);
@@ -126,11 +135,16 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                         b.must(businessStateFilteringPredicate);
                     }
                     if (StringUtils.isNotEmpty(searchTerm)) {
-                        b.must(f.match()
+                        var predicate = f.match()
                                 .field("title").boost(PostBusinessConstant.SEARCH_TITLE_BOOST)
                                 .field("summary").boost(PostBusinessConstant.SEARCH_SUMMARY_BOOST)
                                 .field("contentPlainText").boost(PostBusinessConstant.SEARCH_CONTENT_BOOST)
-                                .matching(searchTerm));
+                                .matching(searchTerm);
+                        if (userCustomSort) {
+                            b.filter(predicate);
+                        } else {
+                            b.must(predicate);
+                        }
                     }
                     if (postCategoryID != null) {
                         b.filter(f.match()
@@ -148,7 +162,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                 .matching(tagContent));
                     }
                 }))
-                .sort(sortFinalStep.toSort())
+                .sort(searchSort)
                 .fetch(page * pageSize, pageSize);
 
         return searchResult;
@@ -161,6 +175,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                                  Integer pageSize,
                                                  String searchTerm,
                                                  String tagContent,
+                                                 AdvancedSort advancedSort,
                                                  Authentication authentication) {
 
         SearchResult<Post> searchResult = getPostSearchResult(sortByPublishDtm,
@@ -171,6 +186,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 tagContent,
                 null,
                 PostBusinessState.PUBLIC,
+                advancedSort,
                 authentication);
 
         Long resultCount = searchResult.total().hitCountLowerBound();
@@ -199,6 +215,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 searchTerm,
                 null,
                 postStateType,
+                null,
                 null,
                 authentication);
 

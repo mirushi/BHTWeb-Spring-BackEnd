@@ -132,6 +132,10 @@ public class Exercise {
     ))
     private Subject subject;
 
+    @Column(name = "attempts")
+    @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
+    private Long attempts = 0L;
+
     @ManyToOne
     @GenericField(
             valueBridge = @ValueBridgeRef(type = ExerciseCategoryIDValueBridge.class),

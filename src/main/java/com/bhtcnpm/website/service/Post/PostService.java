@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.service.Post;
 
+import com.bhtcnpm.website.constant.sort.AdvancedSort;
 import com.bhtcnpm.website.model.dto.Post.*;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
@@ -94,7 +95,7 @@ public interface PostService {
 
     List<PostSummaryDTO> getPostNewest();
 
-    PostSummaryListDTO getPostBySearchTerm (String sortByPublishDtm, @Pagination Integer page, String searchTerm, @PostCategoryID Long postCategoryID, Long tagID, Authentication authentication);
+    PostSummaryListDTO getPostBySearchTerm (String sortByPublishDtm, @Pagination Integer page, String searchTerm, @PostCategoryID Long postCategoryID, AdvancedSort advancedSort, Long tagID, Authentication authentication);
 
     PostSummaryWithStateListDTO getPostWithStateBySearchTerm (Predicate predicate, Pageable pageable);
 
@@ -127,4 +128,9 @@ public interface PostService {
     List<PostSummaryDTO> getTrendingPost();
 
     void calculateAllPageViewAvg();
+
+    void updateHotness(Long postID);
+    void updateWilson(Long postID);
+    void updateLikes(Long postID);
+    void updateViews(Long postID);
 }

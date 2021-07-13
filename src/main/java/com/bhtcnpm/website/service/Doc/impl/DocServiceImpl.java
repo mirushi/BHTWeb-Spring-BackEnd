@@ -4,8 +4,10 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.bhtcnpm.website.constant.business.Doc.AllowedUploadExtension;
 import com.bhtcnpm.website.constant.business.Doc.DocActionAvailableConstant;
 import com.bhtcnpm.website.constant.business.Doc.DocFileUploadConstant;
+import com.bhtcnpm.website.constant.business.GenericBusinessConstant;
 import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.constant.security.evaluator.permission.DocActionPermissionRequest;
+import com.bhtcnpm.website.constant.sort.AdvancedSort;
 import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.AWS.AmazonS3ResultDTO;
 import com.bhtcnpm.website.model.dto.Doc.*;
@@ -16,6 +18,7 @@ import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocSave;
 import com.bhtcnpm.website.model.entity.DocEntities.UserDocSaveId;
+import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.Tag;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocFileUpload.DocFileUploadHostType;
@@ -23,10 +26,7 @@ import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
-import com.bhtcnpm.website.repository.Doc.DocFileUploadRepository;
-import com.bhtcnpm.website.repository.Doc.DocRepository;
-import com.bhtcnpm.website.repository.Doc.UserDocReactionRepository;
-import com.bhtcnpm.website.repository.Doc.UserDocSaveRepository;
+import com.bhtcnpm.website.repository.Doc.*;
 import com.bhtcnpm.website.repository.TagRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.evaluator.Doc.DocPermissionEvaluator;
@@ -59,7 +59,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -96,7 +99,13 @@ public class DocServiceImpl implements DocService {
 
     private final DocFileUploadMapper docFileUploadMapper;
 
+    private final DocSearchMapper docSearchMapper;
+
     private final DocRepository docRepository;
+
+    private final DocViewRepository docViewRepository;
+
+    private final DocDownloadRepository docDownloadRepository;
 
     private final DocFileUploadRepository docFileUploadRepository;
 
@@ -448,6 +457,7 @@ public class DocServiceImpl implements DocService {
             Long tagID,
             Integer page,
             ApiSortOrder sortByPublishDtm,
+            AdvancedSort advancedSort,
             Authentication authentication
     ) {
         //TODO: DocState depends on ACL.
@@ -471,6 +481,7 @@ public class DocServiceImpl implements DocService {
                 PAGE_SIZE,
                 EnumConverter.apiSortOrderToHSearchSortOrder(sortByPublishDtm),
                 null,
+                advancedSort,
                 authentication);
 
         return queryResult;
@@ -599,5 +610,88 @@ public class DocServiceImpl implements DocService {
                 authentication
         );
         return dtoList;
+    }
+
+    @Override
+    public List<DocQuickSearchResult> quickSearch(Pageable pageable, String searchTerm) {
+        Page<Doc> searchResult = docRepository.quickSearch(pageable, searchTerm);
+
+        return docSearchMapper.docListToDocQuickSearchResultList(searchResult.getContent());
+    }
+
+    @Override
+    public void updateHotness(Long docID) {
+        Doc doc = this.getEntityFromIDOnNullThrowException(docID);
+
+        long docPublishDtmEpoch = doc.getPublishDtm().toEpochSecond(ZoneOffset.UTC);
+        long t = docPublishDtmEpoch - GenericBusinessConstant.WEB_START_TIME_EPOCH;
+        long x = doc.getUpVotes() - doc.getDownVotes();
+        long y = 0;
+        if (x > 0) {
+            y = 1;
+        } else if (x < 0) {
+            y = -1;
+        }
+        long absX = Math.abs(x);
+        long z = 1;
+        if (absX >= 1) {
+            z = absX;
+        }
+
+        Double hotness = Math.log10(z) + ((double)y * (double)t) / 45000;
+        doc.setHotness(hotness);
+
+        docRepository.save(doc);
+    }
+
+    @Override
+    //https://www.evanmiller.org/how-not-to-sort-by-average-rating.html
+    public void updateWilson(Long docID) {
+        Doc doc = this.getEntityFromIDOnNullThrowException(docID);
+        double upVotes = doc.getUpVotes();
+        double totalVotes = doc.getUpVotes() + doc.getDownVotes();
+        double z = 1.96;
+        double phat = upVotes / totalVotes;
+        double wilson = ( phat + z*z/(2*totalVotes) - z*Math.sqrt((phat * (1-phat) + z*z/(4*totalVotes))/totalVotes))/(1+z*z/totalVotes);
+        doc.setWilson(wilson);
+        docRepository.save(doc);
+    }
+
+    @Override
+    public void updateUpVotes(Long docID) {
+        Doc doc = this.getEntityFromIDOnNullThrowException(docID);
+        long docLike = userDocReactionRepository.countByDocReactionTypeAndUserDocReactionIdDocId(DocReactionType.LIKE, docID);
+        doc.setUpVotes(docLike);
+        docRepository.save(doc);
+    }
+
+    @Override
+    public void updateDownVotes(Long docID) {
+        Doc doc = this.getEntityFromIDOnNullThrowException(docID);
+        long docDislike = userDocReactionRepository.countByDocReactionTypeAndUserDocReactionIdDocId(DocReactionType.DISLIKE, docID);
+        doc.setDownVotes(docDislike);
+        docRepository.save(doc);
+    }
+
+    @Override
+    public void updateViews(Long docID) {
+        Doc doc = this.getEntityFromIDOnNullThrowException(docID);
+        long docViews = docViewRepository.countByDocId(docID);
+        doc.setViews(docViews);
+        docRepository.save(doc);
+    }
+
+    @Override
+    public void updateDownloads(Long docID) {
+        Doc doc = this.getEntityFromIDOnNullThrowException(docID);
+        long docDownloads = docDownloadRepository.countByDocFileUploadDocId(docID);
+        doc.setDownloads(docDownloads);
+        docRepository.save(doc);
+    }
+
+    private Doc getEntityFromIDOnNullThrowException (Long docID) {
+        Optional<Doc> docOpt = docRepository.findById(docID);
+        Validate.isTrue(docOpt.isPresent());
+        return docOpt.get();
     }
 }

@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.service.Doc;
 
+import com.bhtcnpm.website.constant.sort.AdvancedSort;
 import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
@@ -118,6 +119,7 @@ public interface DocService {
             Long tagID,
             Integer page,
             ApiSortOrder sortByPublishDtm,
+            AdvancedSort advancedSort,
             Authentication authentication
     );
 
@@ -146,4 +148,13 @@ public interface DocService {
             ApiSortOrder sortByCreatedDtm,
             Authentication authentication
     );
+
+    List<DocQuickSearchResult> quickSearch (Pageable pageable, String searchTerm);
+
+    void updateHotness (Long docID);
+    void updateWilson (Long docID);
+    void updateUpVotes (Long docID);
+    void updateDownVotes (Long docID);
+    void updateViews (Long docID);
+    void updateDownloads (Long docID);
 }

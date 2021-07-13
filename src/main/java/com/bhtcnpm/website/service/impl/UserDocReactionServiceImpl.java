@@ -14,6 +14,7 @@ import com.bhtcnpm.website.repository.Doc.DocRepository;
 import com.bhtcnpm.website.repository.Doc.UserDocReactionRepository;
 import com.bhtcnpm.website.repository.UserWebsiteRepository;
 import com.bhtcnpm.website.security.util.SecurityUtils;
+import com.bhtcnpm.website.service.Doc.DocService;
 import com.bhtcnpm.website.service.UserDocReactionService;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,8 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
     private final UserWebsiteService userWebsiteService;
 
     private final DocRepository docRepository;
+
+    private final DocService docService;
 
     private final UserDocReactionMapper userDocReactionMapper;
 
@@ -93,8 +96,23 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
         userDocReaction = reactionRepository.save(userDocReaction);
 
         updateUserReputation(doc.getAuthor().getId(), oldReactionType, userDocReactionUserOwnDTO.getDocReactionType());
+        updateDocStatistic(docID, oldReactionType, userDocReactionUserOwnDTO.getDocReactionType());
 
         return userDocReactionMapper.userDocReactionToUserDocReactionDTO(userDocReaction);
+    }
+
+    private void updateDocStatistic (Long docID, DocReactionType oldReaction, DocReactionType newReaction) {
+        if (oldReaction != null && oldReaction.equals(newReaction)) {
+            return;
+        }
+        if (DocReactionType.DISLIKE.equals(oldReaction) || DocReactionType.DISLIKE.equals(newReaction)) {
+            docService.updateDownVotes(docID);
+        }
+        if (DocReactionType.LIKE.equals(oldReaction) || DocReactionType.LIKE.equals(newReaction)) {
+            docService.updateUpVotes(docID);
+        }
+        docService.updateHotness(docID);
+        docService.updateWilson(docID);
     }
 
     private void updateUserReputation (UUID userID, DocReactionType oldReaction, DocReactionType newReaction) {

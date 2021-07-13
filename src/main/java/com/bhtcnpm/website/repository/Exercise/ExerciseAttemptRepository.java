@@ -11,4 +11,6 @@ public interface ExerciseAttemptRepository extends JpaRepository<ExerciseAttempt
             "FROM ExerciseAttempt exerciseAttempt " +
             "WHERE exerciseAttempt.user.id = :userID AND exerciseAttempt.exercise.id = :exerciseID")
     Integer findMaxScoreAttemptByUserInExercise (UUID userID, Long exerciseID);
+
+    Long countByExerciseId (Long exerciseID);
 }

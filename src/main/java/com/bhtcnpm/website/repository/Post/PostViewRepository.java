@@ -11,4 +11,6 @@ public interface PostViewRepository extends JpaRepository<PostView, Long> {
             "FROM PostView pv " +
             "WHERE pv.post.id = :postID AND (pv.user.id = :userID OR pv.ipAddress = :ipAddress AND pv.user.id IS NULL)")
     boolean existsByPostIdAndUserIdOrIpAddress (Long postID, UUID userID, String ipAddress);
+
+    long countByPostId (Long postID);
 }

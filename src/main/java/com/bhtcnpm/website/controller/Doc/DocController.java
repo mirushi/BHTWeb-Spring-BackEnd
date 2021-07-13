@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.controller.Doc;
 
+import com.bhtcnpm.website.constant.sort.AdvancedSort;
 import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Doc.*;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseAvailableActionDTO;
@@ -319,6 +320,7 @@ public class DocController {
             @RequestParam(value = "tags", required = false) Long tagID,
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "sortByPublishDtm", required = false) ApiSortOrder sortByPublishDtm,
+            @RequestParam(value = "advancedSort", required = false) AdvancedSort advancedSort,
             Authentication authentication) {
 
         DocSummaryListDTO dtoList = docService.getDocBySearchTerm(
@@ -329,6 +331,7 @@ public class DocController {
                 tagID,
                 page,
                 sortByPublishDtm,
+                advancedSort,
                 authentication
         );
 

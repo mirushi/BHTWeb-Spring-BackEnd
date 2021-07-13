@@ -11,4 +11,6 @@ public interface DocDownloadRepository extends JpaRepository<DocDownload, Long> 
             "FROM DocDownload dd " +
             "WHERE dd.docFileUpload.id = :docFileUploadID AND (dd.user.id = :userID OR dd.ipAddress = :ipAddress AND dd.user.id IS NULL)")
     boolean existsByDocIdAndUserIdOrIpAddress (UUID docFileUploadID, UUID userID, String ipAddress);
+
+    long countByDocFileUploadDocId (Long docID);
 }
