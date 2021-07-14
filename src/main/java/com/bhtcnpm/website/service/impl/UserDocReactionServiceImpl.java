@@ -80,7 +80,13 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
         //Xoá reaction của User ra khỏi hệ thống nếu như User chọn là none.
         if (DocReactionType.NONE.equals(userDocReactionUserOwnDTO.getDocReactionType())) {
             if (userDocReactionObject.isPresent()) {
+                userDocReaction = userDocReactionObject.get();
+                oldReactionType = userDocReaction.getDocReactionType();
+
                 reactionRepository.delete(userDocReactionObject.get());
+                
+                updateUserReputation(doc.getAuthor().getId(), oldReactionType, userDocReactionUserOwnDTO.getDocReactionType());
+                updateDocStatistic(docID, oldReactionType, userDocReactionUserOwnDTO.getDocReactionType());
                 return null;
             }
         }
