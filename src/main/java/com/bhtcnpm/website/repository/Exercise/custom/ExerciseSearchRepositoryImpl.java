@@ -1,6 +1,7 @@
 package com.bhtcnpm.website.repository.Exercise.custom;
 
 import com.bhtcnpm.website.constant.business.Exercise.ExerciseSearchConstant;
+import com.bhtcnpm.website.constant.domain.Exercise.ExerciseBusinessState;
 import com.bhtcnpm.website.constant.sort.ApiSortOrder;
 import com.bhtcnpm.website.model.dto.Exercise.filter.ExerciseSearchFilterRequestDTO;
 import com.bhtcnpm.website.model.dto.Exercise.sort.ExerciseSearchSortRequestDTO;
@@ -8,7 +9,12 @@ import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseCategory;
 import com.bhtcnpm.website.model.entity.SubjectEntities.Subject;
 import com.bhtcnpm.website.model.entity.UserWebsite;
+import com.bhtcnpm.website.search.lucene.LuceneIndexUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.queries.mlt.MoreLikeThis;
+import org.apache.lucene.search.Query;
+import org.hibernate.search.backend.lucene.LuceneExtension;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.engine.search.sort.SearchSort;
 import org.hibernate.search.engine.search.sort.dsl.SortThenStep;
@@ -23,8 +29,8 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
-import java.util.UUID;
+import java.io.IOException;
+import java.util.*;
 
 @Component
 public class ExerciseSearchRepositoryImpl implements ExerciseSearchRepository {
@@ -34,20 +40,44 @@ public class ExerciseSearchRepositoryImpl implements ExerciseSearchRepository {
 
     private final SearchSession searchSession;
 
-    public ExerciseSearchRepositoryImpl(EntityManager em) {
+    private final IndexReader luceneIndexReader;
+
+    public ExerciseSearchRepositoryImpl(EntityManager em) throws IOException {
         this.em = em;
         this.searchSession = Search.session(em);
+
+        this.luceneIndexReader = LuceneIndexUtils.getReader("Exercise");
     }
 
     @Override
     public Page<Exercise> searchPublicExercise(ExerciseSearchFilterRequestDTO filterRequestDTO, ExerciseSearchSortRequestDTO sortRequestDTO, Integer page, Integer pageSize, Authentication authentication) {
-        SearchResult<Exercise> exerciseSearchResult = getExerciseSearchResult(filterRequestDTO, sortRequestDTO, page, pageSize, authentication);
+        SearchResult<Exercise> exerciseSearchResult = getExerciseSearchResult(filterRequestDTO, sortRequestDTO, null, page, pageSize, authentication);
 
         return this.searchResultToPage(exerciseSearchResult, page, pageSize);
     }
 
+    @Override
+    public Page<Exercise> getRelatedExercise(String title, String description, int page, int pageSize, ExerciseBusinessState exerciseBusinessState) throws IOException {
+        MoreLikeThis mlt = new MoreLikeThis(luceneIndexReader);
+        mlt.setFieldNames(new String[]{"title", "description"});
+        mlt.setMinTermFreq(0);
+        mlt.setMinDocFreq(0);
+        mlt.setAnalyzer(LuceneIndexUtils.getStandardAnalyzer());
+
+        Map<String, Collection<Object>> filteredExercise = new HashMap<>();
+        filteredExercise.put("title", Collections.singletonList(title));
+        filteredExercise.put("description", Collections.singletonList(description));
+
+        Query query = mlt.like(filteredExercise);
+
+        SearchResult<Exercise> relatedExercises = this.getExerciseSearchResult(null, null, query, page, pageSize, null);
+
+        return this.searchResultToPage(relatedExercises, page, pageSize);
+    }
+
     private SearchResult<Exercise> getExerciseSearchResult (ExerciseSearchFilterRequestDTO filterRequestDTO,
                                                             ExerciseSearchSortRequestDTO sortRequestDTO,
+                                                            Query luceneQuery,
                                                             Integer page,
                                                             Integer pageSize,
                                                             Authentication authentication) {
@@ -81,8 +111,12 @@ public class ExerciseSearchRepositoryImpl implements ExerciseSearchRepository {
         SearchSort searchSort = sortThenStep.toSort();
         //TODO: Do a sort for attempts count of user.
         SearchResult<Exercise> searchResult = searchSession.search(Exercise.class)
+                .extension(LuceneExtension.get())
                 .where(f -> f.bool(b -> {
                     b.filter(f.matchAll());
+                    if (luceneQuery != null) {
+                        b.must(f.fromLuceneQuery(luceneQuery));
+                    }
                     if (filterRequestDTO != null) {
                         String searchTerm = filterRequestDTO.getSearchTerm();
                         Long categoryID = filterRequestDTO.getCategoryID();

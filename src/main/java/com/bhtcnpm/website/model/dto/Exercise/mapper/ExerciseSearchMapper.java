@@ -3,6 +3,7 @@ package com.bhtcnpm.website.model.dto.Exercise.mapper;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseQuickSearchResult;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSearchResultDTO;
 import com.bhtcnpm.website.model.dto.Exercise.ExerciseSearchResultDTOList;
+import com.bhtcnpm.website.model.dto.Exercise.ExerciseSuggestionDTO;
 import com.bhtcnpm.website.model.dto.Subject.mapper.SubjectMapper;
 import com.bhtcnpm.website.model.dto.UserWebsite.UserMapper;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
@@ -29,4 +30,9 @@ public abstract class ExerciseSearchMapper {
     @Mapping(target = "imageURL", source = "subject.imageURL")
     public abstract ExerciseQuickSearchResult exerciseToExerciseQuickSearchResult (Exercise exercise);
     public abstract List<ExerciseQuickSearchResult> exerciseListToExerciseQuickSearchResultList (List<Exercise> exerciseList);
+
+
+    public abstract ExerciseSuggestionDTO exerciseToExerciseSuggestionDTO (Exercise exercise);
+    public abstract List<ExerciseSuggestionDTO> exerciseListToExerciseSuggestionDTOList (List<Exercise> exerciseList);
+
 }

@@ -9,6 +9,7 @@ import com.bhtcnpm.website.constant.security.evaluator.permission.PostActionPerm
 import com.bhtcnpm.website.constant.sort.AdvancedSort;
 import com.bhtcnpm.website.model.dto.AWS.AmazonS3ResultDTO;
 import com.bhtcnpm.website.model.dto.Post.*;
+import com.bhtcnpm.website.model.entity.DocEntities.Doc;
 import com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise;
 import com.bhtcnpm.website.model.entity.PostEntities.*;
 import com.bhtcnpm.website.model.entity.Tag;
@@ -16,6 +17,7 @@ import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
 import com.bhtcnpm.website.model.exception.FileExtensionNotAllowedException;
 import com.bhtcnpm.website.model.exception.IDNotFoundException;
+import com.bhtcnpm.website.repository.Doc.DocRepository;
 import com.bhtcnpm.website.repository.Exercise.ExerciseRepository;
 import com.bhtcnpm.website.repository.Post.PostRepository;
 import com.bhtcnpm.website.repository.Post.PostViewRepository;
@@ -32,6 +34,7 @@ import com.bhtcnpm.website.service.Post.PostViewService;
 import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.service.util.PaginatorUtils;
 import com.bhtcnpm.website.util.FileUploadUtils;
+import com.bhtcnpm.website.util.ValidationUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +73,8 @@ public class PostServiceImpl implements PostService {
     private final UserWebsiteRepository userWebsiteRepository;
 
     private final TagRepository tagRepository;
+
+    private final DocRepository docRepository;
 
     private final PostMapper postMapper;
 
@@ -239,6 +244,10 @@ public class PostServiceImpl implements PostService {
         Post post = optionalPost.get();
 
         post = postMapper.postRequestDTOToPost(postRequestDTO, userID, post);
+
+        if (post.getPostState().equals(PostStateType.PENDING_FIX)) {
+            post.setPostState(PostStateType.PENDING_APPROVAL);
+        }
 
         return postMapper.postToPostDetailsDTO(post);
     }
@@ -438,19 +447,33 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostSuggestionDTO> getRelatedPostByExercise(Long exerciseID, Integer page) throws IDNotFoundException, IOException {
+    public List<PostSuggestionDTO> getRelatedPostByExercise(Long exerciseID, Long docID, Integer page) throws IDNotFoundException, IOException {
         if (page == null) {
             page = 0;
         }
 
-        Optional<Exercise> object = exerciseRepository.findById(exerciseID);
-        if (object.isEmpty()) {
-            throw new IDNotFoundException();
-        }
+        ValidationUtils.assertExactlyOneParamIsNotNull(exerciseID, docID);
+        String title = null;
+        String description = null;
+        if (exerciseID != null) {
+            Optional<Exercise> object = exerciseRepository.findById(exerciseID);
+            if (object.isEmpty()) {
+                throw new IDNotFoundException();
+            }
 
-        Exercise exercise = object.get();
-        final String title = exercise.getTitle();
-        final String description = exercise.getDescription();
+            Exercise exercise = object.get();
+            title = exercise.getTitle();
+            description = exercise.getDescription();
+        } else if (docID != null) {
+            Optional<Doc> object = docRepository.findById(docID);
+            if (object.isEmpty()) {
+                throw new IDNotFoundException();
+            }
+
+            Doc doc = object.get();
+            title = doc.getTitle();
+            description = doc.getDescription();
+        }
 
         return postRepository.searchRelatedPost(null, null, null, title, description, title.concat(description),
                 page, PostBusinessConstant.RELATED_POST_MAX, PostBusinessState.PUBLIC, null);

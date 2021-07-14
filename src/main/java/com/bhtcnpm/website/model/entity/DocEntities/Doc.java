@@ -97,7 +97,9 @@ public class Doc {
     )
     private Subject subject;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "text", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,

@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 import org.hibernate.search.engine.backend.types.*;
@@ -65,7 +66,9 @@ public class Exercise {
     )
     private String title;
 
-    @Column(name = "description")
+    @Lob
+    @Column(columnDefinition = "text")
+    @Type(type = "org.hibernate.type.TextType")
     @FullTextField(
             analyzer = "default",
             norms = Norms.YES,

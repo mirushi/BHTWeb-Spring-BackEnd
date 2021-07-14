@@ -228,6 +228,10 @@ public class DocServiceImpl implements DocService {
 
         doc = docRepository.save(doc);
 
+        if (doc.getDocState().equals(DocStateType.PENDING_FIX)) {
+            doc.setDocState(DocStateType.PENDING_APPROVAL);
+        }
+
         return docDetailsMapper.docToDocDetailsDTO(doc);
     }
 
