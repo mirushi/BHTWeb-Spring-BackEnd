@@ -447,7 +447,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostSuggestionDTO> getRelatedPostByExercise(Long exerciseID, Long docID, Integer page) throws IDNotFoundException, IOException {
+    public List<PostSuggestionDTO> getRelatedPost(Long exerciseID, Long docID, Integer page) throws IDNotFoundException, IOException {
         if (page == null) {
             page = 0;
         }
