@@ -108,15 +108,15 @@ public class UserWebsite {
     @JsonIgnore
     private List<UserDocReaction> docReactions;
 
-    @OneToMany(
-            mappedBy = "actorPassive",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    private List<Notification> notificationsOfUserOwn;
+//    @OneToMany(
+//            mappedBy = "actorPassive",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true
+//    )
+//    @EqualsAndHashCode.Exclude
+//    @ToString.Exclude
+//    @JsonIgnore
+//    private List<Notification> notificationsOfUserOwn;
 
     @OneToMany(
             mappedBy = "userPostLikeId.user",

@@ -407,7 +407,7 @@ public class PostServiceImpl implements PostService {
         //Reset PAGE_SIZE to predefined value.
         pageable = PageRequest.of(pageable.getPageNumber(), PAGE_SIZE, pageable.getSort());
 
-        Page<Post> queryResult = postRepository.findAll(predicate, pageable);
+        Page<Post> queryResult = postRepository.findAll(userOwn.and(notDeleted).and(predicate), pageable);
 
         return postMapper.postPageToPostSummaryWithStateAndFeedbackListDTO(queryResult);
     }
