@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
+import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import lombok.Data;
 
@@ -12,4 +13,5 @@ public class DocSummaryWithStateDTO {
     LocalDateTime submitDtm;
     String feedback;
     DocStateType docState;
+    DocBusinessState docBusinessState;
 }

@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.dto.Doc;
 
+import com.bhtcnpm.website.constant.domain.Doc.DocBusinessState;
 import com.bhtcnpm.website.model.entity.enumeration.DocState.DocStateType;
 import com.bhtcnpm.website.model.validator.dto.Doc.*;
 import com.bhtcnpm.website.model.validator.dto.DocCategory.DocCategoryID;
@@ -51,6 +52,8 @@ public class DocSummaryWithStateAndFeedbackDTO {
     LocalDateTime publishDtm;
 
     DocStateType docState;
+
+    DocBusinessState docBusinessState;
 
     String feedback;
 }
