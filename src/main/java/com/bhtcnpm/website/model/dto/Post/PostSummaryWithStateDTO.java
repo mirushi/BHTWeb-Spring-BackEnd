@@ -9,6 +9,7 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
+//TODO: Refactor this to be the same with PostSummaryWithStateAndFeedback.
 public class PostSummaryWithStateDTO {
     private Long id;
     private String title;
@@ -23,4 +24,5 @@ public class PostSummaryWithStateDTO {
     private Long categoryID;
     private String categoryName;
     private PostStateType postState;
+    private String feedback;
 }

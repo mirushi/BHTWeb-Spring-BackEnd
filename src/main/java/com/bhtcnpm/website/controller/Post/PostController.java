@@ -312,7 +312,7 @@ public class PostController {
     public ResponseEntity<List<PostSuggestionDTO>> related (@RequestParam(value = "exerciseID", required = false) Long exerciseID,
                                                             @RequestParam(value = "docID", required = false) Long docID,
                                                             @RequestParam(value = "page", required = false) Integer page) throws IOException {
-        return new ResponseEntity<>(postService.getRelatedPostByExercise(exerciseID, docID, page), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getRelatedPost(exerciseID, docID, page), HttpStatus.OK);
     }
 
     @GetMapping("myPosts")

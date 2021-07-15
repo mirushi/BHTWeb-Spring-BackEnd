@@ -16,11 +16,11 @@ import java.util.UUID;
 
 public interface ExerciseRepository extends JpaRepository<Exercise, Long>, QuerydslPredicateExecutor<Exercise> {
     @Query("SELECT NEW com.bhtcnpm.website.model.dto.Exercise.ExerciseSummaryDTO(exercise.id, exercise.title, exercise.description, " +
-            "CASE WHEN COUNT(DISTINCT attempts.id) > 0 THEN TRUE ELSE FALSE END," +
-            "MAX(attempts.correctAnsweredQuestions)," +
+            "CASE WHEN COUNT(DISTINCT userAttempts.id) > 0 THEN TRUE ELSE FALSE END," +
+            "MAX(userAttempts.correctAnsweredQuestions)," +
             "COUNT(DISTINCT questions.id)) " +
             "FROM Exercise exercise " +
-            "LEFT JOIN ExerciseAttempt attempts ON attempts.exercise.id = exercise.id " +
+            "LEFT JOIN ExerciseAttempt userAttempts ON userAttempts.exercise.id = userAttempts.id " +
             "LEFT JOIN ExerciseQuestion questions ON questions.exercise.id = exercise.id " +
             "GROUP BY exercise " +
             "ORDER BY exercise.rank ASC")

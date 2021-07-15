@@ -226,11 +226,11 @@ public class DocServiceImpl implements DocService {
 
         Doc doc = docRequestMapper.updateDocFromDocRequestDTO(docRequestDTO, oldDoc, fileUploadList ,userID);
 
-        doc = docRepository.save(doc);
-
-        if (doc.getDocState().equals(DocStateType.PENDING_FIX)) {
+        if (DocStateType.PENDING_FIX.equals(doc.getDocState())) {
             doc.setDocState(DocStateType.PENDING_APPROVAL);
         }
+
+        doc = docRepository.save(doc);
 
         return docDetailsMapper.docToDocDetailsDTO(doc);
     }
@@ -238,7 +238,7 @@ public class DocServiceImpl implements DocService {
     @Override
     public Boolean postApproval(Long docID, Authentication authentication) {
         //TODO: When approve, also move file(s) to approved folder in Google Drive.
-        int rowChanged = docRepository.setDocState(docID, DocStateType.APPROVED);
+        int rowChanged = docRepository.setDocStateAndFeedback(docID, DocStateType.APPROVED, null);
         if (rowChanged == 1) {
             docRepository.indexDoc(docID);
             return true;

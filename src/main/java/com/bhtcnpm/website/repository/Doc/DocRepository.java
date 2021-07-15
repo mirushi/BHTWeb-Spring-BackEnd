@@ -67,10 +67,8 @@ public interface DocRepository extends JpaRepository<Doc, Long>, QuerydslPredica
     @Query(nativeQuery = true,
             value = "SELECT DOC.* " +
             "FROM DOC " +
-            "LEFT JOIN USER_DOC_REACTION AS REACTION ON DOC.ID = REACTION.DOC_ID " +
             "WHERE DOC.DOC_STATE = "+ DocStateTypeConstant.APPROVED_ORDINAL +" AND DELETED_DTM IS NULL AND DOC.PUBLISH_DTM <= CURRENT_TIMESTAMP() " +
-            "GROUP BY DOC.ID " +
-            "ORDER BY HOTNESS")
+            "ORDER BY HOTNESS DESC")
     //Reddit Hot Algorithm (https://www.evanmiller.org/deriving-the-reddit-formula.html).
     List<Doc> getHotDocsPublicOnly(Pageable pageable);
 }

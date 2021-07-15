@@ -44,6 +44,7 @@ public abstract class PostMapper {
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "submitDtm", source = "submitDtm")
+    @Mapping(target = "feedback", source = "adminFeedback")
     public abstract PostSummaryWithStateDTO postToPostSummaryWithStateDTO (Post post);
 
     public abstract List<PostSummaryWithStateDTO> postListToPostSummaryWithStateDTOList (List<Post> postList);

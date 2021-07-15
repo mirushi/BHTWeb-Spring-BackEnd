@@ -32,6 +32,7 @@ public abstract class DocSummaryMapper {
 
     @Mapping(target = "docSummary", source = ".")
     @Mapping(target = "docState", source = "docState")
+    @Mapping(target = "feedback", source = "adminFeedback")
     public abstract DocSummaryWithStateDTO docToDocSummaryWithStateDTO (Doc doc);
 
     @Mapping(target = "authorAvatarURL", source = "doc.author.avatarURL")

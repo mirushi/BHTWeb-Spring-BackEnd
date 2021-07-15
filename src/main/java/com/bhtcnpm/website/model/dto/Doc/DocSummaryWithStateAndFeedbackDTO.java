@@ -45,6 +45,8 @@ public class DocSummaryWithStateAndFeedbackDTO {
     @DocImageURL
     String imageURL;
 
+    LocalDateTime submitDtm;
+
     @DocPublishDtm
     LocalDateTime publishDtm;
 

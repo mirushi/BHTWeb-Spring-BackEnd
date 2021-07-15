@@ -52,10 +52,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -146,7 +143,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Boolean approvePost(Long postID, Authentication authentication) {
-        int rowAffected = postRepository.setPostState(postID, PostStateType.APPROVED);
+        int rowAffected = postRepository.setPostStateAndFeedback(postID, PostStateType.APPROVED, null);
         if (rowAffected == 1) {
             postRepository.indexPost(postID);
             return true;
@@ -245,7 +242,7 @@ public class PostServiceImpl implements PostService {
 
         post = postMapper.postRequestDTOToPost(postRequestDTO, userID, post);
 
-        if (post.getPostState().equals(PostStateType.PENDING_FIX)) {
+        if (PostStateType.PENDING_FIX.equals(post.getPostState())) {
             post.setPostState(PostStateType.PENDING_APPROVAL);
         }
 
@@ -564,7 +561,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostSummaryDTO> getTrendingPost() {
         //TODO: Implement real trending function.
-        Pageable pageable = PageRequest.of(0, PAGE_SIZE_TRENDING_HOME);
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE_TRENDING_HOME, Sort.by(Sort.Direction.DESC, "publishDtm"));
         Predicate publicPost = PostPredicateGenerator.getBooleanExpressionOnBusinessState(PostBusinessState.PUBLIC);
         Page<Post> trendingPost = postRepository.findAll(publicPost, pageable);
         return postMapper.postListToPostSummaryDTOs(trendingPost.getContent());
