@@ -44,8 +44,9 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long>, Query
             "WHERE exercise.id = :id")
     Optional<Exercise> findByIDWithTags (Long id);
 
+    //Checked ok.
     @Query(nativeQuery = true, value = "SELECT ex.id AS id, COUNT(DISTINCT questions.id) AS totalQuestions, COUNT(DISTINCT attempts.id) AS attemptCount, " +
-            "CASE WHEN ex.SUGGESTED_DURATION > 0 THEN ex.SUGGESTED_DURATION ELSE (SELECT SUM(subQuestion.SUGGESTED_DURATION) FROM (EXERCISE_QUESTION subQuestion) WHERE subQuestion.EXERCISE_ID = ex.ID) END AS suggestedDuration " +
+            "CASE WHEN ex.SUGGESTED_DURATION > 0 THEN ex.SUGGESTED_DURATION ELSE (SELECT SUM(subQuestion.SUGGESTED_DURATION) FROM EXERCISE_QUESTION subQuestion WHERE subQuestion.EXERCISE_ID = ex.ID) END AS suggestedDuration " +
             "FROM EXERCISE ex " +
             "LEFT JOIN EXERCISE_ATTEMPT attempts ON ex.ID = attempts.EXERCISE_ID " +
             "LEFT JOIN EXERCISE_QUESTION questions ON ex.ID = questions.EXERCISE_ID " +

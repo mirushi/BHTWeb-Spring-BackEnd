@@ -22,7 +22,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE doc_file_upload SET DELETED_DTM = CURRENT_TIMESTAMP() WHERE id = ?")
+@SQLDelete(sql = "UPDATE doc_file_upload SET DELETED_DTM = CURRENT_TIMESTAMP WHERE id = ?")
 @Where(clause = "DELETED_DTM is NULL")
 public class DocFileUpload {
     @Id

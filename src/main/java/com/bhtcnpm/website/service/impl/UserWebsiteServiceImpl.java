@@ -16,6 +16,8 @@ import com.bhtcnpm.website.service.UserWebsiteService;
 import com.bhtcnpm.website.util.FileUploadUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.jpa.TypedParameterValue;
+import org.hibernate.type.PostgresUUIDType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -181,7 +183,7 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
 
     @Override
     public boolean addUserReputationScore(UUID authorID, ReputationType reputationType, long count) {
-        int rowAffected = uwRepository.addUserReputationScore(authorID, reputationType.getNumVal(), count);
+        int rowAffected = uwRepository.addUserReputationScore((new TypedParameterValue(new PostgresUUIDType(), authorID)), reputationType.getNumVal(), count);
         if (rowAffected == 1) {
             return true;
         }
@@ -190,7 +192,7 @@ public class UserWebsiteServiceImpl implements UserWebsiteService {
 
     @Override
     public boolean subtractUserReputationScore(UUID authorID, ReputationType reputationType, long count) {
-        int rowAffected = uwRepository.subtractUserReputationScore(authorID, reputationType.getNumVal(), count);
+        int rowAffected = uwRepository.subtractUserReputationScore(new TypedParameterValue(new PostgresUUIDType(), authorID), reputationType.getNumVal(), count);
         if (rowAffected == 1) {
             return true;
         }

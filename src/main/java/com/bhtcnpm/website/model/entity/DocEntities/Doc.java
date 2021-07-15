@@ -39,7 +39,7 @@ import java.util.TreeSet;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE doc SET DELETED_DTM = CURRENT_TIMESTAMP() WHERE id = ? AND VERSION = ?")
+@SQLDelete(sql = "UPDATE doc SET DELETED_DTM = CURRENT_TIMESTAMP WHERE id = ? AND VERSION = ?")
 @Loader(namedQuery = "findDocById")
 @NamedQuery(name = "findDocById",
         query = "SELECT d FROM Doc d WHERE d.id = ?1 " +

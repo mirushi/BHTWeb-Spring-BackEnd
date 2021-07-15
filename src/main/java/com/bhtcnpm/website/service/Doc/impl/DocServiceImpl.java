@@ -49,6 +49,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.jpa.TypedParameterValue;
+import org.hibernate.type.PostgresUUIDType;
 import org.jsoup.helper.Validate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -397,7 +400,8 @@ public class DocServiceImpl implements DocService {
     @Override
     public List<DocStatisticDTO> getDocStatistics(List<Long> docIDs, Authentication authentication) {
         UUID userID = SecurityUtils.getUserID(authentication);
-        List<DocStatisticDTO> docStatisticDTOList = docRepository.getDocStatisticDTOs(docIDs, userID);
+        TypedParameterValue userIDParam = new TypedParameterValue(new PostgresUUIDType(), userID);
+        List<DocStatisticDTO> docStatisticDTOList = docRepository.getDocStatisticDTOs(docIDs, userIDParam);
 
         return docStatisticDTOList;
     }

@@ -5,9 +5,11 @@ import com.bhtcnpm.website.model.dto.UserWebsite.UserStatisticDTO;
 import com.bhtcnpm.website.model.entity.UserWebsite;
 import com.bhtcnpm.website.model.entity.enumeration.DocReaction.DocReactionType;
 import com.bhtcnpm.website.model.entity.enumeration.UserWebsite.ReputationType;
+import org.hibernate.jpa.TypedParameterValue;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,7 +32,8 @@ public interface UserWebsiteRepository extends JpaRepository<UserWebsite, UUID> 
             "FROM UserWebsite uw " +
             "LEFT JOIN uw.postedPosts uwPost " +
             "LEFT JOIN uw.postedDocs uwDoc " +
-            "WHERE uw.id = :userID")
+            "WHERE uw.id = :userID " +
+            "GROUP BY uw ")
     UserFullStatisticDTO getUserWebsiteFullStatistic (UUID userID);
 
     List<UserWebsite> findAllByNameOrDisplayNameOrEmail (String name, String displayName, String email);
@@ -38,16 +41,18 @@ public interface UserWebsiteRepository extends JpaRepository<UserWebsite, UUID> 
     @Query("SELECT uw.name FROM UserWebsite uw WHERE uw.email = :email")
     String findUsernameByEmail (String email);
 
+    //Checked ok.
     @Modifying
     @Query(nativeQuery = true,
-            value = "UPDATE USER_WEBSITE uw SET uw.REPUTATION_SCORE = uw.REPUTATION_SCORE + " +
+            value = "UPDATE USER_WEBSITE SET REPUTATION_SCORE = REPUTATION_SCORE + " +
                     ":count * (SELECT rsd.SCORE FROM REPUTATION_SCORE_DEFINITION rsd WHERE rsd.reputation_type = :reputationTypeOrdinal) " +
-                    "WHERE uw.id = :authorID ")
-    int addUserReputationScore(UUID authorID, short reputationTypeOrdinal, long count);
+                    "WHERE id = :authorID ")
+    int addUserReputationScore(@Param("authorID") TypedParameterValue authorID, short reputationTypeOrdinal, long count);
 
+    //Checked ok.
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE USER_WEBSITE uw SET uw.REPUTATION_SCORE = uw.REPUTATION_SCORE + " +
+    @Query(nativeQuery = true, value = "UPDATE USER_WEBSITE SET REPUTATION_SCORE = REPUTATION_SCORE + " +
             "(-1) * :count * (SELECT rsd.SCORE FROM REPUTATION_SCORE_DEFINITION rsd WHERE rsd.reputation_type = :reputationTypeOrdinal) " +
-            "WHERE uw.id = :authorID ")
-    int subtractUserReputationScore(UUID authorID, short reputationTypeOrdinal, long count);
+            "WHERE id = :authorID ")
+    int subtractUserReputationScore(@Param("authorID") TypedParameterValue authorID, short reputationTypeOrdinal, long count);
 }
