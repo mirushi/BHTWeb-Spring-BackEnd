@@ -123,7 +123,7 @@
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "category": {
-      "id": 1
+      "id": 2
     },
     "postState": "APPROVED",
     "userPostLikes": [
@@ -162,16 +162,16 @@
   {
     "_class": "com.bhtcnpm.website.model.entity.PostEntities.Post",
     "id": 4,
-    "title": "Học được gì từ HĐH cho việc quản lý thời gian của mình ?",
-    "summary": "#StudyWithMe #HĐH\nNgoài những kiến thức khô khan mà ta học được trên lớp, phải chăng HĐH chỉ có vậy thôi ? Học thuộc bài, qua môn, xong !!! ",
-    "imageURL": "https://miro.medium.com/max/1838/1*wkWRTkLYMqKmdySQQR_A_Q.jpeg",
+    "title": "\nCông Đoàn UIT chung tay cùng cả nước góp Vaccine Covid-19\n",
+    "summary": "Sáng ngày 15/6/2021, Đ/c Đặng Văn Em - Chủ tịch Công Đoàn trường ĐH Công nghệ Thông tin đã đại diện Công Đoàn trường trao số tiền 26.400.000đ ủng hộ mua Vaccine Covid-19 cho Công Đoàn Đại học Quốc gia TP.HCM. Đây là kinh phí do các Công Đoàn viên ủng hộ cho việc mua Vaccine chung tay cùng cả nước và Thành phố Hồ Chí Minh đẩy lùi dịch Covid-19.",
+    "imageURL": "https://www.uit.edu.vn/sites/vi/files/uploads/images/202106/deo_khau_trang_-_copy_2_-_copy_-_copy_-_copy_-_copy_copy_2.png",
     "submitDtm": "2021-03-21T07:11:06",
     "publishDtm": "2021-03-21T07:11:06",
     "lastUpdatedBy": null,
     "lastUpdatedDtm": "2021-03-21T07:11:06",
     "readingTime": 100,
-    "content": "<p>#StudyWithMe #HĐH\nNgoài những kiến thức khô khan mà ta học được trên lớp, phải chăng HĐH chỉ có vậy thôi ? Học thuộc bài, qua môn, xong !!! \nTuy nhiên, khi ngẫm lại, thực sự chúng ta có thể thấy, ta có thể học được nhiều thứ từ HĐH chứ không chỉ là những kiến thức khô khan thôi đâu ! Hãy cùng mình khám phá qua bài viết sau nhé !\nTrong một mùa hè năm 1997, Robot Pathfinder của NASA đã đổ bộ xuống sao Hoả. Và nó bắt đầu truyền các tín hiệu hình ảnh về Trái Đất để phục vụ mục đích nghiên cứu. Nhưng vài ngày sau đó, có một chuyện không may xảy ra : Việc truyền tin hoàn toàn bị dừng lại. Pathfinder đang bị vướng vào 1 hiệu ứng, gọi là hiệu ứng “trì hoãn” (procrastinating) : Giữ cho chính mình làm việc liên tục nhưng lại hoàn toàn không làm được những việc quan trọng nhất. Chuyện gì đang xảy ra vậy ?\nAh, thì ra là có một bug trong trình Định thời của nó. Mỗi hệ điều hành hiện nay, đều có một thứ gọi là “Bộ định thời”, nhằm mục đích điều khiển CPU nên làm một công việc bao lâu trước khi chuyển qua một công việc khác, và chuyển đến công việc nào. Khi mọi thứ diễn ra suôn sẻ, máy tính của mình sẽ vô cùng mượt mà mặc cho rất nhiều chương trình hiện đang chạy, cho một ảo giác như là máy tính ta làm nhiều công việc một lúc vậy. Và chúng ta đều biết chuyện gì sẽ xảy ra nếu như “Bộ định thì” hoạt động không hiệu quả.</p>",
-    "contentPlainText": "#StudyWithMe #HĐH Ngoài những kiến thức khô khan mà ta học được trên lớp, phải chăng HĐH chỉ có vậy thôi ? Học thuộc bài, qua môn, xong !!! Tuy nhiên, khi ngẫm lại, thực sự chúng ta có thể thấy, ta có thể học được nhiều thứ từ HĐH chứ không chỉ là những kiến thức khô khan thôi đâu ! Hãy cùng mình khám phá qua bài viết sau nhé ! Trong một mùa hè năm 1997, Robot Pathfinder của NASA đã đổ bộ xuống sao Hoả. Và nó bắt đầu truyền các tín hiệu hình ảnh về Trái Đất để phục vụ mục đích nghiên cứu. Nhưng vài ngày sau đó, có một chuyện không may xảy ra : Việc truyền tin hoàn toàn bị dừng lại. Pathfinder đang bị vướng vào 1 hiệu ứng, gọi là hiệu ứng “trì hoãn” (procrastinating) : Giữ cho chính mình làm việc liên tục nhưng lại hoàn toàn không làm được những việc quan trọng nhất. Chuyện gì đang xảy ra vậy ? Ah, thì ra là có một bug trong trình Định thời của nó. Mỗi hệ điều hành hiện nay, đều có một thứ gọi là “Bộ định thời”, nhằm mục đích điều khiển CPU nên làm một công việc bao lâu trước khi chuyển qua một công việc khác, và chuyển đến công việc nào. Khi mọi thứ diễn ra suôn sẻ, máy tính của mình sẽ vô cùng mượt mà mặc cho rất nhiều chương trình hiện đang chạy, cho một ảo giác như là máy tính ta làm nhiều công việc một lúc vậy. Và chúng ta đều biết chuyện gì sẽ xảy ra nếu như “Bộ định thì” hoạt động không hiệu quả.",
+    "content": "Sáng ngày 15/6/2021, Đ/c Đặng Văn Em - Chủ tịch Công Đoàn trường ĐH Công nghệ Thông tin đã đại diện Công Đoàn trường trao số tiền 26.400.000đ ủng hộ mua Vaccine Covid-19 cho Công Đoàn Đại học Quốc gia TP.HCM. Đây là kinh phí do các Công Đoàn viên ủng hộ cho việc mua Vaccine chung tay cùng cả nước và Thành phố Hồ Chí Minh đẩy lùi dịch Covid-19, giúp người dân có thể tiếp cận Vaccine phòng dịch Covid-19 nhanh nhất, thực hiện tốt công tác phòng, chống, kiểm soát dịch bệnh.\n\nĐây là đợt vận đồng lần thứ 2 trong năm 2021 của chương trình ủng hộ quỹ mua Vaccine..... Lần trước đây Công Đoàn trường kêu gọi ủng hộ 16.950.000đ cho Quỹ \"Triệu trái tim, một tấm lòng\" của Đài truyền hình Thành phố Hồ Chí Minh phát động. Như vậy, qua 2 đợt quyên góp, Công đoàn Trường Đại học Công nghệ Thông tin đã đóng góp 43,350,000 đồng cho ủng hộ mua vaccine phòng chống dịch Covid-19.",
+    "contentPlainText": "Sáng ngày 15/6/2021, Đ/c Đặng Văn Em - Chủ tịch Công Đoàn trường ĐH Công nghệ Thông tin đã đại diện Công Đoàn trường trao số tiền 26.400.000đ ủng hộ mua Vaccine Covid-19 cho Công Đoàn Đại học Quốc gia TP.HCM. Đây là kinh phí do các Công Đoàn viên ủng hộ cho việc mua Vaccine chung tay cùng cả nước và Thành phố Hồ Chí Minh đẩy lùi dịch Covid-19, giúp người dân có thể tiếp cận Vaccine phòng dịch Covid-19 nhanh nhất, thực hiện tốt công tác phòng, chống, kiểm soát dịch bệnh.\n\nĐây là đợt vận đồng lần thứ 2 trong năm 2021 của chương trình ủng hộ quỹ mua Vaccine..... Lần trước đây Công Đoàn trường kêu gọi ủng hộ 16.950.000đ cho Quỹ \"Triệu trái tim, một tấm lòng\" của Đài truyền hình Thành phố Hồ Chí Minh phát động. Như vậy, qua 2 đợt quyên góp, Công đoàn Trường Đại học Công nghệ Thông tin đã đóng góp 43,350,000 đồng cho ủng hộ mua vaccine phòng chống dịch Covid-19.",
     "adminFeedback": null,
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -231,7 +231,7 @@
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "category": {
-      "id": 1
+      "id": 4
     },
     "postState": "APPROVED",
     "userPostLikes": [
@@ -365,14 +365,14 @@
     "id": 8,
     "title": "Phương pháp học tốt môn Toán",
     "summary": "Môn Toán luôn là một trong những môn mà biết bao học sinh sợ hãi khi nhắc đến. Vậy làm cách nào để học tốt môn Toán?",
-    "imageURL": "https://i.imgur.com/LnHFl0h.png",
+    "imageURL": "https://giasutienphong.com.vn/wp-content/uploads/2017/09/cach_hoc_tot_mon_toan.jpg",
     "submitDtm": "2020-01-28T07:01:00",
     "publishDtm": "2020-01-28T07:01:00",
     "lastUpdatedBy": null,
     "lastUpdatedDtm": "2021-03-21T07:11:06",
     "readingTime": 300,
-    "content": "Đầu tiên, sự siêng năng chăm chỉ luôn là điều quan trọng nhất nếu bạn muốn thành công bất cứ điều gì. Môn Toán thật sự không khó, có điều phải học đúng cách và sự đầu tư đúng hướng thì bạn sẽ giỏi thôi. Không chỉ học trên lớp mà về nhà cũng phải trau dồi và luyện tập thì bạn sẽ cảm thấy môn học này thật sự chẳng khó tí nào đâu!",
-    "contentPlainText": "Đầu tiên, sự siêng năng chăm chỉ luôn là điều quan trọng nhất nếu bạn muốn thành công bất cứ điều gì. Môn Toán thật sự không khó, có điều phải học đúng cách và sự đầu tư đúng hướng thì bạn sẽ giỏi thôi. Không chỉ học trên lớp mà về nhà cũng phải trau dồi và luyện tập thì bạn sẽ cảm thấy môn học này thật sự chẳng khó tí nào đâu!",
+    "content": "<p>Đầu tiên, sự siêng năng chăm chỉ luôn là điều quan trọng nhất nếu bạn muốn thành công bất cứ điều gì. <strong>Môn Toán</strong> thật sự không khó, có điều phải học đúng cách và sự đầu tư đúng hướng thì bạn sẽ giỏi thôi. Không chỉ học trên lớp mà về nhà cũng phải trau dồi và luyện tập thì bạn sẽ cảm thấy môn học này thật sự chẳng khó tí nào đâu!</p>\n<h2>Học toán trên trường lớp</h2>\n<p><strong>1. Nắm chắc các lý thuyết, định nghĩa: </strong></p>\n<p>Dù không phải học thuộc lòng như mấy môn xã hội, nhưng các định nghĩa cũng như lý thuyết của môn Toán bắt buộc các em phải học thật chắc.</p>\n<p>Các tính chất, công thức, định nghĩa phải nhớ thì các em mới vận dụng nó vào bài tập để chứng minh, giải thích hay phân tích được. Những gì có thể nhớ được trên lớp thì các em cứ cố gắng nhét vào đầu, vì nó sẽ giúp các em dễ dàng hơn khi học bài ở nhà.</p>\n<p><strong>2. Không học dồn:</strong></p>\n<p>Đối với các môn tự nhiên như toán lý hoá, đặc biệt là môn Toán, thì các em phải học vững cái trước thì mới học tốt được cái sau. Bởi thế, việc học dồn là điều không thể để xảy ra với môn học này.</p>\n<p>Có nhiều hs không học bài, đến khi thi mới lôi ra học công thức này nọ thì sẽ có kết quả thi rất thấp. Bởi vì phải có một quá trình để học và trao dồi mỗi ngày, áp dụng những kiến thức vào bài tập thì các em mới ghi nhớ lâu được.</p>\n<p>Các kiến thức có liên quan với nhau, vì thế khi các em đã bỏ quá nhiều mà giờ phải học dồn sẽ không hiểu quả và ảnh hưởng đến sức khỏe của mình nữa.</p>\n<p><strong>3. Lắng nghe và ghi chép mọi thông tin từ bài giảng:</strong></p>\n<p>Đa số bài giảng của thầy cô đều nằm trong sách tới 80% và chỉ 20% là ở ngoài sách để các em hiểu sâu hơn. Vì thế, hãy ghi chép tất cả những gì thầy cô giảng dạy vì đó đều cần thiết và giúp ích cho các em rất nhiều.</p>\n<p>Nếu chỉ ngồi nghe thôi mình sẽ quên nhanh khi về nhà. Vì vậy, không những nghe mà còn phải viết xuống tập một cách cẩn thận để có cái mình xem lại. Hãy tập cho mình thói quen đó các em nhé, nó rất hiệu quả đấy!</p>\n<p><strong>4. Mạnh dạn hỏi khi chưa hiểu:</strong></p>\n<p>Trong quá trình học trên lớp, chắc chắn sẽ có những điều các em thắc mắc hoặc chưa hiểu rõ. Hãy mạnh dạn dơ tay để hỏi Thầy Cô của mình để họ giảng lại hay giải thích cho các em nghe nhé. Vì khi các em hiểu sâu, các em mới làm bài tập và khắc ghi trong đầu được.</p>\n<p>Đừng ngại ngùng khi mình hỏi, vì thầy cô sẽ rất vui nếu các em dám hỏi để thêm kiến thức cho mình. Họ sẽ giúp đỡ học trò của mình bằng mọi cách để các em học tốt hơn!</p>",
+    "contentPlainText": "Đầu tiên, sự siêng năng chăm chỉ luôn là điều quan trọng nhất nếu bạn muốn thành công bất cứ điều gì. Môn Toán thật sự không khó, có điều phải học đúng cách và sự đầu tư đúng hướng thì bạn sẽ giỏi thôi. Không chỉ học trên lớp mà về nhà cũng phải trau dồi và luyện tập thì bạn sẽ cảm thấy môn học này thật sự chẳng khó tí nào đâu! Học toán trên trường lớp 1. Nắm chắc các lý thuyết, định nghĩa: Dù không phải học thuộc lòng như mấy môn xã hội, nhưng các định nghĩa cũng như lý thuyết của môn Toán bắt buộc các em phải học thật chắc. Các tính chất, công thức, định nghĩa phải nhớ thì các em mới vận dụng nó vào bài tập để chứng minh, giải thích hay phân tích được. Những gì có thể nhớ được trên lớp thì các em cứ cố gắng nhét vào đầu, vì nó sẽ giúp các em dễ dàng hơn khi học bài ở nhà. 2. Không học dồn: Đối với các môn tự nhiên như toán lý hoá, đặc biệt là môn Toán, thì các em phải học vững cái trước thì mới học tốt được cái sau. Bởi thế, việc học dồn là điều không thể để xảy ra với môn học này. Có nhiều hs không học bài, đến khi thi mới lôi ra học công thức này nọ thì sẽ có kết quả thi rất thấp. Bởi vì phải có một quá trình để học và trao dồi mỗi ngày, áp dụng những kiến thức vào bài tập thì các em mới ghi nhớ lâu được. Các kiến thức có liên quan với nhau, vì thế khi các em đã bỏ quá nhiều mà giờ phải học dồn sẽ không hiểu quả và ảnh hưởng đến sức khỏe của mình nữa. 3. Lắng nghe và ghi chép mọi thông tin từ bài giảng: Đa số bài giảng của thầy cô đều nằm trong sách tới 80% và chỉ 20% là ở ngoài sách để các em hiểu sâu hơn. Vì thế, hãy ghi chép tất cả những gì thầy cô giảng dạy vì đó đều cần thiết và giúp ích cho các em rất nhiều. Nếu chỉ ngồi nghe thôi mình sẽ quên nhanh khi về nhà. Vì vậy, không những nghe mà còn phải viết xuống tập một cách cẩn thận để có cái mình xem lại. Hãy tập cho mình thói quen đó các em nhé, nó rất hiệu quả đấy! 4. Mạnh dạn hỏi khi chưa hiểu: Trong quá trình học trên lớp, chắc chắn sẽ có những điều các em thắc mắc hoặc chưa hiểu rõ. Hãy mạnh dạn dơ tay để hỏi Thầy Cô của mình để họ giảng lại hay giải thích cho các em nghe nhé. Vì khi các em hiểu sâu, các em mới làm bài tập và khắc ghi trong đầu được. Đừng ngại ngùng khi mình hỏi, vì thầy cô sẽ rất vui nếu các em dám hỏi để thêm kiến thức cho mình. Họ sẽ giúp đỡ học trò của mình bằng mọi cách để các em học tốt hơn!",
     "adminFeedback": null,
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
@@ -529,6 +529,70 @@
 
     ],
     "tags": [
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.Post",
+    "id": 15,
+    "title": "Rèn nghị lực để lập thân.",
+    "summary": "Rất nhiều người trong chúng ta vẫn ngây thơ tin rằng: Họ chỉ cần đọc sách chứ không cần tốn công tu luyện là tâm hồn, tài năng sẽ thay đổi hoàn toàn",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/post-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-9789b4b4-341f-4bfd-a0b9-ba69cef932b7.jpg",
+    "submitDtm": "2021-07-16T06:39:58.675166",
+    "publishDtm": "2021-07-16T06:39:58.675166",
+    "lastUpdatedBy": null,
+    "lastUpdatedDtm": "2021-03-21T07:11:06",
+    "readingTime": 300,
+    "content": "<p>Rất nhiều người trong chúng ta vẫn ngây thơ tin rằng: Họ chỉ cần đọc sách chứ không cần tốn công tu luyện là tâm hồn, tài năng sẽ thay đổi hoàn toàn. Sự ngộ nhận về công dụng của sách dẫn đến nhiều bi quan, ngờ vực không đáng có. Sách vạch cho ta con đường đi, phép tu thân xử thế và làm việc; còn muốn thay đổi đời ta thì tự ta phải làm lấy, nghĩa là <strong>phải có nghị lực và kiên nhẫn thực hành lời trong sách</strong>, trái lại nếu chỉ đọc suông thì sách hoàn toàn vô ích. Vậy nên nếu ta đọc nhiều sách hay mà vẫn chưa thành công thì tại bởi ta thiếu nghị lực và không mong muốn một cách mãnh liệt đấy thôi. Tất nhiên cũng phải biết cách muốn, rồi chỉ cần gắng sức thôi.</p>\n<p><strong>Thành công và Nghị Lực</strong></p>\n<p>Thành công là dùng những phương tiện lương thiện mà đạt được mục đích của mình, mục đích là tùy ở mỗi người song không khi nào ti tiện.</p>\n<p>Nghị lực có thể giúp một người đổi rủi thành may, chuyển họa thành phúc. Chính vì nghèo túng, khó khăn người ta mới ham tự học bởi thấy cần phải tự học. Họ không có gì nhiều để mất nên họ dám mạo hiểm, dám đương đầu vì không quá sợ thất bại. Vậy nên trên con đường đi đến thành công thì giàu có nhiều khi là một bất lợi.</p>\n<p><strong>Giáo dục&nbsp;</strong></p>\n<p>Tính cách con người khi sinh ra đã khác nhau bởi di truyền nhưng không phải là không thay đổi được. Có thể kể đến 4 yếu tố tác động là hoàn cảnh thiên nhiên, hoàn cảnh xã hội, chế độ dinh dưỡng và giáo dục. Được sinh trưởng trong gia đình cha nghiêm, mẹ từ là được hưởng một di sản mà không ngọc ngà châu báu nào sánh được.</p>\n<p>Giáo dục ảnh hưởng lớn nhất đến con người là vậy mà tiếc thay thời nay không chú trọng nhiều đến đức dục. Trẻ em thời trước vỡ lòng đã ê a những câu luân lý, đạo đức, châm ngôn thánh hiền. Về luân lý thì những bậc vĩ nhân đều cho rằng hành động và cử chỉ sẽ ảnh hưởng đến cảm xúc, bởi vậy đạo Nho quy định nhất cử nhất động của cá nhân trong gia đình và xã hội để giữ cho tâm tính được trung hòa. Từ bé khuôn khổ hành động cử chỉ phải lễ phép, đi phải khoan thai đĩnh đạc, ngồi phải trông trước ngó sau và được giám sát nghiêm khắc.</p>\n<p>Một nền<strong> giáo dục khắc kỉ</strong> quá nghiêm như vậy trái với tính trẻ, làm cho nhiều người thành những bộ máy, mất cả sáng kiên; nhưng quả là luyện cho ta được đức tự chủ, thắng được cảm xúc để theo con đường cổ nhân tin là chính đạo. Cũng bởi nhà trường không chú trọng nên phần đông trí thức thời nay nhân phẩm kém xa các nhà Nho thời trước, kết quả là có những kẻ trưởng giả hãnh tiến chứ không phải những bậc thượng lưu được quốc dân trọng vọng như thời trước. Một tư cách cao là một quyền lực mạnh, ngay cả em nhỏ có tư cách cũng làm người lớn kiêng nể.</p>\n<p>Bởi vậy rèn luyện tư cách ắt là việc ta phải tự làm và <strong>Muốn rèn luyện tư cách ta phải rèn nghị lực,</strong> bao gồm: Suy nghĩ, quyết định và hành động.</p>",
+    "contentPlainText": "Rất nhiều người trong chúng ta vẫn ngây thơ tin rằng: Họ chỉ cần đọc sách chứ không cần tốn công tu luyện là tâm hồn, tài năng sẽ thay đổi hoàn toàn. Sự ngộ nhận về công dụng của sách dẫn đến nhiều bi quan, ngờ vực không đáng có. Sách vạch cho ta con đường đi, phép tu thân xử thế và làm việc; còn muốn thay đổi đời ta thì tự ta phải làm lấy, nghĩa là phải có nghị lực và kiên nhẫn thực hành lời trong sách, trái lại nếu chỉ đọc suông thì sách hoàn toàn vô ích. Vậy nên nếu ta đọc nhiều sách hay mà vẫn chưa thành công thì tại bởi ta thiếu nghị lực và không mong muốn một cách mãnh liệt đấy thôi. Tất nhiên cũng phải biết cách muốn, rồi chỉ cần gắng sức thôi. Thành công và Nghị Lực Thành công là dùng những phương tiện lương thiện mà đạt được mục đích của mình, mục đích là tùy ở mỗi người song không khi nào ti tiện. Nghị lực có thể giúp một người đổi rủi thành may, chuyển họa thành phúc. Chính vì nghèo túng, khó khăn người ta mới ham tự học bởi thấy cần phải tự học. Họ không có gì nhiều để mất nên họ dám mạo hiểm, dám đương đầu vì không quá sợ thất bại. Vậy nên trên con đường đi đến thành công thì giàu có nhiều khi là một bất lợi. Giáo dục Tính cách con người khi sinh ra đã khác nhau bởi di truyền nhưng không phải là không thay đổi được. Có thể kể đến 4 yếu tố tác động là hoàn cảnh thiên nhiên, hoàn cảnh xã hội, chế độ dinh dưỡng và giáo dục. Được sinh trưởng trong gia đình cha nghiêm, mẹ từ là được hưởng một di sản mà không ngọc ngà châu báu nào sánh được. Giáo dục ảnh hưởng lớn nhất đến con người là vậy mà tiếc thay thời nay không chú trọng nhiều đến đức dục. Trẻ em thời trước vỡ lòng đã ê a những câu luân lý, đạo đức, châm ngôn thánh hiền. Về luân lý thì những bậc vĩ nhân đều cho rằng hành động và cử chỉ sẽ ảnh hưởng đến cảm xúc, bởi vậy đạo Nho quy định nhất cử nhất động của cá nhân trong gia đình và xã hội để giữ cho tâm tính được trung hòa. Từ bé khuôn khổ hành động cử chỉ phải lễ phép, đi phải khoan thai đĩnh đạc, ngồi phải trông trước ngó sau và được giám sát nghiêm khắc. Một nền giáo dục khắc kỉ quá nghiêm như vậy trái với tính trẻ, làm cho nhiều người thành những bộ máy, mất cả sáng kiên; nhưng quả là luyện cho ta được đức tự chủ, thắng được cảm xúc để theo con đường cổ nhân tin là chính đạo. Cũng bởi nhà trường không chú trọng nên phần đông trí thức thời nay nhân phẩm kém xa các nhà Nho thời trước, kết quả là có những kẻ trưởng giả hãnh tiến chứ không phải những bậc thượng lưu được quốc dân trọng vọng như thời trước. Một tư cách cao là một quyền lực mạnh, ngay cả em nhỏ có tư cách cũng làm người lớn kiêng nể. Bởi vậy rèn luyện tư cách ắt là việc ta phải tự làm và Muốn rèn luyện tư cách ta phải rèn nghị lực, bao gồm: Suy nghĩ, quyết định và hành động.",
+    "adminFeedback": "",
+    "author": {
+      "id": "343f0c68-9cc4-474e-9da2-89626c04c0da"
+    },
+    "category": {
+      "id": 4
+    },
+    "postState": "APPROVED",
+    "userPostLikes": [
+
+    ],
+    "userPostSaves": [
+
+    ],
+    "tags": [
+      {"id": 1}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.PostEntities.Post",
+    "id": 16,
+    "title": "Giải ngố cùng tri thức số #1 - “BLUETOOTH”",
+    "summary": "“Giải ngố cùng tri thức số” là chuyên mục giải đáp về những thuật ngữ, kiến thức công nghệ do đội hình Tri Thức Số của Mùa Hè Xanh 2021 đảm nhiệm với mong muốn lan tỏa kiến thức công nghệ đến với tất cả mọi người. Hôm nay chúng ta cùng tìm hiểu về Bluetooth.",
+    "imageURL": "https://www.uit.edu.vn/sites/vi/files/image_from_word/bluetooth.png",
+    "submitDtm": "2021-07-16T06:39:58.675166",
+    "publishDtm": "2021-07-16T06:39:58.675166",
+    "lastUpdatedBy": null,
+    "lastUpdatedDtm": "2021-03-21T07:11:06",
+    "readingTime": 300,
+    "content": "“Giải ngố cùng tri thức số” là chuyên mục giải đáp về những thuật ngữ, kiến thức công nghệ do đội hình Tri Thức Số của Mùa Hè Xanh 2021 đảm nhiệm với mong muốn lan tỏa kiến thức công nghệ đến với tất cả mọi người. Hôm nay chúng ta cùng tìm hiểu về Bluetooth.\n\nNhờ có Bluetooth, dữ liệu sẽ được truyền tải mà chẳng cần giao tiếp vật lý như dùng dây để nối giữa các thiết bị. Sở dĩ Bluetooth có thể giao tiếp với những thiết bị khác mà không cần đến kết nối vật lý chính là nhờ sóng radio. Các thiết bị công nghệ mà chúng ta thường dùng đều phát ra sóng radio với tần số khác nhau và chúng cũng có thể thu sóng của những thiết bị khác. Những đợt sóng đó sẽ mang các giá trị 0-1 để giao tiếp giữa những thiết bị. Đó là cách mà những công nghệ không dây như Wifi, 3G, 4G, 5G hay Bluetooth hoạt động.\n\nNếu wifi hay 4G phải cần đến kết nối Internet, thì Bluetooth sử dụng sóng radio tầm ngắn, do đó, chỉ cần thiết bị ở trong phạm vi gần nhau là chúng ta có thể sử dụng Bluetooth. Có khoảng 2,4 tỷ sóng radio được lan truyền mỗi giây nhằm đảm bảo cho việc kết nối diễn ra mượt mà nhất có thể. Chính vì thế mà khi bạn kết nối chuột không dây bluetooth đến chiếc laptop của mình, bất kỳ sự chuyển động nào của chuột không dây bluetooth cũng tác động đến con trỏ chuột trên màn hình mà gần như không có bất kỳ một sự chậm trễ nào. Cũng như chúng ta có thể tha hồ kết nối đến Airpod để nghe nhạc mà không bị gián đoạn.",
+    "contentPlainText": "“Giải ngố cùng tri thức số” là chuyên mục giải đáp về những thuật ngữ, kiến thức công nghệ do đội hình Tri Thức Số của Mùa Hè Xanh 2021 đảm nhiệm với mong muốn lan tỏa kiến thức công nghệ đến với tất cả mọi người. Hôm nay chúng ta cùng tìm hiểu về Bluetooth.\n\nNhờ có Bluetooth, dữ liệu sẽ được truyền tải mà chẳng cần giao tiếp vật lý như dùng dây để nối giữa các thiết bị. Sở dĩ Bluetooth có thể giao tiếp với những thiết bị khác mà không cần đến kết nối vật lý chính là nhờ sóng radio. Các thiết bị công nghệ mà chúng ta thường dùng đều phát ra sóng radio với tần số khác nhau và chúng cũng có thể thu sóng của những thiết bị khác. Những đợt sóng đó sẽ mang các giá trị 0-1 để giao tiếp giữa những thiết bị. Đó là cách mà những công nghệ không dây như Wifi, 3G, 4G, 5G hay Bluetooth hoạt động.\n\nNếu wifi hay 4G phải cần đến kết nối Internet, thì Bluetooth sử dụng sóng radio tầm ngắn, do đó, chỉ cần thiết bị ở trong phạm vi gần nhau là chúng ta có thể sử dụng Bluetooth. Có khoảng 2,4 tỷ sóng radio được lan truyền mỗi giây nhằm đảm bảo cho việc kết nối diễn ra mượt mà nhất có thể. Chính vì thế mà khi bạn kết nối chuột không dây bluetooth đến chiếc laptop của mình, bất kỳ sự chuyển động nào của chuột không dây bluetooth cũng tác động đến con trỏ chuột trên màn hình mà gần như không có bất kỳ một sự chậm trễ nào. Cũng như chúng ta có thể tha hồ kết nối đến Airpod để nghe nhạc mà không bị gián đoạn.",
+    "adminFeedback": "",
+    "author": {
+      "id": "343f0c68-9cc4-474e-9da2-89626c04c0da"
+    },
+    "category": {
+      "id": 1
+    },
+    "postState": "APPROVED",
+    "userPostLikes": [
+
+    ],
+    "userPostSaves": [
+
+    ],
+    "tags": [
+      {"id": 452}
     ],
     "version": 0
   }

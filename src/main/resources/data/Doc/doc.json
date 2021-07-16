@@ -14,9 +14,9 @@
     },
     "description": "Tổng hợp đầy đủ các dạng bài tập từ dễ đến khó của môn Giải tích 1.",
     "imageURL": "https://media.store123doc.com/images/document/12/gu/sp/small_spy1344916794.png",
-    "publishDtm": "2020-01-14T23:37:29Z",
-    "submitDtm": "2020-01-14T23:37:29Z",
-    "lastUpdatedDtm": "2020-01-14T23:37:29Z",
+    "publishDtm": "2020-01-14T12:23:43.17374",
+    "submitDtm": "2020-01-14T12:23:43.17374",
+    "lastUpdatedDtm": "2020-01-14T12:23:43.17374",
     "title": "Tổng hợp bài tập Giải tích 1",
     "viewCount": "1000",
     "docState": "APPROVED",
@@ -46,9 +46,9 @@
     },
     "description": "Slide bài giảng XSTK của thầy Hà Mạnh Linh - UIT",
     "imageURL": "https://i.imgur.com/nFdlytE.png",
-    "publishDtm": "2020-12-27T23:37:29Z",
-    "submitDtm": "2020-12-27T23:37:29Z",
-    "lastUpdatedDtm": "2020-12-27T23:37:29Z",
+    "publishDtm": "2020-12-27T12:23:43.17374",
+    "submitDtm": "2020-12-27T12:23:43.17374",
+    "lastUpdatedDtm": "2020-12-27T12:23:43.17374",
     "title": "Slide bài giảng XSTK thầy Hà Mạnh Linh",
     "viewCount": "1000",
     "docState": "APPROVED",
@@ -78,9 +78,9 @@
     },
     "description": "Bảng phân phối XSTK - Phân phối chuẩn, Laplace, Student",
     "imageURL": "https://i.imgur.com/nFdlytE.png",
-    "publishDtm": "2020-12-27T23:37:29Z",
-    "submitDtm": "2020-12-27T23:37:29Z",
-    "lastUpdatedDtm": "2020-12-27T23:37:29Z",
+    "publishDtm": "2020-12-27T12:23:43.17374",
+    "submitDtm": "2020-12-27T12:23:43.17374",
+    "lastUpdatedDtm": "2020-12-27T12:23:43.17374",
     "title": "Bảng phân phối XSTK",
     "viewCount": "998",
     "docState": "APPROVED",
@@ -113,9 +113,9 @@
     },
     "description": "9 đề ôn tập Giải tích cuối kì - Thầy Hà Mạnh Linh",
     "imageURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=11I7hqRxRaN8w1NJP-k2aWn_lcamd7vSW",
-    "publishDtm": "2019-01-23T23:37:29Z",
-    "submitDtm": "2019-01-23T23:37:29Z",
-    "lastUpdatedDtm": "2019-01-23T23:37:29Z",
+    "publishDtm": "2019-01-23T12:23:43.17374",
+    "submitDtm": "2019-01-23T12:23:43.17374",
+    "lastUpdatedDtm": "2019-01-23T12:23:43.17374",
     "title": "9 đề ôn thi Giải tích cuối HK",
     "viewCount": "998",
     "docState": "PENDING_APPROVAL",
@@ -145,9 +145,9 @@
     },
     "description": "Bài tập Tích phân suy rộng",
     "imageURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1S_CWlLpRvT9R9OCLfsvShD6koY0clwH_",
-    "publishDtm": "2019-01-23T23:37:29Z",
-    "submitDtm": "2019-01-23T23:37:29Z",
-    "lastUpdatedDtm": "2019-01-23T23:37:29Z",
+    "publishDtm": "2019-01-23T12:23:43.17374",
+    "submitDtm": "2019-01-23T12:23:43.17374",
+    "lastUpdatedDtm": "2019-01-23T12:23:43.17374",
     "title": "Bài tập Tích phân suy rộng, bao gồm lời giải chi tiết cho từng bài.",
     "viewCount": "998",
     "adminFeedback": "Tài liệu bị trùng lặp và không đạt chất lượng. Scan quá mờ.",
@@ -158,6 +158,366 @@
       },
       {
         "id": 51
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 6,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 2
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>Tổng hợp t&agrave;i liệu b&agrave;i tập <strong>x&aacute;c suất thống k&ecirc; </strong>của <strong>ĐHBKHCM</strong>.</p>\n\n<p>&nbsp;</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-7c3f457c-a587-404b-ba88-491bcef879d4.jpg",
+    "publishDtm": "2021-07-16T08:19:06.054742",
+    "submitDtm": "2021-07-16T08:19:06.054742",
+    "lastUpdatedDtm": "2021-07-16T08:19:06.054742",
+    "title": "Tổng hợp tài liệu Xác suất thống kê ĐHBKHCM (Phần 1)",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 7,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 2
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>Tổng hợp t&agrave;i liệu b&agrave;i tập <strong>x&aacute;c suất thống k&ecirc; </strong>của <strong>ĐHBKHCM </strong>(Phần 2).</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-b68e73c3-d85b-4577-8c20-7a4b07f2df26.jpg",
+    "publishDtm": "2021-07-16T08:42:26.405104",
+    "submitDtm": "2021-07-16T08:42:26.405104",
+    "lastUpdatedDtm": "2021-07-16T08:42:26.405104",
+    "title": "Tổng hợp tài liệu Xác suất thống kê ĐHBKHCM (Phần 2)",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 8,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 2
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>Tổng hợp t&agrave;i liệu b&agrave;i tập <strong>x&aacute;c suất thống k&ecirc; </strong>của <strong>ĐHBKHCM </strong>(Phần 3).</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-29343028-87bb-42a7-9801-7a994b048f39.jpg",
+    "publishDtm": "2021-07-16T09:00:42.491965",
+    "submitDtm": "2021-07-16T09:00:42.491965",
+    "lastUpdatedDtm": "2021-07-16T09:00:42.491965",
+    "title": "Tổng hợp tài liệu Xác suất thống kê ĐHBKHCM (Phần 3)",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 9,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 3
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>Đề thi cuối HK2 năm học 2015-2016 trường Đại học C&ocirc;ng nghệ Th&ocirc;ng tin.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-6321dc52-170f-462e-806a-de0458279800.png",
+    "publishDtm": "2021-07-16T09:15:20.690839",
+    "submitDtm": "2021-07-16T09:15:20.690839",
+    "lastUpdatedDtm": "2021-07-16T09:15:20.690839",
+    "title": "Đề thi cuối HK2 NH 2015 2016",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 10,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 3
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>Đề thi XSTK cuối HK1 năm học 2017 - 2018.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-6d9eb147-e966-434f-a82c-23c8135c9c87.png",
+    "publishDtm": "2021-07-16T09:27:31.81311",
+    "submitDtm": "2021-07-16T09:27:31.81311",
+    "lastUpdatedDtm": "2021-07-16T09:27:31.81311",
+    "title": "Đề thi XSTK cuối HK2 NH 2017 2018",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 11,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 3
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>Đề thi XSTK cuối HK 1 năm học 2018 - 2019.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-b25c5ab7-0b37-400d-b9be-b9f7fa5705c4.png",
+    "publishDtm": "2021-07-16T09:33:26.671052",
+    "submitDtm": "2021-07-16T09:33:26.671052",
+    "lastUpdatedDtm": "2021-07-16T09:33:26.671052",
+    "title": "Đề thi XSTK cuối HK1 NH 2018 2019",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 12,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 1
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>T&agrave;i liệu training XSTK giữa HK2, 2017 - 2018.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-c3771ee9-bc64-438a-b966-b3a97b031287.png",
+    "publishDtm": "2021-07-16T10:54:48.827671",
+    "submitDtm": "2021-07-16T10:54:48.827671",
+    "lastUpdatedDtm": "2021-07-16T10:54:48.827671",
+    "title": "Tài liệu training Xác suất thống kê giữa HK2 NH 2017 2018",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 13,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 1
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>T&agrave;i liệu training XSTK HK2, 2018-2019</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-7eeb5bd1-e8c7-4c97-ad71-5198acb6f7e1.png",
+    "publishDtm": "2021-07-16T11:06:56.459099",
+    "submitDtm": "2021-07-16T11:06:56.459099",
+    "lastUpdatedDtm": "2021-07-16T11:06:56.459099",
+    "title": "Tài liệu training XSTK cuối HK2 NH 2018 2019",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 14,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 1
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>T&agrave;i liệu training XSTK, 2019-2020.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-852225d6-701b-43c8-b15f-4b2aadc1419e.png",
+    "publishDtm": "2021-07-16T11:14:26.459997",
+    "submitDtm": "2021-07-16T11:14:26.459997",
+    "lastUpdatedDtm": "2021-07-16T11:14:26.459997",
+    "title": "Tài liệu training XSTK NH 2019 2020",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 15,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 5
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>T&agrave;i liệu XSTK học viện bưu ch&iacute;nh viễn th&ocirc;ng.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-33f66f92-79bb-40ad-8f6a-e4abb52537fa.png",
+    "publishDtm": "2021-07-16T12:16:32.174115",
+    "submitDtm": "2021-07-16T12:16:32.174115",
+    "lastUpdatedDtm": "2021-07-16T12:16:32.174115",
+    "title": "Tài liệu XSTK HVBCVT",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 16,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 5
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>Gi&aacute;o tr&igrave;nh k&egrave;m b&agrave;i tập x&aacute;c suất thống k&ecirc;.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-79191c3e-e387-4f34-bccb-7875c64bf7ce.png",
+    "publishDtm": "2021-07-16T12:23:43.17374",
+    "submitDtm": "2021-07-16T12:23:43.17374",
+    "lastUpdatedDtm": "2021-07-16T12:23:43.17374",
+    "title": "Giáo trình kèm bài tập Xác suất thống kê",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 17,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 5
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>Gi&aacute;o tr&igrave;nh XSTK trường ĐHCNTT.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-4aa4d5af-5b09-489d-b8b1-08d07c4c58ee.png",
+    "publishDtm": "2021-07-16T12:37:34.127815",
+    "submitDtm": "2021-07-16T12:37:34.127815",
+    "lastUpdatedDtm": "2021-07-16T12:37:34.127815",
+    "title": "Giáo trình XSTK trường ĐHCNTT",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
       }
     ],
     "userDocReactions": [],
