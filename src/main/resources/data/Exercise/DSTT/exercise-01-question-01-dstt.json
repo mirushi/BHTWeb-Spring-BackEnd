@@ -103,7 +103,7 @@
     "stateType": "APPROVED",
     "difficultyType": {"id": 1},
     "answers": [
-      {"content": "<pre>\n<code class=\"language-java\">result.x = x1 + x2;\nresult.y = y1 + y2;</code></pre>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>", "isCorrect": true, "rank": 1, "question": {"id": 16} ,"version": 0},
+      {"content": "<pre>\n<code class=\"language-java\">result.x = x1 + x2;\nresult.y = y1 + y2;</code></pre>\n\n<p>&nbsp;</p>", "isCorrect": true, "rank": 1, "question": {"id": 16} ,"version": 0},
       {"content": "<pre>\n<code>result.x = x1*x2 + y1*y2;\nresult.y = x1*x2 - y1*y2;</code></pre>\n\n<p>&nbsp;</p>", "isCorrect": false, "rank": 2, "question": {"id": 16} ,"version": 0},
       {"content": "<pre>\n<code class=\"language-java\">result.x = x1 + y2;\nresult.y = x2 + y1;</code></pre>\n\n<p>&nbsp;</p>", "isCorrect": false, "rank": 3, "question": {"id": 16} ,"version": 0},
       {"content": "<p>Kh&ocirc;ng c&oacute; đ&aacute;p &aacute;n n&agrave;o đ&uacute;ng.</p>", "isCorrect": false, "rank": 4, "question": {"id": 16} ,"version": 0}

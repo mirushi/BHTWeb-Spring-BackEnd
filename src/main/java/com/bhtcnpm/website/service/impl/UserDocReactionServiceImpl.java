@@ -74,15 +74,22 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
         //Tìm xem user hiện tại đã thực hiện reaction lên Doc chưa.
         //Nếu user đã react rồi thì cập nhật reaction cũ bằng reaction mới.
         Optional<UserDocReaction> userDocReactionObject = reactionRepository.findById(userDocReactionId);
-        UserDocReaction userDocReaction;
+        UserDocReaction userDocReaction = null;
         DocReactionType oldReactionType = null;
+
+        //Nếu react cũ giống react mới thì không làm gì cả.
+        if (userDocReactionObject.isPresent()) {
+            userDocReaction = userDocReactionObject.get();
+            oldReactionType = userDocReaction.getDocReactionType();
+        }
+
+        if (userDocReactionUserOwnDTO.getDocReactionType() != null && userDocReactionUserOwnDTO.getDocReactionType().equals(oldReactionType)) {
+            return null;
+        }
 
         //Xoá reaction của User ra khỏi hệ thống nếu như User chọn là none.
         if (DocReactionType.NONE.equals(userDocReactionUserOwnDTO.getDocReactionType())) {
             if (userDocReactionObject.isPresent()) {
-                userDocReaction = userDocReactionObject.get();
-                oldReactionType = userDocReaction.getDocReactionType();
-
                 reactionRepository.delete(userDocReactionObject.get());
                 
                 updateUserReputation(doc.getAuthor().getId(), oldReactionType, userDocReactionUserOwnDTO.getDocReactionType());
@@ -91,13 +98,11 @@ public class UserDocReactionServiceImpl implements UserDocReactionService {
             }
         }
 
-        if (userDocReactionObject.isPresent()) {
-            userDocReaction = userDocReactionObject.get();
-            oldReactionType = userDocReaction.getDocReactionType();
-        } else {
+        if (userDocReaction == null) {
             userDocReaction = new UserDocReaction();
             userDocReaction.setUserDocReactionId(userDocReactionId);
         }
+
         userDocReaction.setDocReactionType(userDocReactionUserOwnDTO.getDocReactionType());
         userDocReaction = reactionRepository.save(userDocReaction);
 

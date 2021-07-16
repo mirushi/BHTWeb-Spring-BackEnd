@@ -35,6 +35,7 @@ import java.util.List;
         }
 )
 @Builder
+//TODO: Maybe implement soft delete to prevent bugs in future.
 public class ExerciseQuestion {
     @Id
     @GeneratedValue(
