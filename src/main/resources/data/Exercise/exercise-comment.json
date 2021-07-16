@@ -43,5 +43,23 @@
     "exercise": {"id": 3},
     "parentComment": null,
     "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseComment",
+    "id": 6,
+    "content": "Bạn nào ra kết quả khác ở câu 3 không ?",
+    "author": {"id": "343f0c68-9cc4-474e-9da2-89626c04c0da"},
+    "exercise": {"id": 3},
+    "parentComment": null,
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseComment",
+    "id": 7,
+    "content": "Câu 3 hình như đề sai rồi.",
+    "author": {"id": "343f0c68-9cc4-474e-9da2-89626c04c0da"},
+    "exercise": {"id": 3},
+    "parentComment": {"id": 6},
+    "version": 0
   }
 ]

@@ -206,6 +206,11 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
                         .collect(Collectors.toList());
         List<ExerciseQuestionDTO> newExerciseAnswerSavedDTOList = this.createMultipleQuestions(exerciseID, newExerciseAnswerList, authentication);
 
+        //Xoá đi những câu hỏi người dùng không put lên.
+        List<ExerciseQuestion> deletedExerciseQuestion =
+                exerciseQuestionRepository.findByIdNotIn(requestDTOList.stream().map(ExerciseQuestionRequestWithIDContentOnlyDTO::getId).collect(Collectors.toList()));
+        exerciseQuestionRepository.deleteAll(deletedExerciseQuestion);
+
         List<ExerciseQuestionDTO> resultingList = exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicDTOList(exerciseQuestionList);
         resultingList.addAll(newExerciseAnswerSavedDTOList);
 
@@ -228,6 +233,11 @@ public class ExerciseQuestionServiceImpl implements ExerciseQuestionService {
                         .map(exerciseQuestionMapper::exerciseQuestionRequestDTOWithIDToExerciseQuestionRequestDTO)
                         .collect(Collectors.toList());
         List<ExerciseQuestionWithAnswersDTO> newExerciseQuestionSavedList = this.createMultipleQuestionsWithAnswers(exerciseID, newExerciseQuestionList, authentication);
+
+        //Xoá đi những câu hỏi người dùng không put lên.
+        List<ExerciseQuestion> deletedExerciseQuestion =
+                exerciseQuestionRepository.findByIdNotIn(requestDTOList.stream().map(ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO::getId).collect(Collectors.toList()));
+        exerciseQuestionRepository.deleteAll(deletedExerciseQuestion);
 
         List<ExerciseQuestionWithAnswersDTO> resultingList = exerciseQuestionMapper.exerciseQuestionListToExerciseQuestionPublicWithAnswersDTOList(exerciseQuestionList);
         resultingList.addAll(newExerciseQuestionSavedList);
