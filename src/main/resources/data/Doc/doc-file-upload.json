@@ -327,5 +327,95 @@
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "doc": {"id": 17}
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
+    "id": "d35f1b2c-c596-4be7-b805-352283c3d755",
+    "remoteID": "1np040veJCYIq-x81nD8UL2vyGeEfQBTk",
+    "rank": 1,
+    "fileName": "DE_2017-2018_2.pdf",
+    "fileSize": "108184",
+    "downloadURL": "https://drive.google.com/file/d/1np040veJCYIq-x81nD8UL2vyGeEfQBTk/view?usp=drivesdk",
+    "hostType": "G_DRIVE",
+    "thumbnailURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1np040veJCYIq-x81nD8UL2vyGeEfQBTk",
+    "uploader": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "doc": {"id": 18}
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
+    "id": "ed6f6bb2-3096-48b4-ad09-c7f96e0be3a8",
+    "remoteID": "1dI_egBk9VXAb9_l-Ok6-tBXbS0dL6IYR",
+    "rank": 1,
+    "fileName": "_____-tham-khao-2018.pdf",
+    "fileSize": "145098",
+    "downloadURL": "https://drive.google.com/file/d/1dI_egBk9VXAb9_l-Ok6-tBXbS0dL6IYR/view?usp=drivesdk",
+    "hostType": "G_DRIVE",
+    "thumbnailURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1dI_egBk9VXAb9_l-Ok6-tBXbS0dL6IYR",
+    "uploader": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "doc": {"id": 19}
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
+    "id": "d9aeb09e-580a-4ac5-be73-99985b3793bd",
+    "remoteID": "1EOfHIkIltuq3jbQ4sVECFdWlRukZRxsR",
+    "rank": 1,
+    "fileName": "DE_2017-2018_1.pdf",
+    "fileSize": "97487",
+    "downloadURL": "https://drive.google.com/file/d/1EOfHIkIltuq3jbQ4sVECFdWlRukZRxsR/view?usp=drivesdk",
+    "hostType": "G_DRIVE",
+    "thumbnailURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1EOfHIkIltuq3jbQ4sVECFdWlRukZRxsR",
+    "uploader": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "doc": {"id": 20}
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
+    "id": "d90c1041-45b2-4172-94ea-2a5da1013f8d",
+    "remoteID": "1FxtlPbQ2zxw8iXxPzG-nl3NaQCfilRNS",
+    "rank": 1,
+    "fileName": "xac-suat-thong-ke-chuong-1.pdf",
+    "fileSize": "1835966",
+    "downloadURL": "https://drive.google.com/file/d/1FxtlPbQ2zxw8iXxPzG-nl3NaQCfilRNS/view?usp=drivesdk",
+    "hostType": "G_DRIVE",
+    "thumbnailURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1FxtlPbQ2zxw8iXxPzG-nl3NaQCfilRNS",
+    "uploader": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "doc": {"id": 21}
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
+    "id": "3df71efe-c0a0-4a5b-ab3f-d3769da33339",
+    "remoteID": "1OjknGlUh39mD_akSPilyWFFVnqmV_5qP",
+    "rank": 2,
+    "fileName": "xac-suat-thong-ke-chuong-2.pdf",
+    "fileSize": "2088160",
+    "downloadURL": "https://drive.google.com/file/d/1OjknGlUh39mD_akSPilyWFFVnqmV_5qP/view?usp=drivesdk",
+    "hostType": "G_DRIVE",
+    "thumbnailURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1OjknGlUh39mD_akSPilyWFFVnqmV_5qP",
+    "uploader": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "doc": {"id": 21}
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.DocFileUpload",
+    "id": "1e1f51d6-08e8-4e80-ab0b-818b6b0651dc",
+    "remoteID": "1iC3J0iBBLcEesKLZk0rCgYlW8Hn7AG3Y",
+    "rank": 3,
+    "fileName": "xac-suat-thong-ke-chuong-3.pdf",
+    "fileSize": "997769",
+    "downloadURL": "https://drive.google.com/file/d/1iC3J0iBBLcEesKLZk0rCgYlW8Hn7AG3Y/view?usp=drivesdk",
+    "hostType": "G_DRIVE",
+    "thumbnailURL": "https://drive.google.com/thumbnail?authuser=0&sz=w320&id=1iC3J0iBBLcEesKLZk0rCgYlW8Hn7AG3Y",
+    "uploader": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "doc": {"id": 21}
   }
 ]

@@ -522,5 +522,125 @@
     ],
     "userDocReactions": [],
     "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 18,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 7
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>Đề thi thử X&aacute;c suất thống k&ecirc; HK2 2017 2018.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-a8d8677a-9a91-4b0e-9672-b0b5ef8d9017.png",
+    "publishDtm": "2021-07-16T13:10:03.843256",
+    "submitDtm": "2021-07-16T13:10:03.843256",
+    "lastUpdatedDtm": "2021-07-16T13:10:03.843256",
+    "title": "Đề thi thử Xác suất thống kê HK2 2017 2018 (Đề 2)",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 19,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 7
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>Đề thi thử XSTK HK2 2018 2019.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-56907996-52b9-4284-80f0-7a54cd6a8778.png",
+    "publishDtm": "2021-07-16T13:17:13.534555",
+    "submitDtm": "2021-07-16T13:17:13.534555",
+    "lastUpdatedDtm": "2021-07-16T13:17:13.534555",
+    "title": "Đề thi thử XSTK HK2 2018 2019",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 20,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 7
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>Đề thi thử X&aacute;c suất thống k&ecirc; HK2 2017 2018.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-1cd45868-4820-4620-8c38-13cb76108a1b.png",
+    "publishDtm": "2021-07-16T13:25:52.874169",
+    "submitDtm": "2021-07-16T13:25:52.874169",
+    "lastUpdatedDtm": "2021-07-16T13:25:52.874169",
+    "title": "Đề thi thử Xác suất thống kê HK2 2017 2018 (Đề 1)",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.DocEntities.Doc",
+    "id": 21,
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "lastEditedUser": null,
+    "category": {
+      "id": 4
+    },
+    "subject": {
+      "id": 8
+    },
+    "description": "<p>B&agrave;i giảng XSTK ĐHBKHCM.</p>",
+    "imageURL": "https://bhtcnpm.s3.ap-southeast-1.amazonaws.com/doc-image/8460c6d8-d2c7-46b9-a64d-87f76fcf8b18-4101a627-90bf-474f-b22c-d24ad7e2ef5c.png",
+    "publishDtm": "2021-07-16T13:37:33.303459",
+    "submitDtm": "2021-07-16T13:37:33.303459",
+    "lastUpdatedDtm": "2021-07-16T13:37:33.303459",
+    "title": "Bài giảng XSTK ĐHBKHCM",
+    "viewCount": "0",
+    "adminFeedback": null,
+    "docState": "APPROVED",
+    "tags": [
+      {
+        "id": 453
+      }
+    ],
+    "userDocReactions": [],
+    "version": 0
   }
 ]
