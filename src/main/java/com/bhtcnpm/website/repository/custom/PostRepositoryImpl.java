@@ -64,15 +64,15 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
     private final Querydsl querydsl;
 
-    private PostMapper postMapper = PostMapper.INSTANCE;
+    private final PostMapper postMapper;
 
-    private final PostSuggestionMapper postSuggestionMapper = PostSuggestionMapper.INSTANCE;
+    private final PostSuggestionMapper postSuggestionMapper;
 
     private final PostQuickSearchResultMapper postQuickSearchResultMapper = PostQuickSearchResultMapper.INSTANCE;
 
     private final IndexReader luceneIndexReader;
 
-    public PostRepositoryImpl (EntityManager em) throws IOException {
+    public PostRepositoryImpl (EntityManager em, PostMapper postMapper, PostSuggestionMapper postSuggestionMapper) throws IOException {
         this.em = em;
 
         this.luceneIndexReader = LuceneIndexUtils.getReader("Post");
@@ -80,6 +80,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         this.builder = new PathBuilder<Post>(path.getType(), path.getMetadata());
         this.querydsl = new Querydsl(em, builder);
         this.searchSession = Search.session(em);
+        this.postMapper = postMapper;
+        this.postSuggestionMapper = postSuggestionMapper;
     }
 
     private SearchResult<Post> getPostSearchResult (String sortByPublishDtm,
@@ -293,7 +295,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public PostSummaryWithStateListDTO searchBySearchTermWithState(Predicate predicate, Pageable pageable) {
 
         JPAQuery query = new JPAQuery<Post>(em)
-                .select(Projections.constructor(PostSummaryWithStateDTO.class, qPost.id, qPost.title, qPost.summary, qPost.imageURL, qPost.submitDtm, qPost.publishDtm, qPost.readingTime, qPost.author.id, qPost.author.displayName, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.postState))
+                .select(Projections.constructor(PostSummaryWithStateDTO.class,  qPost.id, qPost.title, qPost.summary, qPost.imageURL, qPost.submitDtm, qPost.publishDtm, qPost.readingTime, qPost.author.id, qPost.author.displayName, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.postState))
                 .from(qPost)
                 .where(predicate);
 

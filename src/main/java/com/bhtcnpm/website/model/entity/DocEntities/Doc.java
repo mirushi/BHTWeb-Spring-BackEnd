@@ -39,7 +39,7 @@ import java.util.TreeSet;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE doc SET DELETED_DTM = CURRENT_TIMESTAMP() WHERE id = ? AND VERSION = ?")
+@SQLDelete(sql = "UPDATE doc SET DELETED_DTM = CURRENT_TIMESTAMP WHERE id = ? AND VERSION = ?")
 @Loader(namedQuery = "findDocById")
 @NamedQuery(name = "findDocById",
         query = "SELECT d FROM Doc d WHERE d.id = ?1 " +
@@ -97,7 +97,9 @@ public class Doc {
     )
     private Subject subject;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "text", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,
@@ -108,6 +110,7 @@ public class Doc {
 
     @Lob
     @Column(columnDefinition = "text")
+    @Type(type = "org.hibernate.type.TextType")
     private String adminFeedback;
 
     @OneToMany(
@@ -185,11 +188,11 @@ public class Doc {
     )
     private Set<UserDocReaction> userDocReactions;
 
-    @Column(name = "hotness")
+    @Column(name = "hotness", columnDefinition = "float(8)")
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     private Double hotness = 0d;
 
-    @Column(name = "wilson")
+    @Column(name = "wilson", columnDefinition = "float(8)")
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     private Double wilson = 0d;
 

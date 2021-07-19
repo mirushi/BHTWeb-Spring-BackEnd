@@ -44,9 +44,28 @@ public abstract class PostMapper {
     @Mapping(target = "categoryID", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "submitDtm", source = "submitDtm")
+    @Mapping(target = "feedback", source = "adminFeedback")
     public abstract PostSummaryWithStateDTO postToPostSummaryWithStateDTO (Post post);
 
     public abstract List<PostSummaryWithStateDTO> postListToPostSummaryWithStateDTOList (List<Post> postList);
+
+    @Mapping(target = "authorID", source = "post.author.id")
+    @Mapping(target = "authorDisplayName", source = "post.author.displayName", qualifiedBy = {})
+    @Mapping(target = "authorAvatarURL", source = "post.author.avatarURL")
+    @Mapping(target = "categoryID", source = "category.id")
+    @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(target = "submitDtm", source = "submitDtm")
+    @Mapping(target = "feedback", source = "adminFeedback")
+    public abstract PostSummaryWithStateAndFeedbackDTO postToPostSummaryWithStateAndFeedbackDTO (Post post);
+
+    public abstract List<PostSummaryWithStateAndFeedbackDTO> postListToPostSummaryWithStateAndFeedbackDTOList (List<Post> postList);
+
+    public PostSummaryWithStateAndFeedbackListDTO postPageToPostSummaryWithStateAndFeedbackListDTO (Page<Post> postPage) {
+        List<PostSummaryWithStateAndFeedbackDTO> dtos = this.postListToPostSummaryWithStateAndFeedbackDTOList(postPage.getContent());
+        PostSummaryWithStateAndFeedbackListDTO dtoList = new PostSummaryWithStateAndFeedbackListDTO(dtos, postPage.getTotalPages(), postPage.getTotalElements());
+
+        return dtoList;
+    }
 
     public abstract List<PostSummaryDTO> postListToPostSummaryDTOs(List<Post> posts);
 

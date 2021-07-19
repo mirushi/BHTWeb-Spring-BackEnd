@@ -90,5 +90,100 @@
       {"content": "Không có đáp án nào đúng", "isCorrect": false, "rank": 4, "question": {"id": 15} ,"version": 0}
     ],
     "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 16,
+    "content": "<p>X&eacute;t số phức <span class=\"math-tex\">\\(z_{1} = iy_{1} + x_{1}\\)</span>, <span class=\"math-tex\">\\(z_{2} = iy_{2} + x_{2}\\)</span>. Đoạn code n&agrave;o sau đ&acirc;y trả về đ&uacute;ng gi&aacute; trị <span class=\"math-tex\">\\(z_{1} + z_{2}\\)</span> ?</p>\n\n<p>(Giả sử ta c&oacute; cấu tr&uacute;c đại diện cho một số phức như sau):</p>\n\n<pre>\n<code class=\"language-java\">class Complex {\n  float x;\n  float y;\n}</code></pre>\n\n<p>V&agrave; biến chứa kết quả:</p>\n\n<pre>\n<code class=\"language-java\">Complex result = new Complex();</code></pre>\n\n<p>&nbsp;</p>",
+    "rank": 6,
+    "explanation": "<p>Giải th&iacute;ch: Ph&eacute;p cộng của hai số phức được t&iacute;nh theo từng phần thực v&agrave; phần ảo ri&ecirc;ng biệt.</p>\n\n<div class=\"s3gt_translate_tooltip_mini_box\" id=\"s3gt_translate_tooltip_mini\" is_mini=\"true\" style=\"background:initial !important; border-collapse:initial !important; border-radius:initial !important; border-spacing:initial !important; border:initial !important; box-sizing:initial !important; color:inherit !important; direction:ltr !important; display:initial !important; flex-direction:initial !important; font-family:X-LocaleSpecific,sans-serif,Tahoma,Helvetica !important; font-size:13px !important; font-weight:initial !important; height:initial !important; left:556px; letter-spacing:initial !important; line-height:13px !important; margin-bottom:auto; margin-left:auto; margin-right:auto; margin-top:auto; max-height:initial !important; max-width:initial !important; min-height:initial !important; min-width:initial !important; outline:initial !important; overflow-wrap:initial !important; padding:initial !important; position:absolute; table-layout:initial !important; text-align:initial !important; text-shadow:initial !important; top:49px; vertical-align:top !important; white-space:inherit !important; width:initial !important; word-break:initial !important; word-spacing:initial !important\">\n<div class=\"s3gt_translate_tooltip_mini\" id=\"s3gt_translate_tooltip_mini_logo\" title=\"Translate selected text\">&nbsp;</div>\n\n<div class=\"s3gt_translate_tooltip_mini\" id=\"s3gt_translate_tooltip_mini_sound\" title=\"Play\" title_play=\"Play\" title_stop=\"Stop\">&nbsp;</div>\n\n<div class=\"s3gt_translate_tooltip_mini\" id=\"s3gt_translate_tooltip_mini_copy\" title=\"Copy text to Clipboard\">&nbsp;</div>\n</div>\n<link href=\"moz-extension://cbdcd669-8db8-4a39-8ef5-d433ac626196/skin/s3gt_tooltip_mini.css\" rel=\"stylesheet\" type=\"text/css\" />\n<style media=\"print\" type=\"text/css\">#s3gt_translate_tooltip_mini { display: none !important; }\n</style>",
+    "exercise": {
+      "id": 3
+    },
+    "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
+    "answers": [
+      {"content": "<pre>\n<code class=\"language-java\">result.x = x1 + x2;\nresult.y = y1 + y2;</code></pre>\n\n<p>&nbsp;</p>", "isCorrect": true, "rank": 1, "question": {"id": 16} ,"version": 0},
+      {"content": "<pre>\n<code>result.x = x1*x2 + y1*y2;\nresult.y = x1*x2 - y1*y2;</code></pre>\n\n<p>&nbsp;</p>", "isCorrect": false, "rank": 2, "question": {"id": 16} ,"version": 0},
+      {"content": "<pre>\n<code class=\"language-java\">result.x = x1 + y2;\nresult.y = x2 + y1;</code></pre>\n\n<p>&nbsp;</p>", "isCorrect": false, "rank": 3, "question": {"id": 16} ,"version": 0},
+      {"content": "<p>Kh&ocirc;ng c&oacute; đ&aacute;p &aacute;n n&agrave;o đ&uacute;ng.</p>", "isCorrect": false, "rank": 4, "question": {"id": 16} ,"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 17,
+    "content": "<p>&nbsp;&nbsp;</p>\n\n<p>X&eacute;t số phức <span class=\"math-tex\">\\(z_{1} = iy_{1} + x_{1}\\)</span>, <span class=\"math-tex\">\\(z_{2} = iy_{2} + x_{2}\\)</span>. Đoạn code n&agrave;o sau đ&acirc;y trả về đ&uacute;ng gi&aacute; trị <span class=\"math-tex\">\\(z_{1} * z_{2}\\)</span> ?</p>\n\n<p>(Giả sử ta c&oacute; cấu tr&uacute;c đại diện cho một số phức như sau):</p>\n\n<pre>\n<code class=\"language-java\">class Complex {\n  float x;\n  float y;\n}</code></pre>\n\n<p>V&agrave; biến chứa kết quả:</p>\n\n<pre>\n<code class=\"language-java\">Complex result = new Complex();</code></pre>\n\n<p>&nbsp;</p>",
+    "rank": 7,
+    "explanation": "<p>Giải th&iacute;ch:</p>\n\n<p>Cho&nbsp;z = a&nbsp;+ bi v&agrave; z&#39; = a&#39; + b&#39;i, lấy t&iacute;ch của hai số v&agrave; ch&uacute; &yacute;&nbsp;<span class=\"math-tex\">\\(i^{2}\\)</span> = -1 ta c&oacute;:</p>\n\n<p>z .&nbsp;z&#39; = (a + bi)(a&#39; + b&#39;i) = aa&#39; + ab&#39;i + a&#39;bi + bb&#39;<span class=\"math-tex\">\\(i^2\\)</span> =&nbsp;aa&#39; + ab&#39;i + a&#39;bi + bb&#39;(-1) = aa&#39; - bb&#39; + (ab&#39; +&nbsp;a&#39;b)i</p>",
+    "exercise": {
+      "id": 3
+    },
+    "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
+    "answers": [
+      {"content": "<pre>\n<code class=\"language-java\">result.x = x1 * x2;\nresult.y = y1 * y2;</code></pre>\n\n<p>&nbsp;</p>", "isCorrect": false, "rank": 1, "question": {"id": 17} ,"version": 0},
+      {"content": "<pre>\n<code class=\"language-java\">result.x = (x1 + x2) * (y1 + y2);\nresult.y = y1 * y2;</code></pre>", "isCorrect": false, "rank": 2, "question": {"id": 17} ,"version": 0},
+      {"content": "<pre>\n<code class=\"language-java\">result.x = x1 * x2 - y1 * y2\nresult.y = x1*y2 + x2*y1</code></pre>\n\n<p>&nbsp;</p>", "isCorrect": true, "rank": 3, "question": {"id": 17} ,"version": 0},
+      {"content": "<p>Kh&ocirc;ng c&oacute; đ&aacute;p &aacute;n n&agrave;o đ&uacute;ng.</p>", "isCorrect": false, "rank": 4, "question": {"id": 17} ,"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 18,
+    "content": "<p>T&igrave;m c&aacute;c số thực a v&agrave; b thoả m&atilde;n <span class=\"math-tex\">\\(2a + (b+i)i = 1 + 2i\\)</span> với i l&agrave; đơn vị ảo.</p>",
+    "rank": 7,
+    "explanation": "<p>Giải th&iacute;ch: Ta c&oacute; <span class=\"math-tex\">\\(2a + (b+i)i = 1 + 2i  &lt;=&gt; (2a - 1) + bi = 1 + 2i &lt;=&gt;\\bigg\\{\\begin{equation}\n\\begin{aligned} a = 1\\\\ b = 2 \\end{aligned}\n\\end{equation} \\)</span></p>",
+    "exercise": {
+      "id": 3
+    },
+    "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
+    "answers": [
+      {"content": "<p><span class=\"math-tex\">\\(a = 0, b = 2\\)</span></p>", "isCorrect": false, "rank": 1, "question": {"id": 18} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(a = \\frac{1}{2}, b = 2\\)</span></p>", "isCorrect": false, "rank": 2, "question": {"id": 18} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(a = 0, b = 1\\)</span></p>", "isCorrect": false, "rank": 3, "question": {"id": 18} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(a = 1, b = 2\\)</span></p>", "isCorrect": true, "rank": 4, "question": {"id": 18} ,"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 19,
+    "content": "\t<p>Cho hai số phức <span class=\"math-tex\">\\(z_{1} = -3 + i\\)</span> v&agrave; <span class=\"math-tex\">\\(z_{2} = 1-i\\)</span>. T&igrave;m phần ảo của số phức <span class=\"math-tex\">\\(z_{1} + \\bar{z_{2}}\\)</span>.</p>",
+    "rank": 8,
+    "explanation": "<p>Giải th&iacute;ch: Ta c&oacute; <span class=\"math-tex\">\\(z_{1} + \\bar{z_{2}} = (-3 + i) + (\\overline{1-i}) = -2 + 2i\\)</span>.</p>\n\n<p>Vậy phần ảo của số phức <span class=\"math-tex\">\\(z_{1} + \\overline{z_{2}}\\)</span> l&agrave; <span class=\"math-tex\">\\(2\\)</span>.</p>",
+    "exercise": {
+      "id": 3
+    },
+    "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
+    "answers": [
+      {"content": "<p><span class=\"math-tex\">\\(-2\\)</span></p>", "isCorrect": false, "rank": 1, "question": {"id": 19} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(2i\\)</span></p>", "isCorrect": false, "rank": 2, "question": {"id": 19} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(2\\)</span></p>", "isCorrect": true, "rank": 3, "question": {"id": 19} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(-2i\\)</span></p>", "isCorrect": false, "rank": 4, "question": {"id": 19} ,"version": 0}
+    ],
+    "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 20,
+    "content": "<p>T&igrave;m số phức li&ecirc;n hợp của số phức <span class=\"math-tex\">\\(z = i (3i + 1)\\)</span>.</p>",
+    "rank": 9,
+    "explanation": "<p>Giải th&iacute;ch: Ta c&oacute; <span class=\"math-tex\">\\(z = i (3i + 1) = -3 + i =&gt; \\overline{z} = -3 -i\\)</span>. Chọn D.</p>",
+    "exercise": {
+      "id": 3
+    },
+    "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
+    "answers": [
+      {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = 3 - i\\)</span></p>", "isCorrect": false, "rank": 1, "question": {"id": 20} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = -3 + i\\)</span></p>", "isCorrect": false, "rank": 2, "question": {"id": 20} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = 3 + i\\)</span></p>", "isCorrect": false, "rank": 3, "question": {"id": 20} ,"version": 0},
+      {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = -3 - i\\)</span></p>", "isCorrect": true, "rank": 4, "question": {"id": 20} ,"version": 0}
+    ],
+    "version": 0
   }
 ]

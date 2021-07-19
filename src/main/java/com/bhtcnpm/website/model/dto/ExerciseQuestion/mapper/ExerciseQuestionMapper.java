@@ -124,7 +124,9 @@ public abstract class ExerciseQuestionMapper {
 
         Map<Long, ExerciseQuestionRequestWithIDContentOnlyDTO> dtoMap = new HashMap<>();
         for (ExerciseQuestionRequestWithIDContentOnlyDTO dto : requestDTOList) {
-            dtoMap.put(dto.getId(), dto);
+            if (dto.getId() != null) {
+                dtoMap.put(dto.getId(), dto);
+            }
         }
 
         return entityList.stream()
@@ -148,6 +150,7 @@ public abstract class ExerciseQuestionMapper {
     public List<ExerciseQuestion> updateExerciseQuestionListFromExerciseQuestionRequestWithIDAndAnswersWithIDsDTOList (List<ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> requestDTOList, UUID userID, List<ExerciseQuestion> entityList) {
         Map<Long, ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO> dtoMap =
                 requestDTOList.stream()
+                        .filter(obj -> obj.getId() != null)
                         .collect(Collectors.toMap(ExerciseQuestionRequestWithIDAndAnswersWithIDsDTO::getId, Function.identity()));
 
         return entityList.stream()

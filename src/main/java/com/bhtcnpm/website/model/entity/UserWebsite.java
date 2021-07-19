@@ -11,6 +11,7 @@ import com.bhtcnpm.website.model.entity.PostEntities.UserPostSave;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Type;
 import org.hibernate.search.engine.backend.types.Norms;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Searchable;
@@ -108,15 +109,15 @@ public class UserWebsite {
     @JsonIgnore
     private List<UserDocReaction> docReactions;
 
-    @OneToMany(
-            mappedBy = "actorPassive",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    private List<Notification> notificationsOfUserOwn;
+//    @OneToMany(
+//            mappedBy = "actorPassive",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true
+//    )
+//    @EqualsAndHashCode.Exclude
+//    @ToString.Exclude
+//    @JsonIgnore
+//    private List<Notification> notificationsOfUserOwn;
 
     @OneToMany(
             mappedBy = "userPostLikeId.user",

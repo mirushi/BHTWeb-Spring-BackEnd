@@ -6,8 +6,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "notification")
+//@Entity
+//@Table(name = "notification")
 @Data
 public class Notification {
 

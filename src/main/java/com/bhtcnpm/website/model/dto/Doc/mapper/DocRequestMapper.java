@@ -14,6 +14,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -60,9 +61,20 @@ public abstract class DocRequestMapper {
         newDoc.setSubject(subjectRepository.getOne(docRequestDTO.getSubjectID()));
         newDoc.setTitle(docRequestDTO.getTitle());
         newDoc.setDescription(docRequestDTO.getDescription());
-        newDoc.setImageURL(docRequestDTO.getImageURL());
+        if (docRequestDTO.getImageURL() == null && docFileUploadList != null && !docFileUploadList.isEmpty() && docFileUploadList.get(1) != null) {
+            String firstFileThumbnail = docFileUploadList.get(1).getThumbnailURL();
+            newDoc.setImageURL(firstFileThumbnail);
+        } else {
+            newDoc.setImageURL(docRequestDTO.getImageURL());
+        }
         newDoc.setTags(tagMapper.tagDTOListToTagList(docRequestDTO.getTags()));
-        newDoc.setPublishDtm(docRequestDTO.getPublishDtm());
+        if (newDoc.getPublishDtm() == null) {
+            if (docRequestDTO.getPublishDtm() == null || docRequestDTO.getPublishDtm().isBefore(LocalDateTime.now())) {
+                newDoc.setPublishDtm(LocalDateTime.now());
+            } else {
+                newDoc.setPublishDtm(docRequestDTO.getPublishDtm());
+            }
+        }
 
         return newDoc;
     }

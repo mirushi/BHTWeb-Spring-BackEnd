@@ -21,7 +21,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE doc_comment SET DELETED_DTM = CURRENT_TIMESTAMP() WHERE id = ? AND VERSION = ?")
+@SQLDelete(sql = "UPDATE doc_comment SET DELETED_DTM = CURRENT_TIMESTAMP WHERE id = ? AND VERSION = ?")
 @Where(clause = "DELETED_DTM IS NULL")
 public class DocComment {
     @Id
@@ -38,6 +38,7 @@ public class DocComment {
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "text", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
     private String content;
 
     @ManyToOne

@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
+//TODO: Refactor this to be the same with DocSummaryWithStateAndFeedback.
 public class DocSummaryWithStateListDTO {
     private List<DocSummaryWithStateDTO> docSummaryWithStateDTOs;
     private Integer totalPages;

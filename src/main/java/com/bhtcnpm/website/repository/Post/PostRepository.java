@@ -48,7 +48,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredi
             "SET p.postState = :postStateType " +
             "WHERE p.id = :postID")
     int setPostState (Long postID, PostStateType postStateType);
-
+    
     @Modifying
     @Query("UPDATE Post as p " +
             "SET p.postState = :postStateType, p.adminFeedback = :feedBack " +

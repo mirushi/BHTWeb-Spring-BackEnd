@@ -17,6 +17,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.Validate;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -38,8 +39,10 @@ public class ExerciseServiceImpl implements ExerciseService {
     private final ExercisePermissionEvaluator exercisePermissionEvaluator;
 
     @Override
-    public List<ExerciseSummaryDTO> getExerciseList(Predicate predicate, Authentication authentication) {
+    //TODO: The predicate will not be applied. Fix this when you have time.
+    public List<ExerciseSummaryDTO> getExerciseList(Predicate predicate, Pageable pageable, Authentication authentication) {
         UUID userID = SecurityUtils.getUserID(authentication);
+
         Sort sortByRankAsc = ExerciseOrderingGenerator.orderByRankAsc();
 
         List<ExerciseSummaryDTO> exerciseSummaryDTOList;
@@ -48,14 +51,14 @@ public class ExerciseServiceImpl implements ExerciseService {
             Iterable<Exercise> exerciseIterable = exerciseRepository.findAll(predicate, sortByRankAsc);
             exerciseSummaryDTOList = exerciseMapper.exerciseIterableToExerciseSummaryDTOList(exerciseIterable);
         } else {
-            BooleanExpression userAttempt = ExercisePredicateGenerator.getBooleanExpressionExerciseUserAttempt(userID);
-            exerciseSummaryDTOList = exerciseRepository.getExerciseSummaryWithUserAttempts(userAttempt.and(predicate));
+            exerciseSummaryDTOList = exerciseRepository.getExerciseSummaryWithUserAttempts(userID);
         }
 
         return exerciseSummaryDTOList;
     }
 
     @Override
+    //TODO: The predicate will not be applied. Fix this when you have time.
     public List<ExerciseSummaryWithTopicDTO> getExerciseWithTopic(Predicate predicate, Authentication authentication) {
         UUID userID = SecurityUtils.getUserID(authentication);
         Sort sortByRankAsc = ExerciseOrderingGenerator.orderByRankAsc();
@@ -66,8 +69,7 @@ public class ExerciseServiceImpl implements ExerciseService {
             Iterable<Exercise> exerciseIterable = exerciseRepository.findAll(predicate, sortByRankAsc);
             exerciseSummaryWithTopicDTOList = exerciseMapper.exerciseIterableToExerciseSummaryWithTopicDTOList(exerciseIterable);
         } else {
-            BooleanExpression userAttempt = ExercisePredicateGenerator.getBooleanExpressionExerciseUserAttempt(userID);
-            exerciseSummaryWithTopicDTOList = exerciseRepository.getExerciseSummaryWithTopicAndUserAttempts(userAttempt.and(predicate));
+            exerciseSummaryWithTopicDTOList = exerciseRepository.getExerciseSummaryWithTopicAndUserAttempts(userID);
         }
 
         return exerciseSummaryWithTopicDTOList;

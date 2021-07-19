@@ -2,8 +2,8 @@
   {
     "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
     "id": 3,
-    "title": "Khái niệm",
-    "description": "Khái niệm về số phức.",
+    "title": "Khái niệm cơ bản",
+    "description": "Khái niệm về số phức. Cùng ôn lại một số khái niệm về số phức trong toán học trước khi vào những phần khó hơn nhé.",
     "suggestedDuration": 1800,
     "submitDtm": "2021-06-16T23:37:29Z",
     "publishDtm": "2021-06-16T23:37:29Z",

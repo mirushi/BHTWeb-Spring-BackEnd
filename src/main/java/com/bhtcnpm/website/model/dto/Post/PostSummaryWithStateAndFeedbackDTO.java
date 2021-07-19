@@ -1,5 +1,6 @@
 package com.bhtcnpm.website.model.dto.Post;
 
+import com.bhtcnpm.website.constant.domain.Post.PostBusinessState;
 import com.bhtcnpm.website.model.entity.enumeration.PostState.PostStateType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,4 +25,5 @@ public class PostSummaryWithStateAndFeedbackDTO {
     private String categoryName;
     private String feedback;
     private PostStateType postState;
+    private PostBusinessState postBusinessState;
 }

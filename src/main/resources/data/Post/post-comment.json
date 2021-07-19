@@ -10,53 +10,9 @@
     },
     "childComments": [
       {
-        "content": "Child comment nè",
+        "content": "Cảm ơn tác giả.",
         "author": {
-          "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-        },
-        "post": {
-          "id": 2
-        },
-        "childComments": null,
-        "version": 0
-      },
-      {
-        "content": "Child comment tiếp nè",
-        "author": {
-          "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-        },
-        "post": {
-          "id": 2
-        },
-        "childComments": null,
-        "version": 0
-      },
-      {
-        "content": "Child comment tiếp nè",
-        "author": {
-          "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-        },
-        "post": {
-          "id": 2
-        },
-        "childComments": null,
-        "version": 0
-      },
-      {
-        "content": "Child comment tiếp nè",
-        "author": {
-          "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-        },
-        "post": {
-          "id": 2
-        },
-        "childComments": null,
-        "version": 0
-      },
-      {
-        "content": "Child comment tiếp nè",
-        "author": {
-          "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+          "id": "343f0c68-9cc4-474e-9da2-89626c04c0da"
         },
         "post": {
           "id": 2
@@ -72,7 +28,7 @@
     "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
     "content": "Comment thứ nhì",
     "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+      "id": "343f0c68-9cc4-474e-9da2-89626c04c0da"
     },
     "post": {
       "id": 2
@@ -82,156 +38,37 @@
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
+    "content": "Cảm ơn tác giả",
     "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+      "id": "343f0c68-9cc4-474e-9da2-89626c04c0da"
     },
     "post": {
-      "id": 2
+      "id": 8
     },
+    "childComments": [
+      {
+        "content": "Không có gì. Chúc bạn học tốt.",
+        "author": {
+          "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+        },
+        "post": {
+          "id": 8
+        },
+        "childComments": null,
+        "version": 0
+      }
+    ],
     "parentComment": null,
     "version": 0
   },
   {
     "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
+    "content": "<p>Nếu c&aacute;c bạn học lập tr&igrave;nh, việc thực h&agrave;nh &aacute;p dụng to&aacute;n trong giải thuật thường xuy&ecirc;n cũng sẽ dễ gi&uacute;p c&aacute;c bạn nhớ b&agrave;i hơn.</p>\n\n<p>Nhất l&agrave; đối với những dạng b&agrave;i ma trận phức tạp: <span class=\"math-tex\">\\(\\begin{bmatrix}\n    x_{11}       &amp; x_{12} &amp; x_{13} &amp; \\dots &amp; x_{1n} \\\\\n    x_{21}       &amp; x_{22} &amp; x_{23} &amp; \\dots &amp; x_{2n} \\\\\n    \\dots      &amp; \\dots &amp; \\dots &amp; \\dots &amp; \\dots \\\\\n    x_{d1}       &amp; x_{d2} &amp; x_{d3} &amp; \\dots &amp; x_{dn}\n\\end{bmatrix}\\)</span></p>\n\n<p>Khi c&agrave;i đặt c&aacute;c ph&eacute;p nh&acirc;n, chia như b&ecirc;n dưới sẽ gi&uacute;p c&aacute;c bạn l&agrave;m quen với c&ocirc;ng thức nh&acirc;n ma trận:</p>\n\n<pre>\n<code class=\"language-python\">for i:=1 to M do\nfor j:=1 to P do\nbegin\n    C[i,j]:=0;\n    for k:=1 to N do\n        C[i,j]:=C[i,j]+A[i,k] * B[k,j];\nend;</code></pre>\n\n<p>&nbsp;</p>",
     "author": {
       "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
     },
     "post": {
-      "id": 2
-    },
-    "parentComment": null,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
-    "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    },
-    "post": {
-      "id": 2
-    },
-    "parentComment": null,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
-    "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    },
-    "post": {
-      "id": 2
-    },
-    "parentComment": null,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
-    "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    },
-    "post": {
-      "id": 2
-    },
-    "parentComment": null,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
-    "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    },
-    "post": {
-      "id": 2
-    },
-    "parentComment": null,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
-    "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    },
-    "post": {
-      "id": 2
-    },
-    "parentComment": null,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
-    "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    },
-    "post": {
-      "id": 2
-    },
-    "parentComment": null,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
-    "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    },
-    "post": {
-      "id": 2
-    },
-    "parentComment": null,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
-    "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    },
-    "post": {
-      "id": 2
-    },
-    "parentComment": null,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
-    "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    },
-    "post": {
-      "id": 2
-    },
-    "parentComment": null,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
-    "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    },
-    "post": {
-      "id": 2
-    },
-    "parentComment": null,
-    "version": 0
-  },
-  {
-    "_class": "com.bhtcnpm.website.model.entity.PostCommentEntities.PostComment",
-    "content": "Comment đầu tiên",
-    "author": {
-      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
-    },
-    "post": {
-      "id": 2
+      "id": 8
     },
     "parentComment": null,
     "version": 0

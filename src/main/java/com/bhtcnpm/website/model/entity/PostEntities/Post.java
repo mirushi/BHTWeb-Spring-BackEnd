@@ -35,7 +35,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE post SET DELETED_DATE = "+ "CURRENT_TIMESTAMP()" +" WHERE id = ? AND VERSION = ?")
+@SQLDelete(sql = "UPDATE post SET DELETED_DATE = "+ "CURRENT_TIMESTAMP" +" WHERE id = ? AND VERSION = ?")
 @Loader(namedQuery = "findPostById")
 @NamedQuery(name = "findPostById", query = "SELECT p FROM Post p WHERE p.id = ?1 AND p.deletedDate IS NULL")
 @Where(clause = "DELETED_DATE is NULL")
@@ -62,7 +62,9 @@ public class Post {
             sortable = Sortable.YES)
     private String title;
 
-    @Column(nullable = false, length = PostDomainConstant.SUMMARY_LENGTH)
+    @Lob
+    @Column(columnDefinition = "text", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,
@@ -96,10 +98,12 @@ public class Post {
 
     @Lob
     @Column(columnDefinition = "text", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
     private String content;
 
     @Lob
     @Column(columnDefinition = "text", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
     @FullTextField(analyzer = "default",
             norms = Norms.YES,
             termVector = TermVector.YES,
@@ -109,6 +113,7 @@ public class Post {
 
     @Lob
     @Column(columnDefinition = "text")
+    @Type(type = "org.hibernate.type.TextType")
     private String adminFeedback;
 
     @ManyToOne
@@ -187,11 +192,11 @@ public class Post {
     @ManyToOne
     private UserWebsite deletedBy;
 
-    @Column(name = "hotness")
+    @Column(name = "hotness", columnDefinition = "float(8)")
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     private Double hotness = 0d;
 
-    @Column(name = "wilson")
+    @Column(name = "wilson", columnDefinition = "float(8)")
     @GenericField(sortable = Sortable.YES, projectable = Projectable.YES)
     private Double wilson = 0d;
 

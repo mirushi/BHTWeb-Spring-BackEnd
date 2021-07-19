@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
@@ -34,6 +35,7 @@ import java.util.List;
         }
 )
 @Builder
+//TODO: Maybe implement soft delete to prevent bugs in future.
 public class ExerciseQuestion {
     @Id
     @GeneratedValue(
@@ -46,13 +48,17 @@ public class ExerciseQuestion {
     )
     private Long id;
 
-    @Column(name = "content")
+    @Lob
+    @Column(name = "content",columnDefinition = "text")
+    @Type(type = "org.hibernate.type.TextType")
     private String content;
 
     @Column(name = "rank")
     private Integer rank;
 
-    @Column(name = "explanation")
+    @Lob
+    @Column(columnDefinition = "text")
+    @Type(type = "org.hibernate.type.TextType")
     private String explanation;
 
     @ManyToOne
