@@ -80,11 +80,11 @@ public class WebsiteApplication {
                 new ClassPathResource("data/Exercise/NMLT/exercise-01-question-01-nmlt.json"),
                 new ClassPathResource("data/Exercise/DSTT/exercise-topic-dstt.json"),
                 new ClassPathResource("data/Exercise/DSTT/exercise-01-dstt.json"),
-                new ClassPathResource("data/Exercise/DSTT/exercise-01-question-01-dstt.json"),
                 new ClassPathResource("data/Exercise/DSTT/exercise-02-dstt.json"),
                 new ClassPathResource("data/Exercise/DSTT/exercise-03-dstt.json"),
                 new ClassPathResource("data/Exercise/DSTT/exercise-04-dstt.json"),
                 new ClassPathResource("data/Exercise/DSTT/exercise-05-dstt.json"),
+                new ClassPathResource("data/Exercise/DSTT/exercise-01-question-01-dstt.json"),
                 new ClassPathResource("data/Exercise/exercise-report.json"),
                 new ClassPathResource("data/Exercise/exercise-comment.json")
         });

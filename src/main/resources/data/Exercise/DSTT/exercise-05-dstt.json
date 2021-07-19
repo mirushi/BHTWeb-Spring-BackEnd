@@ -46,5 +46,29 @@
       {"id": 453}
     ],
     "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.Exercise",
+    "id": 28,
+    "title": "Bài tập Nhập môn lập trình cơ bản trong xác định lỗi",
+    "description": "<p>Một số b&agrave;i tập Nhập m&ocirc;n lập tr&igrave;nh cơ bản trong x&aacute;c định lỗi.</p>",
+    "suggestedDuration": null,
+    "submitDtm": "2021-07-19T14:38:42.697364",
+    "publishDtm": "2021-07-09T16:24:21.026",
+    "rank": 3,
+    "exerciseState": "APPROVED",
+    "author": {
+      "id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"
+    },
+    "topic": {
+      "id": 4
+    },
+    "category": {
+      "id": 1
+    },
+    "tags": [
+      {"id": 462}
+    ],
+    "version": 0
   }
 ]
