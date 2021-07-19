@@ -9,12 +9,14 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
@@ -33,9 +35,14 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
     }
 
     @Override
-    public List<ExerciseSummaryDTO> getExerciseSummaryWithUserAttempts(Predicate predicate) {
+    public List<ExerciseSummaryDTO> getExerciseSummaryWithUserAttempts(Predicate predicate, UUID userID) {
+//        NumberExpression<Integer> userAttemption = new CaseBuilder()
+//                .when(qExerciseAttempt.user.id.eq(userID)).then(1).otherwise(0);
+//
 //        BooleanExpression isUserAttempted = new CaseBuilder()
-//                .when(qExerciseAttempt.countDistinct().gt(0)).then(true).otherwise(false);
+//                .when(userAttemption.sum().gt(0)).then(true).otherwise(false);
+//
+//        NumberExpression<Integer> userCorrectAnsweredQuestion
 //
 //        JPAQuery<ExerciseSummaryDTO> query = new JPAQuery<ExerciseSummaryDTO>(em)
 //                .select(Projections.constructor(ExerciseSummaryDTO.class, qExercise.id, qExercise.title, qExercise.description, isUserAttempted,
@@ -53,7 +60,7 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
     }
 
     @Override
-    public List<ExerciseSummaryWithTopicDTO> getExerciseSummaryWithTopicAndUserAttempts(Predicate predicate) {
+    public List<ExerciseSummaryWithTopicDTO> getExerciseSummaryWithTopicAndUserAttempts(Predicate predicate, UUID userID) {
 //        BooleanExpression isUserAttempted = new CaseBuilder()
 //                .when(qExerciseAttempt.countDistinct().gt(0)).then(true).otherwise(false);
 //
