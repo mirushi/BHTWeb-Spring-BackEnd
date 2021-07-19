@@ -295,7 +295,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public PostSummaryWithStateListDTO searchBySearchTermWithState(Predicate predicate, Pageable pageable) {
 
         JPAQuery query = new JPAQuery<Post>(em)
-                .select(Projections.constructor(PostSummaryWithStateDTO.class, qPost.id, qPost.title, qPost.summary, qPost.imageURL, qPost.submitDtm, qPost.publishDtm, qPost.readingTime, qPost.author.id, qPost.author.displayName, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.postState))
+                .select(Projections.constructor(PostSummaryWithStateDTO.class,  qPost.id, qPost.title, qPost.summary, qPost.imageURL, qPost.submitDtm, qPost.publishDtm, qPost.readingTime, qPost.author.id, qPost.author.displayName, qPost.author.avatarURL ,qPost.category.id, qPost.category.name, qPost.postState))
                 .from(qPost)
                 .where(predicate);
 
