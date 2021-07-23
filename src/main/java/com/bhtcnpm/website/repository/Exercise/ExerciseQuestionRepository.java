@@ -23,5 +23,7 @@ public interface ExerciseQuestionRepository extends JpaRepository<ExerciseQuesti
     @EntityGraph(value = "answers.correct")
     List<ExerciseQuestion> findAllByExerciseId (Long exerciseID);
 
+    List<ExerciseQuestion> findByExerciseIdAndIdNotIn (Long exerciseID, List<Long> userSubmittedIDs);
+
     List<ExerciseQuestion> findByIdNotIn (List<Long> exerciseIDs);
 }

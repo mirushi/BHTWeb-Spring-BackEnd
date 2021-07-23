@@ -185,5 +185,25 @@
       {"content": "<p><span class=\"math-tex\">\\(\\overline{z} = -3 - i\\)</span></p>", "isCorrect": true, "rank": 4, "question": {"id": 20} ,"version": 0}
     ],
     "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.ExerciseEntities.ExerciseQuestion",
+    "id": 21,
+    "content": "\t<p>H&atilde;y chọn c&agrave;i đặt đ&uacute;ng biểu diễn to&aacute;n học sau bằng c&acirc;u lệnh điều kiện (giả sử khai b&aacute;o sẵn biến result d&ugrave;ng để lưu gi&aacute; trị, result = 0):</p>\n\n<p>Result = <span class=\"math-tex\">\\(\\sum_{x=0}^{n} x + 1 \\)</span></p>",
+    "rank": 1,
+    "explanation": "Giải thích",
+    "exercise": {
+      "id": 28
+    },
+    "suggestedDuration": 60,
+    "author": {"id": "8460c6d8-d2c7-46b9-a64d-87f76fcf8b18"},
+    "stateType": "APPROVED",
+    "difficultyType": {"id": 1},
+    "answers": [
+      {"content": "<pre>\n<code class=\"language-java\">For (int I = 0; I &lt;= n; ++i) result = result + x.</code></pre>\n\n<p>&nbsp;</p>", "isCorrect": true, "rank": 1,"question": {"id": 21},"version": 0},
+      {"content": "<pre>\n<code class=\"language-java\">For (int i=0; i&lt;=n; ++i) result = result + x + 1</code></pre>\n\n<p>&nbsp;</p>", "isCorrect": false, "rank": 2,"question": {"id": 21},"version": 0},
+      {"content": "<pre>\n<code class=\"language-java\">For (int i=0; i&lt;n;++i) result = result + x</code></pre>\n\n<p>&nbsp;</p>", "isCorrect": false, "rank": 3,"question": {"id": 21},"version": 0}
+    ],
+    "version": 0
   }
 ]

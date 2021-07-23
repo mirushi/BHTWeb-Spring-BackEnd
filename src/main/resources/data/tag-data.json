@@ -77,5 +77,14 @@
     "posts": [
     ],
     "version": 0
+  },
+  {
+    "_class": "com.bhtcnpm.website.model.entity.Tag",
+    "id": 462,
+    "content": "lap_trinh",
+    "docs": [],
+    "posts": [
+    ],
+    "version": 0
   }
 ]
